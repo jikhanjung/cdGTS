@@ -2,7 +2,7 @@
 
 *English · [한국어](README.md)*
 
-> ⚠️ Status: Early brainstorming. Nothing is settled yet — this is a space to throw out ideas and roll them around.
+> ⚠️ Status: Brainstorming. Rolled as far as the concept, the layer model, and a boundary gateway **schema v0** — but the code, data format, and stack are still undecided.
 
 ## What is it
 
@@ -26,22 +26,40 @@ Like Blender's geometry nodes, the core metaphor is a network (DAG) of **data no
 
 Provenance (the FAIR principles), incremental re-evaluation, and what-if comparison are naturally built into the graph structure.
 
+## The layer spine (Layer 0–6)
+
+Nomenclature (0) → boundary definition (1) → primary observations (2) → local age model (3) → correlation (4) → global synthesis · coherence gate (5) → publication (6). Higher layers derive from lower ones. Publication yields two outputs: **ICC = bake (a frozen snapshot)**, **GTS = narrate (a book)**.
+
 ## Documents
 
-- [docs/concept-map_en.md](docs/concept-map_en.md) — **integrated concept map** (the top-level map over all docs · convergence points · start here)
-- [docs/idea_en.md](docs/idea_en.md) — background, problem statement, core idea, the layered data model (Layer 0–6), open questions
-- [docs/node-graph-paradigm_en.md](docs/node-graph-paradigm_en.md) — the node-graph paradigm in detail
-- [docs/case-permian-triassic_en.md](docs/case-permian-triassic_en.md) — the first case study validating the model against the Permian–Triassic boundary (real data + node graph)
-- [docs/case-precambrian-gssa_en.md](docs/case-precambrian-gssa_en.md) — the Precambrian GSSA counter-case (the number *is* the definition — the mirror image of P–T)
-- [docs/case-cambrian-base-correlation_en.md](docs/case-cambrian-base-correlation_en.md) — base of the Cambrian (Fortune Head): the third type, where cross-section correlation produces the number
-- [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — draft boundary gateway schema (v0) spanning all three cases
-- [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning analysis (open questions)
-- [docs/coherence-gate_en.md](docs/coherence-gate_en.md) — the coherence gate concretized (Layer 5): pinned boundary set → valid chart
-- [docs/competing-models_en.md](docs/competing-models_en.md) — how competing models coexist (plural candidates in the network + release selection)
-- [docs/cycles_en.md](docs/cycles_en.md) — cyclic dependencies and clamps (hand-crafted gates placed by subcommissions)
+The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map_en.md) — start here** (the layer spine · document map · five convergence points).
+
+**Concept**
+- [docs/idea_en.md](docs/idea_en.md) — background · problem · layers 0–6 · gateways · open questions
+- [docs/node-graph-paradigm_en.md](docs/node-graph-paradigm_en.md) — DAG · gateway/network · cycles · edge = distribution
+
+**Cases (three types)**
+- [docs/case-permian-triassic_en.md](docs/case-permian-triassic_en.md) — GSSP · local interpolation (the number is computed)
+- [docs/case-precambrian-gssa_en.md](docs/case-precambrian-gssa_en.md) — GSSA · decreed (the number is the definition — the mirror image of P–T)
+- [docs/case-cambrian-base-correlation_en.md](docs/case-cambrian-base-correlation_en.md) — GSSP · cross-section correlation (the number comes from other continents)
+
+**Schema & design**
+- [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — boundary gateway schema v0 (all five §4 open questions resolved)
+- [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning (records + manifest)
+- [docs/coherence-gate_en.md](docs/coherence-gate_en.md) — the coherence gate (Layer 5): pinned boundary set → valid chart
+- [docs/competing-models_en.md](docs/competing-models_en.md) — how competing models coexist (plural candidates + release selection)
+- [docs/cycles_en.md](docs/cycles_en.md) — cyclic dependencies and **clamps** (hand-crafted gates placed by subcommissions)
 - [docs/topology-diff_en.md](docs/topology-diff_en.md) — topology diff (the structural-change axis orthogonal to the value diff)
-- [docs/distribution-representation_en.md](docs/distribution-representation_en.md) — distribution representation (the L0–L5 fidelity ladder of uncertainty)
+- [docs/distribution-representation_en.md](docs/distribution-representation_en.md) — distribution representation (the L0–L5 fidelity ladder)
+
+## Key convergence points
+
+Different threads repeatedly converged to the same structure (details in [concept-map](docs/concept-map_en.md) §3):
+
+- **Provenance depth = a single axis** — coherence level, distribution fidelity, and cycle resolution all depend on it.
+- **The clamp is the unifier** — GSSA (pin = point mass) · cycle-cutting · distribution operators fold into one primitive.
+- **The ICC/GTS = bake/narrate dichotomy** recurs in the gate · competing models · diff · distribution.
 
 ## Status
 
-This is the brainstorming stage. The schema, code, and architecture have not been decided yet.
+This is the brainstorming stage. The concept, the layer model, and a **schema v0** (all five §4 open questions resolved) exist, but the **actual data format, code, and tech stack are still undecided**. Progress is logged in [`devlog/`](devlog/).
