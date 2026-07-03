@@ -6,7 +6,7 @@ services:
     image: honestjung/cdgts:${IMAGE_TAG}
     container_name: cdgts
     ports:
-      - "127.0.0.1:8010:8000"     # 리버스 프록시(nginx) 뒤. 호스트 8010 → 컨테이너 8000
+      - "127.0.0.1:8011:8000"     # 리버스 프록시(nginx) 뒤. 호스트 8011 → 컨테이너 8000
     volumes:
       - /srv/cdGTS/db.sqlite3:/app/db.sqlite3
     env_file:

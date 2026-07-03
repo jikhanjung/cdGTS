@@ -12,7 +12,7 @@ fsis2026 패턴 + 프론트(Vite SPA) 멀티스테이지 빌드. 이미지 `hone
 | `build.sh X.Y.Z` | **빌드 호스트**: pytest + version bump + `docker build/push` (`:X.Y.Z` + `:latest`). |
 | `docker-compose.dev.yml` | 로컬 빌드/실행 테스트(`--build`). |
 | `sync_to_srv.sh` | 운영/테스트 호스트: `host/*` → `/srv/cdGTS`. |
-| `host/docker-compose.yml` | `/srv/cdGTS` 실행(이미지 pull, `${IMAGE_TAG}`, `127.0.0.1:8010:8000`). |
+| `host/docker-compose.yml` | `/srv/cdGTS` 실행(이미지 pull, `${IMAGE_TAG}`, `127.0.0.1:8011:8000`). |
 | `host/deploy.sh X.Y.Z` | 버전 스왑: pull → .env 갱신 → down(+DB 스냅샷) → up → 헬스체크. |
 | `host/.env.example` | `/srv/cdGTS/.env` 템플릿. |
 
@@ -42,6 +42,6 @@ docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
 ```
 
 ## 참고 / 후속
-- 컨테이너는 `127.0.0.1:8010` 만 노출 — 앞단 **nginx 리버스 프록시**(도메인·HTTPS·정적 캐시)는 호스트에서 별도 구성.
+- 컨테이너는 `127.0.0.1:8011` 만 노출 — 앞단 **nginx 리버스 프록시**(도메인·HTTPS·정적 캐시)는 호스트에서 별도 구성.
 - fsis2026 의 maintenance 페이지 토글은 nginx 연동이라 0.1.0 에선 생략(후속).
 - DB 는 SQLite. 공간(GSSP) 기능 착수 시 PostGIS 컨테이너 추가 예정.

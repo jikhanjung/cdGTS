@@ -13,7 +13,7 @@ ROOT=/srv/cdGTS
 cd "$ROOT"
 
 IMAGE="honestjung/cdgts:${VERSION}"
-PORT=8010
+PORT=8011
 
 echo "=== [1/5] Pulling ${IMAGE} ==="
 docker pull "${IMAGE}"
