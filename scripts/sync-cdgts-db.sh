@@ -9,9 +9,10 @@
 # =============================================================================
 set -euo pipefail
 
-# --- 설정 (운영서버 주소는 환경변수/여기서 지정) ---
-REMOTE_USER="${CDGTS_REMOTE_USER:-devops}"
-REMOTE_HOST="${CDGTS_REMOTE_HOST:-cdgts.paleobytes.info}"   # TODO: 실제 운영서버 host/IP 확인
+# --- 설정 ---
+# 운영서버: GCP 인스턴스 dolfinid-2, cdgts.paleobytes.info(34.64.158.160), 사용자 honestjung.
+REMOTE_USER="${CDGTS_REMOTE_USER:-honestjung}"
+REMOTE_HOST="${CDGTS_REMOTE_HOST:-cdgts.paleobytes.info}"
 REMOTE_PATH="/srv/cdGTS"
 REMOTE="${REMOTE_USER}@${REMOTE_HOST}"
 

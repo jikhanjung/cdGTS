@@ -51,7 +51,8 @@ docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
   ```
   0 4 * * *  /home/jikhanjung/projects/cdGTS/scripts/sync-cdgts-db.sh
   ```
-  최초엔 `scripts/sync-cdgts-db.sh` 의 `REMOTE_HOST`(운영서버 주소) 확인 필요.
+  운영서버: GCP `dolfinid-2` = `cdgts.paleobytes.info`(34.64.158.160), 사용자 `honestjung`
+  (SSH 키 인증). `dolfinid` 단독 이름은 이 서버에서 해석 안 됨 → `cdgts.paleobytes.info` 사용.
 
 ## 참고 / 후속
 - 컨테이너는 `127.0.0.1:8011` 만 노출 — 앞단 **nginx 리버스 프록시**(도메인·HTTPS·정적 캐시)는 호스트에서 별도 구성. (8010은 strati2026 이 사용 중.) 개발/테스트 서버는 도메인 미사용(직접 포트/SSH 터널).
