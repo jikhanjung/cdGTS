@@ -38,7 +38,7 @@ The "fact" unit of each observation: sample · method (CA-ID-TIMS) · tracer (ET
   and the age at the boundary position is **interpolated**.
 - Result: **251.902 ± 0.024 Ma** — in the literature's own words, *"a mathematical construct."*
 
-## 4. Correlation / Global (Layer 3.5 — correlation tier)
+## 4. Correlation / Global (Layer 4 — correlation tier)
 
 - Eight conodont zones are established at Meishan (*Clarkina yini → C. meishanensis → Hindeodus changxingensis →
   C. taylorae → H. parvus → Isarcicella staeschei → I. isarcica → C. planata*), tying together ash beds, ages, and biological events.
@@ -52,8 +52,8 @@ The "fact" unit of each observation: sample · method (CA-ID-TIMS) · tracer (ET
 | Layer 1 (boundary definition, GSSP) | Meishan Bed 27c, *H. parvus* FAD, ratified 2001 |
 | Layer 2 (primary observations) | beds 22·25·28·33·34 zircon U–Pb ages (+ tracer, decay constant) |
 | Layer 3 (age model) | Bayesian age-depth interpolation → 251.902 ± 0.024 |
-| Layer 3.5 (correlation) | conodont zones, δ¹³C, other sections, astrochronology |
-| Layer 4 (deployment) | ICC = "251.902" (bake) / GTS = full narrative (narrate) |
+| Layer 4 (correlation) | conodont zones, δ¹³C, other sections, astrochronology |
+| Layer 6 (deployment) | ICC = "251.902" (bake) / GTS = full narrative (narrate) |
 
 ## 6. What This Case Proves / Corrects
 

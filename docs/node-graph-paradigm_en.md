@@ -14,7 +14,7 @@ Like Blender's Geometry Nodes, cdGTS is built as a **network of nodes**:
 
 When this network is **evaluated**, the result is an **age for a specific point on Earth**. Gather all of these together and you get something like the ICC / GTS2030.
 
-This view overlaps with the earlier Layer 2 (data) → Layer 3 (model) → Layer 4 (output) structure from [idea.md](idea_en.md), but seeing it as a **DAG (directed acyclic graph)** rather than as "layers" is more powerful.
+This view overlaps with the earlier Layer 2 (data) → Layers 3–5 (model) → Layer 6 (output) structure from [idea.md](idea_en.md), but seeing it as a **DAG (directed acyclic graph)** rather than as "layers" is more powerful.
 
 ## What the node metaphor gives you for free
 
@@ -44,7 +44,7 @@ Two things come out of the same graph:
 
 > Status: hunch. It needs validation against real cases. It pairs with [idea.md](idea_en.md) §8.
 
-The layers (Layer 0–4 in [idea.md](idea_en.md)) are reinterpreted not as "pipeline stages" but as **contracts**. Two kinds of thing alternate:
+The layers (Layer 0–6 in [idea.md](idea_en.md)) are reinterpreted not as "pipeline stages" but as **contracts**. Two kinds of thing alternate:
 
 - **Gateway layer** = a **fixed type/interface** everyone has agreed on. Citable, version-tagged, the unit of release. The **commit point** that says "at this point, at least, we freeze to this schema".
 - **The node network between gateways** = the **free topology** that produced that type. Where cycles, alternative models, probabilistic propagation, and correlation live.

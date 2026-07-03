@@ -32,7 +32,7 @@ Fortune Head has no radiometric age anchor. The datable ash beds that supply the
 
 Each observation, as in the P–T case, is an invariant, citable fact — but it sits in a different section, physically removed from the boundary point.
 
-## 4. Correlation Produces the Number (Layer 3.5 — Load-Bearing)
+## 4. Correlation Produces the Number (Layer 4 — Load-Bearing)
 
 What links the boundary point (Fortune Head) to the datable ash beds (Oman and others) is **chemostratigraphic correlation**:
 

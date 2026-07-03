@@ -30,7 +30,7 @@
 
 데이터를 다음 계층으로 나눈다. 상위 계층은 하위 계층으로부터 파생된다.
 
-> 참고: 이 계층 구조는 [node-graph-paradigm.md](node-graph-paradigm.md)에서 **노드 그래프(DAG)** 로 재해석된다. Layer 2 = 데이터 노드, Layer 3 = 프로세스/모델 노드, Layer 4 = 그래프 평가 결과.
+> 참고: 이 계층 구조는 [node-graph-paradigm.md](node-graph-paradigm.md)에서 **노드 그래프(DAG)** 로 재해석된다. Layer 2 = 데이터 노드, Layer 3~5 = 프로세스/모델 노드, Layer 6 = 그래프 평가 결과.
 
 ### Layer 0 — 명명 / 계층 (Nomenclature)
 - 이중 체계: 연대층서 (Eonothem/Erathem/System/Series/**Stage**) ↔ 지질연대 (Eon/Era/Period/Epoch/**Age**). 같은 경계를 다른 이름으로 부르는 관계이므로 명시적으로 연결.
@@ -50,13 +50,19 @@
 - Layer 2의 앵커들을 스플라인 / 베이지안 age-depth 모델 등으로 종합해 경계 연대 + 불확실성을 **산출**.
 - 붕괴상수 재보정 같은 방법 변경이 반영되는 곳.
 
-### Layer 4 — 배포된 시대표 (Published timescale)
-- Layer 1 + 3의 산출물. Fixed version으로 릴리스 (ICC vXXXX / GTSXXXX에 대응).
+### Layer 4 — 상관 (Correlation)
+- 서로 다른 노두(section)의 층서를 bio/chemo/magneto-strat로 **상관(correlate)** 해 엮는다. GSSP 지점이 датable하지 않을 때 숫자는 다른 지역에서 이 상관을 타고 온다 → 곁다리가 아니라 **load-bearing**. 사례: [case-cambrian-base-correlation.md](case-cambrian-base-correlation.md).
+
+### Layer 5 — 전역 종합 / 정합성 게이트 (Global synthesis / coherence gate)
+- 상관된 근거를 종합해 (a) 각 경계의 숫자+불확실성을 내고, (b) 경계들이 **전 지구적으로 정합**(단조 순서·지속시간·상관오차)하도록 만든다. 이 정합성 검사의 핵심 메커니즘이 **정합성 게이트**. 상세: [coherence-gate.md](coherence-gate.md).
+
+### Layer 6 — 배포된 시대표 (Published timescale)
+- Layer 1 + 5의 산출물. Fixed version으로 릴리스 (ICC vXXXX / GTSXXXX에 대응). ICC = bake, GTS = narrate.
 
 ## 6. 워크플로우 상상 (CI for science)
 
 1. 학자가 Layer 2에 새 관측을 PR처럼 제안.
-2. 파이프라인이 Layer 3~4를 재계산.
+2. 파이프라인이 Layer 3~6를 재계산.
 3. **diff**를 보여준다 — 예: "이 U-Pb 하나 추가하면 Permian–Triassic 경계가 251.902 → 251.88 Ma, 2σ 축소".
 4. Fixed release는 검증된 스냅샷, sandbox는 실험 브랜치. 개인 fork 시대표 허용 여부는 미정.
 
@@ -71,9 +77,9 @@
 
 > 상태: **hunch(직감) 수준. 확정 아님.** 실제 사례를 하나 붙잡고 작업해봐야 맞는 접근인지 알 수 있다. 아래는 방향 감각을 기록해두는 것.
 
-### 8.1 Layer 3 ↔ 4 사이의 빈 구멍 — correlation / synthesis 티어
+### 8.1 중간 티어 — correlation / synthesis (§5의 Layer 4·5로 승격)
 
-현재 모델은 Layer 3(국소 age model)에서 Layer 4(글로벌 배포)로 바로 점프한다. 그 사이에 **공간(space)과 상관(correlation)** 이 통째로 빠져 있다.
+초기 모델은 Layer 3(국소 age model)에서 배포로 바로 점프했고, 그 사이에 **공간(space)과 상관(correlation)** 이 통째로 빠져 있었다. 이제 §5에서 이를 **Layer 4(correlation)·Layer 5(global synthesis)** 로 승격했다.
 
 왜 필수인가: **GSSP는 경계를 *정의*하지만 경계의 *숫자*를 주지는 않는 경우가 많다.** golden spike 노두가 방사연대 측정이 안 되는 암상일 수 있고, 그러면 실제 숫자는 다른 지역의 datable한 층에서 나와 **correlation으로 GSSP 지점에 연결**된다. 즉 correlation은 곁다리 기능이 아니라 **숫자를 얻는 경로 자체에 실려 있는(load-bearing)** 단계.
 
@@ -84,10 +90,10 @@
 | 단일 포인트 | 시료 하나의 연대 | Layer 2 |
 | Section / 주상도 | age-depth 모델 (한 노두 안) | Layer 3 (공간적으로 국소) |
 | Formation / sequence | 여러 horizon을 한 단위로 묶기 | 국소~지역 |
-| **Section ↔ Section** | **상관 (bio/chemo/magneto-strat tie)** | ← **빠져 있음** |
-| 전 지구 | 같은 경계의 여러 근거를 풀링 → 숫자+불확실성 | Layer 4로 뭉개짐 |
+| **Section ↔ Section** | **상관 (bio/chemo/magneto-strat tie)** | 이제 **Layer 4** |
+| 전 지구 | 같은 경계의 여러 근거를 풀링 → 숫자+불확실성 | 이제 **Layer 5** |
 
-→ 후보: **Layer 3.5 (correlation)**, **Layer 3.7 (global synthesis)**. 어쩌면 둘로 나뉜다.
+→ **§5에서 정수 레이어로 승격: Layer 4 (correlation), Layer 5 (global synthesis / 정합성 게이트).**
 
 주의: correlation 자체가 불확실성을 가진 추론(확률적 매칭)이며, [node-graph-paradigm.md](node-graph-paradigm.md)의 **순환 의존성**(생층서 ↔ 방사연대 상호 보정)이 정확히 이 티어 안에서 터진다. node-graph 문서엔 이미 "correlation 노드 / node group"으로 이 공간 차원이 들어와 있는데, **이 레이어 모델(idea.md)은 아직 그걸 반영하지 못하고 있다** — 두 문서를 맞춰야 한다.
 

@@ -30,7 +30,7 @@ The geologic time scale is published only as a "book / major release" on a rough
 
 Data is divided into the following layers. Higher layers are derived from lower ones.
 
-> Note: this layered structure is reinterpreted as a **node graph (DAG)** in [node-graph-paradigm_en.md](node-graph-paradigm_en.md). Layer 2 = data nodes, Layer 3 = process/model nodes, Layer 4 = the result of evaluating the graph.
+> Note: this layered structure is reinterpreted as a **node graph (DAG)** in [node-graph-paradigm_en.md](node-graph-paradigm_en.md). Layer 2 = data nodes, Layers 3–5 = process/model nodes, Layer 6 = the result of evaluating the graph.
 
 ### Layer 0 — Nomenclature / hierarchy
 
@@ -54,14 +54,22 @@ Data is divided into the following layers. Higher layers are derived from lower 
 - Synthesizes the Layer 2 anchors via splines / Bayesian age-depth models, etc., to **produce** boundary ages + uncertainties.
 - Where method changes such as decay-constant recalibration are reflected.
 
-### Layer 4 — Published time scale
+### Layer 4 — Correlation
 
-- The output of Layers 1 + 3. Released as a fixed version (corresponding to ICC vXXXX / GTSXXXX).
+- Ties the stratigraphy of different outcrops (sections) together via bio/chemo/magneto-strat **correlation**. When a GSSP point is not datable, the number arrives from another region along this correlation → not a side feature but **load-bearing**. Case: [case-cambrian-base-correlation_en.md](case-cambrian-base-correlation_en.md).
+
+### Layer 5 — Global synthesis / coherence gate
+
+- Synthesizes the correlated evidence to (a) produce each boundary's number + uncertainty, and (b) make the boundaries **globally coherent** (monotonic ordering, durations, correlated error). The core mechanism of that coherence check is the **coherence gate**. Detail: [coherence-gate_en.md](coherence-gate_en.md).
+
+### Layer 6 — Published time scale
+
+- The output of Layers 1 + 5. Released as a fixed version (corresponding to ICC vXXXX / GTSXXXX). ICC = bake, GTS = narrate.
 
 ## 6. Imagined workflow (CI for science)
 
 1. A scholar proposes a new observation to Layer 2, PR-style.
-2. The pipeline recomputes Layers 3–4.
+2. The pipeline recomputes Layers 3–6.
 3. It shows a **diff** — e.g., "adding this one U–Pb shifts the Permian–Triassic boundary from 251.902 → 251.88 Ma, with reduced 2σ."
 4. Fixed releases are verified snapshots; the sandbox is an experimental branch. Whether to allow personal fork time scales is undecided.
 
@@ -76,9 +84,9 @@ Data is divided into the following layers. Higher layers are derived from lower 
 
 > Status: **At the level of a hunch. Not settled.** Whether this is the right approach can only be known by grabbing a real case and working through it. What follows is a record of a sense of direction.
 
-### 8.1 The gap between Layers 3 and 4 — a correlation / synthesis tier
+### 8.1 The intermediate tier — correlation / synthesis (promoted to Layers 4·5 in §5)
 
-The current model jumps straight from Layer 3 (local age model) to Layer 4 (global publication). Between them, **space and correlation** are missing entirely.
+The early model jumped straight from Layer 3 (local age model) to publication, and between them **space and correlation** were missing entirely. §5 now promotes these to **Layer 4 (correlation) · Layer 5 (global synthesis)**.
 
 Why this is essential: **a GSSP *defines* a boundary but in many cases does not give the boundary's *number*.** The golden-spike outcrop may be a lithology that cannot be radiometrically dated, in which case the actual number comes from datable beds in another region and is **tied to the GSSP point via correlation**. That is, correlation is not a side feature but a **load-bearing** step on the very path by which the number is obtained.
 
@@ -89,10 +97,10 @@ Operations of different character overlap at different scales:
 | Single point | Age of one sample | Layer 2 |
 | Section / stratigraphic column | Age-depth model (within one outcrop) | Layer 3 (spatially local) |
 | Formation / sequence | Bundling several horizons into one unit | Local–regional |
-| **Section ↔ Section** | **Correlation (bio/chemo/magneto-strat tie)** | ← **missing** |
-| Global | Pooling multiple lines of evidence for the same boundary → number + uncertainty | Collapsed into Layer 4 |
+| **Section ↔ Section** | **Correlation (bio/chemo/magneto-strat tie)** | now **Layer 4** |
+| Global | Pooling multiple lines of evidence for the same boundary → number + uncertainty | now **Layer 5** |
 
-→ Candidates: **Layer 3.5 (correlation)**, **Layer 3.7 (global synthesis)**. Perhaps split into two.
+→ **Promoted to integer layers in §5: Layer 4 (correlation), Layer 5 (global synthesis / coherence gate).**
 
 Caution: correlation is itself an inference with uncertainty (probabilistic matching), and the **circular dependency** from [node-graph-paradigm_en.md](node-graph-paradigm_en.md) (biostratigraphy ↔ radiometric mutual calibration) breaks out precisely within this tier. The node-graph document already brings this spatial dimension in as a "correlation node / node group," but **this layer model (idea.md) does not yet reflect that** — the two documents need to be reconciled.
 

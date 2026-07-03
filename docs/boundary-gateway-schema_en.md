@@ -59,7 +59,7 @@ BoundaryGateway:
     decreed_age_ma: number       # this number IS the definition (no stratotype)
     rationale: string            # e.g. "round-number convention"
 
-  age:                           # age — "when" (output of Layer 3 / 3.5)
+  age:                           # age — "when" (output of Layers 3–5)
     value_ma: number
     uncertainty:                 # null for GSSA (exact by definition)
       plus_minus: number | null

@@ -55,7 +55,7 @@ BoundaryGateway:
     decreed_age_ma: number       # 이 숫자가 곧 정의 (노두 없음)
     rationale: string            # 예: "round-number convention"
 
-  age:                           # 연대 — "언제" (Layer 3 / 3.5의 산출)
+  age:                           # 연대 — "언제" (Layer 3–5의 산출)
     value_ma: number
     uncertainty:                 # GSSA면 null (정의상 정확)
       plus_minus: number | null

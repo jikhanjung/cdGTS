@@ -35,6 +35,7 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 - [docs/case-cambrian-base-correlation_en.md](docs/case-cambrian-base-correlation_en.md) — base of the Cambrian (Fortune Head): the third type, where cross-section correlation produces the number
 - [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — draft boundary gateway schema (v0) spanning all three cases
 - [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning analysis (open questions)
+- [docs/coherence-gate_en.md](docs/coherence-gate_en.md) — the coherence gate concretized (Layer 5): pinned boundary set → valid chart
 
 ## Status
 
