@@ -42,6 +42,9 @@ BoundaryGateway:
       below: unit_ref            # unit below (dual-naming reference)
       above: unit_ref            # unit above
     # unit_ref carries both chronostratigraphic (System/Series/Stage) and geochronologic (Period/Epoch/Age) names
+    lineage:                     # cross-version identity lineage (prerequisite for the topology diff)
+      op: created | renamed | split | merged | retyped | deprecated
+      from: [boundary_id]        # source(s) of a split/merge, or the previous id of a rename
 
   definition:                    # position — "where/what" (Layer 1)
     type: GSSP | GSSA
@@ -210,8 +213,9 @@ These three examples make the two polymorphic axes concrete: **position (GSSP/GS
 - **How competing models coexist.** → **Resolved**: candidates coexist in the network (`ModelCandidate`
   independent objects), and a release binds one via `selection`. Reflected in §2's `age.model_ref` ·
   `ModelCandidate` · `Release`. Detail: [competing-models_en.md](competing-models_en.md).
-- **Topology diff.** When `definition.type` changes GSSA→GSSP between versions (Ediacaran done, Cryogenian
-  in progress), how to notate and track a **topology diff** separate from a value diff.
+- **Topology diff.** → **Resolved**: an axis orthogonal to the value diff. Aligned via stable ids +
+  `identity.lineage` (declared split/merge/retype), notated as edit-script / two-colored union graph / changelog.
+  Detail: [topology-diff_en.md](topology-diff_en.md).
 - **Cycles.** → **Resolved**: local mutual constraint folds into a joint-inference node; global calibration
   feedback is cut by the version spiral + subcommission `Clamp`s. Reflected in §2's `Clamp` · `Release.clamps`.
   Detail: [cycles_en.md](cycles_en.md).

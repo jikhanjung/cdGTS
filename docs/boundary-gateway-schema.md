@@ -38,6 +38,9 @@ BoundaryGateway:
       below: unit_ref            # 아래 단위 (이중 명명 참조)
       above: unit_ref            # 위 단위
     # unit_ref는 각자 연대층서(System/Series/Stage) ↔ 지질연대(Period/Epoch/Age) 이름을 보유
+    lineage:                     # 버전 간 정체성 계보 (토폴로지 diff의 전제)
+      op: created | renamed | split | merged | retyped | deprecated
+      from: [boundary_id]        # split/merge의 원본(들), rename의 이전 id
 
   definition:                    # 위치 — "어디/무엇" (Layer 1)
     type: GSSP | GSSA
@@ -205,8 +208,8 @@ status: { level: ratified, authority: ICS }
 - **경쟁 모델 공존 방식.** → **정리됨**: 후보는 네트워크에 복수 공존(`ModelCandidate` 독립 객체), 릴리스가
   `selection`으로 하나를 바인딩. 위 §2의 `age.model_ref`·`ModelCandidate`·`Release`에 반영. 상세:
   [competing-models.md](competing-models.md).
-- **토폴로지 diff.** `definition.type` 이 버전 간 GSSA→GSSP로 바뀔 때(Ediacaran 완료, Cryogenian 진행),
-  값 diff와 별개의 **위상 diff**를 어떻게 표기·추적할지.
+- **토폴로지 diff.** → **정리됨**: 값 diff와 직교하는 별도 축. 안정 id + `identity.lineage`(split/merge/retype
+  선언)로 정렬하고, edit-script / 2색 합집합그래프 / changelog로 표기. 상세: [topology-diff.md](topology-diff.md).
 - **순환.** → **정리됨**: 국소 상호제약은 joint-inference 노드로 접고, 전역 보정 되먹임은 버전 나선 +
   subcommission의 `Clamp`로 절단. 위 §2의 `Clamp`·`Release.clamps`에 반영. 상세: [cycles.md](cycles.md).
 
