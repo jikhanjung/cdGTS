@@ -21,3 +21,11 @@ export const saveGraph = (id, body) =>
 
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: jsonHeaders }).then(j)
+
+// --- 릴리스 / diff ---
+export const listReleases = () => fetch('/api/releases/').then(j)
+export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)
+export const bakeRelease = (id) =>
+  fetch(`/api/releases/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
+export const diffReleases = (a, b) =>
+  fetch(`/api/releases/diff/?a=${a}&b=${b}`).then(j)

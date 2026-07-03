@@ -46,6 +46,7 @@ function rfToApi(nodes, edges, viewport) {
 
 export default function Editor() {
   const [types, setTypes] = useState([])
+  const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [graphName, setGraphName] = useState('')
   const [nodes, setNodes, onNodesChange] = useNodesState([])
@@ -66,7 +67,8 @@ export default function Editor() {
         const tmap = Object.fromEntries(ts.map((t) => [t.slug, t]))
         let graphs = await listGraphs()
         let g = graphs[0]
-        if (!g) g = await createGraph({ slug: 'sandbox', name: 'Sandbox', nodes: [], edges: [], viewport: {} })
+        if (!g) { g = await createGraph({ slug: 'sandbox', name: 'Sandbox', nodes: [], edges: [], viewport: {} }); graphs = [g] }
+        setGraphs(graphs)
         const full = await getGraph(g.id)
         setGraphId(full.id)
         setGraphName(full.name)
@@ -104,6 +106,23 @@ export default function Editor() {
       data: { nodeType: slug, label: '', params: {}, category: t.category, ports: t.ports },
     }))
   }, [screenToFlowPosition, typeMap, setNodes])
+
+  const loadGraph = useCallback(async (id) => {
+    setError(null)
+    try {
+      const full = await getGraph(id)
+      setGraphId(full.id)
+      setGraphName(full.name)
+      const { nodes: rn, edges: re } = apiToRF(full, typeMap)
+      setNodes(rn.map((n) => ({ ...n, data: { ...n.data, result: null } })))
+      setEdges(re)
+      if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
+      setStatus(`불러옴: ${full.name} (노드 ${rn.length})`)
+    } catch (e) {
+      setError(e.data || String(e))
+      setStatus('로드 실패')
+    }
+  }, [typeMap, setNodes, setEdges, setViewport])
 
   const onSave = useCallback(async () => {
     setError(null)
@@ -167,7 +186,14 @@ export default function Editor() {
 
       <main className="canvas" ref={wrapperRef}>
         <div className="toolbar">
-          <strong>{graphName}</strong>
+          <select
+            className="graph-select"
+            value={graphId || ''}
+            onChange={(e) => loadGraph(Number(e.target.value))}
+            title="그래프 선택"
+          >
+            {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+          </select>
           <button onClick={onSave}>저장 (PUT)</button>
           <button onClick={onEvaluate}>평가</button>
           <span className="status">{status}</span>

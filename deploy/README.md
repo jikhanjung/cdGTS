@@ -43,8 +43,9 @@ cd ~/projects/cdGTS && git pull
 /srv/cdGTS/deploy-dev.sh 0.1.1      # 스냅샷 없이 스왑 (DB = 운영 복사본)
 # 빈 DB 최초 시드(개발/테스트에서 아직 운영 sync 전이면):
 docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
-    sh -c "python manage.py loaddata initial_boundaries initial_node_types example_graphs"
-# example_graphs = 세 케이스 예제 네트워크(GSSA · P–T · 캄브리아 base)
+    sh -c "python manage.py loaddata initial_boundaries initial_node_types example_graphs example_releases"
+# example_graphs   = 세 케이스 예제 네트워크(GSSA · P–T · 캄브리아 base)
+# example_releases = 릴리스 Diff 데모용 두 릴리스(ICC-2012/2024 예시, 값+토폴로지 diff)
 ```
 
 ## DB 관리 — 배포와 분리 (fsis 패턴)

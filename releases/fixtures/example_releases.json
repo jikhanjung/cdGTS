@@ -1,0 +1,72 @@
+[
+  {"model": "releases.modelcandidate", "pk": 1, "fields": {
+    "slug": "base-triassic/legacy-tims", "scope": "boundary", "kind": "legacy TIMS",
+    "method": "local-interpolation", "provenance_ref": "example-permian-triassic",
+    "note": "재보정 이전 옛 TIMS 값(예시)."}},
+  {"model": "releases.modelcandidate", "pk": 2, "fields": {
+    "slug": "base-triassic/caidtims-2014", "scope": "boundary", "kind": "CA-ID-TIMS age-depth",
+    "method": "local-interpolation", "provenance_ref": "example-permian-triassic",
+    "note": "Burgess+2014 EARTHTIME 재보정 + age-depth 보간."}},
+  {"model": "releases.modelcandidate", "pk": 3, "fields": {
+    "slug": "base-cambrian/oman-classic", "scope": "boundary", "kind": "Oman U-Pb + 상관",
+    "method": "cross-section-correlation", "provenance_ref": "example-cambrian-base",
+    "note": "고전 Oman 재층값(예시)."}},
+  {"model": "releases.modelcandidate", "pk": 4, "fields": {
+    "slug": "base-cambrian/bowyer-2022", "scope": "global", "kind": "글로벌 d13C age model",
+    "method": "cross-section-correlation", "provenance_ref": "example-cambrian-base",
+    "note": "Bowyer+2022 130 successions δ13C age model(예시)."}},
+  {"model": "releases.modelcandidate", "pk": 5, "fields": {
+    "slug": "base-proterozoic/gssa", "scope": "boundary", "kind": "committee-decision",
+    "method": "decreed", "provenance_ref": "example-gssa-precambrian",
+    "note": "GSSA 결정값 2500 Ma(오차 없음)."}},
+
+  {"model": "releases.candidateoutput", "pk": 1, "fields": {
+    "candidate": 1, "boundary": 1,
+    "distribution": {"fidelity": "sym", "value_ma": 252.5, "sigma": 2, "budget": {"analytical": 0.3}}}},
+  {"model": "releases.candidateoutput", "pk": 2, "fields": {
+    "candidate": 2, "boundary": 1,
+    "distribution": {"fidelity": "decomposed", "value_ma": 251.902, "sigma": 2, "budget": {"model": 0.024}}}},
+  {"model": "releases.candidateoutput", "pk": 3, "fields": {
+    "candidate": 3, "boundary": 3,
+    "distribution": {"fidelity": "sym", "value_ma": 542.0, "sigma": 2, "budget": {"analytical": 0.3}}}},
+  {"model": "releases.candidateoutput", "pk": 4, "fields": {
+    "candidate": 4, "boundary": 3,
+    "distribution": {"fidelity": "decomposed", "value_ma": 538.8, "sigma": 2, "budget": {"model": 0.6}}}},
+  {"model": "releases.candidateoutput", "pk": 5, "fields": {
+    "candidate": 5, "boundary": 2,
+    "distribution": {"fidelity": "exact", "value_ma": 2500}}},
+
+  {"model": "releases.release", "pk": 1, "fields": {
+    "version": "ICC-2012 (예시)", "note": "재보정 이전 예시 릴리스.",
+    "created_at": "2026-07-03T09:00:00+00:00"}},
+  {"model": "releases.release", "pk": 2, "fields": {
+    "version": "ICC-2024 (예시)", "note": "CA-ID-TIMS 재보정 + 선캄브리아(Proterozoic) 포함 예시.",
+    "created_at": "2026-07-03T09:00:00+00:00"}},
+
+  {"model": "releases.selection", "pk": 1, "fields": {"release": 1, "boundary": 1, "candidate": 1}},
+  {"model": "releases.selection", "pk": 2, "fields": {"release": 1, "boundary": 3, "candidate": 3}},
+  {"model": "releases.selection", "pk": 3, "fields": {"release": 2, "boundary": 1, "candidate": 2}},
+  {"model": "releases.selection", "pk": 4, "fields": {"release": 2, "boundary": 3, "candidate": 4}},
+  {"model": "releases.selection", "pk": 5, "fields": {"release": 2, "boundary": 2, "candidate": 5}},
+
+  {"model": "releases.boundaryrecord", "pk": 1, "fields": {
+    "release": 1, "boundary": 1, "definition_type": "GSSP", "value_ma": 252.5,
+    "uncertainty": {"fidelity": "sym", "value_ma": 252.5, "sigma": 2, "budget": {"analytical": 0.3}},
+    "method": "local-interpolation", "candidate": 1, "provenance_ref": "example-permian-triassic"}},
+  {"model": "releases.boundaryrecord", "pk": 2, "fields": {
+    "release": 1, "boundary": 3, "definition_type": "GSSP", "value_ma": 542.0,
+    "uncertainty": {"fidelity": "sym", "value_ma": 542.0, "sigma": 2, "budget": {"analytical": 0.3}},
+    "method": "cross-section-correlation", "candidate": 3, "provenance_ref": "example-cambrian-base"}},
+  {"model": "releases.boundaryrecord", "pk": 3, "fields": {
+    "release": 2, "boundary": 1, "definition_type": "GSSP", "value_ma": 251.902,
+    "uncertainty": {"fidelity": "decomposed", "value_ma": 251.902, "sigma": 2, "budget": {"model": 0.024}},
+    "method": "local-interpolation", "candidate": 2, "provenance_ref": "example-permian-triassic"}},
+  {"model": "releases.boundaryrecord", "pk": 4, "fields": {
+    "release": 2, "boundary": 3, "definition_type": "GSSP", "value_ma": 538.8,
+    "uncertainty": {"fidelity": "decomposed", "value_ma": 538.8, "sigma": 2, "budget": {"model": 0.6}},
+    "method": "cross-section-correlation", "candidate": 4, "provenance_ref": "example-cambrian-base"}},
+  {"model": "releases.boundaryrecord", "pk": 5, "fields": {
+    "release": 2, "boundary": 2, "definition_type": "GSSA", "value_ma": 2500,
+    "uncertainty": {"fidelity": "exact", "value_ma": 2500},
+    "method": "decreed", "candidate": 5, "provenance_ref": "example-gssa-precambrian"}}
+]
