@@ -13,7 +13,9 @@ fsis2026 패턴 + 프론트(Vite SPA) 멀티스테이지 빌드. 이미지 `hone
 | `docker-compose.dev.yml` | 로컬 빌드/실행 테스트(`--build`). |
 | `sync_to_srv.sh` | 운영/테스트 호스트: `host/*` → `/srv/cdGTS`. |
 | `host/docker-compose.yml` | `/srv/cdGTS` 실행(이미지 pull, `${IMAGE_TAG}`, `127.0.0.1:8011:8000`). |
-| `host/deploy.sh X.Y.Z` | 버전 스왑: pull → .env 갱신 → 컨테이너 교체 → 헬스체크. **DB 는 안 건드림.** |
+| `host/deploy.sh X.Y.Z` | 배포 공통 엔진: pull → .env 갱신 → 컨테이너 교체 → 헬스체크. `DEPLOY_SNAPSHOT=1` 이면 스왑 직전 DB 스냅샷. 직접 호출 X. |
+| `host/deploy-prod.sh X.Y.Z` | **프로덕션** 진입점 — `DEPLOY_SNAPSHOT=1`(배포 전 DB 스냅샷) 로 deploy.sh 호출. |
+| `host/deploy-dev.sh X.Y.Z` | **개발/테스트** 진입점 — 스냅샷 없이 deploy.sh 호출(DB = 운영 복사본). |
 | `host/.env.example` | `/srv/cdGTS/.env` 템플릿. |
 | `../scripts/sync-cdgts-db.sh` | (개발/테스트) 운영 DB 를 cron 으로 pull → 히스토리 + 테스트 DB 로 교체. |
 
@@ -32,11 +34,13 @@ touch /srv/cdGTS/db.sqlite3
 ./deploy/sync_to_srv.sh
 ```
 
-**배포 (매 버전)** — DB 는 안 건드림:
+**배포 (매 버전)** — 환경별 진입점 사용:
 ```
 cd ~/projects/cdGTS && git pull
 ./deploy/sync_to_srv.sh
-/srv/cdGTS/deploy.sh 0.1.1
+/srv/cdGTS/deploy-prod.sh 0.1.1     # 프로덕션: 배포 전 DB 스냅샷 후 스왑
+# 개발/테스트:
+/srv/cdGTS/deploy-dev.sh 0.1.1      # 스냅샷 없이 스왑 (DB = 운영 복사본)
 # 빈 DB 최초 시드(개발/테스트에서 아직 운영 sync 전이면):
 docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
     sh -c "python manage.py loaddata initial_boundaries initial_node_types"
@@ -44,7 +48,8 @@ docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
 
 ## DB 관리 — 배포와 분리 (fsis 패턴)
 
-- **배포(`deploy.sh`)는 DB 를 건드리지 않는다.** 컨테이너(이미지)만 스왑, `/srv/cdGTS/db.sqlite3` 볼륨 유지.
+- **배포는 기본적으로 DB 를 건드리지 않는다** — 컨테이너(이미지)만 스왑, `/srv/cdGTS/db.sqlite3` 볼륨 유지.
+  단 **prod(`deploy-prod.sh`)는 스왑 직전 pre_deploy 스냅샷**을 떠 나쁜 마이그레이션에 대비(개발/테스트 일일 pull 과 별개의 로컬 방어선).
 - **개발/테스트 DB = 운영 복사본** (폐기 가능). `scripts/sync-cdgts-db.sh` 가 운영서버에서 DB 를 pull 해
   히스토리(`~/backups/cdGTS/db_history`, 계층 보관) + 테스트 DB(`/srv/cdGTS/db.sqlite3`)로 교체하고
   컨테이너를 안전 재기동한다. cron:
