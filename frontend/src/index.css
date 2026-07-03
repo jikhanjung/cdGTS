@@ -59,3 +59,9 @@ body {
 .cdgts-node__body .port { padding: 2px 6px; color: #444; white-space: nowrap; }
 .cdgts-node__body .port.signal { color: #b06a00; }
 .cdgts-node__body .port.any { color: #767688; font-style: italic; }
+.cdgts-node__result {
+  border-top: 1px solid #eee; padding: 3px 9px; font-size: 11px;
+  font-variant-numeric: tabular-nums; color: #1c1c22; background: #fafafc;
+  border-radius: 0 0 5px 5px; display: flex; justify-content: space-between; align-items: center;
+}
+.cdgts-node__result .cached { color: #2d7d46; font-size: 14px; line-height: 1; }

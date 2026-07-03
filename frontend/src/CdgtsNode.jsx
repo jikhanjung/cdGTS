@@ -34,6 +34,14 @@ export default function CdgtsNode({ data }) {
           ))}
         </ul>
       </div>
+      {data.result && (
+        <div className="cdgts-node__result" title={data.result.cached ? '캐시 재사용' : '재계산'}>
+          {data.result.distribution && data.result.distribution.value_ma != null
+            ? `${data.result.distribution.value_ma} Ma`
+            : '—'}
+          {data.result.cached && <span className="cached">•</span>}
+        </div>
+      )}
 
       {inputs.map((p, i) => (
         <Handle

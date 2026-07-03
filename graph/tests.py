@@ -121,11 +121,3 @@ def test_bad_port_rejected(api, graph):
     resp = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
     assert resp.status_code == 400
     assert "입력 포트" in str(resp.data)
-
-
-def test_evaluate_stub(api, graph):
-    api.put(f"/api/graphs/{graph.pk}/", _payload(), format="json")
-    resp = api.post(f"/api/graphs/{graph.pk}/evaluate/")
-    assert resp.status_code == 200
-    assert resp.data["status"] == "not-implemented"
-    assert resp.data["node_count"] == 2

@@ -119,12 +119,18 @@ export default function Editor() {
   const onEvaluate = useCallback(async () => {
     setError(null)
     try {
-      const r = await evaluateGraph(graphId)
-      setStatus(`평가: ${r.detail} (노드 ${r.node_count}, 엣지 ${r.edge_count})`)
+      const run = await evaluateGraph(graphId)
+      const byKey = Object.fromEntries(run.results.map((r) => [r.node_key, r]))
+      setNodes((nds) => nds.map((n) => ({ ...n, data: { ...n.data, result: byKey[n.id] || null } })))
+      const cert = run.certificate
+      setStatus(
+        `평가 run#${run.id} · computed ${run.stats.computed} / cached ${run.stats.cached}` +
+        (cert ? ` · 정합성 ${cert.passed ? 'pass' : 'warn'}` : ''),
+      )
     } catch (e) {
       setError(e.data || String(e))
     }
-  }, [graphId])
+  }, [graphId, setNodes])
 
   const grouped = useMemo(() => {
     const g = { data: [], process: [], clamp: [] }
