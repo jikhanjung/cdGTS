@@ -50,9 +50,10 @@ docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
 
 - **배포는 기본적으로 DB 를 건드리지 않는다** — 컨테이너(이미지)만 스왑, `/srv/cdGTS/db.sqlite3` 볼륨 유지.
   단 **prod(`deploy-prod.sh`)는 스왑 직전 pre_deploy 스냅샷**을 떠 나쁜 마이그레이션에 대비(개발/테스트 일일 pull 과 별개의 로컬 방어선).
-- **개발/테스트 DB = 운영 복사본** (폐기 가능). `scripts/sync-cdgts-db.sh` 가 운영서버에서 DB 를 pull 해
-  히스토리(`~/backups/cdGTS/db_history`, 계층 보관) + 테스트 DB(`/srv/cdGTS/db.sqlite3`)로 교체하고
-  컨테이너를 안전 재기동한다. cron:
+- **개발/테스트 DB = 운영 복사본** (폐기 가능). `scripts/sync-cdgts-db.sh` 가 운영서버에서
+  **sqlite online backup API(`.backup`)로 원자적 스냅샷을 만든 뒤 단일 파일만 pull**(WAL hot-copy
+  torn/불일치 회피) → 히스토리(`~/backups/cdGTS/db_history`, 계층 보관) + 테스트 DB(`/srv/cdGTS/db.sqlite3`)로
+  교체하고 컨테이너를 안전 재기동한다. cron:
   ```
   0 4 * * *  /home/jikhanjung/projects/cdGTS/scripts/sync-cdgts-db.sh
   ```

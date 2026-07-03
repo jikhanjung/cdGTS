@@ -50,14 +50,24 @@ log "========== cdGTS DB sync 시작 (from ${REMOTE}) =========="
 TODAY=$(date +%Y%m%d)
 SNAP="${DB_HISTORY_DIR}/db_${TODAY}.sqlite3"
 
-# --- 1. 운영서버에서 DB pull (WAL/SHM 부속 포함) ---
-if scp -q "${REMOTE}:${REMOTE_PATH}/db.sqlite3" "$SNAP"; then
-    scp -q "${REMOTE}:${REMOTE_PATH}/db.sqlite3-wal" "${SNAP}-wal" 2>/dev/null || true
-    scp -q "${REMOTE}:${REMOTE_PATH}/db.sqlite3-shm" "${SNAP}-shm" 2>/dev/null || true
-    log "pull 완료: $SNAP ($(du -h "$SNAP" | cut -f1))"
-else
-    log "ERROR: pull 실패 (${REMOTE})"; exit 1
-fi
+# --- 1. 운영서버에서 원자적 스냅샷 생성 후 pull ---
+# WAL 모드 hot-copy(torn/불일치) 회피: live db + -wal + -shm 를 따로 긁어오면
+# 세 파일이 서로 다른 시점일 수 있다. 대신 prod 에서 sqlite online backup API 로
+# 일관 스냅샷(단일 파일)을 만들고 그것만 가져온다. (fsis backup_db.py 의 .backup 방식)
+REMOTE_SNAP="${REMOTE_PATH}/.db_sync_snapshot.sqlite3"
+ssh "$REMOTE" "python3 - '${REMOTE_PATH}/db.sqlite3' '${REMOTE_SNAP}'" <<'PYEOF' || { log "ERROR: prod 원자적 스냅샷 실패 (${REMOTE})"; exit 1; }
+import sqlite3, sys
+src = sqlite3.connect(sys.argv[1])
+dst = sqlite3.connect(sys.argv[2])
+try:
+    with dst:
+        src.backup(dst)          # online backup API — writer 있어도 일관 스냅샷
+finally:
+    dst.close(); src.close()
+PYEOF
+scp -q "${REMOTE}:${REMOTE_SNAP}" "$SNAP" || { ssh "$REMOTE" "rm -f '${REMOTE_SNAP}'" 2>/dev/null || true; log "ERROR: scp 실패 (${REMOTE})"; exit 1; }
+ssh "$REMOTE" "rm -f '${REMOTE_SNAP}' '${REMOTE_SNAP}-wal' '${REMOTE_SNAP}-shm'" 2>/dev/null || true
+log "pull 완료(원자적 스냅샷): $SNAP ($(du -h "$SNAP" | cut -f1))"
 
 # --- 2. current 갱신 + 히스토리 정리 ---
 cp -f "$SNAP" "${CURRENT_DIR}/db.sqlite3"
@@ -65,14 +75,13 @@ DEL=$(cleanup_db "$DB_HISTORY_DIR" $LOCAL_DAILY_DAYS)
 [ "$DEL" -gt 0 ] && log "히스토리 정리: ${DEL}개 삭제 (${LOCAL_DAILY_DAYS}일 초과, 월초/연말 보존)"
 
 # --- 3. 개발/테스트 DB 교체 ---
-# SQLite 파일을 컨테이너가 열고 있으면 라이브 교체는 위험 → 잠시 정지 후 교체, 재기동.
+# 스냅샷은 이미 일관된 단일 파일(-wal/-shm 없음). 컨테이너가 DB 를 열고 있으므로
+# 라이브 교체를 피해 잠시 정지 → 교체 → 재기동. 남아있던 -wal/-shm 은 제거.
 if [ -f "$COMPOSE" ] && docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER"; then
     log "컨테이너 정지 → DB 교체 → 재기동"
     docker compose -f "$COMPOSE" stop "$CONTAINER" >/dev/null 2>&1 || true
     cp -f "$SNAP" "$DEV_DB"
     rm -f "${DEV_DB}-wal" "${DEV_DB}-shm"
-    [ -f "${SNAP}-wal" ] && cp -f "${SNAP}-wal" "${DEV_DB}-wal" || true
-    [ -f "${SNAP}-shm" ] && cp -f "${SNAP}-shm" "${DEV_DB}-shm" || true
     docker compose -f "$COMPOSE" up -d "$CONTAINER" >/dev/null 2>&1
     log "DB 교체 + 재기동 완료"
 else
