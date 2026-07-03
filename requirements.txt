@@ -1,0 +1,5 @@
+# cdGTS runtime dependencies.
+# Stack: Django 5.2 (fsis2026 과 동일 계열). DB 는 dev SQLite → 추후 PostGIS 전환 예정.
+Django==5.2.12
+python-decouple==3.8
+PyYAML==6.0.1
