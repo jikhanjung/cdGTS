@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'nodes.apps.NodesConfig',
     'graph.apps.GraphConfig',
     'engine.apps.EngineConfig',
+    'releases.apps.ReleasesConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

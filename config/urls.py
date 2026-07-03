@@ -22,4 +22,5 @@ urlpatterns = [
     path('api/', include('graph.urls')),
     path('api/', include('nodes.urls')),
     path('api/', include('engine.urls')),
+    path('api/', include('releases.urls')),
 ]
