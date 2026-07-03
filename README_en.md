@@ -33,6 +33,7 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 - [docs/case-permian-triassic_en.md](docs/case-permian-triassic_en.md) — the first case study validating the model against the Permian–Triassic boundary (real data + node graph)
 - [docs/case-precambrian-gssa_en.md](docs/case-precambrian-gssa_en.md) — the Precambrian GSSA counter-case (the number *is* the definition — the mirror image of P–T)
 - [docs/case-cambrian-base-correlation_en.md](docs/case-cambrian-base-correlation_en.md) — base of the Cambrian (Fortune Head): the third type, where cross-section correlation produces the number
+- [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — draft boundary gateway schema (v0) spanning all three cases
 
 ## Status
 
