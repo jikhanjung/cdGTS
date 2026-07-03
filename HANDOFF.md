@@ -1,54 +1,62 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-03 (하루 세션으로 **빈 브레인스토밍 저장소 → 개념 코퍼스 13주제(한/영 26파일) + 경계 게이트웨이 스키마 v0**. 흐름: 개념 3(idea 레이어 0–6·node-graph 패러다임·README) → **사례 검증 3**(P–T GSSP 국소보간 251.902±0.024 / 선캄 GSSA 결정 2500 / 캄브리아 GSSP 섹션간상관 538.8±0.6) → **스키마 v0** → **설계 심화 6**(전역 vs 경계별 버전 · 정합성 게이트 Layer 5 L0–L3 · 경쟁모델 네트워크복수후보+릴리스선택 · 순환→**clamp** · 토폴로지 diff · 분포 표현 L0–L5) → **통합 개념지도**. 스키마 §4 열린 질문 5개 전부 정리. 주요 봉합: **provenance 깊이=단일 축** / **clamp가 GSSA·순환·분포 통일**(GSSA=Clamp{pin}=점질량) / **ICC·GTS=bake·narrate 반복** / 게이트웨이·네트워크 2계층 반복 / Layer 5=여러 이름의 한 노드(전역종합=게이트=joint=공분산). 미션 재정의: "자동 계산"이 아니라 "subcommission이 clamp를 놓고 기계가 전파·정합·diff". devlog 001~012 + 커밋 12개 push. 한/영 쌍 유지 규칙 memory 기록. **코드·데이터 포맷·스택은 전면 미정**.)
+**Last updated**: 2026-07-03 (**브레인스토밍 → 코드 착수 + P01 계획 완주**. 개념 코퍼스 13주제(한/영 26파일) +
+경계 게이트웨이 스키마 v0 위에, 앱 아키텍처 설계(docs/app-architecture 한/영) → **개발 계획 P01** →
+**Phase 0~6 전부 구현**. 스택 확정: **Django 5.2.12 + SQLite(dev) + DRF 3.17 + React Flow(Vite)**. 5개 앱
+[chrono·nodes·graph·engine·releases] + 프론트 노드 에디터. 백엔드 **pytest 40 passed**. 미션 재정의
+"사람이 clamp, 기계가 전파·정합·diff"의 **전파(engine pass-through)·정합(coherence cert)·diff(releases 값/토폴로지)**
+골격이 실제로 돎. devlog 001~020 + P01 + 커밋 다수 push.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
-> 개념 전체 지도는 `docs/concept-map.md`. 항목별 상세 backlog 는 `TODOs.md`. 저장소 성격은 `CLAUDE.md`.
+> 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
 
 ## 현재 상태
 
-- **성격**: 개인 브레인스토밍 저장소 — 코드베이스가 아니라 아이디어 저장소 (CLAUDE.md).
-- **문서 코퍼스**: `docs/` 13주제 × 한/영(`_en.md`) = 26파일 + README 한/영. **진입점 `docs/concept-map.md`**.
-- **레이어 모델**: 정수 사다리 **0–6** (명명·경계정의·원시관측·국소 age model·상관·전역종합/정합성게이트·배포).
-- **스키마**: `docs/boundary-gateway-schema.md` **v0** — 두 다형 축(`definition.type` GSSP|GSSA / `age.method`
-  decreed|local-interpolation|cross-section-correlation) + `ModelCandidate`·`Release`·`Clamp`·`identity.lineage`·
-  구조화 `uncertainty`. §4 열린 질문 5개 전부 정리, 세 사례 YAML 예시.
-- **핵심 원시타입**: **clamp** (subcommission 이 그래프에 놓는 hand-crafted 거버넌스 게이트; GSSA = `Clamp{pin}` 특수사례).
-- **미결정**: 데이터 직렬화 포맷 · 코드 · 실제 데이터 소스 연동 (착수 전 논의 필요). **스택은 잠정 Django 5.2**
-  (브레인스토밍 종료 후 이 저장소에서 개발 예정 — 사용자 기존 스택 fsis2026 과 동일. 확정 아님).
-- **devlog**: `devlog/YYYYMMDD_NNN_title.md`, NNN = 날짜 무관 단조증가 일련번호. 현재 **001~012**.
-- **언어 규칙**: `docs/`·README 는 한/영 쌍 유지 (memory `bilingual-docs-convention`, `_en.md` 접미사 + 언어
-  전환 링크 + 언어별 상호링크). HANDOFF/TODOs/devlog 는 한글 단독(fsis2026 관행).
-- **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push (개인 저장소).
+- **성격**: 브레인스토밍 저장소 → **실행 가능한 코드베이스로 전환**(개념 코퍼스는 `docs/` 에 그대로 유지).
+- **스택**: Django **5.2.12**, dev DB **SQLite**(공간 기능 착수 시 PostGIS), **DRF 3.17.1**, 프론트 **React 18 +
+  @xyflow/react 12 + Vite**(`frontend/`, dev 는 `/api` 프록시). venv `/home/jikhanjung/venv/cdGTS`.
+- **앱 5개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases):
+  - `chrono` — 정본 registry(Unit 이중명명·Boundary·Lineage·Authority·Ratification·Locality). fixture 세 경계.
+  - `nodes` — 타입 시스템(NodeType 12 + Port) + `Distribution` 값객체(충실도 L0–L5). fixture 12타입.
+  - `graph` — DAG(Graph·NodeInstance·Edge·NodeGroup·Gateway) + DAG 불변식(clamp/joint-inference 로만 순환 절단)
+    + DRF `GET/PUT /api/graphs/{id}` React Flow 왕복.
+  - `engine` — pass-through 평가(EvalRun·NodeResult 콘텐츠해시 증분·CoherenceCertificate 스텁)
+    + `POST /api/graphs/{id}/evaluate/`.
+  - `releases` — ModelCandidate·Release(selection+clamps)·BoundaryRecord(bake)·Clamp + bake/diff API
+    (`/api/releases/{id}/bake/`, `/diff/?a=&b=`).
+- **프론트**: 팔레트(NodeType 구동) → 캔버스 drag&drop → 저장(PUT)/평가 + 결과 뱃지. `npm run build` 통과.
+- **테스트**: 백엔드 `pytest` **40 passed**(pytest.ini). fixture: `initial_boundaries`(chrono), `initial_node_types`(nodes).
+- **문서 코퍼스**: `docs/` 13주제 × 한/영 + README + **app-architecture 한/영**. 진입점 `docs/concept-map.md`.
+- **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push.
 
-## 개념 진척 한 줄 정리
+## 개념/구현 진척 한 줄 정리
 
-> **개념 → 사례 검증(세 유형) → 스키마 v0(§4 열린 질문 5개 정리) → 통합 지도** 까지 한 바퀴 완주.
-> 남은 것: **착수 결정**(데이터 포맷/스택) + 각 설계 문서 말미의 **미해결 열린 질문**(→ TODOs) + 추가 사례 검증.
+> **개념 → 사례검증 → 스키마 v0 → 통합지도 → 앱 설계 → P01 계획 → Phase 0~6 구현** 완주.
+> 스키마의 다형 두 축·clamp·provenance=역추적·게이트웨이2계층이 모두 모델/코드로 내려옴.
 
-## 최근 작업 (2026-07-03, 라운드별 상세는 `devlog/`)
+## 최근 작업 (2026-07-03)
 
-- **개념 셋업** (devlog 001) — CLAUDE.md·README·idea.md(레이어)·node-graph-paradigm.md.
-- **게이트웨이 재해석 + 사례 2** (002) — 레이어=계약, 중간 티어 발견. P–T(GSSP 국소보간)·선캄 GSSA(결정) 사례.
-- **사례 3** (003) — 캄브리아 base(Fortune Head, 섹션 간 correlation이 load-bearing). 중간 티어가 (a)국소보간 /
-  (b)섹션간상관 둘로 갈림 확인.
-- **i18n** (004) — 전 문서·README 영어판(`_en.md`) + 언어 전환 링크.
-- **스키마 v0** (005) — 세 사례를 아우르는 경계 게이트웨이 스키마, 두 다형 축 + 세 예시.
-- **설계 심화** (006~011) — 전역 vs 경계별 버전(레코드+매니페스트) / 정합성 게이트(Layer 5, L0–L3, ICC=검증·GTS=재조정) /
-  경쟁모델(복수후보+릴리스selection) / 순환(국소=joint추정, 전역=버전나선 + **clamp** 도입) / 토폴로지 diff(값 diff와
-  직교, identity.lineage) / 분포 표현(충실도 사다리 L0–L5, 분해예산=공분산). 각 라운드마다 스키마 반영 + §4 항목 정리.
-- **통합 개념지도** (012) — 12문서를 잇는 상위 지도 + 수렴점 5개. README 를 지도 구조에 맞춰 재편.
+- **개념/스키마**(devlog 001~012) — 개념 3 + 사례검증 3 + 스키마 v0 + 설계심화 6 + 통합지도.
+- **문서/계획**(013·014·P01) — HANDOFF/TODOs/README + 환경 뼈대(Django) + **앱 아키텍처(app-architecture 한/영)**
+  + 개발계획 P01.
+- **구현**(015~020) — Phase 1 chrono / 2 nodes(+Distribution) / 3 graph(DAG+DRF) / 4 frontend(React Flow) /
+  5 engine(pass-through+증분+cert) / 6 releases(bake+값/토폴로지 diff). 각 Phase = 모델+admin+fixture/테스트+검증.
 
 ## 다음 작업
 
-### 결정 대기 (즉시)
+### 착수 결정 — **완료** (TODOs §0 참고, 아래는 후속)
 
-- [ ] **데이터 직렬화 포맷·착수 논의** — 브레인스토밍을 실제 구조로 넘길지, 넘긴다면 어떤 형태로.
-  스택은 **잠정 Django 5.2**(+ PostGIS, 무거운 계산은 별도 과학 스택으로 분리 예상). 확정·세부 미정.
-- [ ] **스키마 v0 → v1 승격 여부** — 열린 질문 반영본으로 올릴지, 현행 v0 유지할지.
+- 데이터 포맷: JSONField 임베드(Distribution 등) + fixture(JSON). 스키마 v0 → 코드 모델로 구현(승격은 자연 진행).
 
-### 개념 심화 (선택)
+### 후속 (선택, 우선순위 대략순)
 
-- [ ] **추가 사례** — Cryogenian base GSSA→GSSP 전환(진행형) = 토폴로지 diff 실례 / joint·공분산 워크드 예시.
-- [ ] **기존 표준 정합 조사** — Macrostrat · GeoSciML/CGI Geologic Timescale · ICS 공식 차트 포맷 · Darwin Core.
-- [ ] **미해결 열린 질문** — 각 설계 문서 말미 (최소 clamp 집합, 식별자 lineage 형식, 후보 큐레이션 문지기 등). → `TODOs.md`.
+- [ ] **HANDOFF/TODOs 유지** — 본 갱신 반영 완료. 이후 Phase 후속마다 갱신.
+- [ ] **무거운 계산 커널** — engine pass-through → 노드타입별 실제 age-depth/joint(numpy/scipy/PyMC, 별도 워커).
+- [ ] **브라우저 육안 검증** — 프론트 drag&drop·엣지·복원·결과뱃지 실제 클릭 확인(헤드리스 미검증분).
+- [ ] **프론트 releases/diff UI** — 릴리스 선택·bake·두 릴리스 diff 뷰.
+- [ ] **인증·소유권** — 현재 API AllowAny(dev). 로그인·그래프 소유·샌드박스 권한.
+- [ ] **clamp 통합** — graph 의 clamp 노드 ↔ releases.Clamp(authored 거버넌스) 관계 정리.
+- [ ] **PostGIS** — chrono.Locality lat/lon → PointField(공간 차원 착수 시).
+- [ ] **narrate(GTS)** — BoundaryRecord.narrative 충실화(bake 의 짝).
+- [ ] **미해결 열린 질문** — 각 설계 문서 말미(최소 clamp 집합·lineage 형식·후보 큐레이션 등). → `TODOs.md` §2.
+- [ ] **리뷰(R01)** — 구현 코드 리뷰 회차(devlog R 시리즈).
