@@ -36,6 +36,7 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 - [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — draft boundary gateway schema (v0) spanning all three cases
 - [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning analysis (open questions)
 - [docs/coherence-gate_en.md](docs/coherence-gate_en.md) — the coherence gate concretized (Layer 5): pinned boundary set → valid chart
+- [docs/competing-models_en.md](docs/competing-models_en.md) — how competing models coexist (plural candidates in the network + release selection)
 
 ## Status
 

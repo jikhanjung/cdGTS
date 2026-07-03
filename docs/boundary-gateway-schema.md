@@ -63,13 +63,9 @@ BoundaryGateway:
       distribution_ref: ref?     # 요약 대신 분포 자체를 가리킬 수도 (엣지 = 분포)
       note: string?              # 예: "contested; ~536 Ma까지"
     method: decreed | local-interpolation | cross-section-correlation
-    age_model:                   # 1급 필드
-      kind: string               # 예: bayesian-age-depth, global-d13C-age-model
-      chosen: string             # 채택된 모델/문헌
-      alternatives: [string]     # 경쟁 대안 (= 대안 그래프 브랜치)
-      inputs: [node_ref]         # 기여한 관측/앵커 노드
-      correlation_via: [string]  # (섹션 간일 때) BACE, Sr 동위원소 등
-    provenance_ref: graph_ref    # 이 숫자를 내는 서브그래프. 지리적으로 분산 가능.
+    model_ref: model_candidate_ref  # 이 릴리스가 *선택*한 모델 후보. 권위 바인딩은
+                                    # 릴리스 매니페스트의 selection. value_ma는 그 후보 출력의 bake 사본.
+    provenance_ref: graph_ref    # 선택된 후보가 값을 내는 서브그래프. 지리적으로 분산 가능.
 
   status:
     level: ratified | proposed | sandbox | deprecated
@@ -77,6 +73,28 @@ BoundaryGateway:
     supersedes: version?         # 이전 버전 레코드
 
   narrative_ref: doc_ref?        # bake(이 레코드)의 짝 — GTS식 서술(narrate)
+```
+
+경쟁 모델은 게이트웨이 *사이 네트워크*에 복수로 공존한다. 각 후보는 **독립 객체**이고, 릴리스가 그중 하나를
+선택(`model_ref`)한다. 상세: [competing-models.md](competing-models.md).
+
+```yaml
+ModelCandidate:                  # 네트워크에 공존하는 경쟁 후보 (독립 주소지정)
+  id: string                     # 예: base-cambrian/bowyer2022-modelA
+  version: string
+  scope: boundary | global       # global이면 다수 경계를 한꺼번에 정함 → 그 자체로 내부 정합
+  sets: [boundary_id]            # (scope=global) 이 후보가 정하는 경계들
+  kind: string                   # bayesian-age-depth, global-d13C-age-model, committee-decision …
+  inputs: [node_ref]             # 기여 관측/앵커 노드
+  correlation_via: [string]      # (섹션 간) BACE, Sr 동위원소 …
+  output:                        # 후보가 내는 값(들)
+    { boundary_id: { value_ma, uncertainty } }
+  provenance_ref: graph_ref
+
+# 릴리스가 selection을 소유한다 (경계 레코드가 아니라):
+Release:
+  version: string                # 예: ICC-2024/12
+  selection: { boundary_id: model_candidate_ref }   # 정합한 선택 = 일관된(가급적 같은 global) 후보에서 뽑기
 ```
 
 ## 3. 세 케이스 적용
@@ -99,10 +117,7 @@ age:
   value_ma: 251.902
   uncertainty: { plus_minus: 0.024, sigma: 2 }
   method: local-interpolation
-  age_model:
-    kind: bayesian-age-depth
-    chosen: "Burgess, Bowring & Shen 2014"
-    inputs: [ash-bed-25, ash-bed-28, ash-bed-22, ash-bed-33, ash-bed-34]
+  model_ref: "base-triassic/burgess2014"   # 선택된 후보 (아래 ModelCandidate)
   provenance_ref: "graph://base-triassic/age@Burgess2014"
 status: { level: ratified, authority: ICS }
 ```
@@ -121,7 +136,7 @@ age:
   value_ma: 2500
   uncertainty: { plus_minus: null, sigma: null }   # 정의상 정확
   method: decreed
-  age_model: { kind: committee-decision, chosen: "IUGS/ICS Precambrian Subcommission" }
+  model_ref: "base-proterozoic/decree"     # 후보 = 위원회 결정
   provenance_ref: "decision://ICS/precambrian-subcommission"
 status: { level: ratified, authority: ICS }
 # 주: definition.type 이력상 현재 GSSA. 다른 선캄 경계(Ediacaran)는 이미 GSSP로 재배선됨.
@@ -145,14 +160,22 @@ age:
   value_ma: 538.8
   uncertainty: { plus_minus: 0.6, sigma: 2, note: "contested; 경쟁 모델은 ~536 Ma까지" }
   method: cross-section-correlation
-  age_model:
-    kind: global-d13C-age-model
-    chosen: "Bowyer et al. 2022 (model A/B)"
-    alternatives: ["model C", "model D (~3 Myr younger)"]
-    inputs: [oman-ara-uPb, namibia-uPb, siberia-uPb]
-    correlation_via: [BACE-d13C, Sr-isotope-stratigraphy]
+  model_ref: "ediacaran-cambrian/bowyer2022-modelAB"   # 선택된 후보 (scope=global)
   provenance_ref: "graph://base-cambrian/age"   # 캐나다(위치) + 오만·나미비아·시베리아(앵커)
 status: { level: ratified, authority: ICS }
+
+# 경쟁 후보들 — 네트워크에 공존하고, 릴리스가 그중 하나를 선택:
+- id: "ediacaran-cambrian/bowyer2022-modelAB"
+  scope: global
+  sets: [base-cambrian, base-fortunian, …]     # 여러 경계를 한꺼번에 → 내부 정합
+  kind: global-d13C-age-model
+  inputs: [oman-ara-uPb, namibia-uPb, siberia-uPb]
+  correlation_via: [BACE-d13C, Sr-isotope-stratigraphy]
+  output: { base-cambrian: { value_ma: 538.8, uncertainty: { plus_minus: 0.6, sigma: 2 } } }
+- id: "ediacaran-cambrian/bowyer2022-modelD"
+  scope: global
+  kind: global-d13C-age-model
+  output: { base-cambrian: { value_ma: ~536, uncertainty: { note: "~3 Myr younger" } } }
 ```
 
 세 예시가 두 다형 축을 구체화한다: **위치(GSSP/GSSA)** 와 **숫자 출처(decreed/보간/상관)** 가
@@ -165,11 +188,12 @@ status: { level: ratified, authority: ICS }
   → 별도 검토: [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md).
 - **분포 표현.** `value ± ` 만인가, 분포 요약(중앙값/95% HPD)/샘플 참조까지인가.
   "엣지가 분포를 흘린다"를 게이트웨이에서 어디까지 얼릴지.
-- **경쟁 모델 공존 방식.** `chosen` + `alternatives` 를 한 레코드에 두는 게 맞나, 아니면 각 모델이
-  **독립 게이트웨이 후보**이고 그중 하나가 비준되는 구조인가.
+- **경쟁 모델 공존 방식.** → **정리됨**: 후보는 네트워크에 복수 공존(`ModelCandidate` 독립 객체), 릴리스가
+  `selection`으로 하나를 바인딩. 위 §2의 `age.model_ref`·`ModelCandidate`·`Release`에 반영. 상세:
+  [competing-models.md](competing-models.md).
 - **토폴로지 diff.** `definition.type` 이 버전 간 GSSA→GSSP로 바뀔 때(Ediacaran 완료, Cryogenian 진행),
   값 diff와 별개의 **위상 diff**를 어떻게 표기·추적할지.
-- **순환.** `age_model.inputs` 가 생층서 ↔ 방사연대 순환을 담을 때 joint-inference 노드로 접을지.
+- **순환.** `ModelCandidate.inputs` 가 생층서 ↔ 방사연대 순환을 담을 때 joint-inference 노드로 접을지.
 
 ## 5. 링크
 

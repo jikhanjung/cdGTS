@@ -67,13 +67,9 @@ BoundaryGateway:
       distribution_ref: ref?     # may point at the distribution itself instead of a summary (edge = distribution)
       note: string?              # e.g. "contested; down to ~536 Ma"
     method: decreed | local-interpolation | cross-section-correlation
-    age_model:                   # first-class field
-      kind: string               # e.g. bayesian-age-depth, global-d13C-age-model
-      chosen: string             # the adopted model/reference
-      alternatives: [string]     # competing alternatives (= alternative graph branches)
-      inputs: [node_ref]         # contributing observation/anchor nodes
-      correlation_via: [string]  # (when cross-section) BACE, Sr isotopes, etc.
-    provenance_ref: graph_ref    # the subgraph that yields this number. May be geographically distributed.
+    model_ref: model_candidate_ref  # the model candidate this release *selected*. The authoritative binding is
+                                    # the release manifest's selection. value_ma is a baked copy of that candidate's output.
+    provenance_ref: graph_ref    # the subgraph the selected candidate yields the value from. May be geographically distributed.
 
   status:
     level: ratified | proposed | sandbox | deprecated
@@ -81,6 +77,28 @@ BoundaryGateway:
     supersedes: version?         # previous-version record
 
   narrative_ref: doc_ref?        # the counterpart of the bake (this record) — the GTS-style narration (narrate)
+```
+
+Competing models coexist in plurality in the *network between* gateways. Each candidate is an **independent
+object**, and a release selects one (`model_ref`). Detail: [competing-models_en.md](competing-models_en.md).
+
+```yaml
+ModelCandidate:                  # a competing candidate coexisting in the network (independently addressable)
+  id: string                     # e.g. base-cambrian/bowyer2022-modelA
+  version: string
+  scope: boundary | global       # if global, sets many boundaries at once → internally coherent by construction
+  sets: [boundary_id]            # (scope=global) the boundaries this candidate sets
+  kind: string                   # bayesian-age-depth, global-d13C-age-model, committee-decision …
+  inputs: [node_ref]             # contributing observation/anchor nodes
+  correlation_via: [string]      # (cross-section) BACE, Sr isotopes …
+  output:                        # the value(s) the candidate yields
+    { boundary_id: { value_ma, uncertainty } }
+  provenance_ref: graph_ref
+
+# The release owns the selection (not the boundary record):
+Release:
+  version: string                # e.g. ICC-2024/12
+  selection: { boundary_id: model_candidate_ref }   # a coherent selection = drawing from a consistent (ideally same global) set
 ```
 
 ## 3. Applied to the three cases
@@ -103,10 +121,7 @@ age:
   value_ma: 251.902
   uncertainty: { plus_minus: 0.024, sigma: 2 }
   method: local-interpolation
-  age_model:
-    kind: bayesian-age-depth
-    chosen: "Burgess, Bowring & Shen 2014"
-    inputs: [ash-bed-25, ash-bed-28, ash-bed-22, ash-bed-33, ash-bed-34]
+  model_ref: "base-triassic/burgess2014"   # selected candidate (ModelCandidate below)
   provenance_ref: "graph://base-triassic/age@Burgess2014"
 status: { level: ratified, authority: ICS }
 ```
@@ -125,7 +140,7 @@ age:
   value_ma: 2500
   uncertainty: { plus_minus: null, sigma: null }   # exact by definition
   method: decreed
-  age_model: { kind: committee-decision, chosen: "IUGS/ICS Precambrian Subcommission" }
+  model_ref: "base-proterozoic/decree"     # candidate = the committee decision
   provenance_ref: "decision://ICS/precambrian-subcommission"
 status: { level: ratified, authority: ICS }
 # note: by definition.type history, currently GSSA. Another Precambrian boundary (Ediacaran) has already been rewired to a GSSP.
@@ -149,14 +164,22 @@ age:
   value_ma: 538.8
   uncertainty: { plus_minus: 0.6, sigma: 2, note: "contested; competing models down to ~536 Ma" }
   method: cross-section-correlation
-  age_model:
-    kind: global-d13C-age-model
-    chosen: "Bowyer et al. 2022 (model A/B)"
-    alternatives: ["model C", "model D (~3 Myr younger)"]
-    inputs: [oman-ara-uPb, namibia-uPb, siberia-uPb]
-    correlation_via: [BACE-d13C, Sr-isotope-stratigraphy]
+  model_ref: "ediacaran-cambrian/bowyer2022-modelAB"   # selected candidate (scope=global)
   provenance_ref: "graph://base-cambrian/age"   # Canada (position) + Oman/Namibia/Siberia (anchors)
 status: { level: ratified, authority: ICS }
+
+# Competing candidates — coexisting in the network; the release selects one:
+- id: "ediacaran-cambrian/bowyer2022-modelAB"
+  scope: global
+  sets: [base-cambrian, base-fortunian, …]     # sets many boundaries at once → internally coherent
+  kind: global-d13C-age-model
+  inputs: [oman-ara-uPb, namibia-uPb, siberia-uPb]
+  correlation_via: [BACE-d13C, Sr-isotope-stratigraphy]
+  output: { base-cambrian: { value_ma: 538.8, uncertainty: { plus_minus: 0.6, sigma: 2 } } }
+- id: "ediacaran-cambrian/bowyer2022-modelD"
+  scope: global
+  kind: global-d13C-age-model
+  output: { base-cambrian: { value_ma: ~536, uncertainty: { note: "~3 Myr younger" } } }
 ```
 
 These three examples make the two polymorphic axes concrete: **position (GSSP/GSSA)** and
@@ -170,11 +193,12 @@ These three examples make the two polymorphic axes concrete: **position (GSSP/GS
   → Separate note: [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md).
 - **Distribution representation.** `value ± ` only, or a distribution summary (median / 95% HPD) / sample
   reference too? How much of "edges carry distributions" should be frozen into the gateway.
-- **How competing models coexist.** Are `chosen` + `alternatives` right to keep in one record, or is each
-  model an **independent gateway candidate** of which one gets ratified?
+- **How competing models coexist.** → **Resolved**: candidates coexist in the network (`ModelCandidate`
+  independent objects), and a release binds one via `selection`. Reflected in §2's `age.model_ref` ·
+  `ModelCandidate` · `Release`. Detail: [competing-models_en.md](competing-models_en.md).
 - **Topology diff.** When `definition.type` changes GSSA→GSSP between versions (Ediacaran done, Cryogenian
   in progress), how to notate and track a **topology diff** separate from a value diff.
-- **Cycles.** When `age_model.inputs` embeds a biostratigraphy ↔ radiometric-dating cycle, whether to fold
+- **Cycles.** When `ModelCandidate.inputs` embeds a biostratigraphy ↔ radiometric-dating cycle, whether to fold
   it into a joint-inference node.
 
 ## 5. Links
