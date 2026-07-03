@@ -60,11 +60,14 @@ BoundaryGateway:
 
   age:                           # 연대 — "언제" (Layer 3–5의 산출)
     value_ma: number
-    uncertainty:                 # GSSA면 null (정의상 정확)
-      plus_minus: number | null
-      sigma: 1 | 2
-      distribution_ref: ref?     # 요약 대신 분포 자체를 가리킬 수도 (엣지 = 분포)
-      note: string?              # 예: "contested; ~536 Ma까지"
+    uncertainty:                 # 구조화된 분포 (충실도 사다리 L0–L5). GSSA = { fidelity: exact }
+      fidelity: exact | sym | decomposed | shape | joint | full
+      sigma: 1 | 2               # budget 값의 신뢰수준
+      budget: { analytical, systematic, model }   # 분해 예산; 계통 공유 = 공분산 열쇠
+      shape: { median, hpd95: [lo, hi] }?          # 비대칭/왜곡 (없으면 대칭 가정)
+      shared_components: [node_ref]                # 공유 계통 노드 (joint 재구성)
+      posterior_ref: sample_ref | model_ref?       # L5: 샘플 / 재실행 모델
+      note: string?
     method: decreed | local-interpolation | cross-section-correlation
     model_ref: model_candidate_ref  # 이 릴리스가 *선택*한 모델 후보. 권위 바인딩은
                                     # 릴리스 매니페스트의 selection. value_ma는 그 후보 출력의 bake 사본.
@@ -132,7 +135,11 @@ definition:
     level: "base of Bed 27c"
 age:
   value_ma: 251.902
-  uncertainty: { plus_minus: 0.024, sigma: 2 }
+  uncertainty:
+    fidelity: decomposed
+    sigma: 2
+    budget: { analytical: 0.024 }          # +tracer/+decay 계통은 출처 참조
+    shared_components: [earthtime-tracer, u-decay-const]
   method: local-interpolation
   model_ref: "base-triassic/burgess2014"   # 선택된 후보 (아래 ModelCandidate)
   provenance_ref: "graph://base-triassic/age@Burgess2014"
@@ -151,7 +158,7 @@ definition:
   rationale: "round-number convention; 물리적 stratotype 없음"
 age:
   value_ma: 2500
-  uncertainty: { plus_minus: null, sigma: null }   # 정의상 정확
+  uncertainty: { fidelity: exact }                 # 점질량 δ(2500)
   method: decreed
   model_ref: "base-proterozoic/decree"     # 후보 = 위원회 결정
   provenance_ref: "decision://ICS/precambrian-subcommission"
@@ -175,7 +182,11 @@ definition:
     level: "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm"
 age:
   value_ma: 538.8
-  uncertainty: { plus_minus: 0.6, sigma: 2, note: "contested; 경쟁 모델은 ~536 Ma까지" }
+  uncertainty:
+    fidelity: decomposed
+    sigma: 2
+    budget: { analytical: 0.6 }
+    note: "contested; 모델 간 ~536까지 → 다봉은 competing-models 층"
   method: cross-section-correlation
   model_ref: "ediacaran-cambrian/bowyer2022-modelAB"   # 선택된 후보 (scope=global)
   provenance_ref: "graph://base-cambrian/age"   # 캐나다(위치) + 오만·나미비아·시베리아(앵커)
@@ -203,8 +214,9 @@ status: { level: ratified, authority: ICS }
 - **전역 vs 경계별 버전.** 이 초안은 경계별 독립 버전을 가정(각 레코드가 자기 `version`). ICC 전체 릴리스와
   어떻게 묶을지(릴리스 = 경계 레코드들의 스냅샷 집합?).
   → 별도 검토: [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md).
-- **분포 표현.** `value ± ` 만인가, 분포 요약(중앙값/95% HPD)/샘플 참조까지인가.
-  "엣지가 분포를 흘린다"를 게이트웨이에서 어디까지 얼릴지.
+- **분포 표현.** → **정리됨**: `uncertainty`를 충실도 사다리(L0–L5)로 구조화 — 분해 예산(=공분산 열쇠) +
+  모양 + 공유성분 태그 + 사후 참조. GSSA = `fidelity: exact`(점질량). ICC 정본 rung ≈ L2/L3, joint(L4)는
+  릴리스 층. 상세: [distribution-representation.md](distribution-representation.md).
 - **경쟁 모델 공존 방식.** → **정리됨**: 후보는 네트워크에 복수 공존(`ModelCandidate` 독립 객체), 릴리스가
   `selection`으로 하나를 바인딩. 위 §2의 `age.model_ref`·`ModelCandidate`·`Release`에 반영. 상세:
   [competing-models.md](competing-models.md).

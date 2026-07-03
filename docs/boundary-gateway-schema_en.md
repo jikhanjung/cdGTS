@@ -64,11 +64,14 @@ BoundaryGateway:
 
   age:                           # age — "when" (output of Layers 3–5)
     value_ma: number
-    uncertainty:                 # null for GSSA (exact by definition)
-      plus_minus: number | null
-      sigma: 1 | 2
-      distribution_ref: ref?     # may point at the distribution itself instead of a summary (edge = distribution)
-      note: string?              # e.g. "contested; down to ~536 Ma"
+    uncertainty:                 # structured distribution (fidelity ladder L0–L5). GSSA = { fidelity: exact }
+      fidelity: exact | sym | decomposed | shape | joint | full
+      sigma: 1 | 2               # confidence level of the budget values
+      budget: { analytical, systematic, model }   # decomposed budget; shared systematic = covariance key
+      shape: { median, hpd95: [lo, hi] }?          # asymmetry/skew (symmetric assumed if absent)
+      shared_components: [node_ref]                # shared systematic nodes (joint reconstruction)
+      posterior_ref: sample_ref | model_ref?       # L5: samples / re-runnable model
+      note: string?
     method: decreed | local-interpolation | cross-section-correlation
     model_ref: model_candidate_ref  # the model candidate this release *selected*. The authoritative binding is
                                     # the release manifest's selection. value_ma is a baked copy of that candidate's output.
@@ -136,7 +139,11 @@ definition:
     level: "base of Bed 27c"
 age:
   value_ma: 251.902
-  uncertainty: { plus_minus: 0.024, sigma: 2 }
+  uncertainty:
+    fidelity: decomposed
+    sigma: 2
+    budget: { analytical: 0.024 }          # +tracer/+decay systematics: see source
+    shared_components: [earthtime-tracer, u-decay-const]
   method: local-interpolation
   model_ref: "base-triassic/burgess2014"   # selected candidate (ModelCandidate below)
   provenance_ref: "graph://base-triassic/age@Burgess2014"
@@ -155,7 +162,7 @@ definition:
   rationale: "round-number convention; no physical stratotype"
 age:
   value_ma: 2500
-  uncertainty: { plus_minus: null, sigma: null }   # exact by definition
+  uncertainty: { fidelity: exact }                 # point mass δ(2500)
   method: decreed
   model_ref: "base-proterozoic/decree"     # candidate = the committee decision
   provenance_ref: "decision://ICS/precambrian-subcommission"
@@ -179,7 +186,11 @@ definition:
     level: "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm"
 age:
   value_ma: 538.8
-  uncertainty: { plus_minus: 0.6, sigma: 2, note: "contested; competing models down to ~536 Ma" }
+  uncertainty:
+    fidelity: decomposed
+    sigma: 2
+    budget: { analytical: 0.6 }
+    note: "contested; model-to-model down to ~536 → multimodality in the competing-models layer"
   method: cross-section-correlation
   model_ref: "ediacaran-cambrian/bowyer2022-modelAB"   # selected candidate (scope=global)
   provenance_ref: "graph://base-cambrian/age"   # Canada (position) + Oman/Namibia/Siberia (anchors)
@@ -208,8 +219,10 @@ These three examples make the two polymorphic axes concrete: **position (GSSP/GS
 - **Global vs per-boundary versioning.** This draft assumes per-boundary independent versions (each record
   carries its own `version`). How to tie that to a whole-ICC release (a release = a snapshot set of boundary records?).
   → Separate note: [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md).
-- **Distribution representation.** `value ± ` only, or a distribution summary (median / 95% HPD) / sample
-  reference too? How much of "edges carry distributions" should be frozen into the gateway.
+- **Distribution representation.** → **Resolved**: `uncertainty` structured as a fidelity ladder (L0–L5) —
+  decomposed budget (= covariance key) + shape + shared-component tags + posterior ref. GSSA = `fidelity: exact`
+  (point mass). ICC canonical rung ≈ L2/L3, the joint (L4) on the release layer. Detail:
+  [distribution-representation_en.md](distribution-representation_en.md).
 - **How competing models coexist.** → **Resolved**: candidates coexist in the network (`ModelCandidate`
   independent objects), and a release binds one via `selection`. Reflected in §2's `age.model_ref` ·
   `ModelCandidate` · `Release`. Detail: [competing-models_en.md](competing-models_en.md).

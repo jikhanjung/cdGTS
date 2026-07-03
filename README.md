@@ -39,6 +39,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 - [docs/competing-models.md](docs/competing-models.md) — 경쟁 모델 공존 방식 (네트워크 복수 후보 + 릴리스 선택)
 - [docs/cycles.md](docs/cycles.md) — 순환 의존성과 clamp (subcommission이 놓는 hand-crafted 게이트)
 - [docs/topology-diff.md](docs/topology-diff.md) — 토폴로지 diff (값 diff와 직교하는 구조 변화의 축)
+- [docs/distribution-representation.md](docs/distribution-representation.md) — 분포 표현 (불확실성의 충실도 사다리 L0–L5)
 
 ## 상태
 

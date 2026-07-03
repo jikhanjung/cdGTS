@@ -39,6 +39,7 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 - [docs/competing-models_en.md](docs/competing-models_en.md) — how competing models coexist (plural candidates in the network + release selection)
 - [docs/cycles_en.md](docs/cycles_en.md) — cyclic dependencies and clamps (hand-crafted gates placed by subcommissions)
 - [docs/topology-diff_en.md](docs/topology-diff_en.md) — topology diff (the structural-change axis orthogonal to the value diff)
+- [docs/distribution-representation_en.md](docs/distribution-representation_en.md) — distribution representation (the L0–L5 fidelity ladder of uncertainty)
 
 ## Status
 
