@@ -1,0 +1,188 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  ReactFlow, Background, Controls, MiniMap,
+  addEdge, useNodesState, useEdgesState, useReactFlow,
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
+
+import CdgtsNode, { CATEGORY_COLOR } from './CdgtsNode.jsx'
+import {
+  listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph,
+} from './api.js'
+
+const nodeTypes = { cdgts: CdgtsNode }
+
+// --- API ↔ React Flow 변환 ---
+function apiToRF(graph, typeMap) {
+  const nodes = graph.nodes.map((n) => {
+    const t = typeMap[n.node_type] || { category: 'process', ports: [] }
+    return {
+      id: n.key, type: 'cdgts', position: { x: n.x, y: n.y },
+      data: { nodeType: n.node_type, label: n.label, params: n.params, category: t.category, ports: t.ports },
+    }
+  })
+  const edges = graph.edges.map((e) => ({
+    id: `${e.source}:${e.source_port}->${e.target}:${e.target_port}`,
+    source: e.source, target: e.target,
+    sourceHandle: e.source_port, targetHandle: e.target_port,
+    data: { kind: e.kind },
+  }))
+  return { nodes, edges }
+}
+
+function rfToApi(nodes, edges, viewport) {
+  return {
+    viewport,
+    nodes: nodes.map((n) => ({
+      key: n.id, node_type: n.data.nodeType, label: n.data.label || '',
+      params: n.data.params || {}, x: Math.round(n.position.x), y: Math.round(n.position.y),
+    })),
+    edges: edges.map((e) => ({
+      source: e.source, source_port: e.sourceHandle,
+      target: e.target, target_port: e.targetHandle, kind: e.data?.kind || 'data',
+    })),
+  }
+}
+
+export default function Editor() {
+  const [types, setTypes] = useState([])
+  const [graphId, setGraphId] = useState(null)
+  const [graphName, setGraphName] = useState('')
+  const [nodes, setNodes, onNodesChange] = useNodesState([])
+  const [edges, setEdges, onEdgesChange] = useEdgesState([])
+  const [status, setStatus] = useState('로딩 중…')
+  const [error, setError] = useState(null)
+  const wrapperRef = useRef(null)
+  const { screenToFlowPosition, getViewport, setViewport } = useReactFlow()
+
+  const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
+
+  // 초기 로드: 타입 → 그래프(없으면 생성).
+  useEffect(() => {
+    (async () => {
+      try {
+        const ts = await listNodeTypes()
+        setTypes(ts)
+        const tmap = Object.fromEntries(ts.map((t) => [t.slug, t]))
+        let graphs = await listGraphs()
+        let g = graphs[0]
+        if (!g) g = await createGraph({ slug: 'sandbox', name: 'Sandbox', nodes: [], edges: [], viewport: {} })
+        const full = await getGraph(g.id)
+        setGraphId(full.id)
+        setGraphName(full.name)
+        const { nodes: rn, edges: re } = apiToRF(full, tmap)
+        setNodes(rn)
+        setEdges(re)
+        if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
+        setStatus(`불러옴: ${full.name} (노드 ${rn.length})`)
+      } catch (e) {
+        setError(e.data || String(e))
+        setStatus('로드 실패')
+      }
+    })()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const onConnect = useCallback(
+    (c) => setEdges((eds) => addEdge({ ...c, data: { kind: 'data' } }, eds)),
+    [setEdges],
+  )
+
+  const onDragOver = useCallback((e) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+  }, [])
+
+  const onDrop = useCallback((e) => {
+    e.preventDefault()
+    const slug = e.dataTransfer.getData('application/cdgts')
+    const t = typeMap[slug]
+    if (!t) return
+    const position = screenToFlowPosition({ x: e.clientX, y: e.clientY })
+    const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
+    setNodes((nds) => nds.concat({
+      id: key, type: 'cdgts', position,
+      data: { nodeType: slug, label: '', params: {}, category: t.category, ports: t.ports },
+    }))
+  }, [screenToFlowPosition, typeMap, setNodes])
+
+  const onSave = useCallback(async () => {
+    setError(null)
+    try {
+      await saveGraph(graphId, rfToApi(nodes, edges, getViewport()))
+      setStatus(`저장됨 · ${new Date().toLocaleTimeString()}`)
+    } catch (e) {
+      setError(e.data || String(e))
+      setStatus('저장 실패 (검증 오류?)')
+    }
+  }, [graphId, nodes, edges, getViewport])
+
+  const onEvaluate = useCallback(async () => {
+    setError(null)
+    try {
+      const r = await evaluateGraph(graphId)
+      setStatus(`평가: ${r.detail} (노드 ${r.node_count}, 엣지 ${r.edge_count})`)
+    } catch (e) {
+      setError(e.data || String(e))
+    }
+  }, [graphId])
+
+  const grouped = useMemo(() => {
+    const g = { data: [], process: [], clamp: [] }
+    types.forEach((t) => (g[t.category] || (g[t.category] = [])).push(t))
+    return g
+  }, [types])
+
+  return (
+    <div className="editor">
+      <aside className="palette">
+        <h1>cdGTS</h1>
+        <p className="hint">노드를 캔버스로 드래그</p>
+        {['data', 'process', 'clamp'].map((cat) => (
+          <div key={cat} className="palette-group">
+            <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
+            {(grouped[cat] || []).map((t) => (
+              <div
+                key={t.slug}
+                className="palette-item"
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData('application/cdgts', t.slug)
+                  e.dataTransfer.effectAllowed = 'move'
+                }}
+                title={t.description}
+                style={{ borderLeftColor: CATEGORY_COLOR[cat] }}
+              >
+                {t.name}
+              </div>
+            ))}
+          </div>
+        ))}
+      </aside>
+
+      <main className="canvas" ref={wrapperRef}>
+        <div className="toolbar">
+          <strong>{graphName}</strong>
+          <button onClick={onSave}>저장 (PUT)</button>
+          <button onClick={onEvaluate}>평가</button>
+          <span className="status">{status}</span>
+        </div>
+        {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
+        <div className="flow" onDrop={onDrop} onDragOver={onDragOver}>
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            nodeTypes={nodeTypes}
+            fitView
+          >
+            <Background />
+            <Controls />
+            <MiniMap pannable zoomable />
+          </ReactFlow>
+        </div>
+      </main>
+    </div>
+  )
+}

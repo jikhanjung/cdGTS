@@ -2,6 +2,7 @@ import json
 
 import pytest
 from django.core.management import call_command
+from rest_framework.test import APIClient
 
 from nodes.distribution import FIDELITY_LADDER, Distribution, DistributionError
 from nodes.models import NodeType, Port
@@ -76,3 +77,11 @@ def test_edges_carry_distributions(seeded):
     # 데이터/모델 출력은 분포, 상관 신호는 signal.
     assert Port.objects.get(node_type__slug="radiometric-uPb", direction="out").datatype == "distribution"
     assert Port.objects.get(node_type__slug="biostratigraphic", direction="out").datatype == "signal"
+
+
+def test_node_types_api(seeded):
+    resp = APIClient().get("/api/node-types/")
+    assert resp.status_code == 200
+    adm = next(t for t in resp.data if t["slug"] == "age-depth-model")
+    assert adm["category"] == "process"
+    assert {p["name"] for p in adm["ports"]} == {"dated_horizons", "horizon_age"}
