@@ -1,11 +1,6 @@
 """
-pass-through 평가.
-
-노드를 위상순으로 돌며 분포를 하류로 전파한다(계산 없음):
-  - data(leaf)   : params["distribution"] (Distribution dict) 를 그대로 방출.
-  - clamp pin     : exact(params["value"]) 방출 (GSSA = Clamp{pin}).
-  - clamp 기타     : 입력 분포 통과.
-  - process       : 첫 입력 분포 통과 + provenance 기록(실제 결합은 후속 커널).
+평가 — 노드를 위상순으로 돌며 분포를 하류로 전파. 노드별 연산은 engine.kernels 가 담당
+(joint-inference·correlation=역분산 결합, range=절단, pin=exact, 나머지=pass-through 폴백).
 
 증분: 노드 content_hash = sha1(타입, params, 정렬된 입력 해시). 이전 run 의 같은 node_key 가
 같은 해시면 결과 재사용(cached). leaf param 이 바뀌면 해시가 바뀌어 하류가 자동 dirty.
@@ -17,7 +12,7 @@ import hashlib
 import json
 from collections import defaultdict
 
-from nodes.distribution import Distribution
+from . import kernels
 
 
 def content_hash(type_slug, params, input_hashes):
@@ -48,24 +43,14 @@ def topo_order(node_keys, edges):
 
 
 def _compute(node, incoming, results):
-    """(distribution_dict|None, provenance_keys) 반환. incoming = target 이 이 노드인 엣지들(포트순)."""
+    """(distribution_dict|None, provenance_keys) 반환. 커널 디스패치. incoming = 포트순 입력 엣지."""
     prov = [e["source"] for e in incoming if e["source"] in results]
-    cat = node["category"]
-    slug = node["slug"]
-
-    if cat == "data":
-        return node["params"].get("distribution"), prov
-
-    if slug == "pin":
-        val = node["params"].get("value")
-        return (Distribution.exact(val).to_dict() if val is not None else None), prov
-
-    # clamp 기타 + process: 첫 입력 분포 통과.
-    for e in incoming:
-        r = results.get(e["source"])
-        if r and r["distribution"] is not None:
-            return r["distribution"], prov
-    return None, prov
+    inputs = [
+        results[e["source"]]["distribution"] if e["source"] in results else None
+        for e in incoming
+    ]
+    dist = kernels.compute(node["category"], node["slug"], inputs, node["params"])
+    return dist, prov
 
 
 def evaluate_graph(graph):
