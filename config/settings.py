@@ -42,6 +42,7 @@ ALLOWED_HOSTS = config(
 
 INSTALLED_APPS = [
     'chrono.apps.ChronoConfig',
+    'nodes.apps.NodesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
