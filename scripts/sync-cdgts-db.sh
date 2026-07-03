@@ -29,6 +29,10 @@ CONTAINER="cdgts"
 
 LOCAL_DAILY_DAYS=30
 
+# NAS 오프사이트 백업 (다른 백업 스크립트와 동일 관례: /nas/JikhanJung/<project>_backup)
+NAS_DIR="/nas/JikhanJung/cdgts_backup"
+NAS_DAILY_DAYS=90
+
 mkdir -p "$DB_HISTORY_DIR" "$CURRENT_DIR"
 log() { echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> "$LOG_FILE"; }
 
@@ -74,7 +78,21 @@ cp -f "$SNAP" "${CURRENT_DIR}/db.sqlite3"
 DEL=$(cleanup_db "$DB_HISTORY_DIR" $LOCAL_DAILY_DAYS)
 [ "$DEL" -gt 0 ] && log "히스토리 정리: ${DEL}개 삭제 (${LOCAL_DAILY_DAYS}일 초과, 월초/연말 보존)"
 
-# --- 3. 개발/테스트 DB 교체 ---
+# --- 3. NAS 오프사이트 백업 (단일 일관 스냅샷이라 -wal/-shm 없음) ---
+if timeout 10 test -d "$NAS_DIR"; then
+    NAS_DB_DIR="${NAS_DIR}/db_history"
+    NAS_CURRENT="${NAS_DIR}/current"
+    mkdir -p "$NAS_DB_DIR" "$NAS_CURRENT"
+    cp -f "$SNAP" "${NAS_DB_DIR}/db_${TODAY}.sqlite3"
+    cp -f "$SNAP" "${NAS_CURRENT}/db.sqlite3"
+    NAS_DEL=$(cleanup_db "$NAS_DB_DIR" $NAS_DAILY_DAYS)
+    [ "$NAS_DEL" -gt 0 ] && log "NAS 정리: ${NAS_DEL}개 삭제 (${NAS_DAILY_DAYS}일 초과, 월초/연말 보존)"
+    log "NAS 백업 완료 (${NAS_DIR})"
+else
+    log "WARN: NAS 디렉토리 없음 (${NAS_DIR}) — 건너뜀"
+fi
+
+# --- 4. 개발/테스트 DB 교체 ---
 # 스냅샷은 이미 일관된 단일 파일(-wal/-shm 없음). 컨테이너가 DB 를 열고 있으므로
 # 라이브 교체를 피해 잠시 정지 → 교체 → 재기동. 남아있던 -wal/-shm 은 제거.
 if [ -f "$COMPOSE" ] && docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER"; then
