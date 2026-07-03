@@ -14,8 +14,10 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import include, path
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,3 +26,7 @@ urlpatterns = [
     path('api/', include('engine.urls')),
     path('api/', include('releases.urls')),
 ]
+
+# 프론트 SPA(빌드 산출물)가 있으면 루트에서 서빙. dev 는 vite(:5173) 사용.
+if settings.FRONTEND_DIST.exists():
+    urlpatterns += [path('', TemplateView.as_view(template_name='index.html'), name='spa')]

@@ -1,0 +1,16 @@
+# 로컬(빌드 호스트)에서 이미지 빌드 + 실행 테스트.
+#   cd deploy && docker compose -f docker-compose.dev.yml up --build
+# 실제 /srv/cdGTS 운영 실행은 deploy/host/docker-compose.yml (이미지 pull) 사용.
+services:
+  cdgts:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: honestjung/cdgts:latest
+    ports:
+      - "8010:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    env_file:
+      - .env
+    restart: unless-stopped
