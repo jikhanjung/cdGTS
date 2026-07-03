@@ -30,9 +30,10 @@ echo ""
 echo "=== [3/5] Stop old container + pre-deploy DB snapshot ==="
 docker compose down
 # compose down 직후 — writer 없어 cp 안전. WAL/SHM 도 함께 보존.
-if [ -f "$ROOT/db.sqlite3" ]; then
-    SNAP_DIR="$ROOT/backup/pre_deploy"
-    mkdir -p "$SNAP_DIR"
+SNAP_DIR="$ROOT/backup/pre_deploy"
+if [ ! -s "$ROOT/db.sqlite3" ]; then
+    echo "  (DB 비어있음/없음 — 스냅샷 생략)"
+elif mkdir -p "$SNAP_DIR" 2>/dev/null && [ -w "$SNAP_DIR" ]; then
     TS=$(date -u +%Y%m%d_%H%M%S)
     SNAP="$SNAP_DIR/cdgts_pre_deploy_${VERSION}_${TS}.sqlite3"
     cp -p "$ROOT/db.sqlite3" "$SNAP"
@@ -43,6 +44,8 @@ if [ -f "$ROOT/db.sqlite3" ]; then
     ls -1tr "$SNAP_DIR"/cdgts_pre_deploy_*.sqlite3 2>/dev/null \
         | head -n -20 \
         | while read -r f; do rm -f "$f" "$f-wal" "$f-shm"; done
+else
+    echo "  ⚠ 스냅샷 건너뜀 — $SNAP_DIR 쓰기 불가(소유권 확인: sudo chown -R \$USER $ROOT/backup)"
 fi
 
 echo ""
