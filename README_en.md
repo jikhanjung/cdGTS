@@ -2,7 +2,7 @@
 
 *English · [한국어](README.md)*
 
-> ⚠️ Status: Brainstorming. Rolled as far as the concept, the layer model, and a boundary gateway **schema v0** — but the code, data format, and stack are still undecided.
+> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.2** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info). The concept corpus stays in `docs/`.
 
 ## What is it
 
@@ -62,4 +62,10 @@ Different threads repeatedly converged to the same structure (details in [concep
 
 ## Status
 
-This is the brainstorming stage. The concept, the layer model, and a **schema v0** (all five §4 open questions resolved) exist, but the **actual data format, code, and tech stack are still undecided**. Progress is logged in [`devlog/`](devlog/).
+Concept (brainstorming) → **implemented & deployed**. Schema v0 (all five §4 open questions resolved) has been brought down into a runnable app.
+
+- **Stack**: Django 5.2 + SQLite + DRF + React Flow (Vite). 5 apps (chrono·nodes·graph·engine·releases) + a front-end node editor and release-diff view. Backend `pytest` 59 passed.
+- **Engine**: value + provenance propagation (pass-through) · coherence gate · value/topology diff skeleton. A compute kernel (numpy/scipy) runs the real age-depth model.
+- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.2**, dev/test @ v0.1.1. Atomic DB snapshot + NAS offsite backup (04:00 cron).
+
+The current-state headline is in [HANDOFF.md](HANDOFF.md), per-round changes in [`devlog/`](devlog/), and the remaining open questions in [TODOs.md](TODOs.md).
