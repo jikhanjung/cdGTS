@@ -42,6 +42,6 @@ docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
 ```
 
 ## 참고 / 후속
-- 컨테이너는 `127.0.0.1:8011` 만 노출 — 앞단 **nginx 리버스 프록시**(도메인·HTTPS·정적 캐시)는 호스트에서 별도 구성.
+- 컨테이너는 `127.0.0.1:8011` 만 노출 — 앞단 **nginx 리버스 프록시**(도메인·HTTPS·정적 캐시)는 호스트에서 별도 구성. (8010은 strati2026 이 사용 중.)
 - fsis2026 의 maintenance 페이지 토글은 nginx 연동이라 0.1.0 에선 생략(후속).
 - DB 는 SQLite. 공간(GSSP) 기능 착수 시 PostGIS 컨테이너 추가 예정.
