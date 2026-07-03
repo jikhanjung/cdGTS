@@ -28,7 +28,8 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 
 ## Documents
 
-- [docs/idea_en.md](docs/idea_en.md) — background, problem statement, core idea, the layered data model (Layer 0–4), open questions
+- [docs/concept-map_en.md](docs/concept-map_en.md) — **integrated concept map** (the top-level map over all docs · convergence points · start here)
+- [docs/idea_en.md](docs/idea_en.md) — background, problem statement, core idea, the layered data model (Layer 0–6), open questions
 - [docs/node-graph-paradigm_en.md](docs/node-graph-paradigm_en.md) — the node-graph paradigm in detail
 - [docs/case-permian-triassic_en.md](docs/case-permian-triassic_en.md) — the first case study validating the model against the Permian–Triassic boundary (real data + node graph)
 - [docs/case-precambrian-gssa_en.md](docs/case-precambrian-gssa_en.md) — the Precambrian GSSA counter-case (the number *is* the definition — the mirror image of P–T)

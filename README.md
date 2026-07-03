@@ -28,7 +28,8 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 
 ## 문서
 
-- [docs/idea.md](docs/idea.md) — 배경, 문제의식, 핵심 아이디어, 계층형 데이터 모델(Layer 0~4), 열린 질문
+- [docs/concept-map.md](docs/concept-map.md) — **통합 개념 지도** (전체 문서를 잇는 상위 지도 · 수렴점 · 여기서 시작)
+- [docs/idea.md](docs/idea.md) — 배경, 문제의식, 핵심 아이디어, 계층형 데이터 모델(Layer 0~6), 열린 질문
 - [docs/node-graph-paradigm.md](docs/node-graph-paradigm.md) — 노드 그래프 패러다임 상세
 - [docs/case-permian-triassic.md](docs/case-permian-triassic.md) — Permian–Triassic 경계로 모델을 검증한 첫 케이스 스터디 (실제 데이터 + 노드 그래프)
 - [docs/case-precambrian-gssa.md](docs/case-precambrian-gssa.md) — 선캄브리아 GSSA 대조군 (숫자가 곧 정의 — P–T의 거울상)
