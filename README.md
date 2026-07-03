@@ -30,6 +30,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 - [docs/node-graph-paradigm.md](docs/node-graph-paradigm.md) — 노드 그래프 패러다임 상세
 - [docs/case-permian-triassic.md](docs/case-permian-triassic.md) — Permian–Triassic 경계로 모델을 검증한 첫 케이스 스터디 (실제 데이터 + 노드 그래프)
 - [docs/case-precambrian-gssa.md](docs/case-precambrian-gssa.md) — 선캄브리아 GSSA 대조군 (숫자가 곧 정의 — P–T의 거울상)
+- [docs/case-cambrian-base-correlation.md](docs/case-cambrian-base-correlation.md) — 캄브리아기 base (Fortune Head): 섹션 간 correlation이 숫자를 만드는 세 번째 유형
 
 ## 상태
 
