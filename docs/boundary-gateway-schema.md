@@ -162,6 +162,7 @@ status: { level: ratified, authority: ICS }
 
 - **전역 vs 경계별 버전.** 이 초안은 경계별 독립 버전을 가정(각 레코드가 자기 `version`). ICC 전체 릴리스와
   어떻게 묶을지(릴리스 = 경계 레코드들의 스냅샷 집합?).
+  → 별도 검토: [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md).
 - **분포 표현.** `value ± ` 만인가, 분포 요약(중앙값/95% HPD)/샘플 참조까지인가.
   "엣지가 분포를 흘린다"를 게이트웨이에서 어디까지 얼릴지.
 - **경쟁 모델 공존 방식.** `chosen` + `alternatives` 를 한 레코드에 두는 게 맞나, 아니면 각 모델이

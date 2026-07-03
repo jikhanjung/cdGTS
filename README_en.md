@@ -34,6 +34,7 @@ Provenance (the FAIR principles), incremental re-evaluation, and what-if compari
 - [docs/case-precambrian-gssa_en.md](docs/case-precambrian-gssa_en.md) — the Precambrian GSSA counter-case (the number *is* the definition — the mirror image of P–T)
 - [docs/case-cambrian-base-correlation_en.md](docs/case-cambrian-base-correlation_en.md) — base of the Cambrian (Fortune Head): the third type, where cross-section correlation produces the number
 - [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — draft boundary gateway schema (v0) spanning all three cases
+- [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning analysis (open questions)
 
 ## Status
 

@@ -167,6 +167,7 @@ These three examples make the two polymorphic axes concrete: **position (GSSP/GS
 
 - **Global vs per-boundary versioning.** This draft assumes per-boundary independent versions (each record
   carries its own `version`). How to tie that to a whole-ICC release (a release = a snapshot set of boundary records?).
+  → Separate note: [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md).
 - **Distribution representation.** `value ± ` only, or a distribution summary (median / 95% HPD) / sample
   reference too? How much of "edges carry distributions" should be frozen into the gateway.
 - **How competing models coexist.** Are `chosen` + `alternatives` right to keep in one record, or is each
