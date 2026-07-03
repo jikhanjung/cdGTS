@@ -1,5 +1,7 @@
 # 케이스 스터디 — 선캄브리아 GSSA (P–T의 거울상)
 
+*[English](case-precambrian-gssa_en.md) · 한국어*
+
 > 상태: [case-permian-triassic.md](case-permian-triassic.md)의 **대조군.** GSSP가 "경계 → 숫자(계산)"라면
 > GSSA는 "숫자 → 경계(정의)"로 화살표가 뒤집힌다. 사실은 문헌으로 확인함(§5).
 

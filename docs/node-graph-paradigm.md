@@ -1,5 +1,7 @@
 # 노드 그래프 패러다임 (The Node-Graph Paradigm)
 
+*[English](node-graph-paradigm_en.md) · 한국어*
+
 > cdGTS의 핵심 개념적 은유. 블렌더의 지오메트리 노드(Geometry Nodes)에서 출발.
 
 ## 은유

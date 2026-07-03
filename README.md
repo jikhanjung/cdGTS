@@ -1,5 +1,7 @@
 # cdGTS — Continuously Deployed Geologic Time Scale
 
+*[English](README_en.md) · 한국어*
+
 > ⚠️ 상태: 초기 브레인스토밍. 확정된 것은 아직 없으며, 아이디어를 던지고 굴려보는 공간입니다.
 
 ## 무엇인가

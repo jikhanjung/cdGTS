@@ -1,5 +1,7 @@
 # 케이스 스터디 — 캄브리아기 base (Fortune Head GSSP): correlation이 load-bearing
 
+*[English](case-cambrian-base-correlation_en.md) · 한국어*
+
 > 상태: 세 번째 사례. [case-permian-triassic.md](case-permian-triassic.md)(국소 보간)와
 > [case-precambrian-gssa.md](case-precambrian-gssa.md)(결정된 상수)에 이어,
 > **중간 티어 (b) 섹션 간 상관(correlation)이 숫자를 만드는** 유형을 검증한다. 사실은 문헌 확인(§8).

@@ -1,5 +1,7 @@
 # 케이스 스터디 — Permian–Triassic 경계 (Meishan GSSP)
 
+*[English](case-permian-triassic_en.md) · 한국어*
+
 > 상태: cdGTS의 레이어/게이트웨이 모델([idea.md](idea.md) §5·§8, [node-graph-paradigm.md](node-graph-paradigm.md))을
 > **실제 사례에 처음 매핑해본 검증 노트.** 아래 사실은 문헌으로 확인함(§5 출처).
 
