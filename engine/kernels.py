@@ -12,6 +12,8 @@ NodeType.slug → 커널 함수 레지스트리. 미등록 slug 는 pass-through
 """
 import math
 
+import numpy as np
+from scipy.interpolate import CubicSpline
 from scipy.stats import truncnorm
 
 from nodes.distribution import Distribution
@@ -76,34 +78,120 @@ def range_clamp(dist, lo, hi):
     return dist_from(float(tn.mean()), float(tn.std()), note=f"range[{lo},{hi}]")
 
 
-# --- 레지스트리 (slug → fn(inputs, params) → dist dict|None) ---
+def _summarize_samples(samples, note):
+    """MC 샘플 → 분포 dict. 왜도 있으면 shape(median+hpd95), 아니면 decomposed(2σ)."""
+    med = float(np.median(samples))
+    mean = float(np.mean(samples))
+    std = float(np.std(samples))
+    if std > 0 and abs(mean - med) > 0.1 * std:
+        lo, hi = np.percentile(samples, [2.5, 97.5])
+        return Distribution(
+            fidelity="shape", value_ma=round(med, 6),
+            shape={"median": round(med, 6), "hpd95": [round(float(lo), 6), round(float(hi), 6)]},
+            note=note,
+        ).to_dict()
+    return dist_from(med, std, note=note)
+
+
+def _linear_age_depth(horizons, target):
+    """정렬된 (depth, mean, sigma1) 에서 target 깊이의 연대를 선형 보간(구간 밖은 최근접 구간으로 외삽)."""
+    depths = [h[0] for h in horizons]
+    if target <= depths[0]:
+        (d1, m1, s1), (d2, m2, s2) = horizons[0], horizons[1]
+    elif target >= depths[-1]:
+        (d1, m1, s1), (d2, m2, s2) = horizons[-2], horizons[-1]
+    else:
+        k = next(i for i in range(len(horizons) - 1) if depths[i] <= target <= depths[i + 1])
+        (d1, m1, s1), (d2, m2, s2) = horizons[k], horizons[k + 1]
+    if d2 == d1:   # 같은 깊이 두 점 → 결합
+        return dist_from((m1 + m2) / 2, math.sqrt((s1 * s1 + s2 * s2)) / 2, note="age-depth (coincident)")
+    t = (target - d1) / (d2 - d1)
+    mean = m1 + (m2 - m1) * t
+    var = (1 - t) ** 2 * s1 * s1 + t * t * s2 * s2   # 독립 두 점의 선형결합 분산(외삽 시 증가)
+    where = "interp" if depths[0] <= target <= depths[-1] else "extrap"
+    return dist_from(mean, math.sqrt(var), note=f"age-depth linear @ {target} ({where})")
+
+
+def _spline_age_depth(horizons, target):
+    """3차 스플라인 + MC 불확실성 전파(각 horizon 을 정규 샘플, 매 draw 스플라인 적합 후 target 평가)."""
+    depths = np.array([h[0] for h in horizons])
+    means = np.array([h[1] for h in horizons])
+    sigmas = np.array([h[2] for h in horizons])
+    order = np.argsort(depths)
+    depths_s = depths[order]
+    if np.any(np.diff(depths_s) <= 0):   # 중복/비단조 깊이 → 선형 폴백
+        return _linear_age_depth(horizons, target)
+    means_s, sigmas_s = means[order], sigmas[order]
+    rng = np.random.default_rng(0)       # 결정론적(입력 고정 시 재현)
+    n = 3000
+    draws = means_s + sigmas_s * rng.standard_normal((n, len(means_s)))
+    vals = np.array([CubicSpline(depths_s, draws[k])(target) for k in range(n)])
+    return _summarize_samples(vals, note=f"age-depth spline @ {target}")
+
+
+def age_depth_model(inputs, params):
+    """
+    dated horizon((depth, age) 들)에서 target_depth 의 연대를 보간. depth 는 상류 노드 params["depth"].
+    method: linear(기본, 해석적) | spline(MC 전파). target_depth 없으면 결합으로 폴백.
+    """
+    params = params or {}
+    method = params.get("method", "linear")
+    target = params.get("target_depth")
+
+    horizons = []
+    for i in inputs:
+        depth = (i.get("params") or {}).get("depth")
+        m = moments(i.get("dist"))
+        if depth is not None and m is not None:
+            horizons.append((float(depth), m[0], m[1]))
+
+    dists = [i.get("dist") for i in inputs]
+    if not horizons:
+        return _first_non_null(dists)                       # 깊이 정보 없음 → pass-through
+    if target is None:
+        return inverse_variance_combine(dists, "age-depth (no target)")
+    horizons.sort()
+    target = float(target)
+    if len(horizons) == 1:
+        _, m0, s0 = horizons[0]
+        return dist_from(m0, s0, note=f"age-depth @ {target} (single horizon)")
+    if method == "spline" and len(horizons) >= 3:
+        return _spline_age_depth(horizons, target)
+    return _linear_age_depth(horizons, target)
+
+
+# --- 레지스트리 (slug → fn(inputs, params) → dist dict|None). inputs = [{dist, params, port}] ---
 KERNELS = {
-    "joint-inference": lambda inputs, params: inverse_variance_combine(inputs, "joint"),
-    "cross-section-correlation": lambda inputs, params: inverse_variance_combine(inputs, "correlation"),
+    "joint-inference": lambda inputs, params: inverse_variance_combine([i["dist"] for i in inputs], "joint"),
+    "cross-section-correlation": lambda inputs, params: inverse_variance_combine([i["dist"] for i in inputs], "correlation"),
+    "age-depth-model": age_depth_model,
 }
 
 
-def _first_non_null(inputs):
-    for d in inputs:
+def _first_non_null(dists):
+    for d in dists:
         if d is not None:
             return d
     return None
 
 
 def compute(category, slug, inputs, params):
-    """노드 하나의 출력 분포 계산. inputs = 입력 분포 dict 목록(포트순, 없으면 None)."""
+    """
+    노드 하나의 출력 분포 계산.
+    inputs = 포트순 입력 목록, 각 원소 {"dist": 분포|None, "params": 상류노드 params, "port": target_port}.
+    """
     if category == "data":
-        return params.get("distribution")
+        return (params or {}).get("distribution")
     if slug == "pin":
-        v = params.get("value")
+        v = (params or {}).get("value")
         return Distribution.exact(v).to_dict() if v is not None else None
     if slug == "range":
-        d = _first_non_null(inputs)
-        lo, hi = params.get("min"), params.get("max")
+        d = _first_non_null([i["dist"] for i in inputs])
+        lo, hi = (params or {}).get("min"), (params or {}).get("max")
         if d is not None and lo is not None and hi is not None:
             return range_clamp(d, float(lo), float(hi))
         return d
     fn = KERNELS.get(slug)
     if fn is not None:
         return fn(inputs, params)
-    return _first_non_null(inputs)   # pass-through 폴백
+    return _first_non_null([i["dist"] for i in inputs])   # pass-through 폴백

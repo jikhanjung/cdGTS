@@ -42,13 +42,18 @@ def topo_order(node_keys, edges):
     return order + leftover
 
 
-def _compute(node, incoming, results):
-    """(distribution_dict|None, provenance_keys) 반환. 커널 디스패치. incoming = 포트순 입력 엣지."""
+def _compute(node, incoming, results, node_meta):
+    """(distribution_dict|None, provenance_keys) 반환. 커널 디스패치. incoming = 포트순 입력 엣지.
+    각 입력에 상류 노드 params 를 함께 실어 보낸다(age-depth 의 depth 등)."""
     prov = [e["source"] for e in incoming if e["source"] in results]
-    inputs = [
-        results[e["source"]]["distribution"] if e["source"] in results else None
-        for e in incoming
-    ]
+    inputs = []
+    for e in incoming:
+        r = results.get(e["source"])
+        inputs.append({
+            "dist": r["distribution"] if r else None,
+            "params": node_meta.get(e["source"], {}).get("params", {}),
+            "port": e["target_port"],
+        })
     dist = kernels.compute(node["category"], node["slug"], inputs, node["params"])
     return dist, prov
 
@@ -94,7 +99,7 @@ def evaluate_graph(graph):
             dist, prov, cached = prior.distribution, prior.provenance, True
             stats["cached"] += 1
         else:
-            dist, prov = _compute(meta, inc, results)
+            dist, prov = _compute(meta, inc, results, node_meta)
             cached = False
             stats["computed"] += 1
 

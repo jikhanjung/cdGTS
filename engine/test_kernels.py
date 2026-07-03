@@ -2,12 +2,16 @@
 import math
 
 from engine.kernels import (
-    compute, dist_from, inverse_variance_combine, moments, range_clamp,
+    age_depth_model, compute, dist_from, inverse_variance_combine, moments, range_clamp,
 )
 
 
 def _sym(value, sigma1):
     return {"fidelity": "decomposed", "value_ma": value, "sigma": 1, "budget": {"model": sigma1}}
+
+
+def _horizon(depth, value, sigma1):
+    return {"dist": _sym(value, sigma1), "params": {"depth": depth}, "port": "dated_horizons"}
 
 
 # --- moments ---
@@ -74,9 +78,9 @@ def test_range_clamp_exact_clips():
 # --- compute 디스패치 ---
 
 def test_compute_passthrough_fallback():
-    # age-depth-model 은 미등록 → 첫 입력 통과.
+    # calibration-transfer 는 미등록 커널 → 첫 입력 통과.
     d = _sym(251.9, 0.1)
-    assert compute("process", "age-depth-model", [d], {}) == d
+    assert compute("process", "calibration-transfer", [{"dist": d, "params": {}}], {}) == d
 
 
 def test_compute_pin():
@@ -86,3 +90,41 @@ def test_compute_pin():
 def test_compute_data_emits_params():
     d = _sym(1.0, 0.1)
     assert compute("data", "radiometric-uPb", [], {"distribution": d}) == d
+
+
+# --- age-depth-model ---
+
+def test_age_depth_linear_midpoint():
+    # depth 0→250, depth 10→260; target 5 → 255. var = 0.25·1+0.25·1 = 0.5.
+    out = age_depth_model([_horizon(0, 250, 1.0), _horizon(10, 260, 1.0)],
+                          {"method": "linear", "target_depth": 5})
+    mean, s1 = moments(out)
+    assert abs(mean - 255.0) < 1e-6
+    assert abs(s1 - math.sqrt(0.5)) < 1e-6
+
+
+def test_age_depth_extrapolation_grows_uncertainty():
+    hs = [_horizon(0, 250, 1.0), _horizon(10, 260, 1.0)]
+    s_in = moments(age_depth_model(hs, {"target_depth": 5}))[1]
+    s_ex = moments(age_depth_model(hs, {"target_depth": 30}))[1]
+    assert s_ex > s_in
+
+
+def test_age_depth_single_horizon():
+    assert moments(age_depth_model([_horizon(5, 255, 0.5)], {"target_depth": 5}))[0] == 255.0
+
+
+def test_age_depth_no_depth_passes_through():
+    inp = {"dist": _sym(251.9, 0.1), "params": {}, "port": "dated_horizons"}
+    assert age_depth_model([inp], {"target_depth": 5}) == _sym(251.9, 0.1)
+
+
+def test_age_depth_no_target_combines():
+    out = age_depth_model([_horizon(0, 250, 1.0), _horizon(10, 252, 1.0)], {})
+    assert moments(out)[1] < 1.0        # target 없음 → 결합(불확실성 축소)
+
+
+def test_age_depth_spline_runs():
+    hs = [_horizon(0, 250, 0.5), _horizon(10, 256, 0.5), _horizon(20, 260, 0.5)]
+    out = age_depth_model(hs, {"method": "spline", "target_depth": 10})
+    assert out is not None and moments(out)[0] is not None

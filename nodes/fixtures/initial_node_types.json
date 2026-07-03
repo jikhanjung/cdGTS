@@ -1,10 +1,12 @@
 [
   {"model": "nodes.nodetype", "pk": 1, "fields": {
     "slug": "radiometric-uPb", "name": "Radiometric U-Pb", "category": "data",
-    "description": "U-Pb 방사연대 관측 (불변·인용·leaf).", "params_schema": {}}},
+    "description": "U-Pb 방사연대 관측 (불변·인용·leaf).",
+    "params_schema": {"distribution": {"type": "distribution"}, "depth": {"type": "number", "help": "층서 깊이/높이(age-depth 용)"}}}},
   {"model": "nodes.nodetype", "pk": 2, "fields": {
     "slug": "astronomical", "name": "Astronomical tuning", "category": "data",
-    "description": "천문 주기 조정 연대 (불변·leaf).", "params_schema": {}}},
+    "description": "천문 주기 조정 연대 (불변·leaf).",
+    "params_schema": {"distribution": {"type": "distribution"}, "depth": {"type": "number", "help": "층서 깊이/높이"}}}},
   {"model": "nodes.nodetype", "pk": 3, "fields": {
     "slug": "magnetostratigraphic", "name": "Magnetostratigraphy", "category": "data",
     "description": "자기 반전 패턴 신호 (상관용).", "params_schema": {}}},
@@ -14,8 +16,9 @@
 
   {"model": "nodes.nodetype", "pk": 5, "fields": {
     "slug": "age-depth-model", "name": "Age-depth model", "category": "process",
-    "description": "한 섹션의 age-depth 보간(국소).",
-    "params_schema": {"method": {"type": "enum", "choices": ["spline", "bayesian"], "default": "bayesian"}}}},
+    "description": "한 섹션의 age-depth 보간(국소). dated_horizons(각 depth+age)에서 target_depth 의 연대.",
+    "params_schema": {"method": {"type": "enum", "choices": ["linear", "spline"], "default": "linear"},
+                      "target_depth": {"type": "number", "help": "보간할 층준(예: GSSP 레벨)"}}}},
   {"model": "nodes.nodetype", "pk": 6, "fields": {
     "slug": "cross-section-correlation", "name": "Cross-section correlation", "category": "process",
     "description": "섹션 간 상관 종합(load-bearing).",

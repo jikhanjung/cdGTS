@@ -51,6 +51,25 @@ def test_distribution_propagates_downstream(node_types):
     assert by_key["adm"].provenance == ["uPb"]
 
 
+def test_age_depth_interpolates_through_graph(node_types):
+    """두 dated horizon(depth+age) → age-depth-model(target_depth) → 보간 연대."""
+    g = Graph.objects.create(slug="ad", name="AD")
+    uPb = NodeType.objects.get(slug="radiometric-uPb")
+    h1 = NodeInstance.objects.create(graph=g, key="h1", node_type=uPb, params={
+        "depth": 0, "distribution": {"fidelity": "decomposed", "value_ma": 250.0, "sigma": 1, "budget": {"model": 1.0}}})
+    h2 = NodeInstance.objects.create(graph=g, key="h2", node_type=uPb, params={
+        "depth": 10, "distribution": {"fidelity": "decomposed", "value_ma": 260.0, "sigma": 1, "budget": {"model": 1.0}}})
+    adm = NodeInstance.objects.create(
+        graph=g, key="adm", node_type=NodeType.objects.get(slug="age-depth-model"),
+        params={"method": "linear", "target_depth": 5})
+    Edge.objects.create(graph=g, source=h1, source_port="age", target=adm, target_port="dated_horizons")
+    Edge.objects.create(graph=g, source=h2, source_port="age", target=adm, target_port="dated_horizons")
+    run = evaluate_graph(g)
+    r = run.results.get(node_key="adm")
+    assert r.distribution["value_ma"] == 255.0          # 중점 보간
+    assert set(r.provenance) == {"h1", "h2"}            # 두 horizon 이 기여
+
+
 def test_pin_emits_exact(node_types):
     g = Graph.objects.create(slug="p", name="P")
     NodeInstance.objects.create(
