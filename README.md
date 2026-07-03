@@ -37,6 +37,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 - [docs/versioning-global-vs-per-boundary.md](docs/versioning-global-vs-per-boundary.md) — 전역 vs 경계별 버전 문제 검토 (열린 질문)
 - [docs/coherence-gate.md](docs/coherence-gate.md) — 정합성 게이트 구체화 (Layer 5): 핀된 경계 집합 → 유효한 차트
 - [docs/competing-models.md](docs/competing-models.md) — 경쟁 모델 공존 방식 (네트워크 복수 후보 + 릴리스 선택)
+- [docs/cycles.md](docs/cycles.md) — 순환 의존성과 clamp (subcommission이 놓는 hand-crafted 게이트)
 
 ## 상태
 

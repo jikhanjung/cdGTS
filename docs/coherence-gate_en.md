@@ -45,7 +45,7 @@ coherence_gate(
 
 | Level | Check | Input needed | Nature |
 |---|---|---|---|
-| **L0 structural** | Referential integrity + topology: every boundary resolves to an existing version, and the units partition the timeline with **no gaps or overlaps**. Dual-naming pairs present. | id · topology | **FAIL** |
+| **L0 structural** | Referential integrity + topology + **acyclicity**: every boundary resolves to an existing version, the units partition the timeline with **no gaps or overlaps**, and (after clamps are applied) provenance is **acyclic** within the release. Dual-naming pairs present. | id · topology · edge type | **FAIL** |
 | **L1a ordering (point)** | For adjacent boundary pairs, age(younger base) < age(older base). Total monotonicity. | values | **FAIL** (almost always passes for flagship boundaries) |
 | **L1b ordering (interval)** | Do adjacent boundaries' 2σ ranges overlap = a flag that "ordering is not statistically resolved" (not a violation). | values + ± | **WARN** |
 | **L2 durations** | Stage/epoch length = difference of two boundaries. Negative durations; distribution mass leaking below zero. | values + ± + **covariance** | FAIL/WARN |
@@ -71,6 +71,8 @@ This sets the gate's character:
   clean (release number = record number = ratified value). But it can **only reject, not fix**.
 - **Reconcile (L3b):** produces a coherent chart even when raw records conflict. But now the **release number ≠
   the record number** — a "release-adjusted age" appears and the release itself becomes an inference node.
+  → **Reconciliation is more honest done via a subcommission's authored `Clamp` than via automatic joint
+  inference** (the divergence becomes a named, attributable governance decision). Detail: [cycles_en.md](cycles_en.md).
 
 **A clean mapping falls out — the two modes map exactly onto ICC/GTS:**
 

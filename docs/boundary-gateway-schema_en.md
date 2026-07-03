@@ -99,6 +99,20 @@ ModelCandidate:                  # a competing candidate coexisting in the netwo
 Release:
   version: string                # e.g. ICC-2024/12
   selection: { boundary_id: model_candidate_ref }   # a coherent selection = drawing from a consistent (ideally same global) set
+  clamps: [clamp_ref]            # the authored clamps this release applies
+
+# Clamp — a governance gateway a subcommission plugs *inside* the network (cuts cycles / pins authority)
+Clamp:
+  id: string
+  owner: string                  # e.g. ICS Cambrian Subcommission
+  target: node_ref | boundary_id # what it fixes
+  kind: pin | range | order | freeze-version
+  value_or_bound: any            # pin=value, range=[min,max], order=neighbor ref, freeze-version=version
+  rationale: string
+  ratified: { year: int, by: authority }
+  overridable_in_sandbox: bool   # removable in a sandbox what-if?
+# note: GSSA = the Clamp{kind: pin} special case (one root with definition.type=GSSA).
+# note: provenance edges carry a type (co-location | calibration-transfer) so the gate can detect cycles.
 ```
 
 ## 3. Applied to the three cases
@@ -198,8 +212,9 @@ These three examples make the two polymorphic axes concrete: **position (GSSP/GS
   `ModelCandidate` · `Release`. Detail: [competing-models_en.md](competing-models_en.md).
 - **Topology diff.** When `definition.type` changes GSSA→GSSP between versions (Ediacaran done, Cryogenian
   in progress), how to notate and track a **topology diff** separate from a value diff.
-- **Cycles.** When `ModelCandidate.inputs` embeds a biostratigraphy ↔ radiometric-dating cycle, whether to fold
-  it into a joint-inference node.
+- **Cycles.** → **Resolved**: local mutual constraint folds into a joint-inference node; global calibration
+  feedback is cut by the version spiral + subcommission `Clamp`s. Reflected in §2's `Clamp` · `Release.clamps`.
+  Detail: [cycles_en.md](cycles_en.md).
 
 ## 5. Links
 
