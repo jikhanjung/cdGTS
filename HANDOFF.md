@@ -4,7 +4,7 @@
 앱 아키텍처 → 개발계획 P01 → **Phase 0~6 구현 → 계산 커널 → Docker 배포 → 배포/DB 분리·원자적 sync·NAS 백업
 → 예제 그래프 3종 → 릴리스 diff UI**. 스택 확정: **Django 5.2.12 + SQLite + DRF 3.17 + React Flow(Vite)**.
 5개 앱[chrono·nodes·graph·engine·releases] + 프론트 노드 에디터/diff 뷰. 백엔드 **pytest 59 passed**.
-운영 **cdgts.paleobytes.info @ 0.1.2**, 개발/테스트 **@ 0.1.1**. devlog 001~031 push.)
+운영 **cdgts.paleobytes.info @ 0.1.3**(통합 seed 2026.07.0 재시드 완료·드리프트 해소), 개발/테스트 **@ 0.1.1**. devlog 001~033 push.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -27,7 +27,7 @@
   **릴리스 Diff 뷰**(값/토폴로지 직교, 인라인 bake). `npm run build` 통과.
 - **배포/운영**:
   - Docker 이미지 `honestjung/cdgts`(numpy/scipy 포함), `deploy/build.sh <ver>` 로 pytest→bump→build→push.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.2**(nginx + certbot). **개발/테스트** `127.0.0.1:8011` @ 0.1.1.
+  - **운영서버** `cdgts.paleobytes.info` @ **0.1.3**(nginx + certbot). **개발/테스트** `127.0.0.1:8011` @ 0.1.1.
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 를 배포에서 분리 + prod→test sync.
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + **04:00 cron**.
 - **초기 데이터(seed)**: 통합 `seed/`(manifest version `2026.07.0`, 자연키·pk 없음) — chrono·nodes·graph·releases 단일 소스.
@@ -50,12 +50,13 @@
 - **인프라**(027·028) — 원자적 스냅샷 sync + NAS 오프사이트 백업 + 04:00 cron.
 - **UX/시드**(029·030) — 예제 그래프 3종 + 릴리스 diff UI(값/토폴로지).
 - **릴리스**(031) — v0.1.2 운영서버(cdgts.paleobytes.info) 배포.
+- **프론트/시드**(032·033) — 노드 속성 인스펙터 + 결과 패널 + seed 통합(자연키) → **v0.1.3 배포 + 운영 재시드**(드리프트 해소, self-FK ProtectedError 수정).
 
 ## 다음 작업
 
 ### 후속 (선택, 우선순위 대략순)
 
-- [ ] **운영 배포 검증 기록** — 헬스체크·시드 확인 결과를 devlog 에 정리(현재 미기록).
+- [x] **운영 재시드 + 검증**(devlog 033) — 0.1.3 배포 + `seed --mode=replace`(deleted 87/inserted 96/bake 2). 드리프트 해소.
 - [ ] **브라우저 육안 검증** — 프론트 drag&drop·엣지·복원·결과뱃지·diff 뷰 실제 클릭 확인(헤드리스 미검증분).
 - [ ] **계산 커널 확장** — age-depth 외 joint/베이지안 등 노드타입별 실제 커널(별도 워커·PyMC).
 - [ ] **인증·소유권** — 현재 API AllowAny(dev). 로그인·그래프 소유·샌드박스 권한.
