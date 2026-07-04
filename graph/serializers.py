@@ -18,7 +18,7 @@ class NodeInstanceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = NodeInstance
-        fields = ["key", "node_type", "label", "params", "x", "y"]
+        fields = ["key", "node_type", "label", "description", "params", "x", "y", "width"]
 
 
 class EdgeSerializer(serializers.Serializer):

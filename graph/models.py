@@ -89,9 +89,11 @@ class NodeInstance(models.Model):
     key = models.CharField(max_length=100, help_text="React Flow 노드 id (그래프 내 유일)")
     node_type = models.ForeignKey(NodeType, on_delete=models.PROTECT, related_name="instances")
     label = models.CharField(max_length=200, blank=True)
+    description = models.TextField(blank=True, help_text="사용자 설명(제목은 짧게, 상세는 여기 · 노드 툴팁). params 의 note 와 별개.")
     params = models.JSONField(default=dict, blank=True)
     x = models.FloatField(default=0)
     y = models.FloatField(default=0)
+    width = models.FloatField(null=True, blank=True, help_text="사용자가 조정한 노드 폭(px). null=기본 폭.")
     group = models.ForeignKey(
         NodeGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="members",
     )

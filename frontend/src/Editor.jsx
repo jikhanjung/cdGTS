@@ -13,6 +13,7 @@ import {
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode }
+const DEFAULT_NODE_WIDTH = 172   // 기본 폭(px). 사용자가 우측 핸들로 조정 가능.
 
 // --- API ↔ React Flow 변환 ---
 function apiToRF(graph, typeMap) {
@@ -20,7 +21,11 @@ function apiToRF(graph, typeMap) {
     const t = typeMap[n.node_type] || { category: 'process', ports: [] }
     return {
       id: n.key, type: 'cdgts', position: { x: n.x, y: n.y },
-      data: { nodeType: n.node_type, label: n.label, params: n.params, category: t.category, ports: t.ports },
+      width: n.width || DEFAULT_NODE_WIDTH,
+      data: {
+        nodeType: n.node_type, label: n.label, description: n.description || '',
+        params: n.params, category: t.category, ports: t.ports,
+      },
     }
   })
   const edges = graph.edges.map((e) => ({
@@ -37,7 +42,9 @@ function rfToApi(nodes, edges, viewport) {
     viewport,
     nodes: nodes.map((n) => ({
       key: n.id, node_type: n.data.nodeType, label: n.data.label || '',
+      description: n.data.description || '',
       params: n.data.params || {}, x: Math.round(n.position.x), y: Math.round(n.position.y),
+      width: n.width ? Math.round(n.width) : null,
     })),
     edges: edges.map((e) => ({
       source: e.source, source_port: e.sourceHandle,
@@ -110,8 +117,8 @@ export default function Editor() {
     const position = screenToFlowPosition({ x: e.clientX, y: e.clientY })
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
     setNodes((nds) => nds.concat({
-      id: key, type: 'cdgts', position,
-      data: { nodeType: slug, label: '', params: {}, category: t.category, ports: t.ports },
+      id: key, type: 'cdgts', position, width: DEFAULT_NODE_WIDTH,
+      data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports },
     }))
   }, [screenToFlowPosition, typeMap, setNodes])
 
@@ -186,6 +193,10 @@ export default function Editor() {
 
   const onLabel = useCallback((id, label) => {
     patchNodeData(id, (d) => ({ ...d, label }))
+  }, [patchNodeData])
+
+  const onDescription = useCallback((id, description) => {
+    patchNodeData(id, (d) => ({ ...d, description }))
   }, [patchNodeData])
 
   const onParam = useCallback((id, key, value) => {
@@ -312,6 +323,7 @@ export default function Editor() {
         type={selectedNode ? typeMap[selectedNode.data.nodeType] : null}
         nodeKeys={nodeKeys}
         onLabel={(v) => onLabel(selectedNode.id, v)}
+        onDescription={(v) => onDescription(selectedNode.id, v)}
         onParam={(k, v) => onParam(selectedNode.id, k, v)}
         onDist={(k, sk, v) => onDist(selectedNode.id, k, sk, v)}
         onReplaceParams={(p) => onReplaceParams(selectedNode.id, p)}

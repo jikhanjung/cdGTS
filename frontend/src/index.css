@@ -101,15 +101,21 @@ body {
 
 /* --- 커스텀 노드 --- */
 .cdgts-node {
-  background: #fff; border: 2px solid #888; border-radius: 8px;
-  min-width: 150px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  width: 100%; background: #fff; border: 2px solid #888; border-radius: 8px;
+  font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 .cdgts-node__header {
   color: #fff; padding: 5px 9px; border-radius: 5px 5px 0 0;
-  display: flex; justify-content: space-between; align-items: center;
+  display: flex; align-items: center; gap: 6px;
 }
-.cdgts-node__title { font-weight: 600; }
-.cdgts-node__cat { font-size: 9px; opacity: 0.8; text-transform: uppercase; }
+/* 제목은 폭에 맞춰 말줄임 — 노드가 제목 길이로 늘어나지 않게. 상세는 description 툴팁으로. */
+.cdgts-node__title {
+  font-weight: 600; flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.cdgts-node__cat { flex: 0 0 auto; font-size: 9px; opacity: 0.8; text-transform: uppercase; }
+/* 우측 폭 조정 핸들 (노드 선택 시 표시) */
+.cdgts-resize { width: 7px; right: -4px; cursor: ew-resize; }
 .cdgts-node__body { display: flex; justify-content: space-between; padding: 6px 4px; }
 .cdgts-node__body .ports { list-style: none; margin: 0; padding: 0; }
 .cdgts-node__body .ports.in { text-align: left; }
@@ -141,6 +147,7 @@ body {
   width: 100%; border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px;
   font-size: 13px; background: #fff; color: #1c1c22;
 }
+.insp-desc { resize: vertical; min-height: 46px; font-family: inherit; line-height: 1.4; }
 .insp-checks { display: flex; flex-direction: column; gap: 3px; }
 .insp-check { font-size: 12px; display: flex; align-items: center; gap: 6px; color: #1c1c22; }
 .insp-check input { margin: 0; }

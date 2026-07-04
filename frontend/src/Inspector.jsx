@@ -169,7 +169,7 @@ function DistributionField({ name, value, onDist }) {
 }
 
 // --- 인스펙터 패널 ---
-export default function Inspector({ node, type, nodeKeys, onLabel, onParam, onDist, onReplaceParams }) {
+export default function Inspector({ node, type, nodeKeys, onLabel, onDescription, onParam, onDist, onReplaceParams }) {
   if (!node) {
     return <aside className="inspector empty"><p className="hint">노드를 선택하면 속성이 여기 표시됩니다.</p></aside>
   }
@@ -191,6 +191,16 @@ export default function Inspector({ node, type, nodeKeys, onLabel, onParam, onDi
           type="text" className="insp-input"
           defaultValue={node.data.label ?? ''} placeholder={node.data.nodeType}
           onChange={(e) => onLabel(e.target.value)}
+        />
+      </div>
+
+      <div className="insp-field">
+        <label className="insp-label">description</label>
+        <textarea
+          className="insp-input insp-desc" rows={3}
+          defaultValue={node.data.description ?? ''}
+          placeholder="상세 설명 — 제목은 짧게, 여기 자세히 (노드 제목 툴팁에 표시)"
+          onChange={(e) => onDescription(e.target.value)}
         />
       </div>
 
