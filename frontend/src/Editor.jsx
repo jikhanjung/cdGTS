@@ -148,6 +148,7 @@ export default function Editor() {
   const [error, setError] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])
   const [selectedGroup, setSelectedGroup] = useState(null)
+  const [menu, setMenu] = useState(null)   // 우클릭 컨텍스트 메뉴 {x,y,kind,id?,groupKey?}
   const [gateways, setGateways] = useState([])
   const [outputs, setOutputs] = useState([])
   const [runMeta, setRunMeta] = useState(null)
@@ -249,18 +250,42 @@ export default function Editor() {
   }, [screenToFlowPosition, typeMap, setNodes, activeGroup])
 
   // --- 그룹 만들기 / 해제 / 드릴인 ---
-  const onCreateGroup = useCallback(() => {
-    if (!selectedIds.length || activeGroup) return
+  const createGroupFrom = useCallback((ids) => {
+    if (!ids.length || activeGroup) return
     const key = `grp-${Math.random().toString(36).slice(2, 7)}`
     const name = (window.prompt('그룹 이름', `Group ${groups.length + 1}`) || '').trim() || `Group ${groups.length + 1}`
-    const mem = nodes.filter((n) => selectedIds.includes(n.id))
+    const mem = nodes.filter((n) => ids.includes(n.id))
     const cx = Math.round(mem.reduce((s, n) => s + n.position.x, 0) / mem.length)
     const cy = Math.round(mem.reduce((s, n) => s + n.position.y, 0) / mem.length)
-    setNodes((nds) => nds.map((n) => (selectedIds.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
+    setNodes((nds) => nds.map((n) => (ids.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
     setGroups((gs) => gs.concat({ key, name, collapsed: true, x: cx, y: cy }))
     setSelectedIds([])
     setStatus(`그룹 '${name}' 생성 (${mem.length} 노드)`)
-  }, [selectedIds, activeGroup, groups.length, nodes, setNodes])
+  }, [activeGroup, groups.length, nodes, setNodes])
+
+  const onCreateGroup = useCallback(() => createGroupFrom(selectedIds), [createGroupFrom, selectedIds])
+
+  const removeFromGroup = useCallback((id) => {
+    setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: { ...n.data, group: null } } : n)))
+    setStatus('노드를 그룹에서 뺐음')
+  }, [setNodes])
+
+  // 우클릭 대상 노드가 선택에 없으면 그 노드만, 있으면 현재 선택 전체를 그룹 대상으로.
+  const groupTargets = useCallback((id) => {
+    if (id && !selectedIds.includes(id)) return [id]
+    return selectedIds.length ? selectedIds : (id ? [id] : [])
+  }, [selectedIds])
+
+  const closeMenu = useCallback(() => setMenu(null), [])
+  const onNodeContextMenu = useCallback((e, node) => {
+    e.preventDefault()
+    if (node.type === 'cdgtsGroup') setMenu({ x: e.clientX, y: e.clientY, kind: 'group', groupKey: node.data.key })
+    else if (node.type === 'cdgts') setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
+  }, [])
+  const onPaneContextMenu = useCallback((e) => {
+    e.preventDefault()
+    setMenu({ x: e.clientX, y: e.clientY, kind: 'pane' })
+  }, [])
 
   const onUngroup = useCallback((key) => {
     setNodes((nds) => nds.map((n) => (n.data.group === key ? { ...n, data: { ...n.data, group: null } } : n)))
@@ -423,6 +448,9 @@ export default function Editor() {
             onConnect={onConnect}
             onSelectionChange={onSelectionChange}
             onNodeDoubleClick={onNodeDoubleClick}
+            onNodeContextMenu={onNodeContextMenu}
+            onPaneContextMenu={onPaneContextMenu}
+            onPaneClick={closeMenu}
             nodeTypes={nodeTypes}
             fitView
           >
@@ -432,6 +460,37 @@ export default function Editor() {
           </ReactFlow>
         </div>
         {showResults && <ResultsPanel outputs={outputs} meta={runMeta} onClose={() => setShowResults(false)} />}
+
+        {menu && (
+          <>
+            <div className="ctx-backdrop" onClick={closeMenu}
+                 onContextMenu={(e) => { e.preventDefault(); closeMenu() }} />
+            <ul className="ctx-menu" style={{ left: menu.x, top: menu.y }}>
+              {menu.kind === 'node' && !activeGroup && (
+                <li onClick={() => { createGroupFrom(groupTargets(menu.id)); closeMenu() }}>
+                  선택 노드 그룹으로 묶기 ({groupTargets(menu.id).length})
+                </li>
+              )}
+              {menu.kind === 'node' && activeGroup && (
+                <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>그룹에서 빼기</li>
+              )}
+              {menu.kind === 'group' && (
+                <>
+                  <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>그룹 열기</li>
+                  <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>그룹 해제</li>
+                </>
+              )}
+              {menu.kind === 'pane' && !activeGroup && (
+                selectedIds.length
+                  ? <li onClick={() => { createGroupFrom(selectedIds); closeMenu() }}>선택 노드 그룹으로 묶기 ({selectedIds.length})</li>
+                  : <li className="disabled">노드를 선택한 뒤 우클릭</li>
+              )}
+              {menu.kind === 'pane' && activeGroup && (
+                <li onClick={() => { setActiveGroup(null); closeMenu() }}>상위로 나가기</li>
+              )}
+            </ul>
+          </>
+        )}
       </main>
 
       <Inspector
