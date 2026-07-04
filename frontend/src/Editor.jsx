@@ -76,20 +76,24 @@ function buildView(nodes, edges, groups, activeGroup, labelMap) {
       const sIn = memberSet.has(e.source), tIn = memberSet.has(e.target)
       if (sIn && tIn) { viewEdges.push({ ...e, id: `v-${e.id}` }); return }
       if (tIn && !sIn) {
-        const sid = `stub-in:${e.source}:${e.sourceHandle}`
+        // 그룹 입력 포트 = 멤버 쪽(e.target·targetHandle), 출처 = 외부(e.source·sourceHandle). 연결별 스텁.
+        const sid = `stub-in:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
         if (!stubSeen.has(sid)) {
           stubSeen.add(sid)
-          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -240, y: ins * 64 },
-            data: { dir: 'in', label: lab(e.source, e.sourceHandle) }, draggable: false, selectable: false })
+          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
+            data: { dir: 'in', port: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) },
+            draggable: false, selectable: false })
           ins++
         }
         viewEdges.push({ ...e, id: `v-${e.id}`, source: sid, sourceHandle: 'out' })
       } else if (sIn && !tIn) {
-        const sid = `stub-out:${e.target}:${e.targetHandle}`
+        // 그룹 출력 포트 = 멤버 쪽(e.source·sourceHandle), 도착 = 외부(e.target·targetHandle). 연결별 스텁.
+        const sid = `stub-out:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
         if (!stubSeen.has(sid)) {
           stubSeen.add(sid)
-          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 720, y: outs * 64 },
-            data: { dir: 'out', label: lab(e.target, e.targetHandle) }, draggable: false, selectable: false })
+          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
+            data: { dir: 'out', port: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) },
+            draggable: false, selectable: false })
           outs++
         }
         viewEdges.push({ ...e, id: `v-${e.id}`, target: sid, targetHandle: 'in' })

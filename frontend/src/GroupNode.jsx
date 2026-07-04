@@ -29,12 +29,17 @@ export function GroupNode({ data, selected }) {
   )
 }
 
-// 드릴인 내부에서 경계를 넘는 연결을 보여주는 읽기전용 인터페이스 스텁(외부 노드 대리 표시).
+// 드릴인 내부에서 경계를 넘는 연결을 보여주는 읽기전용 인터페이스 스텁.
+// 그룹 포트(멤버 쪽) + 외부 출처/도착을 함께 표기: 입력 `port ← peer`, 출력 `port → peer`.
 export function StubNode({ data }) {
   const inp = data.dir === 'in'
+  const arrow = inp ? '←' : '→'
   return (
-    <div className={`stub-node ${data.dir}`} title={data.label}>
-      {inp ? '▸ ' : ''}{data.label}{inp ? '' : ' ▸'}
+    <div className={`stub-node ${data.dir}`} title={`${data.port} ${arrow} ${data.peer}`}>
+      <span className="stub-tag">{inp ? 'in' : 'out'}</span>
+      <span className="stub-port">{data.port}</span>
+      <span className="stub-arrow">{arrow}</span>
+      <span className="stub-peer">{data.peer}</span>
       <Handle id={inp ? 'out' : 'in'} type={inp ? 'source' : 'target'}
               position={inp ? Position.Right : Position.Left} />
     </div>

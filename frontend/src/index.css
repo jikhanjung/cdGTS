@@ -86,11 +86,21 @@ body {
 .group-node__io .gio li { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.5; }
 
 .stub-node {
-  border: 1px dashed #b9a0d0; border-radius: 6px; background: #fbfaff; color: #7a6a90;
+  display: flex; align-items: center; gap: 5px;
+  border: 1px dashed #b9a0d0; border-radius: 6px; background: #fbfaff;
   font-size: 10px; padding: 5px 9px; white-space: nowrap; font-family: ui-monospace, Menlo, monospace;
 }
 .stub-node.in { border-left: 3px solid #4a9d5b; }
 .stub-node.out { border-right: 3px solid #b0662c; }
+.stub-node .stub-tag {
+  font-size: 8px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 700;
+  padding: 0 4px; border-radius: 6px; color: #fff;
+}
+.stub-node.in .stub-tag { background: #4a9d5b; }
+.stub-node.out .stub-tag { background: #b0662c; }
+.stub-node .stub-port { color: #3a2450; font-weight: 600; }
+.stub-node .stub-arrow { color: #a142f4; }
+.stub-node .stub-peer { color: #9a8ab0; }
 
 .breadcrumb {
   display: flex; align-items: center; gap: 8px; padding: 5px 12px; font-size: 12px;
