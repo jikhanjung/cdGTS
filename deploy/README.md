@@ -41,11 +41,13 @@ cd ~/projects/cdGTS && git pull
 /srv/cdGTS/deploy-prod.sh 0.1.1     # 프로덕션: 배포 전 DB 스냅샷 후 스왑
 # 개발/테스트:
 /srv/cdGTS/deploy-dev.sh 0.1.1      # 스냅샷 없이 스왑 (DB = 운영 복사본)
-# 빈 DB 최초 시드(개발/테스트에서 아직 운영 sync 전이면):
+# 초기 데이터 시드 — 통합 seed(자연키, seed/). devlog P02.
 docker compose -f /srv/cdGTS/docker-compose.yml exec cdgts \
-    sh -c "python manage.py loaddata initial_boundaries initial_node_types example_graphs example_releases"
-# example_graphs   = 세 케이스 예제 네트워크(GSSA · P–T · 캄브리아 base)
-# example_releases = 릴리스 Diff 데모용 두 릴리스(ICC-2012/2024 예시, 값+토폴로지 diff)
+    python manage.py seed --mode=replace   # 깨끗한 재구축(seed 범위 flush 후 전체 로드 + bake)
+# 이후 버전업에서 초기 데이터가 추가됐을 때 (기존 데이터 보존하며 없는 것만):
+#   python manage.py seed --mode=add        # 그래프/릴리스는 원자 단위, pk 충돌 없음
+#   python manage.py seed --mode=add --dry-run   # 무엇이 insert 될지 미리보기
+# seed 세트: chrono(경계·단위) · nodes(노드타입) · graph(예제 3종) · releases(ICC-2012/2024 diff 데모).
 ```
 
 ## DB 관리 — 배포와 분리 (fsis 패턴)

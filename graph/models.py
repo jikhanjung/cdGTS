@@ -12,6 +12,30 @@ from django.db import models
 from nodes.models import NodeType
 
 
+class GraphManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class NodeInstanceManager(models.Manager):
+    def get_by_natural_key(self, graph_slug, key):
+        return self.get(graph__slug=graph_slug, key=key)
+
+
+class GatewayManager(models.Manager):
+    def get_by_natural_key(self, graph_slug, slug):
+        return self.get(graph__slug=graph_slug, slug=slug)
+
+
+class EdgeManager(models.Manager):
+    def get_by_natural_key(self, graph_slug, source_key, source_port, target_key, target_port):
+        return self.get(
+            graph__slug=graph_slug,
+            source__key=source_key, source_port=source_port,
+            target__key=target_key, target_port=target_port,
+        )
+
+
 class Graph(models.Model):
     """네트워크 컨테이너 (브랜치/샌드박스 단위). viewport = React Flow 팬/줌 상태."""
     class Status(models.TextChoices):
@@ -31,11 +55,16 @@ class Graph(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    objects = GraphManager()
+
     class Meta:
         ordering = ["slug"]
 
     def __str__(self):
         return self.slug
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class NodeGroup(models.Model):
@@ -67,6 +96,8 @@ class NodeInstance(models.Model):
         NodeGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="members",
     )
 
+    objects = NodeInstanceManager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["graph", "key"], name="uniq_node_key_per_graph")
@@ -74,6 +105,11 @@ class NodeInstance(models.Model):
 
     def __str__(self):
         return f"{self.graph.slug}/{self.key}:{self.node_type.slug}"
+
+    def natural_key(self):
+        return (self.graph.slug, self.key)
+
+    natural_key.dependencies = ["graph.graph", "nodes.nodetype"]
 
     @property
     def is_cycle_breaker(self):
@@ -95,8 +131,15 @@ class Edge(models.Model):
     target_port = models.CharField(max_length=100)
     kind = models.CharField(max_length=24, choices=Kind.choices, default=Kind.DATA)
 
+    objects = EdgeManager()
+
     def __str__(self):
         return f"{self.source.key}.{self.source_port} → {self.target.key}.{self.target_port}"
+
+    def natural_key(self):
+        return (self.graph.slug, self.source.key, self.source_port, self.target.key, self.target_port)
+
+    natural_key.dependencies = ["graph.graph", "graph.nodeinstance"]
 
 
 class Gateway(models.Model):
@@ -117,6 +160,8 @@ class Gateway(models.Model):
         related_name="gateways", help_text="이 게이트웨이가 추정하는 경계(있으면)",
     )
 
+    objects = GatewayManager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["graph", "slug"], name="uniq_gateway_slug_per_graph")
@@ -124,3 +169,8 @@ class Gateway(models.Model):
 
     def __str__(self):
         return f"{self.graph.slug}::{self.slug}"
+
+    def natural_key(self):
+        return (self.graph.slug, self.slug)
+
+    natural_key.dependencies = ["graph.graph", "graph.nodeinstance", "chrono.boundary"]

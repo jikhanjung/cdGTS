@@ -16,6 +16,31 @@ class AgeMethod(models.TextChoices):
     CROSS_SECTION = "cross-section-correlation", "cross-section correlation"
 
 
+class ModelCandidateManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class CandidateOutputManager(models.Manager):
+    def get_by_natural_key(self, candidate_slug, boundary_slug):
+        return self.get(candidate__slug=candidate_slug, boundary__slug=boundary_slug)
+
+
+class ClampManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class ReleaseManager(models.Manager):
+    def get_by_natural_key(self, version):
+        return self.get(version=version)
+
+
+class SelectionManager(models.Manager):
+    def get_by_natural_key(self, release_version, boundary_slug):
+        return self.get(release__version=release_version, boundary__slug=boundary_slug)
+
+
 class ModelCandidate(models.Model):
     """네트워크에 공존하는 경쟁 후보 (독립 주소지정). 릴리스가 그중 하나를 선택."""
     class Scope(models.TextChoices):
@@ -29,8 +54,13 @@ class ModelCandidate(models.Model):
     provenance_ref = models.CharField(max_length=300, blank=True, help_text="값을 내는 서브그래프 참조")
     note = models.TextField(blank=True)
 
+    objects = ModelCandidateManager()
+
     def __str__(self):
         return self.slug
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class CandidateOutput(models.Model):
@@ -39,6 +69,8 @@ class CandidateOutput(models.Model):
     boundary = models.ForeignKey("chrono.Boundary", on_delete=models.CASCADE, related_name="candidate_outputs")
     distribution = models.JSONField(help_text="Distribution.to_dict (nodes.distribution)")
 
+    objects = CandidateOutputManager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["candidate", "boundary"], name="uniq_output_per_candidate_boundary")
@@ -46,6 +78,11 @@ class CandidateOutput(models.Model):
 
     def __str__(self):
         return f"{self.candidate.slug} → {self.boundary.slug}"
+
+    def natural_key(self):
+        return (self.candidate.slug, self.boundary.slug)
+
+    natural_key.dependencies = ["releases.modelcandidate", "chrono.boundary"]
 
 
 class Clamp(models.Model):
@@ -70,8 +107,13 @@ class Clamp(models.Model):
     ratified_year = models.IntegerField(null=True, blank=True)
     overridable_in_sandbox = models.BooleanField(default=True)
 
+    objects = ClampManager()
+
     def __str__(self):
         return f"{self.slug} ({self.kind})"
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class Release(models.Model):
@@ -84,11 +126,16 @@ class Release(models.Model):
     clamps = models.ManyToManyField(Clamp, blank=True, related_name="releases")
     created_at = models.DateTimeField(auto_now_add=True)
 
+    objects = ReleaseManager()
+
     class Meta:
         ordering = ["version"]
 
     def __str__(self):
         return self.version
+
+    def natural_key(self):
+        return (self.version,)
 
 
 class Selection(models.Model):
@@ -97,6 +144,8 @@ class Selection(models.Model):
     boundary = models.ForeignKey("chrono.Boundary", on_delete=models.CASCADE, related_name="selections")
     candidate = models.ForeignKey(ModelCandidate, on_delete=models.PROTECT, related_name="selections")
 
+    objects = SelectionManager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["release", "boundary"], name="uniq_selection_per_release_boundary")
@@ -104,6 +153,11 @@ class Selection(models.Model):
 
     def __str__(self):
         return f"{self.release.version}: {self.boundary.slug} → {self.candidate.slug}"
+
+    def natural_key(self):
+        return (self.release.version, self.boundary.slug)
+
+    natural_key.dependencies = ["releases.release", "chrono.boundary"]
 
 
 class BoundaryRecord(models.Model):

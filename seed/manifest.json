@@ -1,0 +1,10 @@
+{
+  "version": "2026.07.0",
+  "description": "cdGTS 통합 초기 데이터 (자연키, pk 없음). chrono → nodes → graph → releases 순서.",
+  "fixtures": [
+    "01_chrono.json",
+    "02_nodes.json",
+    "03_graphs.json",
+    "04_releases.json"
+  ]
+}

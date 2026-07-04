@@ -30,7 +30,9 @@
   - **운영서버** `cdgts.paleobytes.info` @ **0.1.2**(nginx + certbot). **개발/테스트** `127.0.0.1:8011` @ 0.1.1.
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 를 배포에서 분리 + prod→test sync.
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + **04:00 cron**.
-- **테스트**: 백엔드 `pytest` **59 passed**. fixture: `initial_boundaries`·`initial_node_types`·`example_graphs`·`example_releases`.
+- **초기 데이터(seed)**: 통합 `seed/`(manifest version `2026.07.0`, 자연키·pk 없음) — chrono·nodes·graph·releases 단일 소스.
+  `manage.py seed --mode=replace|add`(replace=재구축, add=없는 것만·그래프/릴리스 원자). 앱별 fixture 폐지, `FIXTURE_DIRS=seed/`.
+- **테스트**: 백엔드 `pytest` **59 passed**. 테스트 fixture 는 seed 파일(`01_chrono`·`02_nodes`)을 loaddata.
 - **문서 코퍼스**: `docs/` 13주제 × 한/영 + README + app-architecture 한/영. 진입점 `docs/concept-map.md`.
 - **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push.
 

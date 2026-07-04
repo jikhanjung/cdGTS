@@ -1,0 +1,433 @@
+[
+{
+  "model": "graph.graph",
+  "fields": {
+    "slug": "example-gssa-precambrian",
+    "name": "예제 ①: 선캄브리아 GSSA (Archean–Proterozoic 2500 Ma)",
+    "owner": null,
+    "status": "sandbox",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "zoom": 1
+    },
+    "created_at": "2026-07-03T09:00:00Z",
+    "updated_at": "2026-07-03T09:00:00Z"
+  }
+},
+{
+  "model": "graph.graph",
+  "fields": {
+    "slug": "example-permian-triassic",
+    "name": "예제 ②: Permian–Triassic (Meishan GSSP · age-depth 보간)",
+    "owner": null,
+    "status": "sandbox",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "zoom": 1
+    },
+    "created_at": "2026-07-03T09:00:00Z",
+    "updated_at": "2026-07-03T09:00:00Z"
+  }
+},
+{
+  "model": "graph.graph",
+  "fields": {
+    "slug": "example-cambrian-base",
+    "name": "예제 ③: 캄브리아 base (Fortune Head · 섹션 간 상관)",
+    "owner": null,
+    "status": "sandbox",
+    "viewport": {
+      "x": 0,
+      "y": 0,
+      "zoom": 1
+    },
+    "created_at": "2026-07-03T09:00:00Z",
+    "updated_at": "2026-07-03T09:00:00Z"
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-gssa-precambrian"
+    ],
+    "key": "gssa-decree",
+    "node_type": [
+      "pin"
+    ],
+    "label": "GSSA 결정: 2500 Ma\n(ICS·IUGS 합의 round number · 오차 없음)",
+    "params": {
+      "value": 2500
+    },
+    "x": 260.0,
+    "y": 160.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "key": "bed25",
+    "node_type": [
+      "radiometric-uPb"
+    ],
+    "label": "Bed 25 지르콘 U–Pb\n251.941 ± 0.037 Ma (경계 아래)",
+    "params": {
+      "distribution": {
+        "fidelity": "sym",
+        "value_ma": 251.941,
+        "sigma": 2,
+        "budget": {
+          "analytical": 0.037
+        },
+        "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+      },
+      "depth": -0.14
+    },
+    "x": 80.0,
+    "y": 90.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "key": "bed28",
+    "node_type": [
+      "radiometric-uPb"
+    ],
+    "label": "Bed 28 지르콘 U–Pb\n251.880 ± 0.031 Ma (경계 ~8cm 위)",
+    "params": {
+      "distribution": {
+        "fidelity": "sym",
+        "value_ma": 251.88,
+        "sigma": 2,
+        "budget": {
+          "analytical": 0.031
+        },
+        "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+      },
+      "depth": 0.08
+    },
+    "x": 80.0,
+    "y": 300.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "key": "adm",
+    "node_type": [
+      "age-depth-model"
+    ],
+    "label": "age-depth 보간\ntarget = 경계층준 (H. parvus FAD, base bed 27c)",
+    "params": {
+      "method": "linear",
+      "target_depth": 0.0
+    },
+    "x": 470.0,
+    "y": 190.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "key": "oman",
+    "node_type": [
+      "radiometric-uPb"
+    ],
+    "label": "Oman Ara Group 재층 U–Pb\n538.8 ± 0.6 Ma (타 대륙)",
+    "params": {
+      "distribution": {
+        "fidelity": "sym",
+        "value_ma": 538.8,
+        "sigma": 2,
+        "budget": {
+          "analytical": 0.6
+        },
+        "note": "고전 542.0±0.3 → 최근 CA-ID-TIMS 재정렬값(예시·근사)"
+      }
+    },
+    "x": 80.0,
+    "y": 70.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "key": "namibia",
+    "node_type": [
+      "radiometric-uPb"
+    ],
+    "label": "Namibia 재층 U–Pb\n≈538.6 Ma (예시·근사)",
+    "params": {
+      "distribution": {
+        "fidelity": "sym",
+        "value_ma": 538.6,
+        "sigma": 2,
+        "budget": {
+          "analytical": 1.6
+        },
+        "note": "예시·근사값"
+      }
+    },
+    "x": 80.0,
+    "y": 200.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "key": "siberia",
+    "node_type": [
+      "radiometric-uPb"
+    ],
+    "label": "Siberia 재층 U–Pb\n≈539.0 Ma (예시·근사)",
+    "params": {
+      "distribution": {
+        "fidelity": "sym",
+        "value_ma": 539.0,
+        "sigma": 2,
+        "budget": {
+          "analytical": 1.8
+        },
+        "note": "예시·근사값"
+      }
+    },
+    "x": 80.0,
+    "y": 330.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "key": "fad-fortunehead",
+    "node_type": [
+      "biostratigraphic"
+    ],
+    "label": "T. pedum FAD · Fortune Head (캐나다)\n= 경계 위치 · 연대측정 불가",
+    "params": {},
+    "x": 80.0,
+    "y": 470.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.nodeinstance",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "key": "global-age-model",
+    "node_type": [
+      "cross-section-correlation"
+    ],
+    "label": "글로벌 δ13C age model\n(BACE·Sr 상관 · 130 successions · 방사연대 anchor)",
+    "params": {
+      "correlation_via": [
+        "d13C",
+        "Sr-isotope"
+      ]
+    },
+    "x": 500.0,
+    "y": 230.0,
+    "group": null
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "source": [
+      "example-permian-triassic",
+      "bed25"
+    ],
+    "source_port": "age",
+    "target": [
+      "example-permian-triassic",
+      "adm"
+    ],
+    "target_port": "dated_horizons",
+    "kind": "data"
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "source": [
+      "example-permian-triassic",
+      "bed28"
+    ],
+    "source_port": "age",
+    "target": [
+      "example-permian-triassic",
+      "adm"
+    ],
+    "target_port": "dated_horizons",
+    "kind": "data"
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "source": [
+      "example-cambrian-base",
+      "oman"
+    ],
+    "source_port": "age",
+    "target": [
+      "example-cambrian-base",
+      "global-age-model"
+    ],
+    "target_port": "anchors",
+    "kind": "data"
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "source": [
+      "example-cambrian-base",
+      "namibia"
+    ],
+    "source_port": "age",
+    "target": [
+      "example-cambrian-base",
+      "global-age-model"
+    ],
+    "target_port": "anchors",
+    "kind": "data"
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "source": [
+      "example-cambrian-base",
+      "siberia"
+    ],
+    "source_port": "age",
+    "target": [
+      "example-cambrian-base",
+      "global-age-model"
+    ],
+    "target_port": "anchors",
+    "kind": "data"
+  }
+},
+{
+  "model": "graph.edge",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "source": [
+      "example-cambrian-base",
+      "fad-fortunehead"
+    ],
+    "source_port": "datum",
+    "target": [
+      "example-cambrian-base",
+      "global-age-model"
+    ],
+    "target_port": "signals",
+    "kind": "calibration-transfer"
+  }
+},
+{
+  "model": "graph.gateway",
+  "fields": {
+    "graph": [
+      "example-gssa-precambrian"
+    ],
+    "slug": "base-proterozoic-gw",
+    "name": "Archean–Proterozoic 경계 (GSSA)",
+    "node": [
+      "example-gssa-precambrian",
+      "gssa-decree"
+    ],
+    "output_port": "out",
+    "boundary": [
+      "base-proterozoic"
+    ]
+  }
+},
+{
+  "model": "graph.gateway",
+  "fields": {
+    "graph": [
+      "example-permian-triassic"
+    ],
+    "slug": "base-triassic-gw",
+    "name": "Permian–Triassic 경계",
+    "node": [
+      "example-permian-triassic",
+      "adm"
+    ],
+    "output_port": "horizon_age",
+    "boundary": [
+      "base-triassic"
+    ]
+  }
+},
+{
+  "model": "graph.gateway",
+  "fields": {
+    "graph": [
+      "example-cambrian-base"
+    ],
+    "slug": "base-cambrian-gw",
+    "name": "캄브리아기 base 경계",
+    "node": [
+      "example-cambrian-base",
+      "global-age-model"
+    ],
+    "output_port": "correlated_age",
+    "boundary": [
+      "base-cambrian"
+    ]
+  }
+}
+]

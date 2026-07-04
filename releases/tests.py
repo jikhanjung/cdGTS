@@ -11,7 +11,7 @@ from releases.services import bake_release, diff_releases
 
 @pytest.fixture
 def chrono(db):
-    call_command("loaddata", "initial_boundaries", verbosity=0)
+    call_command("loaddata", "01_chrono", verbosity=0)
 
 
 def _candidate(slug, boundary, value, method="cross-section-correlation"):

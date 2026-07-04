@@ -23,6 +23,36 @@ _CHRONO_TERM = {1: "Eonothem", 2: "Erathem", 3: "System", 4: "Series", 5: "Stage
 _GEO_TERM = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
 
 
+class UnitManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class AuthorityManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class BoundaryManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
+class BoundaryLineageManager(models.Manager):
+    def get_by_natural_key(self, boundary_slug, op):
+        return self.get(boundary__slug=boundary_slug, op=op)
+
+
+class RatificationManager(models.Manager):
+    def get_by_natural_key(self, boundary_slug, authority_slug, year):
+        return self.get(boundary__slug=boundary_slug, authority__slug=authority_slug, year=year)
+
+
+class LocalityManager(models.Manager):
+    def get_by_natural_key(self, boundary_slug):
+        return self.get(boundary__slug=boundary_slug)
+
+
 class Unit(models.Model):
     """
     이중 명명 단위 (Layer 0). 같은 엔티티가 연대층서(System…)와 지질연대(Period…) 두 얼굴을 갖는다.
@@ -37,11 +67,16 @@ class Unit(models.Model):
         help_text="상위 등급 단위. 예: Changhsingian(Age) → Lopingian(Epoch)",
     )
 
+    objects = UnitManager()
+
     class Meta:
         ordering = ["rank", "name"]
 
     def __str__(self):
         return f"{self.name} ({self.geochronologic_term})"
+
+    def natural_key(self):
+        return (self.slug,)
 
     @property
     def chronostratigraphic_term(self):
@@ -78,12 +113,17 @@ class Authority(models.Model):
         help_text="상위 권위. 예: Cambrian Subcommission → ICS",
     )
 
+    objects = AuthorityManager()
+
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "authorities"
 
     def __str__(self):
         return self.name
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class Boundary(models.Model):
@@ -111,12 +151,17 @@ class Boundary(models.Model):
     )
     note = models.TextField(blank=True)
 
+    objects = BoundaryManager()
+
     class Meta:
         ordering = ["slug"]
         verbose_name_plural = "boundaries"
 
     def __str__(self):
         return self.slug
+
+    def natural_key(self):
+        return (self.slug,)
 
 
 class BoundaryLineage(models.Model):
@@ -140,8 +185,15 @@ class BoundaryLineage(models.Model):
     )
     note = models.TextField(blank=True)
 
+    objects = BoundaryLineageManager()
+
     def __str__(self):
         return f"{self.boundary.slug}: {self.op}"
+
+    def natural_key(self):
+        return (self.boundary.slug, self.op)
+
+    natural_key.dependencies = ["chrono.boundary"]
 
 
 class Ratification(models.Model):
@@ -151,11 +203,18 @@ class Ratification(models.Model):
     year = models.IntegerField()
     note = models.TextField(blank=True)
 
+    objects = RatificationManager()
+
     class Meta:
         ordering = ["year"]
 
     def __str__(self):
         return f"{self.boundary.slug} @ {self.year} ({self.authority.slug})"
+
+    def natural_key(self):
+        return (self.boundary.slug, self.authority.slug, self.year)
+
+    natural_key.dependencies = ["chrono.boundary", "chrono.authority"]
 
 
 class Locality(models.Model):
@@ -172,8 +231,15 @@ class Locality(models.Model):
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 
+    objects = LocalityManager()
+
     class Meta:
         verbose_name_plural = "localities"
 
     def __str__(self):
         return self.name
+
+    def natural_key(self):
+        return (self.boundary.slug,)
+
+    natural_key.dependencies = ["chrono.boundary"]

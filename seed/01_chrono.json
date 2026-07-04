@@ -1,0 +1,272 @@
+[
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "archean",
+    "name": "Archean",
+    "rank": 1,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "proterozoic",
+    "name": "Proterozoic",
+    "rank": 1,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "permian",
+    "name": "Permian",
+    "rank": 3,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "lopingian",
+    "name": "Lopingian",
+    "rank": 4,
+    "parent": [
+      "permian"
+    ]
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "changhsingian",
+    "name": "Changhsingian",
+    "rank": 5,
+    "parent": [
+      "lopingian"
+    ]
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "triassic",
+    "name": "Triassic",
+    "rank": 3,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "early-triassic",
+    "name": "Early Triassic",
+    "rank": 4,
+    "parent": [
+      "triassic"
+    ]
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "induan",
+    "name": "Induan",
+    "rank": 5,
+    "parent": [
+      "early-triassic"
+    ]
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "ediacaran",
+    "name": "Ediacaran",
+    "rank": 3,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "cambrian",
+    "name": "Cambrian",
+    "rank": 3,
+    "parent": null
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "terreneuvian",
+    "name": "Terreneuvian",
+    "rank": 4,
+    "parent": [
+      "cambrian"
+    ]
+  }
+},
+{
+  "model": "chrono.unit",
+  "fields": {
+    "slug": "fortunian",
+    "name": "Fortunian",
+    "rank": 5,
+    "parent": [
+      "terreneuvian"
+    ]
+  }
+},
+{
+  "model": "chrono.authority",
+  "fields": {
+    "slug": "ics",
+    "name": "International Commission on Stratigraphy",
+    "kind": "ICS",
+    "parent": null
+  }
+},
+{
+  "model": "chrono.boundary",
+  "fields": {
+    "slug": "base-triassic",
+    "name": "Base of the Triassic",
+    "below": [
+      "changhsingian"
+    ],
+    "above": [
+      "induan"
+    ],
+    "definition_type": "GSSP",
+    "note": "GSSP · 국소 보간. Meishan D."
+  }
+},
+{
+  "model": "chrono.boundary",
+  "fields": {
+    "slug": "base-proterozoic",
+    "name": "Base of the Proterozoic",
+    "below": [
+      "archean"
+    ],
+    "above": [
+      "proterozoic"
+    ],
+    "definition_type": "GSSA",
+    "note": "GSSA · 2500 Ma round-number 결정. 노두 없음."
+  }
+},
+{
+  "model": "chrono.boundary",
+  "fields": {
+    "slug": "base-cambrian",
+    "name": "Base of the Cambrian",
+    "below": [
+      "ediacaran"
+    ],
+    "above": [
+      "fortunian"
+    ],
+    "definition_type": "GSSP",
+    "note": "GSSP · 섹션 간 상관. Fortune Head."
+  }
+},
+{
+  "model": "chrono.boundarylineage",
+  "fields": {
+    "boundary": [
+      "base-triassic"
+    ],
+    "op": "created",
+    "note": "",
+    "sources": []
+  }
+},
+{
+  "model": "chrono.boundarylineage",
+  "fields": {
+    "boundary": [
+      "base-proterozoic"
+    ],
+    "op": "created",
+    "note": "현재 GSSA. Ediacaran 등 다른 선캐 경계는 GSSP 로 retype 진행형.",
+    "sources": []
+  }
+},
+{
+  "model": "chrono.boundarylineage",
+  "fields": {
+    "boundary": [
+      "base-cambrian"
+    ],
+    "op": "created",
+    "note": "",
+    "sources": []
+  }
+},
+{
+  "model": "chrono.ratification",
+  "fields": {
+    "boundary": [
+      "base-triassic"
+    ],
+    "authority": [
+      "ics"
+    ],
+    "year": 2001,
+    "note": ""
+  }
+},
+{
+  "model": "chrono.ratification",
+  "fields": {
+    "boundary": [
+      "base-proterozoic"
+    ],
+    "authority": [
+      "ics"
+    ],
+    "year": 1991,
+    "note": ""
+  }
+},
+{
+  "model": "chrono.ratification",
+  "fields": {
+    "boundary": [
+      "base-cambrian"
+    ],
+    "authority": [
+      "ics"
+    ],
+    "year": 1992,
+    "note": ""
+  }
+},
+{
+  "model": "chrono.locality",
+  "fields": {
+    "boundary": [
+      "base-triassic"
+    ],
+    "name": "Meishan D, Changxing, Zhejiang, China",
+    "level": "base of Bed 27c",
+    "latitude": null,
+    "longitude": null
+  }
+},
+{
+  "model": "chrono.locality",
+  "fields": {
+    "boundary": [
+      "base-cambrian"
+    ],
+    "name": "Fortune Head, Burin Peninsula, Newfoundland, Canada",
+    "level": "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm",
+    "latitude": null,
+    "longitude": null
+  }
+}
+]

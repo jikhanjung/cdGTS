@@ -6,7 +6,7 @@ from chrono.models import Boundary, Rank, Unit
 
 @pytest.fixture
 def seeded(db):
-    call_command("loaddata", "initial_boundaries", verbosity=0)
+    call_command("loaddata", "01_chrono", verbosity=0)
 
 
 def test_fixture_loads_three_boundaries(seeded):

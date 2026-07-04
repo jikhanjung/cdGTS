@@ -105,6 +105,10 @@ DATABASES = {
     }
 }
 
+# 통합 초기 데이터. loaddata/테스트가 이름(01_chrono 등)으로 찾도록 seed/ 를 fixture 경로에 추가.
+# 배포/재시드는 `manage.py seed` (자연키 · replace|add). devlog P02 참조.
+FIXTURE_DIRS = [BASE_DIR / 'seed']
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

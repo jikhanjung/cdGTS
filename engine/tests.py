@@ -8,7 +8,7 @@ from nodes.models import NodeType
 
 @pytest.fixture
 def node_types(db):
-    call_command("loaddata", "initial_node_types", verbosity=0)
+    call_command("loaddata", "02_nodes", verbosity=0)
 
 
 def _build_chain(distribution):

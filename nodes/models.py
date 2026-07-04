@@ -10,6 +10,11 @@ nodes — 노드 *타입 시스템* (어휘).
 from django.db import models
 
 
+class NodeTypeManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class NodeType(models.Model):
     """
     노드 타입 정의. category 로 크게 갈리고(data/process/clamp), slug 가 engine 계산 커널
@@ -29,11 +34,16 @@ class NodeType(models.Model):
         help_text="파라미터 스키마(JSON). 에디터가 파라미터 컨트롤을 렌더할 근거.",
     )
 
+    objects = NodeTypeManager()
+
     class Meta:
         ordering = ["category", "slug"]
 
     def __str__(self):
         return self.slug
+
+    def natural_key(self):
+        return (self.slug,)
 
     @property
     def input_ports(self):
@@ -42,6 +52,11 @@ class NodeType(models.Model):
     @property
     def output_ports(self):
         return self.ports.filter(direction=Port.Direction.OUT)
+
+
+class PortManager(models.Manager):
+    def get_by_natural_key(self, nodetype_slug, direction, name):
+        return self.get(node_type__slug=nodetype_slug, direction=direction, name=name)
 
 
 class Port(models.Model):
@@ -66,6 +81,8 @@ class Port(models.Model):
     multiple = models.BooleanField(default=False, help_text="다중 연결 허용(번들 입력)")
     order = models.IntegerField(default=0)
 
+    objects = PortManager()
+
     class Meta:
         ordering = ["node_type", "direction", "order"]
         constraints = [
@@ -76,3 +93,8 @@ class Port(models.Model):
 
     def __str__(self):
         return f"{self.node_type.slug}.{self.name} ({self.direction}:{self.datatype})"
+
+    def natural_key(self):
+        return (self.node_type.slug, self.direction, self.name)
+
+    natural_key.dependencies = ["nodes.nodetype"]

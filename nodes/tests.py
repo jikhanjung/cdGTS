@@ -10,7 +10,7 @@ from nodes.models import NodeType, Port
 
 @pytest.fixture
 def seeded(db):
-    call_command("loaddata", "initial_node_types", verbosity=0)
+    call_command("loaddata", "02_nodes", verbosity=0)
 
 
 # --- Distribution 값 객체 (충실도 L0–L5) ---
