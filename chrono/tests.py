@@ -9,11 +9,12 @@ def seeded(db):
     call_command("loaddata", "01_chrono", verbosity=0)
 
 
-def test_fixture_loads_three_boundaries(seeded):
-    assert Boundary.objects.count() == 3
-    assert set(Boundary.objects.values_list("slug", flat=True)) == {
-        "base-triassic", "base-proterozoic", "base-cambrian",
-    }
+def test_fixture_loads_icc_boundaries(seeded):
+    # ICS chart.ttl 확장: 예제 3 + period+/finer 경계. 예제 슬러그는 보존.
+    assert Boundary.objects.count() == 175
+    assert {"base-triassic", "base-proterozoic", "base-cambrian"} <= set(
+        Boundary.objects.values_list("slug", flat=True)
+    )
 
 
 def test_dual_naming(db):

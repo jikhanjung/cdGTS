@@ -56,8 +56,9 @@ def test_to_dict_omits_empties():
 # --- NodeType 카탈로그 (데이터로 존재, 하드코딩 아님) ---
 
 def test_catalog_loads(seeded):
-    assert NodeType.objects.count() == 12
+    assert NodeType.objects.count() == 13          # + published-age (ICS 공표값 leaf)
     assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "clamp"}
+    assert NodeType.objects.get(slug="published-age").category == "data"
 
 
 def test_ports_wired(seeded):

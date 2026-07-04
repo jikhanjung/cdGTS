@@ -1,850 +1,2309 @@
 [
-  {
-    "model": "graph.graph",
-    "fields": {
-      "slug": "example-gssa-precambrian",
-      "name": "예제 ①: 선캄브리아 GSSA (Archean–Proterozoic 2500 Ma)",
-      "owner": null,
-      "status": "sandbox",
-      "viewport": {
-        "x": 0,
-        "y": 0,
-        "zoom": 1
-      },
-      "created_at": "2026-07-03T09:00:00Z",
-      "updated_at": "2026-07-03T09:00:00Z"
-    }
-  },
-  {
-    "model": "graph.graph",
-    "fields": {
-      "slug": "example-permian-triassic",
-      "name": "예제 ②: Permian–Triassic (Meishan GSSP · age-depth 보간)",
-      "owner": null,
-      "status": "sandbox",
-      "viewport": {
-        "x": 0,
-        "y": 0,
-        "zoom": 1
-      },
-      "created_at": "2026-07-03T09:00:00Z",
-      "updated_at": "2026-07-03T09:00:00Z"
-    }
-  },
-  {
-    "model": "graph.graph",
-    "fields": {
-      "slug": "example-cambrian-base",
-      "name": "예제 ③: 캄브리아 base (Fortune Head · 섹션 간 상관)",
-      "owner": null,
-      "status": "sandbox",
-      "viewport": {
-        "x": 0,
-        "y": 0,
-        "zoom": 1
-      },
-      "created_at": "2026-07-03T09:00:00Z",
-      "updated_at": "2026-07-03T09:00:00Z"
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-gssa-precambrian"
-      ],
-      "key": "gssa-decree",
-      "node_type": [
-        "pin"
-      ],
-      "label": "GSSA 결정: 2500 Ma\n(ICS·IUGS 합의 round number · 오차 없음)",
-      "params": {
-        "value": 2500
-      },
-      "x": 260.0,
-      "y": 160.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "key": "bed25",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Bed 25 지르콘 U–Pb\n251.941 ± 0.037 Ma (경계 아래)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 251.941,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.037
-          },
-          "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
-        },
-        "depth": -0.14
-      },
-      "x": 80.0,
-      "y": 90.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "key": "bed28",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Bed 28 지르콘 U–Pb\n251.880 ± 0.031 Ma (경계 ~8cm 위)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 251.88,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.031
-          },
-          "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
-        },
-        "depth": 0.08
-      },
-      "x": 80.0,
-      "y": 300.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "key": "adm",
-      "node_type": [
-        "age-depth-model"
-      ],
-      "label": "age-depth 보간\ntarget = 경계층준 (H. parvus FAD, base bed 27c)",
-      "params": {
-        "method": "linear",
-        "target_depth": 0.0
-      },
-      "x": 470.0,
-      "y": 190.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "key": "oman",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Oman Ara Group 재층 U–Pb\n538.8 ± 0.6 Ma (타 대륙)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 538.8,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.6
-          },
-          "note": "고전 542.0±0.3 → 최근 CA-ID-TIMS 재정렬값(예시·근사)"
-        }
-      },
-      "x": 80.0,
-      "y": 70.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "key": "namibia",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Namibia 재층 U–Pb\n≈538.6 Ma (예시·근사)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 538.6,
-          "sigma": 2,
-          "budget": {
-            "analytical": 1.6
-          },
-          "note": "예시·근사값"
-        }
-      },
-      "x": 80.0,
-      "y": 200.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "key": "siberia",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Siberia 재층 U–Pb\n≈539.0 Ma (예시·근사)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 539.0,
-          "sigma": 2,
-          "budget": {
-            "analytical": 1.8
-          },
-          "note": "예시·근사값"
-        }
-      },
-      "x": 80.0,
-      "y": 330.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "key": "fad-fortunehead",
-      "node_type": [
-        "biostratigraphic"
-      ],
-      "label": "T. pedum FAD · Fortune Head (캐나다)\n= 경계 위치 · 연대측정 불가",
-      "params": {},
-      "x": 80.0,
-      "y": 470.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "key": "global-age-model",
-      "node_type": [
-        "cross-section-correlation"
-      ],
-      "label": "글로벌 δ13C age model\n(BACE·Sr 상관 · 130 successions · 방사연대 anchor)",
-      "params": {
-        "correlation_via": [
-          "d13C",
-          "Sr-isotope"
-        ]
-      },
-      "x": 500.0,
-      "y": 230.0,
-      "group": null
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "source": [
-        "example-permian-triassic",
-        "bed25"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-permian-triassic",
-        "adm"
-      ],
-      "target_port": "dated_horizons",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "source": [
-        "example-permian-triassic",
-        "bed28"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-permian-triassic",
-        "adm"
-      ],
-      "target_port": "dated_horizons",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "source": [
-        "example-cambrian-base",
-        "oman"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-cambrian-base",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "source": [
-        "example-cambrian-base",
-        "namibia"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-cambrian-base",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "source": [
-        "example-cambrian-base",
-        "siberia"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-cambrian-base",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "source": [
-        "example-cambrian-base",
-        "fad-fortunehead"
-      ],
-      "source_port": "datum",
-      "target": [
-        "example-cambrian-base",
-        "global-age-model"
-      ],
-      "target_port": "signals",
-      "kind": "calibration-transfer"
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-gssa-precambrian"
-      ],
-      "slug": "base-proterozoic-gw",
-      "name": "Archean–Proterozoic 경계 (GSSA)",
-      "node": [
-        "example-gssa-precambrian",
-        "gssa-decree"
-      ],
-      "output_port": "out",
-      "boundary": [
-        "base-proterozoic"
-      ]
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-permian-triassic"
-      ],
-      "slug": "base-triassic-gw",
-      "name": "Permian–Triassic 경계",
-      "node": [
-        "example-permian-triassic",
-        "adm"
-      ],
-      "output_port": "horizon_age",
-      "boundary": [
-        "base-triassic"
-      ]
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-cambrian-base"
-      ],
-      "slug": "base-cambrian-gw",
-      "name": "캄브리아기 base 경계",
-      "node": [
-        "example-cambrian-base",
-        "global-age-model"
-      ],
-      "output_port": "correlated_age",
-      "boundary": [
-        "base-cambrian"
-      ]
-    }
-  },
-  {
-    "model": "graph.graph",
-    "fields": {
-      "slug": "example-icc-partial",
-      "name": "예제 ④: ICC 일부 — 3경계 조립 (P–T · 캄브리아 base · 선캄브리아 GSSA)",
-      "owner": null,
-      "status": "sandbox",
-      "viewport": {
-        "x": 40,
-        "y": 30,
-        "zoom": 0.6
-      },
-      "created_at": "2026-07-04T09:00:00Z",
-      "updated_at": "2026-07-04T09:00:00Z"
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "gssa-decree",
-      "node_type": [
-        "pin"
-      ],
-      "label": "GSSA 결정: 2500 Ma\n(ICS·IUGS 합의 round number · 오차 없음)",
-      "params": {
-        "value": 2500
-      },
-      "x": 260.0,
-      "y": 1160.0,
-      "group": null,
-      "description": "Archean–Proterozoic 경계(base-proterozoic)를 GSSA로 2500 Ma에 결정 — 오차 없는 약속된 연대.",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "bed25",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Bed 25 지르콘 U–Pb\n251.941 ± 0.037 Ma (경계 아래)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 251.941,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.037
-          },
-          "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
-        },
-        "depth": -0.14
-      },
-      "x": 80.0,
-      "y": 90.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "bed28",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Bed 28 지르콘 U–Pb\n251.880 ± 0.031 Ma (경계 ~8cm 위)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 251.88,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.031
-          },
-          "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
-        },
-        "depth": 0.08
-      },
-      "x": 80.0,
-      "y": 300.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "adm",
-      "node_type": [
-        "age-depth-model"
-      ],
-      "label": "age-depth 보간\ntarget = 경계층준 (H. parvus FAD, base bed 27c)",
-      "params": {
-        "method": "linear",
-        "target_depth": 0.0
-      },
-      "x": 470.0,
-      "y": 190.0,
-      "group": null,
-      "description": "Meishan GSSP 층준을 U–Pb age-depth 모델로 보간 → Permian–Triassic 경계(base-triassic).",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "oman",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Oman Ara Group 재층 U–Pb\n538.8 ± 0.6 Ma (타 대륙)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 538.8,
-          "sigma": 2,
-          "budget": {
-            "analytical": 0.6
-          },
-          "note": "고전 542.0±0.3 → 최근 CA-ID-TIMS 재정렬값(예시·근사)"
-        }
-      },
-      "x": 80.0,
-      "y": 470.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "namibia",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Namibia 재층 U–Pb\n≈538.6 Ma (예시·근사)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 538.6,
-          "sigma": 2,
-          "budget": {
-            "analytical": 1.6
-          },
-          "note": "예시·근사값"
-        }
-      },
-      "x": 80.0,
-      "y": 600.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "siberia",
-      "node_type": [
-        "radiometric-uPb"
-      ],
-      "label": "Siberia 재층 U–Pb\n≈539.0 Ma (예시·근사)",
-      "params": {
-        "distribution": {
-          "fidelity": "sym",
-          "value_ma": 539.0,
-          "sigma": 2,
-          "budget": {
-            "analytical": 1.8
-          },
-          "note": "예시·근사값"
-        }
-      },
-      "x": 80.0,
-      "y": 730.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "fad-fortunehead",
-      "node_type": [
-        "biostratigraphic"
-      ],
-      "label": "T. pedum FAD · Fortune Head (캐나다)\n= 경계 위치 · 연대측정 불가",
-      "params": {},
-      "x": 80.0,
-      "y": 870.0,
-      "group": null,
-      "description": "",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.nodeinstance",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "key": "global-age-model",
-      "node_type": [
-        "cross-section-correlation"
-      ],
-      "label": "글로벌 δ13C age model\n(BACE·Sr 상관 · 130 successions · 방사연대 anchor)",
-      "params": {
-        "correlation_via": [
-          "d13C",
-          "Sr-isotope"
-        ]
-      },
-      "x": 500.0,
-      "y": 630.0,
-      "group": null,
-      "description": "타 대륙 U–Pb 앵커 + δ13C 상관으로 캄브리아 기저(base-cambrian) 연대 이전.",
-      "width": null
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "bed25"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-icc-partial",
-        "adm"
-      ],
-      "target_port": "dated_horizons",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "bed28"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-icc-partial",
-        "adm"
-      ],
-      "target_port": "dated_horizons",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "oman"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-icc-partial",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "namibia"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-icc-partial",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "siberia"
-      ],
-      "source_port": "age",
-      "target": [
-        "example-icc-partial",
-        "global-age-model"
-      ],
-      "target_port": "anchors",
-      "kind": "data"
-    }
-  },
-  {
-    "model": "graph.edge",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "source": [
-        "example-icc-partial",
-        "fad-fortunehead"
-      ],
-      "source_port": "datum",
-      "target": [
-        "example-icc-partial",
-        "global-age-model"
-      ],
-      "target_port": "signals",
-      "kind": "calibration-transfer"
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "slug": "base-proterozoic-gw",
-      "name": "Archean–Proterozoic 경계 (GSSA)",
-      "node": [
-        "example-icc-partial",
-        "gssa-decree"
-      ],
-      "output_port": "out",
-      "boundary": [
-        "base-proterozoic"
-      ]
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "slug": "base-cambrian-gw",
-      "name": "캄브리아기 base 경계",
-      "node": [
-        "example-icc-partial",
-        "global-age-model"
-      ],
-      "output_port": "correlated_age",
-      "boundary": [
-        "base-cambrian"
-      ]
-    }
-  },
-  {
-    "model": "graph.gateway",
-    "fields": {
-      "graph": [
-        "example-icc-partial"
-      ],
-      "slug": "base-triassic-gw",
-      "name": "Permian–Triassic 경계",
-      "node": [
-        "example-icc-partial",
-        "adm"
-      ],
-      "output_port": "horizon_age",
-      "boundary": [
-        "base-triassic"
-      ]
-    }
+ {
+  "model": "graph.graph",
+  "fields": {
+   "slug": "example-gssa-precambrian",
+   "name": "예제 ①: 선캄브리아 GSSA (Archean–Proterozoic 2500 Ma)",
+   "owner": null,
+   "status": "sandbox",
+   "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+   },
+   "created_at": "2026-07-03T09:00:00Z",
+   "updated_at": "2026-07-03T09:00:00Z"
   }
+ },
+ {
+  "model": "graph.graph",
+  "fields": {
+   "slug": "example-permian-triassic",
+   "name": "예제 ②: Permian–Triassic (Meishan GSSP · age-depth 보간)",
+   "owner": null,
+   "status": "sandbox",
+   "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+   },
+   "created_at": "2026-07-03T09:00:00Z",
+   "updated_at": "2026-07-03T09:00:00Z"
+  }
+ },
+ {
+  "model": "graph.graph",
+  "fields": {
+   "slug": "example-cambrian-base",
+   "name": "예제 ③: 캄브리아 base (Fortune Head · 섹션 간 상관)",
+   "owner": null,
+   "status": "sandbox",
+   "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+   },
+   "created_at": "2026-07-03T09:00:00Z",
+   "updated_at": "2026-07-03T09:00:00Z"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-gssa-precambrian"
+   ],
+   "key": "gssa-decree",
+   "node_type": [
+    "pin"
+   ],
+   "label": "GSSA 결정: 2500 Ma\n(ICS·IUGS 합의 round number · 오차 없음)",
+   "params": {
+    "value": 2500
+   },
+   "x": 260.0,
+   "y": 160.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "key": "bed25",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Bed 25 지르콘 U–Pb\n251.941 ± 0.037 Ma (경계 아래)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 251.941,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.037
+     },
+     "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+    },
+    "depth": -0.14
+   },
+   "x": 80.0,
+   "y": 90.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "key": "bed28",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Bed 28 지르콘 U–Pb\n251.880 ± 0.031 Ma (경계 ~8cm 위)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 251.88,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.031
+     },
+     "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+    },
+    "depth": 0.08
+   },
+   "x": 80.0,
+   "y": 300.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "key": "adm",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "age-depth 보간\ntarget = 경계층준 (H. parvus FAD, base bed 27c)",
+   "params": {
+    "method": "linear",
+    "target_depth": 0.0
+   },
+   "x": 470.0,
+   "y": 190.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "oman",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Oman Ara Group 재층 U–Pb\n538.8 ± 0.6 Ma (타 대륙)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.8,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.6
+     },
+     "note": "고전 542.0±0.3 → 최근 CA-ID-TIMS 재정렬값(예시·근사)"
+    }
+   },
+   "x": 80.0,
+   "y": 70.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "namibia",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Namibia 재층 U–Pb\n≈538.6 Ma (예시·근사)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.6,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.6
+     },
+     "note": "예시·근사값"
+    }
+   },
+   "x": 80.0,
+   "y": 200.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "siberia",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Siberia 재층 U–Pb\n≈539.0 Ma (예시·근사)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.0,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.8
+     },
+     "note": "예시·근사값"
+    }
+   },
+   "x": 80.0,
+   "y": 330.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "fad-fortunehead",
+   "node_type": [
+    "biostratigraphic"
+   ],
+   "label": "T. pedum FAD · Fortune Head (캐나다)\n= 경계 위치 · 연대측정 불가",
+   "params": {},
+   "x": 80.0,
+   "y": 470.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "global-age-model",
+   "node_type": [
+    "cross-section-correlation"
+   ],
+   "label": "글로벌 δ13C age model\n(BACE·Sr 상관 · 130 successions · 방사연대 anchor)",
+   "params": {
+    "correlation_via": [
+     "d13C",
+     "Sr-isotope"
+    ]
+   },
+   "x": 500.0,
+   "y": 230.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "source": [
+    "example-permian-triassic",
+    "bed25"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-permian-triassic",
+    "adm"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "source": [
+    "example-permian-triassic",
+    "bed28"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-permian-triassic",
+    "adm"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "oman"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "namibia"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "siberia"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "fad-fortunehead"
+   ],
+   "source_port": "datum",
+   "target": [
+    "example-cambrian-base",
+    "global-age-model"
+   ],
+   "target_port": "signals",
+   "kind": "calibration-transfer"
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-gssa-precambrian"
+   ],
+   "slug": "base-proterozoic-gw",
+   "name": "Archean–Proterozoic 경계 (GSSA)",
+   "node": [
+    "example-gssa-precambrian",
+    "gssa-decree"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-proterozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-permian-triassic"
+   ],
+   "slug": "base-triassic-gw",
+   "name": "Permian–Triassic 경계",
+   "node": [
+    "example-permian-triassic",
+    "adm"
+   ],
+   "output_port": "horizon_age",
+   "boundary": [
+    "base-triassic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "slug": "base-cambrian-gw",
+   "name": "캄브리아기 base 경계",
+   "node": [
+    "example-cambrian-base",
+    "global-age-model"
+   ],
+   "output_port": "correlated_age",
+   "boundary": [
+    "base-cambrian"
+   ]
+  }
+ },
+ {
+  "model": "graph.graph",
+  "fields": {
+   "slug": "example-icc-partial",
+   "name": "예제 ④: ICC 일부 — 3경계 조립 (P–T · 캄브리아 base · 선캄브리아 GSSA)",
+   "owner": null,
+   "status": "sandbox",
+   "viewport": {
+    "x": 40,
+    "y": 30,
+    "zoom": 0.6
+   },
+   "created_at": "2026-07-04T09:00:00Z",
+   "updated_at": "2026-07-04T09:00:00Z"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "gssa-decree",
+   "node_type": [
+    "pin"
+   ],
+   "label": "GSSA 결정: 2500 Ma\n(ICS·IUGS 합의 round number · 오차 없음)",
+   "params": {
+    "value": 2500
+   },
+   "x": 260.0,
+   "y": 1160.0,
+   "group": null,
+   "description": "Archean–Proterozoic 경계(base-proterozoic)를 GSSA로 2500 Ma에 결정 — 오차 없는 약속된 연대.",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "bed25",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Bed 25 지르콘 U–Pb\n251.941 ± 0.037 Ma (경계 아래)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 251.941,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.037
+     },
+     "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+    },
+    "depth": -0.14
+   },
+   "x": 80.0,
+   "y": 90.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "bed28",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Bed 28 지르콘 U–Pb\n251.880 ± 0.031 Ma (경계 ~8cm 위)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 251.88,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.031
+     },
+     "note": "Burgess+2014 PNAS, CA-ID-TIMS, ET535"
+    },
+    "depth": 0.08
+   },
+   "x": 80.0,
+   "y": 300.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "adm",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "age-depth 보간\ntarget = 경계층준 (H. parvus FAD, base bed 27c)",
+   "params": {
+    "method": "linear",
+    "target_depth": 0.0
+   },
+   "x": 470.0,
+   "y": 190.0,
+   "group": null,
+   "description": "Meishan GSSP 층준을 U–Pb age-depth 모델로 보간 → Permian–Triassic 경계(base-triassic).",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "oman",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Oman Ara Group 재층 U–Pb\n538.8 ± 0.6 Ma (타 대륙)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.8,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.6
+     },
+     "note": "고전 542.0±0.3 → 최근 CA-ID-TIMS 재정렬값(예시·근사)"
+    }
+   },
+   "x": 80.0,
+   "y": 470.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "namibia",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Namibia 재층 U–Pb\n≈538.6 Ma (예시·근사)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.6,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.6
+     },
+     "note": "예시·근사값"
+    }
+   },
+   "x": 80.0,
+   "y": 600.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "siberia",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Siberia 재층 U–Pb\n≈539.0 Ma (예시·근사)",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.0,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.8
+     },
+     "note": "예시·근사값"
+    }
+   },
+   "x": 80.0,
+   "y": 730.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "fad-fortunehead",
+   "node_type": [
+    "biostratigraphic"
+   ],
+   "label": "T. pedum FAD · Fortune Head (캐나다)\n= 경계 위치 · 연대측정 불가",
+   "params": {},
+   "x": 80.0,
+   "y": 870.0,
+   "group": null,
+   "description": "",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "global-age-model",
+   "node_type": [
+    "cross-section-correlation"
+   ],
+   "label": "글로벌 δ13C age model\n(BACE·Sr 상관 · 130 successions · 방사연대 anchor)",
+   "params": {
+    "correlation_via": [
+     "d13C",
+     "Sr-isotope"
+    ]
+   },
+   "x": 500.0,
+   "y": 630.0,
+   "group": null,
+   "description": "타 대륙 U–Pb 앵커 + δ13C 상관으로 캄브리아 기저(base-cambrian) 연대 이전.",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bed25"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bed28"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "oman"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "namibia"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "siberia"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "fad-fortunehead"
+   ],
+   "source_port": "datum",
+   "target": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "target_port": "signals",
+   "kind": "calibration-transfer"
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-proterozoic-gw",
+   "name": "Archean–Proterozoic 경계 (GSSA)",
+   "node": [
+    "example-icc-partial",
+    "gssa-decree"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-proterozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-cambrian-gw",
+   "name": "캄브리아기 base 경계",
+   "node": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "output_port": "correlated_age",
+   "boundary": [
+    "base-cambrian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-triassic-gw",
+   "name": "Permian–Triassic 경계",
+   "node": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "output_port": "horizon_age",
+   "boundary": [
+    "base-triassic"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-hadean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Hadean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 4567.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 900,
+   "y": 80,
+   "group": null,
+   "description": "Eon · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-eoarchean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Eoarchean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 4031.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1090,
+   "y": 80,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-archean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Archean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 4031.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1280,
+   "y": 80,
+   "group": null,
+   "description": "Eon · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-paleoarchean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Paleoarchean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 3600.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1470,
+   "y": 80,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-mesoarchean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Mesoarchean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 3200.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1660,
+   "y": 80,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-neoarchean",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Neoarchean",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2800.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1850,
+   "y": 80,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-siderian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Siderian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2500.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 900,
+   "y": 176,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-paleoproterozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Paleoproterozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2500.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1090,
+   "y": 176,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-rhyacian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Rhyacian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2300.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1280,
+   "y": 176,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-orosirian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Orosirian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2050.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1470,
+   "y": 176,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-statherian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Statherian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1800.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1660,
+   "y": 176,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-calymmian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Calymmian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1600.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1850,
+   "y": 176,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-mesoproterozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Mesoproterozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1600.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 900,
+   "y": 272,
+   "group": null,
+   "description": "Era · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-ectasian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Ectasian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1400.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1090,
+   "y": 272,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-stenian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Stenian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1200.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1280,
+   "y": 272,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-tonian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Tonian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1000.0,
+     "note": "ICS 2024-12 · GSSA"
+    }
+   },
+   "x": 1470,
+   "y": 272,
+   "group": null,
+   "description": "Period · GSSA · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-neoproterozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Neoproterozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 1000.0,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 1660,
+   "y": 272,
+   "group": null,
+   "description": "Era · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-cryogenian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Cryogenian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 720.0,
+     "note": "ICS 2024-12 · 공표값"
+    }
+   },
+   "x": 1850,
+   "y": 272,
+   "group": null,
+   "description": "Period · 공표값 · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-ediacaran",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Ediacaran",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 635.0,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 900,
+   "y": 368,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-paleozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Paleozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.8,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.6
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1090,
+   "y": 368,
+   "group": null,
+   "description": "Era · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-phanerozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Phanerozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.8,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.6
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1280,
+   "y": 368,
+   "group": null,
+   "description": "Eon · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-ordovician",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Ordovician",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 486.85,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.5
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1470,
+   "y": 368,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-silurian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Silurian",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 443.1,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.0
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1660,
+   "y": 368,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-devonian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Devonian",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 419.62,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.36
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1850,
+   "y": 368,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-carboniferous",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Carboniferous",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 358.86,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.19
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 900,
+   "y": 464,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-permian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Permian",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 298.9,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.15
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1090,
+   "y": 464,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-mesozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Mesozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 251.902,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.024
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1280,
+   "y": 464,
+   "group": null,
+   "description": "Era · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-jurassic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Jurassic",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 201.4,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.2
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1470,
+   "y": 464,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-cretaceous",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Cretaceous",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 143.1,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.6
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 1660,
+   "y": 464,
+   "group": null,
+   "description": "Period · 공표값 · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-paleogene",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Paleogene",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 66.0,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 1850,
+   "y": 464,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-cenozoic",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Cenozoic",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 66.0,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 900,
+   "y": 560,
+   "group": null,
+   "description": "Era · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-neogene",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Neogene",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 23.04,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 1090,
+   "y": 560,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-quaternary",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Quaternary",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2.58,
+     "note": "ICS 2024-12 · GSSP"
+    }
+   },
+   "x": 1280,
+   "y": 560,
+   "group": null,
+   "description": "Period · GSSP · ICS 2024-12",
+   "width": 172
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-hadean-gw",
+   "name": "Base of the Hadean",
+   "node": [
+    "example-icc-partial",
+    "pub-hadean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-hadean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-eoarchean-gw",
+   "name": "Base of the Eoarchean",
+   "node": [
+    "example-icc-partial",
+    "pub-eoarchean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-eoarchean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-archean-gw",
+   "name": "Base of the Archean",
+   "node": [
+    "example-icc-partial",
+    "pub-archean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-archean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-paleoarchean-gw",
+   "name": "Base of the Paleoarchean",
+   "node": [
+    "example-icc-partial",
+    "pub-paleoarchean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-paleoarchean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-mesoarchean-gw",
+   "name": "Base of the Mesoarchean",
+   "node": [
+    "example-icc-partial",
+    "pub-mesoarchean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-mesoarchean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-neoarchean-gw",
+   "name": "Base of the Neoarchean",
+   "node": [
+    "example-icc-partial",
+    "pub-neoarchean"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-neoarchean"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-siderian-gw",
+   "name": "Base of the Siderian",
+   "node": [
+    "example-icc-partial",
+    "pub-siderian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-siderian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-paleoproterozoic-gw",
+   "name": "Base of the Paleoproterozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-paleoproterozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-paleoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-rhyacian-gw",
+   "name": "Base of the Rhyacian",
+   "node": [
+    "example-icc-partial",
+    "pub-rhyacian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-rhyacian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-orosirian-gw",
+   "name": "Base of the Orosirian",
+   "node": [
+    "example-icc-partial",
+    "pub-orosirian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-orosirian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-statherian-gw",
+   "name": "Base of the Statherian",
+   "node": [
+    "example-icc-partial",
+    "pub-statherian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-statherian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-calymmian-gw",
+   "name": "Base of the Calymmian",
+   "node": [
+    "example-icc-partial",
+    "pub-calymmian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-calymmian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-mesoproterozoic-gw",
+   "name": "Base of the Mesoproterozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-mesoproterozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-mesoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-ectasian-gw",
+   "name": "Base of the Ectasian",
+   "node": [
+    "example-icc-partial",
+    "pub-ectasian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-ectasian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-stenian-gw",
+   "name": "Base of the Stenian",
+   "node": [
+    "example-icc-partial",
+    "pub-stenian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-stenian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-tonian-gw",
+   "name": "Base of the Tonian",
+   "node": [
+    "example-icc-partial",
+    "pub-tonian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-tonian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-neoproterozoic-gw",
+   "name": "Base of the Neoproterozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-neoproterozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-neoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-cryogenian-gw",
+   "name": "Base of the Cryogenian",
+   "node": [
+    "example-icc-partial",
+    "pub-cryogenian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-cryogenian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-ediacaran-gw",
+   "name": "Base of the Ediacaran",
+   "node": [
+    "example-icc-partial",
+    "pub-ediacaran"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-ediacaran"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-paleozoic-gw",
+   "name": "Base of the Paleozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-paleozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-paleozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-phanerozoic-gw",
+   "name": "Base of the Phanerozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-phanerozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-phanerozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-ordovician-gw",
+   "name": "Base of the Ordovician",
+   "node": [
+    "example-icc-partial",
+    "pub-ordovician"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-ordovician"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-silurian-gw",
+   "name": "Base of the Silurian",
+   "node": [
+    "example-icc-partial",
+    "pub-silurian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-silurian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-devonian-gw",
+   "name": "Base of the Devonian",
+   "node": [
+    "example-icc-partial",
+    "pub-devonian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-devonian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-carboniferous-gw",
+   "name": "Base of the Carboniferous",
+   "node": [
+    "example-icc-partial",
+    "pub-carboniferous"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-permian-gw",
+   "name": "Base of the Permian",
+   "node": [
+    "example-icc-partial",
+    "pub-permian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-permian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-mesozoic-gw",
+   "name": "Base of the Mesozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-mesozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-mesozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-jurassic-gw",
+   "name": "Base of the Jurassic",
+   "node": [
+    "example-icc-partial",
+    "pub-jurassic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-jurassic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-cretaceous-gw",
+   "name": "Base of the Cretaceous",
+   "node": [
+    "example-icc-partial",
+    "pub-cretaceous"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-cretaceous"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-paleogene-gw",
+   "name": "Base of the Paleogene",
+   "node": [
+    "example-icc-partial",
+    "pub-paleogene"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-paleogene"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-cenozoic-gw",
+   "name": "Base of the Cenozoic",
+   "node": [
+    "example-icc-partial",
+    "pub-cenozoic"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-cenozoic"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-neogene-gw",
+   "name": "Base of the Neogene",
+   "node": [
+    "example-icc-partial",
+    "pub-neogene"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-neogene"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-quaternary-gw",
+   "name": "Base of the Quaternary",
+   "node": [
+    "example-icc-partial",
+    "pub-quaternary"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-quaternary"
+   ]
+  }
+ }
 ]

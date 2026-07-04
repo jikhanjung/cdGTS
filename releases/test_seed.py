@@ -28,8 +28,9 @@ def _counts():
 
 def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
-    assert (units, boundaries, types, graphs) == (12, 3, 12, 4)
-    assert (releases, records) == (2, 5)                     # records = bake 산출
+    # ICS chart.ttl 확장: period+ units(42) + 전체 boundary(175) + published-age 타입(13)
+    assert (units, boundaries, types, graphs) == (42, 175, 13, 4)
+    assert (releases, records) == (2, 5)                     # records = 릴리스 bake 산출
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
     assert Unit.objects.filter(parent__isnull=False).exists()
 
@@ -49,27 +50,40 @@ def test_add_is_idempotent(seeded):
 
 
 def test_bake_graph_produces_icc_table(seeded):
-    """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다."""
+    """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다.
+    period 이상(Eon/Era/Period) 36경계 = 예제 파이프라인 3 + ICS 공표값 데이터 노드 33."""
     from graph.models import Graph
     from releases.services import bake_graph
     g = Graph.objects.get(slug="example-icc-partial")
     rel, n = bake_graph(g)
-    assert n == 3
+    assert n == 36
     assert rel.version == "graph:example-icc-partial"
     recs = {r.boundary.slug: r for r in rel.records.select_related("boundary")}
-    assert set(recs) == {"base-proterozoic", "base-cambrian", "base-triassic"}
+    # 예제 파이프라인 값 유지
+    assert {"base-proterozoic", "base-cambrian", "base-triassic"} <= set(recs)
     assert recs["base-proterozoic"].value_ma == 2500 and recs["base-proterozoic"].definition_type == "GSSA"
     assert recs["base-triassic"].definition_type == "GSSP"
+    # chart.ttl 공표값 데이터 노드 (period)
+    assert recs["base-jurassic"].value_ma == 201.4
+    assert recs["base-hadean"].value_ma == 4567.0 and recs["base-hadean"].definition_type == "GSSA"
     # 재-bake 는 같은 릴리스에 멱등
     rel2, n2 = bake_graph(g)
-    assert n2 == 3 and rel2.pk == rel.pk
+    assert n2 == 36 and rel2.pk == rel.pk
 
     # HTTP 엔드포인트도 확인
     from rest_framework.test import APIClient
     resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
-    assert resp.status_code == 200 and resp.data["baked"] == 3
+    assert resp.status_code == 200 and resp.data["baked"] == 36
     assert resp.data["release"]["version"] == "graph:example-icc-partial"
-    assert len(resp.data["release"]["records"]) == 3
+    assert len(resp.data["release"]["records"]) == 36
+
+
+def test_finer_boundaries_registry_only(seeded):
+    """Epoch/Age 경계는 registry(Boundary)에만 — 네트웍(게이트웨이)엔 없다. period+ 는 네트웍에."""
+    from graph.models import Gateway
+    assert Boundary.objects.filter(slug="base-fortunian").exists()        # Age → registry
+    assert not Gateway.objects.filter(boundary__slug="base-fortunian").exists()
+    assert Gateway.objects.filter(boundary__slug="base-jurassic").exists()  # Period → 네트웍
 
 
 def test_seed_content_canonical(seeded):

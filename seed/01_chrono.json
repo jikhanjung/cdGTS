@@ -1,272 +1,2556 @@
 [
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "archean",
-    "name": "Archean",
-    "rank": 1,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "proterozoic",
-    "name": "Proterozoic",
-    "rank": 1,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "permian",
-    "name": "Permian",
-    "rank": 3,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "lopingian",
-    "name": "Lopingian",
-    "rank": 4,
-    "parent": [
-      "permian"
-    ]
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "changhsingian",
-    "name": "Changhsingian",
-    "rank": 5,
-    "parent": [
-      "lopingian"
-    ]
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "triassic",
-    "name": "Triassic",
-    "rank": 3,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "early-triassic",
-    "name": "Early Triassic",
-    "rank": 4,
-    "parent": [
-      "triassic"
-    ]
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "induan",
-    "name": "Induan",
-    "rank": 5,
-    "parent": [
-      "early-triassic"
-    ]
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "ediacaran",
-    "name": "Ediacaran",
-    "rank": 3,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "cambrian",
-    "name": "Cambrian",
-    "rank": 3,
-    "parent": null
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "terreneuvian",
-    "name": "Terreneuvian",
-    "rank": 4,
-    "parent": [
-      "cambrian"
-    ]
-  }
-},
-{
-  "model": "chrono.unit",
-  "fields": {
-    "slug": "fortunian",
-    "name": "Fortunian",
-    "rank": 5,
-    "parent": [
-      "terreneuvian"
-    ]
-  }
-},
-{
+ {
   "model": "chrono.authority",
   "fields": {
-    "slug": "ics",
-    "name": "International Commission on Stratigraphy",
-    "kind": "ICS",
-    "parent": null
+   "slug": "ics",
+   "name": "International Commission on Stratigraphy",
+   "kind": "ICS",
+   "parent": null
   }
-},
-{
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "archean",
+   "name": "Archean",
+   "rank": 1,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "proterozoic",
+   "name": "Proterozoic",
+   "rank": 1,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "permian",
+   "name": "Permian",
+   "rank": 3,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lopingian",
+   "name": "Lopingian",
+   "rank": 4,
+   "parent": [
+    "permian"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "changhsingian",
+   "name": "Changhsingian",
+   "rank": 5,
+   "parent": [
+    "lopingian"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "triassic",
+   "name": "Triassic",
+   "rank": 3,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "early-triassic",
+   "name": "Early Triassic",
+   "rank": 4,
+   "parent": [
+    "triassic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "induan",
+   "name": "Induan",
+   "rank": 5,
+   "parent": [
+    "early-triassic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ediacaran",
+   "name": "Ediacaran",
+   "rank": 3,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrian",
+   "name": "Cambrian",
+   "rank": 3,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "terreneuvian",
+   "name": "Terreneuvian",
+   "rank": 4,
+   "parent": [
+    "cambrian"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "fortunian",
+   "name": "Fortunian",
+   "rank": 5,
+   "parent": [
+    "terreneuvian"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "hadean",
+   "name": "Hadean",
+   "rank": 1,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "phanerozoic",
+   "name": "Phanerozoic",
+   "rank": 1,
+   "parent": null
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "eoarchean",
+   "name": "Eoarchean",
+   "rank": 2,
+   "parent": [
+    "archean"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "mesoarchean",
+   "name": "Mesoarchean",
+   "rank": 2,
+   "parent": [
+    "archean"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "neoarchean",
+   "name": "Neoarchean",
+   "rank": 2,
+   "parent": [
+    "archean"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paleoarchean",
+   "name": "Paleoarchean",
+   "rank": 2,
+   "parent": [
+    "archean"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cenozoic",
+   "name": "Cenozoic",
+   "rank": 2,
+   "parent": [
+    "phanerozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "mesoproterozoic",
+   "name": "Mesoproterozoic",
+   "rank": 2,
+   "parent": [
+    "proterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "mesozoic",
+   "name": "Mesozoic",
+   "rank": 2,
+   "parent": [
+    "phanerozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "neoproterozoic",
+   "name": "Neoproterozoic",
+   "rank": 2,
+   "parent": [
+    "proterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paleoproterozoic",
+   "name": "Paleoproterozoic",
+   "rank": 2,
+   "parent": [
+    "proterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paleozoic",
+   "name": "Paleozoic",
+   "rank": 2,
+   "parent": [
+    "phanerozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "calymmian",
+   "name": "Calymmian",
+   "rank": 3,
+   "parent": [
+    "mesoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cryogenian",
+   "name": "Cryogenian",
+   "rank": 3,
+   "parent": [
+    "neoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ectasian",
+   "name": "Ectasian",
+   "rank": 3,
+   "parent": [
+    "mesoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "orosirian",
+   "name": "Orosirian",
+   "rank": 3,
+   "parent": [
+    "paleoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "rhyacian",
+   "name": "Rhyacian",
+   "rank": 3,
+   "parent": [
+    "paleoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "siderian",
+   "name": "Siderian",
+   "rank": 3,
+   "parent": [
+    "paleoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "statherian",
+   "name": "Statherian",
+   "rank": 3,
+   "parent": [
+    "paleoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "stenian",
+   "name": "Stenian",
+   "rank": 3,
+   "parent": [
+    "mesoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "tonian",
+   "name": "Tonian",
+   "rank": 3,
+   "parent": [
+    "neoproterozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "carboniferous",
+   "name": "Carboniferous",
+   "rank": 3,
+   "parent": [
+    "paleozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cretaceous",
+   "name": "Cretaceous",
+   "rank": 3,
+   "parent": [
+    "mesozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "neogene",
+   "name": "Neogene",
+   "rank": 3,
+   "parent": [
+    "cenozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "quaternary",
+   "name": "Quaternary",
+   "rank": 3,
+   "parent": [
+    "cenozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "devonian",
+   "name": "Devonian",
+   "rank": 3,
+   "parent": [
+    "paleozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "jurassic",
+   "name": "Jurassic",
+   "rank": 3,
+   "parent": [
+    "mesozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ordovician",
+   "name": "Ordovician",
+   "rank": 3,
+   "parent": [
+    "paleozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paleogene",
+   "name": "Paleogene",
+   "rank": 3,
+   "parent": [
+    "cenozoic"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "silurian",
+   "name": "Silurian",
+   "rank": 3,
+   "parent": [
+    "paleozoic"
+   ]
+  }
+ },
+ {
   "model": "chrono.boundary",
   "fields": {
-    "slug": "base-triassic",
-    "name": "Base of the Triassic",
-    "below": [
-      "changhsingian"
-    ],
-    "above": [
-      "induan"
-    ],
-    "definition_type": "GSSP",
-    "note": "GSSP · 국소 보간. Meishan D."
+   "slug": "base-triassic",
+   "name": "Base of the Triassic",
+   "below": [
+    "changhsingian"
+   ],
+   "above": [
+    "induan"
+   ],
+   "definition_type": "GSSP",
+   "note": "GSSP · 국소 보간. Meishan D."
   }
-},
-{
+ },
+ {
   "model": "chrono.boundary",
   "fields": {
-    "slug": "base-proterozoic",
-    "name": "Base of the Proterozoic",
-    "below": [
-      "archean"
-    ],
-    "above": [
-      "proterozoic"
-    ],
-    "definition_type": "GSSA",
-    "note": "GSSA · 2500 Ma round-number 결정. 노두 없음."
+   "slug": "base-proterozoic",
+   "name": "Base of the Proterozoic",
+   "below": [
+    "archean"
+   ],
+   "above": [
+    "proterozoic"
+   ],
+   "definition_type": "GSSA",
+   "note": "GSSA · 2500 Ma round-number 결정. 노두 없음."
   }
-},
-{
+ },
+ {
   "model": "chrono.boundary",
   "fields": {
-    "slug": "base-cambrian",
-    "name": "Base of the Cambrian",
-    "below": [
-      "ediacaran"
-    ],
-    "above": [
-      "fortunian"
-    ],
-    "definition_type": "GSSP",
-    "note": "GSSP · 섹션 간 상관. Fortune Head."
+   "slug": "base-cambrian",
+   "name": "Base of the Cambrian",
+   "below": [
+    "ediacaran"
+   ],
+   "above": [
+    "fortunian"
+   ],
+   "definition_type": "GSSP",
+   "note": "GSSP · 섹션 간 상관. Fortune Head."
   }
-},
-{
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-hadean",
+   "name": "Base of the Hadean",
+   "below": null,
+   "above": [
+    "hadean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-eoarchean",
+   "name": "Base of the Eoarchean",
+   "below": null,
+   "above": [
+    "eoarchean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-archean",
+   "name": "Base of the Archean",
+   "below": null,
+   "above": [
+    "archean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paleoarchean",
+   "name": "Base of the Paleoarchean",
+   "below": null,
+   "above": [
+    "paleoarchean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-mesoarchean",
+   "name": "Base of the Mesoarchean",
+   "below": null,
+   "above": [
+    "mesoarchean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-neoarchean",
+   "name": "Base of the Neoarchean",
+   "below": null,
+   "above": [
+    "neoarchean"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-siderian",
+   "name": "Base of the Siderian",
+   "below": null,
+   "above": [
+    "siderian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paleoproterozoic",
+   "name": "Base of the Paleoproterozoic",
+   "below": null,
+   "above": [
+    "paleoproterozoic"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-rhyacian",
+   "name": "Base of the Rhyacian",
+   "below": null,
+   "above": [
+    "rhyacian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-orosirian",
+   "name": "Base of the Orosirian",
+   "below": null,
+   "above": [
+    "orosirian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-statherian",
+   "name": "Base of the Statherian",
+   "below": null,
+   "above": [
+    "statherian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-calymmian",
+   "name": "Base of the Calymmian",
+   "below": null,
+   "above": [
+    "calymmian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-mesoproterozoic",
+   "name": "Base of the Mesoproterozoic",
+   "below": null,
+   "above": [
+    "mesoproterozoic"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ectasian",
+   "name": "Base of the Ectasian",
+   "below": null,
+   "above": [
+    "ectasian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-stenian",
+   "name": "Base of the Stenian",
+   "below": null,
+   "above": [
+    "stenian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-tonian",
+   "name": "Base of the Tonian",
+   "below": null,
+   "above": [
+    "tonian"
+   ],
+   "definition_type": "GSSA",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-neoproterozoic",
+   "name": "Base of the Neoproterozoic",
+   "below": null,
+   "above": [
+    "neoproterozoic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cryogenian",
+   "name": "Base of the Cryogenian",
+   "below": null,
+   "above": [
+    "cryogenian"
+   ],
+   "definition_type": null,
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ediacaran",
+   "name": "Base of the Ediacaran",
+   "below": null,
+   "above": [
+    "ediacaran"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-fortunian",
+   "name": "Base of the Fortunian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 538.8 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paleozoic",
+   "name": "Base of the Paleozoic",
+   "below": null,
+   "above": [
+    "paleozoic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-phanerozoic",
+   "name": "Base of the Phanerozoic",
+   "below": null,
+   "above": [
+    "phanerozoic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-terreneuvian",
+   "name": "Base of the Terreneuvian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 538.8 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cambrianstage2",
+   "name": "Base of the CambrianStage2",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 529.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cambrianstage3",
+   "name": "Base of the CambrianStage3",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 521.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cambrianseries2",
+   "name": "Base of the CambrianSeries2",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 521.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cambrianstage4",
+   "name": "Base of the CambrianStage4",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 514.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-wuliuan",
+   "name": "Base of the Wuliuan",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 506.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-miaolingian",
+   "name": "Base of the Miaolingian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 506.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-drumian",
+   "name": "Base of the Drumian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 504.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-guzhangian",
+   "name": "Base of the Guzhangian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 500.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paibian",
+   "name": "Base of the Paibian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 497.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-furongian",
+   "name": "Base of the Furongian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 497.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-jiangshanian",
+   "name": "Base of the Jiangshanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 494.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cambrianstage10",
+   "name": "Base of the CambrianStage10",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 491.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-tremadocian",
+   "name": "Base of the Tremadocian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 486.85 ± 1.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ordovician",
+   "name": "Base of the Ordovician",
+   "below": null,
+   "above": [
+    "ordovician"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowerordovician",
+   "name": "Base of the LowerOrdovician",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 486.85 ± 1.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-floian",
+   "name": "Base of the Floian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 477.1 ± 1.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-dapingian",
+   "name": "Base of the Dapingian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 471.3 ± 1.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middleordovician",
+   "name": "Base of the MiddleOrdovician",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 471.3 ± 1.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-darriwilian",
+   "name": "Base of the Darriwilian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 469.4 ± 0.9 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-sandbian",
+   "name": "Base of the Sandbian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 458.2 ± 0.7 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-upperordovician",
+   "name": "Base of the UpperOrdovician",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 458.2 ± 0.7 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-katian",
+   "name": "Base of the Katian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 452.8 ± 0.7 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-hirnantian",
+   "name": "Base of the Hirnantian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 445.2 ± 0.9 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-rhuddanian",
+   "name": "Base of the Rhuddanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 443.1 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-silurian",
+   "name": "Base of the Silurian",
+   "below": null,
+   "above": [
+    "silurian"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-llandovery",
+   "name": "Base of the Llandovery",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 443.1 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-aeronian",
+   "name": "Base of the Aeronian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 440.5 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-telychian",
+   "name": "Base of the Telychian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 438.6 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-sheinwoodian",
+   "name": "Base of the Sheinwoodian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 432.9 ± 1.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-wenlock",
+   "name": "Base of the Wenlock",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 432.9 ± 1.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-homerian",
+   "name": "Base of the Homerian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 430.6 ± 1.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-gorstian",
+   "name": "Base of the Gorstian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 426.7 ± 1.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ludlow",
+   "name": "Base of the Ludlow",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 426.7 ± 1.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ludfordian",
+   "name": "Base of the Ludfordian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 425.0 ± 1.5 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pridoli",
+   "name": "Base of the Pridoli",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 422.7 ± 1.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lochkovian",
+   "name": "Base of the Lochkovian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 419.62 ± 1.36 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-devonian",
+   "name": "Base of the Devonian",
+   "below": null,
+   "above": [
+    "devonian"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowerdevonian",
+   "name": "Base of the LowerDevonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 419.62 ± 1.36 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pragian",
+   "name": "Base of the Pragian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 413.02 ± 1.91 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-emsian",
+   "name": "Base of the Emsian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 410.62 ± 1.95 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-eifelian",
+   "name": "Base of the Eifelian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 393.47 ± 0.99 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middledevonian",
+   "name": "Base of the MiddleDevonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 393.47 ± 0.99 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-givetian",
+   "name": "Base of the Givetian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 387.95 ± 1.04 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-frasnian",
+   "name": "Base of the Frasnian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 382.31 ± 1.36 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-upperdevonian",
+   "name": "Base of the UpperDevonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 382.31 ± 1.36 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-famennian",
+   "name": "Base of the Famennian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 372.15 ± 0.46 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-tournaisian",
+   "name": "Base of the Tournaisian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 358.86 ± 0.19 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-carboniferous",
+   "name": "Base of the Carboniferous",
+   "below": null,
+   "above": [
+    "carboniferous"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowermississippian",
+   "name": "Base of the LowerMississippian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 358.86 ± 0.19 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-visean",
+   "name": "Base of the Visean",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 346.7 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middlemississippian",
+   "name": "Base of the MiddleMississippian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 346.7 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-serpukhovian",
+   "name": "Base of the Serpukhovian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 330.3 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-uppermississippian",
+   "name": "Base of the UpperMississippian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 330.3 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-bashkirian",
+   "name": "Base of the Bashkirian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 323.4 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowerpennsylvanian",
+   "name": "Base of the LowerPennsylvanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 323.4 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-moscovian",
+   "name": "Base of the Moscovian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 315.2 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middlepennsylvanian",
+   "name": "Base of the MiddlePennsylvanian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 315.2 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-kasimovian",
+   "name": "Base of the Kasimovian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 307.0 ± 0.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-upperpennsylvanian",
+   "name": "Base of the UpperPennsylvanian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 307.0 ± 0.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-gzhelian",
+   "name": "Base of the Gzhelian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 303.7 ± 0.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-asselian",
+   "name": "Base of the Asselian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 298.9 ± 0.15 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-permian",
+   "name": "Base of the Permian",
+   "below": null,
+   "above": [
+    "permian"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cisuralian",
+   "name": "Base of the Cisuralian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 298.9 ± 0.15 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-sakmarian",
+   "name": "Base of the Sakmarian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 293.52 ± 0.17 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-artinskian",
+   "name": "Base of the Artinskian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 290.1 ± 0.26 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-kungurian",
+   "name": "Base of the Kungurian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 283.3 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-roadian",
+   "name": "Base of the Roadian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 274.4 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-guadalupian",
+   "name": "Base of the Guadalupian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 274.4 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-wordian",
+   "name": "Base of the Wordian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 266.9 ± 0.4 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-capitanian",
+   "name": "Base of the Capitanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 264.28 ± 0.16 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-wuchiapingian",
+   "name": "Base of the Wuchiapingian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 259.857 ± 0.084 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lopingian",
+   "name": "Base of the Lopingian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 259.857 ± 0.084 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-changhsingian",
+   "name": "Base of the Changhsingian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 254.14 ± 0.07 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-induan",
+   "name": "Base of the Induan",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 251.902 ± 0.024 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-mesozoic",
+   "name": "Base of the Mesozoic",
+   "below": null,
+   "above": [
+    "mesozoic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowertriassic",
+   "name": "Base of the LowerTriassic",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 251.902 ± 0.024 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-olenekian",
+   "name": "Base of the Olenekian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 250.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-anisian",
+   "name": "Base of the Anisian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 247.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middletriassic",
+   "name": "Base of the MiddleTriassic",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 247.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ladinian",
+   "name": "Base of the Ladinian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 241.464 ± 0.28 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-carnian",
+   "name": "Base of the Carnian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 237.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-uppertriassic",
+   "name": "Base of the UpperTriassic",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 237.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-norian",
+   "name": "Base of the Norian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 227.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-rhaetian",
+   "name": "Base of the Rhaetian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 205.7 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-hettangian",
+   "name": "Base of the Hettangian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 201.4 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-jurassic",
+   "name": "Base of the Jurassic",
+   "below": null,
+   "above": [
+    "jurassic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowerjurassic",
+   "name": "Base of the LowerJurassic",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 201.4 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-sinemurian",
+   "name": "Base of the Sinemurian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 199.5 ± 0.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pliensbachian",
+   "name": "Base of the Pliensbachian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 192.9 ± 0.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-toarcian",
+   "name": "Base of the Toarcian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 184.2 ± 0.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-aalenian",
+   "name": "Base of the Aalenian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 174.7 ± 0.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-middlejurassic",
+   "name": "Base of the MiddleJurassic",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 174.7 ± 0.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-bajocian",
+   "name": "Base of the Bajocian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 170.9 ± 0.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-bathonian",
+   "name": "Base of the Bathonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 168.2 ± 1.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-callovian",
+   "name": "Base of the Callovian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 165.3 ± 1.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-oxfordian",
+   "name": "Base of the Oxfordian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 161.5 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-upperjurassic",
+   "name": "Base of the UpperJurassic",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 161.5 ± 1.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-kimmeridgian",
+   "name": "Base of the Kimmeridgian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 154.8 ± 0.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-tithonian",
+   "name": "Base of the Tithonian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 149.2 ± 0.7 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-berriasian",
+   "name": "Base of the Berriasian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 143.1 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cretaceous",
+   "name": "Base of the Cretaceous",
+   "below": null,
+   "above": [
+    "cretaceous"
+   ],
+   "definition_type": null,
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lowercretaceous",
+   "name": "Base of the LowerCretaceous",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 143.1 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-valanginian",
+   "name": "Base of the Valanginian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 137.05 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-hauterivian",
+   "name": "Base of the Hauterivian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 132.6 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-barremian",
+   "name": "Base of the Barremian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 125.77 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-aptian",
+   "name": "Base of the Aptian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 121.4 ± 0.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-albian",
+   "name": "Base of the Albian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 113.2 ± 0.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cenomanian",
+   "name": "Base of the Cenomanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 100.5 ± 0.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-uppercretaceous",
+   "name": "Base of the UpperCretaceous",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 100.5 ± 0.1 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-turonian",
+   "name": "Base of the Turonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 93.9 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-coniacian",
+   "name": "Base of the Coniacian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 89.8 ± 0.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-santonian",
+   "name": "Base of the Santonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 85.7 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-campanian",
+   "name": "Base of the Campanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 83.6 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-maastrichtian",
+   "name": "Base of the Maastrichtian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 72.2 ± 0.2 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-danian",
+   "name": "Base of the Danian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 66.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paleogene",
+   "name": "Base of the Paleogene",
+   "below": null,
+   "above": [
+    "paleogene"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-cenozoic",
+   "name": "Base of the Cenozoic",
+   "below": null,
+   "above": [
+    "cenozoic"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-paleocene",
+   "name": "Base of the Paleocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 66.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-selandian",
+   "name": "Base of the Selandian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 61.66 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-thanetian",
+   "name": "Base of the Thanetian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 59.24 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-ypresian",
+   "name": "Base of the Ypresian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 56.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-eocene",
+   "name": "Base of the Eocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 56.0 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-lutetian",
+   "name": "Base of the Lutetian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 48.07 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-bartonian",
+   "name": "Base of the Bartonian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 41.03 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-priabonian",
+   "name": "Base of the Priabonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 37.71 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-rupelian",
+   "name": "Base of the Rupelian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 33.9 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-oligocene",
+   "name": "Base of the Oligocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 33.9 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-chattian",
+   "name": "Base of the Chattian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 27.3 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-neogene",
+   "name": "Base of the Neogene",
+   "below": null,
+   "above": [
+    "neogene"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-miocene",
+   "name": "Base of the Miocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 23.04 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-aquitanian",
+   "name": "Base of the Aquitanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 23.03 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-burdigalian",
+   "name": "Base of the Burdigalian",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 20.45 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-langhian",
+   "name": "Base of the Langhian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 15.98 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-serravallian",
+   "name": "Base of the Serravallian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 13.82 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-tortonian",
+   "name": "Base of the Tortonian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 11.63 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-messinian",
+   "name": "Base of the Messinian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 7.246 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-zanclean",
+   "name": "Base of the Zanclean",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 5.333 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pliocene",
+   "name": "Base of the Pliocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 5.333 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-piacenzian",
+   "name": "Base of the Piacenzian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 3.6 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-gelasian",
+   "name": "Base of the Gelasian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 2.58 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-quaternary",
+   "name": "Base of the Quaternary",
+   "below": null,
+   "above": [
+    "quaternary"
+   ],
+   "definition_type": "GSSP",
+   "note": ""
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pleistocene",
+   "name": "Base of the Pleistocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 2.58 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-calabrian",
+   "name": "Base of the Calabrian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 1.8 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-chibanian",
+   "name": "Base of the Chibanian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 0.774 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-upperpleistocene",
+   "name": "Base of the UpperPleistocene",
+   "below": null,
+   "above": null,
+   "definition_type": null,
+   "note": "ICS 2024-12: 0.129 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-greenlandian",
+   "name": "Base of the Greenlandian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 0.0117 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-holocene",
+   "name": "Base of the Holocene",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 0.0117 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-northgrippian",
+   "name": "Base of the Northgrippian",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 0.0082 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-meghalayan",
+   "name": "Base of the Meghalayan",
+   "below": null,
+   "above": null,
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 0.0042 Ma. registry 만(네트웍 미포함)."
+  }
+ },
+ {
   "model": "chrono.boundarylineage",
   "fields": {
-    "boundary": [
-      "base-triassic"
-    ],
-    "op": "created",
-    "note": "",
-    "sources": []
+   "boundary": [
+    "base-triassic"
+   ],
+   "op": "created",
+   "note": "",
+   "sources": []
   }
-},
-{
+ },
+ {
   "model": "chrono.boundarylineage",
   "fields": {
-    "boundary": [
-      "base-proterozoic"
-    ],
-    "op": "created",
-    "note": "현재 GSSA. Ediacaran 등 다른 선캐 경계는 GSSP 로 retype 진행형.",
-    "sources": []
+   "boundary": [
+    "base-proterozoic"
+   ],
+   "op": "created",
+   "note": "현재 GSSA. Ediacaran 등 다른 선캐 경계는 GSSP 로 retype 진행형.",
+   "sources": []
   }
-},
-{
+ },
+ {
   "model": "chrono.boundarylineage",
   "fields": {
-    "boundary": [
-      "base-cambrian"
-    ],
-    "op": "created",
-    "note": "",
-    "sources": []
+   "boundary": [
+    "base-cambrian"
+   ],
+   "op": "created",
+   "note": "",
+   "sources": []
   }
-},
-{
+ },
+ {
   "model": "chrono.ratification",
   "fields": {
-    "boundary": [
-      "base-triassic"
-    ],
-    "authority": [
-      "ics"
-    ],
-    "year": 2001,
-    "note": ""
+   "boundary": [
+    "base-triassic"
+   ],
+   "authority": [
+    "ics"
+   ],
+   "year": 2001,
+   "note": ""
   }
-},
-{
+ },
+ {
   "model": "chrono.ratification",
   "fields": {
-    "boundary": [
-      "base-proterozoic"
-    ],
-    "authority": [
-      "ics"
-    ],
-    "year": 1991,
-    "note": ""
+   "boundary": [
+    "base-proterozoic"
+   ],
+   "authority": [
+    "ics"
+   ],
+   "year": 1991,
+   "note": ""
   }
-},
-{
+ },
+ {
   "model": "chrono.ratification",
   "fields": {
-    "boundary": [
-      "base-cambrian"
-    ],
-    "authority": [
-      "ics"
-    ],
-    "year": 1992,
-    "note": ""
+   "boundary": [
+    "base-cambrian"
+   ],
+   "authority": [
+    "ics"
+   ],
+   "year": 1992,
+   "note": ""
   }
-},
-{
+ },
+ {
   "model": "chrono.locality",
   "fields": {
-    "boundary": [
-      "base-triassic"
-    ],
-    "name": "Meishan D, Changxing, Zhejiang, China",
-    "level": "base of Bed 27c",
-    "latitude": null,
-    "longitude": null
+   "boundary": [
+    "base-triassic"
+   ],
+   "name": "Meishan D, Changxing, Zhejiang, China",
+   "level": "base of Bed 27c",
+   "latitude": null,
+   "longitude": null
   }
-},
-{
+ },
+ {
   "model": "chrono.locality",
   "fields": {
-    "boundary": [
-      "base-cambrian"
-    ],
-    "name": "Fortune Head, Burin Peninsula, Newfoundland, Canada",
-    "level": "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm",
-    "latitude": null,
-    "longitude": null
+   "boundary": [
+    "base-cambrian"
+   ],
+   "name": "Fortune Head, Burin Peninsula, Newfoundland, Canada",
+   "level": "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm",
+   "latitude": null,
+   "longitude": null
   }
-}
+ }
 ]
