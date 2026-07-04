@@ -103,6 +103,8 @@
 
 자세한 전개는 [node-graph-paradigm.md](node-graph-paradigm.md)의 **"게이트웨이 레이어"** 절 참조.
 
+> **구현 후 회고:** 실제 구현에서 이 재해석이 어떻게 굳었는지 — L0~6이 **티어(registry/graph/release) × 카테고리(data/process/clamp)** 로 분해된 과정 — 는 [tier-category-model.md](tier-category-model.md) 참조.
+
 ### 8.3 이에 따라 늘어나는 열린 질문
 
 - correlation / synthesis를 별도 티어로 뽑을지, 몇 개로 나눌지.

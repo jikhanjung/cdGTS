@@ -48,6 +48,7 @@ flowchart TD
 **개념**
 - [idea.md](idea.md) — 배경·문제의식·레이어 0–6·게이트웨이·열린 질문
 - [node-graph-paradigm.md](node-graph-paradigm.md) — DAG·게이트웨이/네트워크·순환·엣지=분포
+- [tier-category-model.md](tier-category-model.md) — 구현 후 회고: 레이어 0–6 → 티어 × 카테고리(data/process/clamp)
 
 **사례 (세 유형)**
 - [case-permian-triassic.md](case-permian-triassic.md) — GSSP · 국소 보간 (숫자는 계산)

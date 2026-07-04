@@ -110,6 +110,8 @@ A bigger reinterpretation: don't nail the layers down as fixed sequential stages
 
 For the full development, see the **"gateway layers"** section of [node-graph-paradigm_en.md](node-graph-paradigm_en.md).
 
+> **Retrospective:** how this reinterpretation actually solidified in the build — L0–6 decomposing into **tier (registry/graph/release) × category (data/process/clamp)** — is covered in [tier-category-model_en.md](tier-category-model_en.md).
+
 ### 8.3 Open questions this raises
 
 - Whether to extract correlation / synthesis as a separate tier, and into how many.

@@ -49,6 +49,7 @@ flowchart TD
 **Concept**
 - [idea_en.md](idea_en.md) — background · problem · layers 0–6 · gateways · open questions
 - [node-graph-paradigm_en.md](node-graph-paradigm_en.md) — DAG · gateway/network · cycles · edge = distribution
+- [tier-category-model_en.md](tier-category-model_en.md) — retrospective: layers 0–6 → tier × category (data/process/clamp)
 
 **Cases (three types)**
 - [case-permian-triassic_en.md](case-permian-triassic_en.md) — GSSP · local interpolation (the number is computed)
