@@ -7,6 +7,7 @@ import '@xyflow/react/dist/style.css'
 
 import CdgtsNode, { CATEGORY_COLOR } from './CdgtsNode.jsx'
 import Inspector from './Inspector.jsx'
+import ResultsPanel from './ResultsPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph,
 } from './api.js'
@@ -55,6 +56,10 @@ export default function Editor() {
   const [status, setStatus] = useState('로딩 중…')
   const [error, setError] = useState(null)
   const [selectedId, setSelectedId] = useState(null)
+  const [gateways, setGateways] = useState([])
+  const [outputs, setOutputs] = useState([])
+  const [runMeta, setRunMeta] = useState(null)
+  const [showResults, setShowResults] = useState(false)
   const wrapperRef = useRef(null)
   const { screenToFlowPosition, getViewport, setViewport } = useReactFlow()
 
@@ -77,6 +82,7 @@ export default function Editor() {
         const { nodes: rn, edges: re } = apiToRF(full, tmap)
         setNodes(rn)
         setEdges(re)
+        setGateways(full.gateways || [])
         if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
         setStatus(`불러옴: ${full.name} (노드 ${rn.length})`)
       } catch (e) {
@@ -118,6 +124,9 @@ export default function Editor() {
       const { nodes: rn, edges: re } = apiToRF(full, typeMap)
       setNodes(rn.map((n) => ({ ...n, data: { ...n.data, result: null } })))
       setEdges(re)
+      setGateways(full.gateways || [])
+      setOutputs([])
+      setRunMeta(null)
       if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
       setStatus(`불러옴: ${full.name} (노드 ${rn.length})`)
     } catch (e) {
@@ -143,6 +152,23 @@ export default function Editor() {
       const run = await evaluateGraph(graphId)
       const byKey = Object.fromEntries(run.results.map((r) => [r.node_key, r]))
       setNodes((nds) => nds.map((n) => ({ ...n, data: { ...n.data, result: byKey[n.id] || null } })))
+
+      // 최종 출력: gateway 우선, 없으면 위상적 sink(나가는 엣지 없는 말단).
+      let rows
+      if (gateways.length) {
+        rows = gateways.map((gw) => ({ id: gw.node, title: gw.name || gw.node, boundary: gw.boundary, source: 'gateway' }))
+      } else {
+        const hasOut = new Set(edges.map((e) => e.source))
+        rows = nodes.filter((n) => !hasOut.has(n.id))
+          .map((n) => ({ id: n.id, title: n.data.label || n.data.nodeType, boundary: null, source: 'sink' }))
+      }
+      setOutputs(rows.map((r) => {
+        const res = byKey[r.id]
+        return { ...r, dist: res?.distribution || null, provenance: res?.provenance || [], missing: !res }
+      }))
+      setRunMeta({ id: run.id, stats: run.stats, certificate: run.certificate })
+      setShowResults(true)
+
       const cert = run.certificate
       setStatus(
         `평가 run#${run.id} · computed ${run.stats.computed} / cached ${run.stats.cached}` +
@@ -151,7 +177,7 @@ export default function Editor() {
     } catch (e) {
       setError(e.data || String(e))
     }
-  }, [graphId, setNodes])
+  }, [graphId, setNodes, gateways, nodes, edges])
 
   // --- 선택 노드 속성 편집 (Inspector) ---
   const patchNodeData = useCallback((id, fn) => {
@@ -248,6 +274,14 @@ export default function Editor() {
           </select>
           <button onClick={onSave}>저장 (PUT)</button>
           <button onClick={onEvaluate}>평가</button>
+          <button
+            onClick={() => setShowResults((v) => !v)}
+            className={showResults ? 'active' : ''}
+            disabled={!runMeta}
+            title="최종 노드 출력 보기"
+          >
+            결과{outputs.length ? ` (${outputs.length})` : ''}
+          </button>
           <span className="status">{status}</span>
         </div>
         {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
@@ -267,6 +301,9 @@ export default function Editor() {
             <MiniMap pannable zoomable />
           </ReactFlow>
         </div>
+        {showResults && (
+          <ResultsPanel outputs={outputs} meta={runMeta} onClose={() => setShowResults(false)} />
+        )}
       </main>
 
       <Inspector
