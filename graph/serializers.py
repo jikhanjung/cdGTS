@@ -10,15 +10,29 @@ from rest_framework import serializers
 from nodes.models import NodeType, Port
 
 from .dag import find_unbroken_cycles
-from .models import Edge, Gateway, Graph, NodeInstance
+from .models import Edge, Gateway, Graph, NodeGroup, NodeInstance
+
+
+class NodeGroupSerializer(serializers.ModelSerializer):
+    """노드그룹 = 편집/표현용 컨테이너(멤버십 + 접기 + 접힌 노드 위치). 엔진 무관."""
+    class Meta:
+        model = NodeGroup
+        fields = ["key", "name", "collapsed", "x", "y"]
 
 
 class NodeInstanceSerializer(serializers.ModelSerializer):
     node_type = serializers.SlugRelatedField(slug_field="slug", queryset=NodeType.objects.all())
+    # 소속 그룹 key (없으면 null). write 는 문자열, read 는 to_representation 에서 group.key.
+    group = serializers.CharField(required=False, allow_null=True, allow_blank=True, write_only=True)
 
     class Meta:
         model = NodeInstance
-        fields = ["key", "node_type", "label", "description", "params", "x", "y", "width"]
+        fields = ["key", "node_type", "label", "description", "params", "x", "y", "width", "group"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["group"] = instance.group.key if instance.group_id else None
+        return data
 
 
 class EdgeSerializer(serializers.Serializer):
@@ -51,23 +65,33 @@ class GatewaySerializer(serializers.ModelSerializer):
 class GraphSerializer(serializers.ModelSerializer):
     nodes = NodeInstanceSerializer(many=True)
     edges = EdgeSerializer(many=True)
+    groups = NodeGroupSerializer(many=True, required=False)
     gateways = GatewaySerializer(many=True, read_only=True)
 
     class Meta:
         model = Graph
-        fields = ["id", "slug", "name", "status", "viewport", "nodes", "edges", "gateways"]
-        # 토폴로지 PUT 은 nodes/edges/viewport 만 바꾼다 — slug/name 은 생성 시 고정.
+        fields = ["id", "slug", "name", "status", "viewport", "nodes", "edges", "groups", "gateways"]
+        # 토폴로지 PUT 은 nodes/edges/groups/viewport 만 바꾼다 — slug/name 은 생성 시 고정.
         extra_kwargs = {"slug": {"required": False}, "name": {"required": False}}
 
     # --- 검증: 위상 정합을 저장 전에 (nodes/edges 를 함께 봐야 하므로 여기서) ---
     def validate(self, attrs):
         nodes = attrs.get("nodes", [])
         edges = attrs.get("edges", [])
+        groups = attrs.get("groups", [])
 
         keys = [n["key"] for n in nodes]
         if len(keys) != len(set(keys)):
             raise serializers.ValidationError("노드 key 가 중복됨.")
         key_to_type = {n["key"]: n["node_type"] for n in nodes}
+
+        # 그룹 정합: 노드가 참조하는 group key 는 groups 에 있어야 함.
+        group_keys = {g["key"] for g in groups}
+        if len(group_keys) != len(groups):
+            raise serializers.ValidationError("그룹 key 가 중복됨.")
+        for n in nodes:
+            if n.get("group") and n["group"] not in group_keys:
+                raise serializers.ValidationError(f"노드 {n['key']!r} 가 없는 그룹 {n['group']!r} 참조.")
 
         # 타입별 포트 방향 인덱스 (한 번만 조회)
         type_ids = {t.id for t in key_to_type.values()}
@@ -112,26 +136,38 @@ class GraphSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         nodes = validated_data.pop("nodes", None)
         edges = validated_data.pop("edges", None)
+        groups = validated_data.pop("groups", None)
         for field, value in validated_data.items():
             setattr(instance, field, value)
         instance.save()
         if nodes is not None:
-            self._replace_topology(instance, nodes, edges or [])
+            self._replace_topology(instance, nodes, edges or [], groups or [])
         return instance
 
     @transaction.atomic
     def create(self, validated_data):
         nodes = validated_data.pop("nodes", [])
         edges = validated_data.pop("edges", [])
+        groups = validated_data.pop("groups", [])
         instance = Graph.objects.create(**validated_data)
-        self._replace_topology(instance, nodes, edges)
+        self._replace_topology(instance, nodes, edges, groups)
         return instance
 
-    def _replace_topology(self, graph, nodes, edges):
+    def _replace_topology(self, graph, nodes, edges, groups):
         graph.nodes.all().delete()          # cascade 로 edges 도 제거
-        key_to_obj = {
-            n["key"]: NodeInstance.objects.create(graph=graph, **n) for n in nodes
+        graph.groups.all().delete()
+        key_to_group = {
+            g["key"]: NodeGroup.objects.create(graph=graph, **g) for g in groups
         }
+        key_to_obj = {}
+        for n in nodes:
+            fields = dict(n)
+            gkey = fields.pop("group", None)
+            obj = NodeInstance.objects.create(graph=graph, **fields)
+            if gkey and gkey in key_to_group:
+                obj.group = key_to_group[gkey]
+                obj.save(update_fields=["group"])
+            key_to_obj[n["key"]] = obj
         Edge.objects.bulk_create([
             Edge(
                 graph=graph,

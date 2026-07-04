@@ -68,11 +68,16 @@ class Graph(models.Model):
 
 
 class NodeGroup(models.Model):
-    """지역/경계별 서브그래프 (node-graph: node group = locality). 접으면 게이트웨이처럼."""
+    """
+    지역/경계별 서브그래프 (node-graph: node group = locality). 접으면 게이트웨이처럼.
+    엔진에는 영향 없음(평탄 평가) — 편집/표현용 컨테이너. x/y = 접힌 그룹 노드의 캔버스 위치.
+    """
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="groups")
     key = models.CharField(max_length=100)
     name = models.CharField(max_length=200)
     collapsed = models.BooleanField(default=False)
+    x = models.FloatField(default=0)
+    y = models.FloatField(default=0)
 
     class Meta:
         constraints = [

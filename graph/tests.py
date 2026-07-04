@@ -53,6 +53,27 @@ def _payload():
     }
 
 
+def test_group_roundtrip(api, graph):
+    """노드그룹(멤버십 + 접기 + 위치)이 PUT/GET 왕복. 엔진 무관·표현용."""
+    payload = _payload()
+    payload["groups"] = [{"key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50}]
+    payload["nodes"][0]["group"] = "g1"          # obs1 → 그룹, adm 은 그룹 밖
+    put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    assert put.status_code == 200, put.data
+    got = api.get(f"/api/graphs/{graph.pk}/").data
+    assert got["groups"] == [{"key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50}]
+    by_key = {n["key"]: n for n in got["nodes"]}
+    assert by_key["obs1"]["group"] == "g1"
+    assert by_key["adm"]["group"] is None
+
+
+def test_group_bad_ref_rejected(api, graph):
+    payload = _payload()
+    payload["nodes"][0]["group"] = "ghost"       # groups 에 없는 그룹
+    put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    assert put.status_code == 400
+
+
 def test_put_then_get_roundtrip(api, graph):
     put = api.put(f"/api/graphs/{graph.pk}/", _payload(), format="json")
     assert put.status_code == 200, put.data

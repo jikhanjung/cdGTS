@@ -65,6 +65,50 @@ body {
 .topo-removed .op { background: #c0392b; }
 .topo-retype .op { background: #a142f4; }
 
+/* --- 노드그룹 (접힌 노드 · 인터페이스 스텁 · breadcrumb) --- */
+.group-node {
+  width: 100%; box-sizing: border-box; border: 1.5px dashed #a142f4; border-radius: 10px;
+  background: #faf5ff; color: #3a2450; font-size: 12px; position: relative; min-width: 150px;
+}
+.group-node.selected { box-shadow: 0 0 0 2px #a142f4; }
+.group-node__bar {
+  display: flex; align-items: center; gap: 6px; padding: 6px 10px;
+  border-bottom: 1px solid #e6d6f7; font-weight: 600;
+}
+.group-node__icon { color: #a142f4; }
+.group-node__name { flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.group-node__count {
+  background: #a142f4; color: #fff; border-radius: 9px; font-size: 10px; padding: 0 6px; font-weight: 600;
+}
+.group-node__io { display: flex; justify-content: space-between; gap: 8px; padding: 4px 8px 8px; }
+.group-node__io .gio { list-style: none; margin: 0; padding: 0; font-size: 10px; color: #6b5a80; max-width: 46%; }
+.group-node__io .gio.out { text-align: right; }
+.group-node__io .gio li { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; line-height: 1.5; }
+
+.stub-node {
+  border: 1px dashed #b9a0d0; border-radius: 6px; background: #fbfaff; color: #7a6a90;
+  font-size: 10px; padding: 5px 9px; white-space: nowrap; font-family: ui-monospace, Menlo, monospace;
+}
+.stub-node.in { border-left: 3px solid #4a9d5b; }
+.stub-node.out { border-right: 3px solid #b0662c; }
+
+.breadcrumb {
+  display: flex; align-items: center; gap: 8px; padding: 5px 12px; font-size: 12px;
+  background: #f7f2fd; border-bottom: 1px solid #ece2f8;
+}
+.breadcrumb .link {
+  background: none; border: none; color: #7a2fbf; cursor: pointer; padding: 0; font-size: 12px;
+}
+.breadcrumb .link:hover { text-decoration: underline; }
+.breadcrumb .cur { color: #3a2450; font-weight: 600; }
+.breadcrumb .sep { color: #b09cc8; }
+.breadcrumb .bc-hint { color: #9a8ab0; font-size: 11px; }
+.breadcrumb .ungroup {
+  margin-left: auto; border: 1px solid #d9c4ef; background: #fff; color: #7a2fbf;
+  border-radius: 6px; padding: 2px 10px; font-size: 11px; cursor: pointer;
+}
+.breadcrumb .ungroup:hover { background: #f0e6fa; }
+
 /* --- ICC 테이블 --- */
 .icc { height: 100%; overflow-y: auto; padding: 18px 24px; }
 .icc-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
