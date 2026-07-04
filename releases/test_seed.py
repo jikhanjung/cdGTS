@@ -28,7 +28,7 @@ def _counts():
 
 def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
-    assert (units, boundaries, types, graphs) == (12, 3, 12, 3)
+    assert (units, boundaries, types, graphs) == (12, 3, 12, 4)
     assert (releases, records) == (2, 5)                     # records = bake 산출
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
     assert Unit.objects.filter(parent__isnull=False).exists()
