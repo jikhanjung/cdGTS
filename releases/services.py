@@ -8,6 +8,42 @@ diff — 두 릴리스 간 **값 diff** 와 **토폴로지 diff**(직교 축)를
 from .models import BoundaryRecord
 
 
+def bake_graph(graph):
+    """
+    그래프를 평가해 **게이트웨이 출력을 ICC 테이블로 얼린다** (graph → ICC bake).
+    각 게이트웨이(경계 지정)의 노드 결과 분포 → BoundaryRecord. 릴리스는 그래프당 하나
+    (version=`graph:<slug>`)로 재사용 → 재-bake 는 레코드 갱신. 릴리스 diff 도 그대로 적용됨.
+    반환: (release, 레코드 수).
+    """
+    from engine.evaluate import evaluate_graph
+    from .models import Release
+
+    run = evaluate_graph(graph)
+    results = {r.node_key: r for r in run.results.all()}
+
+    release, _ = Release.objects.get_or_create(
+        version=f"graph:{graph.slug}",
+        defaults={"note": f"'{graph.name}' 그래프 bake (자동 생성 ICC 스냅샷)"},
+    )
+    release.records.all().delete()
+    rows = []
+    for gw in graph.gateways.select_related("boundary", "node"):
+        if gw.boundary is None:
+            continue
+        r = results.get(gw.node.key)
+        dist = r.distribution if r else None
+        rows.append(BoundaryRecord(
+            release=release,
+            boundary=gw.boundary,
+            definition_type=gw.boundary.definition_type or "",
+            value_ma=(dist or {}).get("value_ma") if dist else None,
+            uncertainty=dist,
+            provenance_ref=f"{graph.slug}::{gw.node.key}",
+        ))
+    BoundaryRecord.objects.bulk_create(rows)
+    return release, len(rows)
+
+
 def bake_release(release):
     """selection 을 돌며 BoundaryRecord 를 (재)생성. 반환: 레코드 수."""
     release.records.all().delete()

@@ -48,6 +48,30 @@ def test_add_is_idempotent(seeded):
     assert _counts() == before
 
 
+def test_bake_graph_produces_icc_table(seeded):
+    """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다."""
+    from graph.models import Graph
+    from releases.services import bake_graph
+    g = Graph.objects.get(slug="example-icc-partial")
+    rel, n = bake_graph(g)
+    assert n == 3
+    assert rel.version == "graph:example-icc-partial"
+    recs = {r.boundary.slug: r for r in rel.records.select_related("boundary")}
+    assert set(recs) == {"base-proterozoic", "base-cambrian", "base-triassic"}
+    assert recs["base-proterozoic"].value_ma == 2500 and recs["base-proterozoic"].definition_type == "GSSA"
+    assert recs["base-triassic"].definition_type == "GSSP"
+    # 재-bake 는 같은 릴리스에 멱등
+    rel2, n2 = bake_graph(g)
+    assert n2 == 3 and rel2.pk == rel.pk
+
+    # HTTP 엔드포인트도 확인
+    from rest_framework.test import APIClient
+    resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
+    assert resp.status_code == 200 and resp.data["baked"] == 3
+    assert resp.data["release"]["version"] == "graph:example-icc-partial"
+    assert len(resp.data["release"]["records"]) == 3
+
+
 def test_seed_content_canonical(seeded):
     """정본값 가드 — seed 파일 드리프트 회귀 방지(운영에서 겪은 age-depth/radiometric 어긋남)."""
     adm = NodeType.objects.get(slug="age-depth-model")

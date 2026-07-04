@@ -65,6 +65,36 @@ body {
 .topo-removed .op { background: #c0392b; }
 .topo-retype .op { background: #a142f4; }
 
+/* --- ICC 테이블 --- */
+.icc { height: 100%; overflow-y: auto; padding: 18px 24px; }
+.icc-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+.icc-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
+.icc-controls select {
+  border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px; font-size: 13px;
+  color: #1c1c22; max-width: 380px;
+}
+.icc-controls button {
+  border: 1px solid #cfcfe0; background: #fff; border-radius: 6px; padding: 5px 12px;
+  font-size: 13px; cursor: pointer;
+}
+.icc-controls button:hover { background: #f0f0f6; }
+.icc-status { font-size: 12px; color: #767688; margin-left: auto; }
+.icc-empty { color: #767688; font-size: 14px; max-width: 560px; line-height: 1.6; }
+.icc-note { margin-top: 14px; font-size: 12px; color: #767688; line-height: 1.6; max-width: 620px; }
+.icc-note code { background: #f0eaf9; color: #7a2fbf; padding: 1px 5px; border-radius: 4px; font-size: 11px; }
+
+.icctable { border-collapse: collapse; font-size: 13px; min-width: 560px; }
+.icctable th, .icctable td { border-bottom: 1px solid #ececf2; padding: 7px 16px; text-align: left; }
+.icctable th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #767688; }
+.icctable .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.icctable .num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+.icctable .unc { color: #444; font-variant-numeric: tabular-nums; }
+.icctable .prov { color: #909098; font-size: 11px; }
+.icctable tbody tr:hover { background: #fafafc; }
+.deftype { font-size: 10px; font-weight: 600; padding: 1px 7px; border-radius: 8px; }
+.deftype.GSSP { background: #e3f0fb; color: #2c6cb0; }
+.deftype.GSSA { background: #f0eaf9; color: #7a2fbf; }
+
 /* --- 팔레트 --- */
 .palette {
   width: 220px; flex-shrink: 0; background: #f6f6f9; border-right: 1px solid #e2e2ea;

@@ -22,6 +22,10 @@ export const saveGraph = (id, body) =>
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
+// 그래프 → ICC 테이블 bake (게이트웨이 출력 스냅샷 → 릴리스 graph:<slug>).
+export const bakeGraph = (id) =>
+  fetch(`/api/graphs/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
+
 // --- 릴리스 / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)
