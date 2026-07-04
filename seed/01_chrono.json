@@ -14,7 +14,8 @@
    "slug": "archean",
    "name": "Archean",
    "rank": 1,
-   "parent": null
+   "parent": null,
+   "color": "#F0047F"
   }
  },
  {
@@ -23,7 +24,8 @@
    "slug": "proterozoic",
    "name": "Proterozoic",
    "rank": 1,
-   "parent": null
+   "parent": null,
+   "color": "#F73563"
   }
  },
  {
@@ -32,7 +34,8 @@
    "slug": "permian",
    "name": "Permian",
    "rank": 3,
-   "parent": null
+   "parent": null,
+   "color": "#F04028"
   }
  },
  {
@@ -43,7 +46,8 @@
    "rank": 4,
    "parent": [
     "permian"
-   ]
+   ],
+   "color": "#FBA794"
   }
  },
  {
@@ -54,7 +58,8 @@
    "rank": 5,
    "parent": [
     "lopingian"
-   ]
+   ],
+   "color": "#FCC0B2"
   }
  },
  {
@@ -63,7 +68,8 @@
    "slug": "triassic",
    "name": "Triassic",
    "rank": 3,
-   "parent": null
+   "parent": null,
+   "color": "#812B92"
   }
  },
  {
@@ -74,7 +80,8 @@
    "rank": 4,
    "parent": [
     "triassic"
-   ]
+   ],
+   "color": ""
   }
  },
  {
@@ -85,7 +92,8 @@
    "rank": 5,
    "parent": [
     "early-triassic"
-   ]
+   ],
+   "color": "#A4469F"
   }
  },
  {
@@ -94,7 +102,8 @@
    "slug": "ediacaran",
    "name": "Ediacaran",
    "rank": 3,
-   "parent": null
+   "parent": null,
+   "color": "#FED96A"
   }
  },
  {
@@ -103,7 +112,8 @@
    "slug": "cambrian",
    "name": "Cambrian",
    "rank": 3,
-   "parent": null
+   "parent": null,
+   "color": "#7FA056"
   }
  },
  {
@@ -114,7 +124,8 @@
    "rank": 4,
    "parent": [
     "cambrian"
-   ]
+   ],
+   "color": "#8CB06C"
   }
  },
  {
@@ -125,7 +136,8 @@
    "rank": 5,
    "parent": [
     "terreneuvian"
-   ]
+   ],
+   "color": "#99B575"
   }
  },
  {
@@ -134,7 +146,8 @@
    "slug": "hadean",
    "name": "Hadean",
    "rank": 1,
-   "parent": null
+   "parent": null,
+   "color": "#AE027E"
   }
  },
  {
@@ -143,7 +156,8 @@
    "slug": "phanerozoic",
    "name": "Phanerozoic",
    "rank": 1,
-   "parent": null
+   "parent": null,
+   "color": "#9AD9DD"
   }
  },
  {
@@ -154,7 +168,8 @@
    "rank": 2,
    "parent": [
     "archean"
-   ]
+   ],
+   "color": "#DA037F"
   }
  },
  {
@@ -165,7 +180,8 @@
    "rank": 2,
    "parent": [
     "archean"
-   ]
+   ],
+   "color": "#F768A9"
   }
  },
  {
@@ -176,7 +192,8 @@
    "rank": 2,
    "parent": [
     "archean"
-   ]
+   ],
+   "color": "#F99BC1"
   }
  },
  {
@@ -187,7 +204,8 @@
    "rank": 2,
    "parent": [
     "archean"
-   ]
+   ],
+   "color": "#F4449F"
   }
  },
  {
@@ -198,7 +216,8 @@
    "rank": 2,
    "parent": [
     "phanerozoic"
-   ]
+   ],
+   "color": "#F2F91D"
   }
  },
  {
@@ -209,7 +228,8 @@
    "rank": 2,
    "parent": [
     "proterozoic"
-   ]
+   ],
+   "color": "#FDB462"
   }
  },
  {
@@ -220,7 +240,8 @@
    "rank": 2,
    "parent": [
     "phanerozoic"
-   ]
+   ],
+   "color": "#67C5CA"
   }
  },
  {
@@ -231,7 +252,8 @@
    "rank": 2,
    "parent": [
     "proterozoic"
-   ]
+   ],
+   "color": "#FEB342"
   }
  },
  {
@@ -242,7 +264,8 @@
    "rank": 2,
    "parent": [
     "proterozoic"
-   ]
+   ],
+   "color": "#F74370"
   }
  },
  {
@@ -253,7 +276,8 @@
    "rank": 2,
    "parent": [
     "phanerozoic"
-   ]
+   ],
+   "color": "#99C08D"
   }
  },
  {
@@ -264,7 +288,8 @@
    "rank": 3,
    "parent": [
     "mesoproterozoic"
-   ]
+   ],
+   "color": "#FDC07A"
   }
  },
  {
@@ -275,7 +300,8 @@
    "rank": 3,
    "parent": [
     "neoproterozoic"
-   ]
+   ],
+   "color": "#FECC5C"
   }
  },
  {
@@ -286,7 +312,8 @@
    "rank": 3,
    "parent": [
     "mesoproterozoic"
-   ]
+   ],
+   "color": "#FDCC8A"
   }
  },
  {
@@ -297,7 +324,8 @@
    "rank": 3,
    "parent": [
     "paleoproterozoic"
-   ]
+   ],
+   "color": "#F76898"
   }
  },
  {
@@ -308,7 +336,8 @@
    "rank": 3,
    "parent": [
     "paleoproterozoic"
-   ]
+   ],
+   "color": "#F75B89"
   }
  },
  {
@@ -319,7 +348,8 @@
    "rank": 3,
    "parent": [
     "paleoproterozoic"
-   ]
+   ],
+   "color": "#F74F7C"
   }
  },
  {
@@ -330,7 +360,8 @@
    "rank": 3,
    "parent": [
     "paleoproterozoic"
-   ]
+   ],
+   "color": "#F875A7"
   }
  },
  {
@@ -341,7 +372,8 @@
    "rank": 3,
    "parent": [
     "mesoproterozoic"
-   ]
+   ],
+   "color": "#FED99A"
   }
  },
  {
@@ -352,7 +384,8 @@
    "rank": 3,
    "parent": [
     "neoproterozoic"
-   ]
+   ],
+   "color": "#FEBF4E"
   }
  },
  {
@@ -363,7 +396,8 @@
    "rank": 3,
    "parent": [
     "paleozoic"
-   ]
+   ],
+   "color": "#67A599"
   }
  },
  {
@@ -374,7 +408,8 @@
    "rank": 3,
    "parent": [
     "mesozoic"
-   ]
+   ],
+   "color": "#7FC64E"
   }
  },
  {
@@ -385,7 +420,8 @@
    "rank": 3,
    "parent": [
     "cenozoic"
-   ]
+   ],
+   "color": "#FFE619"
   }
  },
  {
@@ -396,7 +432,8 @@
    "rank": 3,
    "parent": [
     "cenozoic"
-   ]
+   ],
+   "color": "#F9F97F"
   }
  },
  {
@@ -407,7 +444,8 @@
    "rank": 3,
    "parent": [
     "paleozoic"
-   ]
+   ],
+   "color": "#CB8C37"
   }
  },
  {
@@ -418,7 +456,8 @@
    "rank": 3,
    "parent": [
     "mesozoic"
-   ]
+   ],
+   "color": "#34B2C9"
   }
  },
  {
@@ -429,7 +468,8 @@
    "rank": 3,
    "parent": [
     "paleozoic"
-   ]
+   ],
+   "color": "#009270"
   }
  },
  {
@@ -440,7 +480,8 @@
    "rank": 3,
    "parent": [
     "cenozoic"
-   ]
+   ],
+   "color": "#FD9A52"
   }
  },
  {
@@ -451,7 +492,8 @@
    "rank": 3,
    "parent": [
     "paleozoic"
-   ]
+   ],
+   "color": "#B3E1B6"
   }
  },
  {

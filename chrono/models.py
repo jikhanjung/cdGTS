@@ -62,6 +62,8 @@ class Unit(models.Model):
     slug = models.SlugField(unique=True, help_text="안정 식별자. 예: changhsingian")
     name = models.CharField(max_length=100, help_text="고유명(등급어 제외). 예: Changhsingian")
     rank = models.IntegerField(choices=Rank.choices)
+    color = models.CharField(max_length=7, blank=True, default="",
+                             help_text="ICS 공식 색 (#RRGGBB). ICC 차트 표시용.")
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.PROTECT, related_name="children",
         help_text="상위 등급 단위. 예: Changhsingian(Age) → Lopingian(Epoch)",

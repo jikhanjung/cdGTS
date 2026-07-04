@@ -93,6 +93,9 @@ def test_icc_chart_tiles_by_rank(seeded):
     assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8
     assert eon["hadean"]["bottom"] == 4567.0
     assert lv["Period"][0]["slug"] == "quaternary" and lv["Period"][0]["top"] == 0.0
+    # 공식 ICS 색 주입 확인 (Triassic = #812B92)
+    per = {b["slug"]: b for b in lv["Period"]}
+    assert per["triassic"]["color"] == "#812B92"
 
 
 def test_finer_boundaries_registry_only(seeded):

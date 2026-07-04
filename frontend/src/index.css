@@ -77,7 +77,7 @@ body {
 .iccchart-scroll { overflow: auto; flex: 1; border: 1px solid #ececf2; border-radius: 8px; background: #fff; }
 .icc-colhdr { font-size: 12px; font-weight: 700; fill: #555; text-transform: uppercase; letter-spacing: 0.5px; }
 .icc-axis { font-size: 9px; fill: #9a9aa8; font-variant-numeric: tabular-nums; }
-.icc-band { font-size: 10px; fill: #23202a; font-weight: 500; pointer-events: none; }
+.icc-band { font-size: 10px; font-weight: 500; pointer-events: none; }
 .iccchart-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; }
 
 /* --- 노드그룹 (접힌 노드 · 인터페이스 스텁 · breadcrumb) --- */

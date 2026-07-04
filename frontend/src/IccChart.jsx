@@ -6,9 +6,16 @@ const COLW = 152
 const AXIS = 64
 const HEADER = 22
 
-// slug → 결정적 색. rank 로 명도 차등(Eon 진하게 → Period 옅게).
+// 공식 ICS 색(band.color) 우선, 없으면 slug 해시 폴백(rank 로 명도 차등).
 const hue = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h }
-const bandColor = (slug, rank) => `hsl(${hue(slug)} 48% ${rank === 1 ? 60 : rank === 2 ? 70 : 80}%)`
+const bandColor = (b, rank) => b.color || `hsl(${hue(b.slug)} 48% ${rank === 1 ? 60 : rank === 2 ? 70 : 80}%)`
+
+// 배경색 밝기에 따라 라벨을 검/흰으로.
+const textOn = (hex) => {
+  if (!hex || hex[0] !== '#' || hex.length < 7) return '#23202a'
+  const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16)
+  return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#23202a' : '#fff'
+}
 
 // 그래프 산출물을 Eon/Era/Period 중첩 컬럼(ICC식)으로. 오래된=아래, 최근=위.
 export default function IccChart() {
@@ -81,11 +88,12 @@ export default function IccChart() {
                 return (
                   <g key={lv.rank + b.slug}>
                     <rect x={AXIS + ci * COLW + 1} y={yt} width={COLW - 2} height={h}
-                          fill={bandColor(b.slug, lv.rank_n)} stroke="#fff" strokeWidth="0.6">
+                          fill={bandColor(b, lv.rank_n)} stroke="#fff" strokeWidth="0.6">
                       <title>{`${b.name} · ${b.top}–${b.bottom} Ma`}</title>
                     </rect>
                     {h > 13 && (
-                      <text x={AXIS + ci * COLW + COLW / 2} y={yt + h / 2 + 3} textAnchor="middle" className="icc-band">
+                      <text x={AXIS + ci * COLW + COLW / 2} y={yt + h / 2 + 3} textAnchor="middle"
+                            className="icc-band" fill={textOn(b.color)}>
                         {b.name}
                       </text>
                     )}

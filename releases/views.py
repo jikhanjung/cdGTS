@@ -90,7 +90,8 @@ class IccChartView(APIView):
             )  # base 오름차순 = 젊은 것부터
             bands, prev = [], 0.0
             for s, name, base in us:
-                bands.append({"slug": s, "name": name, "top": round(prev, 4), "bottom": round(base, 4)})
+                bands.append({"slug": s, "name": name, "top": round(prev, 4), "bottom": round(base, 4),
+                              "color": units[s].color or None})
                 prev = base
             levels.append({"rank": self.GEO[rank_n], "rank_n": rank_n, "bands": bands})
 
