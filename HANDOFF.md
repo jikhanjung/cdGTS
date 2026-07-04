@@ -3,7 +3,7 @@
 **Last updated**: 2026-07-04 (**v0.1.2 운영서버 배포 완료**. 개념 코퍼스 13주제(한/영 26파일) + 스키마 v0 위에
 앱 아키텍처 → 개발계획 P01 → **Phase 0~6 구현 → 계산 커널 → Docker 배포 → 배포/DB 분리·원자적 sync·NAS 백업
 → 예제 그래프 3종 → 릴리스 diff UI**. 스택 확정: **Django 5.2.12 + SQLite + DRF 3.17 + React Flow(Vite)**.
-5개 앱[chrono·nodes·graph·engine·releases] + 프론트 노드 에디터/diff 뷰. 백엔드 **pytest 59 passed**.
+5개 앱[chrono·nodes·graph·engine·releases] + 프론트 노드 에디터/diff 뷰. 백엔드 **pytest 63 passed**.
 운영 **cdgts.paleobytes.info @ 0.1.3**(통합 seed 2026.07.0 재시드 완료·드리프트 해소), 개발/테스트 **@ 0.1.1**. devlog 001~033 push.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
@@ -32,7 +32,8 @@
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + **04:00 cron**.
 - **초기 데이터(seed)**: 통합 `seed/`(manifest version `2026.07.0`, 자연키·pk 없음) — chrono·nodes·graph·releases 단일 소스.
   `manage.py seed --mode=replace|add`(replace=재구축, add=없는 것만·그래프/릴리스 원자). 앱별 fixture 폐지, `FIXTURE_DIRS=seed/`.
-- **테스트**: 백엔드 `pytest` **59 passed**. 테스트 fixture 는 seed 파일(`01_chrono`·`02_nodes`)을 loaddata.
+- **테스트**: 백엔드 `pytest` **63 passed**. 테스트 fixture 는 seed 파일(`01_chrono`·`02_nodes`)을 loaddata.
+  seed 회귀 테스트 `releases/test_seed.py`(데이터 있는 DB replace·self-FK·add 멱등·정본값 가드).
 - **문서 코퍼스**: `docs/` 13주제 × 한/영 + README + app-architecture 한/영. 진입점 `docs/concept-map.md`.
 - **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push.
 
