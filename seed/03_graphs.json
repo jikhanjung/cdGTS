@@ -460,8 +460,8 @@
    "params": {
     "value": 2500
    },
-   "x": 260.0,
-   "y": 1160.0,
+   "x": 1700,
+   "y": 2524,
    "group": null,
    "description": "Archean–Proterozoic 경계(base-proterozoic)를 GSSA로 2500 Ma에 결정 — 오차 없는 약속된 연대.",
    "width": null
@@ -542,8 +542,8 @@
     "method": "linear",
     "target_depth": 0.0
    },
-   "x": 470.0,
-   "y": 190.0,
+   "x": 1700,
+   "y": 684,
    "group": null,
    "description": "Meishan GSSP 층준을 U–Pb age-depth 모델로 보간 → Permian–Triassic 경계(base-triassic).",
    "width": null
@@ -672,8 +672,8 @@
      "Sr-isotope"
     ]
    },
-   "x": 500.0,
-   "y": 630.0,
+   "x": 1700,
+   "y": 1236,
    "group": null,
    "description": "타 대륙 U–Pb 앵커 + δ13C 상관으로 캄브리아 기저(base-cambrian) 연대 이전.",
    "width": null
@@ -865,8 +865,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 900,
-   "y": 80,
+   "x": 1700,
+   "y": 3260,
    "group": null,
    "description": "Eon · GSSA · ICS 2024-12",
    "width": 172
@@ -890,8 +890,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1090,
-   "y": 80,
+   "x": 1700,
+   "y": 3076,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -915,8 +915,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1280,
-   "y": 80,
+   "x": 1700,
+   "y": 3168,
    "group": null,
    "description": "Eon · GSSA · ICS 2024-12",
    "width": 172
@@ -940,8 +940,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1470,
-   "y": 80,
+   "x": 1700,
+   "y": 2984,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -965,8 +965,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1660,
-   "y": 80,
+   "x": 1700,
+   "y": 2892,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -990,8 +990,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1850,
-   "y": 80,
+   "x": 1700,
+   "y": 2800,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -1015,8 +1015,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 900,
-   "y": 176,
+   "x": 1700,
+   "y": 2616,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1040,8 +1040,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1090,
-   "y": 176,
+   "x": 1700,
+   "y": 2708,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -1065,8 +1065,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1280,
-   "y": 176,
+   "x": 1700,
+   "y": 2432,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1090,8 +1090,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1470,
-   "y": 176,
+   "x": 1700,
+   "y": 2340,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1115,8 +1115,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1660,
-   "y": 176,
+   "x": 1700,
+   "y": 2248,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1140,8 +1140,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1850,
-   "y": 176,
+   "x": 1700,
+   "y": 2064,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1165,8 +1165,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 900,
-   "y": 272,
+   "x": 1700,
+   "y": 2156,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172
@@ -1190,8 +1190,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1090,
-   "y": 272,
+   "x": 1700,
+   "y": 1972,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1215,8 +1215,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1280,
-   "y": 272,
+   "x": 1700,
+   "y": 1880,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1240,8 +1240,8 @@
      "note": "ICS 2024-12 · GSSA"
     }
    },
-   "x": 1470,
-   "y": 272,
+   "x": 1700,
+   "y": 1696,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172
@@ -1265,8 +1265,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 1660,
-   "y": 272,
+   "x": 1700,
+   "y": 1788,
    "group": null,
    "description": "Era · GSSP · ICS 2024-12",
    "width": 172
@@ -1290,8 +1290,8 @@
      "note": "ICS 2024-12 · 공표값"
     }
    },
-   "x": 1850,
-   "y": 272,
+   "x": 1700,
+   "y": 1604,
    "group": null,
    "description": "Period · 공표값 · ICS 2024-12",
    "width": 172
@@ -1315,8 +1315,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 900,
-   "y": 368,
+   "x": 1700,
+   "y": 1512,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1344,8 +1344,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1090,
-   "y": 368,
+   "x": 1700,
+   "y": 1328,
    "group": null,
    "description": "Era · GSSP · ICS 2024-12",
    "width": 172
@@ -1373,8 +1373,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1280,
-   "y": 368,
+   "x": 1700,
+   "y": 1420,
    "group": null,
    "description": "Eon · GSSP · ICS 2024-12",
    "width": 172
@@ -1402,8 +1402,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1470,
-   "y": 368,
+   "x": 1700,
+   "y": 1144,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1431,8 +1431,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1660,
-   "y": 368,
+   "x": 1700,
+   "y": 1052,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1460,8 +1460,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1850,
-   "y": 368,
+   "x": 1700,
+   "y": 960,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1489,8 +1489,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 900,
-   "y": 464,
+   "x": 1700,
+   "y": 868,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1518,8 +1518,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1090,
-   "y": 464,
+   "x": 1700,
+   "y": 776,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1547,8 +1547,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1280,
-   "y": 464,
+   "x": 1700,
+   "y": 592,
    "group": null,
    "description": "Era · GSSP · ICS 2024-12",
    "width": 172
@@ -1576,8 +1576,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1470,
-   "y": 464,
+   "x": 1700,
+   "y": 500,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1605,8 +1605,8 @@
      "note": "ICS 2024-12 chart.ttl"
     }
    },
-   "x": 1660,
-   "y": 464,
+   "x": 1700,
+   "y": 408,
    "group": null,
    "description": "Period · 공표값 · ICS 2024-12",
    "width": 172
@@ -1630,8 +1630,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 1850,
-   "y": 464,
+   "x": 1700,
+   "y": 224,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1655,8 +1655,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 900,
-   "y": 560,
+   "x": 1700,
+   "y": 316,
    "group": null,
    "description": "Era · GSSP · ICS 2024-12",
    "width": 172
@@ -1680,8 +1680,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 1090,
-   "y": 560,
+   "x": 1700,
+   "y": 132,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -1705,8 +1705,8 @@
      "note": "ICS 2024-12 · GSSP"
     }
    },
-   "x": 1280,
-   "y": 560,
+   "x": 1700,
+   "y": 40,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172
@@ -2304,6 +2304,2106 @@
    "boundary": [
     "base-quaternary"
    ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-00",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 86,
+   "group": null,
+   "description": "base-neogene (older) ≥ base-quaternary (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-01",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 178,
+   "group": null,
+   "description": "base-paleogene (older) ≥ base-neogene (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-02",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 270,
+   "group": null,
+   "description": "base-cenozoic (older) ≥ base-paleogene (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-03",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 362,
+   "group": null,
+   "description": "base-cretaceous (older) ≥ base-cenozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-04",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 454,
+   "group": null,
+   "description": "base-jurassic (older) ≥ base-cretaceous (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-05",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 546,
+   "group": null,
+   "description": "base-mesozoic (older) ≥ base-jurassic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-06",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 638,
+   "group": null,
+   "description": "base-triassic (older) ≥ base-mesozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-07",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 730,
+   "group": null,
+   "description": "base-permian (older) ≥ base-triassic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-08",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 822,
+   "group": null,
+   "description": "base-carboniferous (older) ≥ base-permian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-09",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 914,
+   "group": null,
+   "description": "base-devonian (older) ≥ base-carboniferous (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-10",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1006,
+   "group": null,
+   "description": "base-silurian (older) ≥ base-devonian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-11",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1098,
+   "group": null,
+   "description": "base-ordovician (older) ≥ base-silurian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-12",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1190,
+   "group": null,
+   "description": "base-cambrian (older) ≥ base-ordovician (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-13",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1282,
+   "group": null,
+   "description": "base-paleozoic (older) ≥ base-cambrian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-14",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1374,
+   "group": null,
+   "description": "base-phanerozoic (older) ≥ base-paleozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-15",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1466,
+   "group": null,
+   "description": "base-ediacaran (older) ≥ base-phanerozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-16",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1558,
+   "group": null,
+   "description": "base-cryogenian (older) ≥ base-ediacaran (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-17",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1650,
+   "group": null,
+   "description": "base-tonian (older) ≥ base-cryogenian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-18",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1742,
+   "group": null,
+   "description": "base-neoproterozoic (older) ≥ base-tonian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-19",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1834,
+   "group": null,
+   "description": "base-stenian (older) ≥ base-neoproterozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-20",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 1926,
+   "group": null,
+   "description": "base-ectasian (older) ≥ base-stenian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-21",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2018,
+   "group": null,
+   "description": "base-calymmian (older) ≥ base-ectasian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-22",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2110,
+   "group": null,
+   "description": "base-mesoproterozoic (older) ≥ base-calymmian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-23",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2202,
+   "group": null,
+   "description": "base-statherian (older) ≥ base-mesoproterozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-24",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2294,
+   "group": null,
+   "description": "base-orosirian (older) ≥ base-statherian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-25",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2386,
+   "group": null,
+   "description": "base-rhyacian (older) ≥ base-orosirian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-26",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2478,
+   "group": null,
+   "description": "base-proterozoic (older) ≥ base-rhyacian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-27",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2570,
+   "group": null,
+   "description": "base-siderian (older) ≥ base-proterozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-28",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2662,
+   "group": null,
+   "description": "base-paleoproterozoic (older) ≥ base-siderian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-29",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2754,
+   "group": null,
+   "description": "base-neoarchean (older) ≥ base-paleoproterozoic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-30",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2846,
+   "group": null,
+   "description": "base-mesoarchean (older) ≥ base-neoarchean (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-31",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 2938,
+   "group": null,
+   "description": "base-paleoarchean (older) ≥ base-mesoarchean (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-32",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 3030,
+   "group": null,
+   "description": "base-eoarchean (older) ≥ base-paleoarchean (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-33",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 3122,
+   "group": null,
+   "description": "base-archean (older) ≥ base-eoarchean (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-34",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 1950,
+   "y": 3214,
+   "group": null,
+   "description": "base-hadean (older) ≥ base-archean (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-00"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-quaternary"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-00"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-01"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-01"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cenozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-02"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-02"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cretaceous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-03"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cenozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-03"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-jurassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-04"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cretaceous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-04"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-05"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-jurassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-05"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "ord-06"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-06"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-permian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-07"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "ord-07"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carboniferous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-08"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-permian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-08"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-devonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-09"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carboniferous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-09"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-silurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-10"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-devonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-10"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ordovician"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-11"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-silurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-11"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "source_port": "correlated_age",
+   "target": [
+    "example-icc-partial",
+    "ord-12"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ordovician"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-12"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-13"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "global-age-model"
+   ],
+   "source_port": "correlated_age",
+   "target": [
+    "example-icc-partial",
+    "ord-13"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-phanerozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-14"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-14"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ediacaran"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-15"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-phanerozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-15"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cryogenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-16"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ediacaran"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-16"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-tonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-17"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cryogenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-17"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-18"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-tonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-18"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-stenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-19"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-19"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ectasian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-20"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-stenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-20"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-calymmian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-21"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ectasian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-21"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-22"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-calymmian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-22"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-statherian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-23"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-23"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-orosirian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-24"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-statherian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-24"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhyacian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-25"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-orosirian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-25"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "gssa-decree"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-26"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhyacian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-26"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-siderian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-27"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "gssa-decree"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-27"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-28"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-siderian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-28"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-29"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleoproterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-29"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-30"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-30"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-31"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-31"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-eoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-32"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-32"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-archean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-33"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-eoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-33"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-hadean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-34"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-archean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-34"
+   ],
+   "target_port": "younger",
+   "kind": "data"
   }
  }
 ]
