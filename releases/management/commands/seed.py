@@ -84,6 +84,18 @@ class Command(BaseCommand):
 
     # --- replace ---
     def _delete_all(self):
+        # 자기참조 PROTECT FK(예: chrono.Unit.parent)는 일괄 delete 를 막는다
+        # (자식이 부모를 참조 → ProtectedError). 삭제 전에 self-FK 를 null 로 끊는다.
+        for label in SEED_MODELS:
+            model = _model(label)
+            if model is None:
+                continue
+            self_fks = [
+                f.name for f in model._meta.fields
+                if f.is_relation and f.remote_field.model is model and f.null
+            ]
+            if self_fks:
+                model.objects.update(**{name: None for name in self_fks})
         n = 0
         for label in DERIVED_MODELS + list(reversed(SEED_MODELS)):
             model = _model(label)
