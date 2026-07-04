@@ -2,12 +2,39 @@
 import math
 
 from engine.kernels import (
-    age_depth_model, compute, dist_from, inverse_variance_combine, moments, range_clamp,
+    age_depth_model, compute, dist_from, inverse_variance_combine, moments, order_check, range_clamp,
 )
 
 
 def _sym(value, sigma1):
     return {"fidelity": "decomposed", "value_ma": value, "sigma": 1, "budget": {"model": sigma1}}
+
+
+def _agein(port, value):
+    return {"dist": {"fidelity": "exact", "value_ma": value}, "params": {}, "port": port}
+
+
+# --- order (선후 검사) ---
+
+def test_order_pass_when_older_is_older():
+    r = order_check([_agein("older", 500), _agein("younger", 400)], {"min_gap": 0})
+    assert r["kind"] == "order" and r["ok"] is True and r["gap"] == 100
+
+def test_order_fail_when_inverted():
+    r = order_check([_agein("older", 300), _agein("younger", 400)], {"min_gap": 0})
+    assert r["ok"] is False and r["gap"] == -100
+
+def test_order_min_gap_duration():
+    # gap 60 < Δ 100 → 위반(최소 지속시간 미달)
+    r = order_check([_agein("older", 460), _agein("younger", 400)], {"min_gap": 100})
+    assert r["ok"] is False
+
+def test_order_missing_input():
+    assert order_check([_agein("older", 500)], {})["ok"] is None
+
+def test_order_via_compute_dispatch():
+    r = compute("clamp", "order", [_agein("older", 500), _agein("younger", 400)], {"min_gap": 0})
+    assert r["ok"] is True
 
 
 def _horizon(depth, value, sigma1):

@@ -116,21 +116,43 @@ def evaluate_graph(graph):
 
 
 def _certify(run, graph, results):
-    """정합성 게이트 스텁 — 게이트웨이 경계 연대의 단조성만 대략 확인(L1), 나머지 skip."""
+    """
+    정합성 게이트 — **L1 순서**: authored `order` 제약(노드)이 있으면 그걸로 판정,
+    없으면 게이트웨이 단조 휴리스틱(스텁)으로 폴백. L2/L3 는 skip(후속: joint reconcile).
+    """
     from .models import CoherenceCertificate
 
     checks = {"L0": "pass", "L1": "skip", "L2": "skip", "L3": "skip"}
     passed = True
 
-    gateways = list(graph.gateways.select_related("boundary"))
-    vals = []
-    for gw in gateways:
-        r = results.get(gw.node.key)
-        if r and r["distribution"] and r["distribution"].get("value_ma") is not None:
-            vals.append(r["distribution"]["value_ma"])
-    if len(vals) >= 2:
-        # 단조(정렬돼 있으면 pass). 실제 층서순 대조는 후속.
-        checks["L1"] = "pass" if vals == sorted(vals) or vals == sorted(vals, reverse=True) else "warn"
-        passed = checks["L1"] != "warn"
+    order_nodes = [n for n in graph.nodes.select_related("node_type") if n.node_type.slug == "order"]
+    if order_nodes:
+        # 사람이 명시한 선후 제약 — 국소·authored·provenance. 위반 시 mode 로 FAIL/WARN.
+        violations, hard_fail = 0, False
+        for n in order_nodes:
+            r = results.get(n.key)
+            d = r["distribution"] if r else None
+            if not d or d.get("ok") is None:
+                continue
+            if not d["ok"]:
+                violations += 1
+                if (n.params or {}).get("mode", "hard") == "hard":
+                    hard_fail = True
+        if violations == 0:
+            checks["L1"] = "pass"
+        elif hard_fail:
+            checks["L1"] = "fail"; passed = False
+        else:
+            checks["L1"] = "warn"
+    else:
+        gateways = list(graph.gateways.select_related("boundary"))
+        vals = []
+        for gw in gateways:
+            r = results.get(gw.node.key)
+            if r and r["distribution"] and r["distribution"].get("value_ma") is not None:
+                vals.append(r["distribution"]["value_ma"])
+        if len(vals) >= 2:
+            checks["L1"] = "pass" if vals == sorted(vals) or vals == sorted(vals, reverse=True) else "warn"
+            passed = checks["L1"] != "warn"
 
     CoherenceCertificate.objects.create(eval_run=run, passed=passed, checks=checks)

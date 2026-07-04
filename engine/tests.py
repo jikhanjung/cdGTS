@@ -80,6 +80,40 @@ def test_pin_emits_exact(node_types):
     assert r.distribution == {"fidelity": "exact", "value_ma": 2500}   # GSSA 점질량
 
 
+def _order_graph(older_val, younger_val, min_gap=0, mode="hard"):
+    g = Graph.objects.create(slug=f"ord-{older_val}-{younger_val}-{min_gap}-{mode}", name="Order")
+    pin = NodeType.objects.get(slug="pin")
+    older = NodeInstance.objects.create(graph=g, key="older", node_type=pin, params={"value": older_val})
+    younger = NodeInstance.objects.create(graph=g, key="younger", node_type=pin, params={"value": younger_val})
+    oc = NodeInstance.objects.create(graph=g, key="oc", node_type=NodeType.objects.get(slug="order"),
+                                     params={"min_gap": min_gap, "mode": mode})
+    Edge.objects.create(graph=g, source=older, source_port="out", target=oc, target_port="older")
+    Edge.objects.create(graph=g, source=younger, source_port="out", target=oc, target_port="younger")
+    return g
+
+
+def test_order_constraint_certifies_pass(node_types):
+    run = evaluate_graph(_order_graph(500, 400))
+    assert run.results.get(node_key="oc").distribution["ok"] is True
+    assert run.certificate.checks["L1"] == "pass" and run.certificate.passed is True
+
+
+def test_order_constraint_hard_violation_fails(node_types):
+    run = evaluate_graph(_order_graph(300, 400, mode="hard"))   # older < younger
+    assert run.results.get(node_key="oc").distribution["ok"] is False
+    assert run.certificate.checks["L1"] == "fail" and run.certificate.passed is False
+
+
+def test_order_constraint_warn_mode_warns(node_types):
+    run = evaluate_graph(_order_graph(300, 400, mode="warn"))
+    assert run.certificate.checks["L1"] == "warn" and run.certificate.passed is True
+
+
+def test_order_constraint_min_gap(node_types):
+    run = evaluate_graph(_order_graph(460, 400, min_gap=100))   # gap 60 < Δ 100
+    assert run.results.get(node_key="oc").distribution["ok"] is False
+
+
 # --- 증분 캐시 ---
 
 def test_incremental_cache_hit_when_unchanged(node_types):

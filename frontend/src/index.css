@@ -119,6 +119,28 @@ body {
 }
 .breadcrumb .ungroup:hover { background: #f0e6fa; }
 
+/* --- order 제약 노드 (세로 핸들 · 선후 검사) --- */
+.order-node {
+  width: 158px; box-sizing: border-box; border: 1.5px solid #a24bd8; border-radius: 10px;
+  background: #fbf6ff; color: #3a2450; font-size: 12px; text-align: center; position: relative;
+}
+.order-node.selected { box-shadow: 0 0 0 2px #a24bd8; }
+.order-node.violated { border-color: #d24b4b; background: #fdf2f2; }
+.order-node.ok { border-color: #4a9d5b; }
+.order-node__port { font-size: 9px; color: #8a7aa0; padding: 3px 0; font-family: ui-monospace, Menlo, monospace; }
+.order-node__port.top { border-bottom: 1px dashed #e6d6f7; }
+.order-node__port.bottom { border-top: 1px dashed #e6d6f7; }
+.order-node__body { padding: 6px 8px; }
+.order-node__title { font-weight: 600; }
+.order-node__rule { font-size: 10px; color: #8a7aa0; margin-top: 2px; }
+.order-node__verdict {
+  margin-top: 5px; font-size: 10px; font-weight: 600; border-radius: 5px; padding: 2px 4px;
+  font-variant-numeric: tabular-nums;
+}
+.order-node__verdict.good { background: #e5f4e9; color: #2f7d45; }
+.order-node__verdict.bad { background: #fbe3e3; color: #b0332f; }
+.order-node__verdict.none { background: #f0edf5; color: #9a8ab0; }
+
 /* --- 우클릭 컨텍스트 메뉴 --- */
 .ctx-backdrop { position: fixed; inset: 0; z-index: 40; }
 .ctx-menu {

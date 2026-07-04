@@ -7,21 +7,26 @@ import '@xyflow/react/dist/style.css'
 
 import CdgtsNode, { CATEGORY_COLOR } from './CdgtsNode.jsx'
 import { GroupNode, StubNode } from './GroupNode.jsx'
+import OrderNode from './OrderNode.jsx'
 import Inspector from './Inspector.jsx'
 import ResultsPanel from './ResultsPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph,
 } from './api.js'
 
-const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode }
+const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode, cdgtsOrder: OrderNode }
 const DEFAULT_NODE_WIDTH = 172   // 기본 폭(px). 사용자가 우측 핸들로 조정 가능.
+
+// 노드타입 slug → React Flow 노드 컴포넌트 종류. order 는 세로 핸들 전용 컴포넌트.
+const rfType = (slug) => (slug === 'order' ? 'cdgtsOrder' : 'cdgts')
+const isRealNode = (t) => t === 'cdgts' || t === 'cdgtsOrder'
 
 // --- API ↔ React Flow 변환 (nodes/edges 는 항상 '전체 실제' 집합; 뷰는 buildView 로 파생) ---
 function apiToRF(graph, typeMap) {
   const nodes = graph.nodes.map((n) => {
     const t = typeMap[n.node_type] || { category: 'process', ports: [] }
     return {
-      id: n.key, type: 'cdgts', position: { x: n.x, y: n.y },
+      id: n.key, type: rfType(n.node_type), position: { x: n.x, y: n.y },
       width: n.width || DEFAULT_NODE_WIDTH,
       data: {
         nodeType: n.node_type, label: n.label, description: n.description || '',
@@ -244,7 +249,7 @@ export default function Editor() {
     const position = screenToFlowPosition({ x: e.clientX, y: e.clientY })
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
     setNodes((nds) => nds.concat({
-      id: key, type: 'cdgts', position, width: DEFAULT_NODE_WIDTH,
+      id: key, type: rfType(slug), position, width: DEFAULT_NODE_WIDTH,
       data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
   }, [screenToFlowPosition, typeMap, setNodes, activeGroup])
@@ -280,7 +285,7 @@ export default function Editor() {
   const onNodeContextMenu = useCallback((e, node) => {
     e.preventDefault()
     if (node.type === 'cdgtsGroup') setMenu({ x: e.clientX, y: e.clientY, kind: 'group', groupKey: node.data.key })
-    else if (node.type === 'cdgts') setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
+    else if (isRealNode(node.type)) setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
   }, [])
   const onPaneContextMenu = useCallback((e) => {
     e.preventDefault()
@@ -303,7 +308,7 @@ export default function Editor() {
   useEffect(() => { const id = setTimeout(() => fitView({ duration: 200 }), 0); return () => clearTimeout(id) }, [activeGroup, fitView])
 
   const onSelectionChange = useCallback(({ nodes: sel }) => {
-    setSelectedIds(sel.filter((n) => n.type === 'cdgts').map((n) => n.id))
+    setSelectedIds(sel.filter((n) => isRealNode(n.type)).map((n) => n.id))
     const g = sel.find((n) => n.type === 'cdgtsGroup')
     setSelectedGroup(g ? g.data.key : null)
   }, [])

@@ -154,17 +154,19 @@
    "slug": "order",
    "name": "Clamp: order",
    "category": "clamp",
-   "description": "이웃 대비 단조 순서 강제.",
+   "description": "두 경계의 시간적 선후 검사 (아래=older ≥ 위=younger + Δ). 검사만·값 불변.",
    "params_schema": {
-    "neighbor": {
-     "type": "node_ref"
+    "min_gap": {
+     "type": "number",
+     "help": "최소 지속시간 Δ (Ma). 0 = 단순 선후."
     },
-    "relation": {
+    "mode": {
      "type": "enum",
      "choices": [
-      "before",
-      "after"
-     ]
+      "hard",
+      "warn"
+     ],
+     "help": "hard=위반 시 FAIL · warn=경고"
     }
    }
   }
@@ -421,32 +423,6 @@
   "model": "nodes.port",
   "fields": {
    "node_type": [
-    "order"
-   ],
-   "name": "target",
-   "direction": "in",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "order"
-   ],
-   "name": "out",
-   "direction": "out",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
     "freeze-version"
    ],
    "name": "target",
@@ -494,6 +470,32 @@
    "datatype": "distribution",
    "multiple": false,
    "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "order"
+   ],
+   "name": "younger",
+   "direction": "in",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "order"
+   ],
+   "name": "older",
+   "direction": "in",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 1
   }
  }
 ]
