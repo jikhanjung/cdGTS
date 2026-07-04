@@ -6,6 +6,7 @@ import {
 import '@xyflow/react/dist/style.css'
 
 import CdgtsNode, { CATEGORY_COLOR } from './CdgtsNode.jsx'
+import Inspector from './Inspector.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph,
 } from './api.js'
@@ -53,6 +54,7 @@ export default function Editor() {
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
   const [status, setStatus] = useState('로딩 중…')
   const [error, setError] = useState(null)
+  const [selectedId, setSelectedId] = useState(null)
   const wrapperRef = useRef(null)
   const { screenToFlowPosition, getViewport, setViewport } = useReactFlow()
 
@@ -151,6 +153,56 @@ export default function Editor() {
     }
   }, [graphId, setNodes])
 
+  // --- 선택 노드 속성 편집 (Inspector) ---
+  const patchNodeData = useCallback((id, fn) => {
+    setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
+  }, [setNodes])
+
+  const onLabel = useCallback((id, label) => {
+    patchNodeData(id, (d) => ({ ...d, label }))
+  }, [patchNodeData])
+
+  const onParam = useCallback((id, key, value) => {
+    patchNodeData(id, (d) => {
+      const params = { ...(d.params || {}) }
+      if (value === undefined) delete params[key]; else params[key] = value
+      return { ...d, params }
+    })
+  }, [patchNodeData])
+
+  const onDist = useCallback((id, key, subKey, value) => {
+    patchNodeData(id, (d) => {
+      const params = { ...(d.params || {}) }
+      const dist = { ...(params[key] || {}) }
+      if (subKey.startsWith('budget.')) {
+        const bk = subKey.slice('budget.'.length)
+        const budget = { ...(dist.budget || {}) }
+        if (value === undefined) delete budget[bk]; else budget[bk] = value
+        if (Object.keys(budget).length) dist.budget = budget; else delete dist.budget
+      } else if (value === undefined) {
+        delete dist[subKey]
+      } else {
+        dist[subKey] = value
+      }
+      params[key] = dist
+      return { ...d, params }
+    })
+  }, [patchNodeData])
+
+  const onReplaceParams = useCallback((id, params) => {
+    patchNodeData(id, (d) => ({ ...d, params }))
+  }, [patchNodeData])
+
+  const selectedNode = useMemo(
+    () => nodes.find((n) => n.id === selectedId) || null,
+    [nodes, selectedId],
+  )
+  const nodeKeys = useMemo(
+    () => nodes.filter((n) => n.id !== selectedId)
+      .map((n) => ({ id: n.id, label: n.data.label || n.data.nodeType })),
+    [nodes, selectedId],
+  )
+
   const grouped = useMemo(() => {
     const g = { data: [], process: [], clamp: [] }
     types.forEach((t) => (g[t.category] || (g[t.category] = [])).push(t))
@@ -206,6 +258,7 @@ export default function Editor() {
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
+            onSelectionChange={({ nodes: sel }) => setSelectedId(sel[0]?.id ?? null)}
             nodeTypes={nodeTypes}
             fitView
           >
@@ -215,6 +268,17 @@ export default function Editor() {
           </ReactFlow>
         </div>
       </main>
+
+      <Inspector
+        key={selectedNode?.id || 'none'}
+        node={selectedNode}
+        type={selectedNode ? typeMap[selectedNode.data.nodeType] : null}
+        nodeKeys={nodeKeys}
+        onLabel={(v) => onLabel(selectedNode.id, v)}
+        onParam={(k, v) => onParam(selectedNode.id, k, v)}
+        onDist={(k, sk, v) => onDist(selectedNode.id, k, sk, v)}
+        onReplaceParams={(p) => onReplaceParams(selectedNode.id, p)}
+      />
     </div>
   )
 }

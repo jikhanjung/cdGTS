@@ -123,3 +123,37 @@ body {
   border-radius: 0 0 5px 5px; display: flex; justify-content: space-between; align-items: center;
 }
 .cdgts-node__result .cached { color: #2d7d46; font-size: 14px; line-height: 1; }
+
+/* --- 인스펙터 (우측 속성 패널) --- */
+.inspector {
+  width: 280px; flex-shrink: 0; background: #f6f6f9; border-left: 1px solid #e2e2ea;
+  padding: 12px 14px; overflow-y: auto;
+}
+.inspector.empty { display: flex; align-items: flex-start; }
+.inspector .hint { font-size: 12px; color: #767688; margin: 8px 0; line-height: 1.5; }
+.insp-head { border-top: 3px solid #888; padding-top: 8px; margin-bottom: 10px; }
+.insp-type { font-size: 13px; font-weight: 600; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.insp-cat { font-size: 9px; text-transform: uppercase; color: #767688; margin-left: 6px; letter-spacing: 0.5px; }
+.insp-field { margin-bottom: 9px; }
+.insp-label { display: block; font-size: 11px; color: #55555f; margin-bottom: 3px; font-weight: 500; }
+.insp-help { color: #a0a0b0; cursor: help; }
+.insp-input {
+  width: 100%; border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px;
+  font-size: 13px; background: #fff; color: #1c1c22;
+}
+.insp-checks { display: flex; flex-direction: column; gap: 3px; }
+.insp-check { font-size: 12px; display: flex; align-items: center; gap: 6px; color: #1c1c22; }
+.insp-check input { margin: 0; }
+.insp-dist { border: 1px solid #e2e2ea; border-radius: 6px; padding: 8px 10px 4px; margin-bottom: 10px; background: #fff; }
+.insp-dist legend { font-size: 11px; color: #55555f; padding: 0 4px; font-weight: 600; }
+.insp-note { font-size: 12px; color: #767688; line-height: 1.5; margin: 6px 0; }
+.insp-note code { background: #ececf2; padding: 1px 4px; border-radius: 4px; }
+.insp-raw { margin-top: 8px; }
+.insp-raw summary { font-size: 12px; color: #767688; cursor: pointer; }
+.insp-json {
+  width: 100%; min-height: 120px; margin-top: 6px; border: 1px solid #cfcfe0; border-radius: 6px;
+  padding: 6px 8px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 12px;
+  background: #fff; color: #1c1c22; resize: vertical;
+}
+.insp-json-err { color: #a3271b; font-size: 11px; margin-top: 4px; }
+.insp-foot { font-size: 11px; color: #909098; margin-top: 12px; line-height: 1.5; }
