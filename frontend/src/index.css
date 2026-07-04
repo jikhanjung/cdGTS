@@ -65,6 +65,21 @@ body {
 .topo-removed .op { background: #c0392b; }
 .topo-retype .op { background: #a142f4; }
 
+/* --- ICC 차트 (중첩 컬럼) --- */
+.iccchart { height: 100%; display: flex; flex-direction: column; padding: 14px 20px; box-sizing: border-box; }
+.iccchart-controls { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+.iccchart-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
+.iccchart-controls select { border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px; font-size: 13px; max-width: 360px; }
+.scale-toggle { display: inline-flex; border: 1px solid #cfcfe0; border-radius: 6px; overflow: hidden; }
+.scale-toggle button { border: none; background: #fff; padding: 5px 10px; font-size: 12px; cursor: pointer; color: #555; }
+.scale-toggle button.active { background: #7a2fbf; color: #fff; }
+.iccchart-status { font-size: 12px; color: #767688; margin-left: auto; }
+.iccchart-scroll { overflow: auto; flex: 1; border: 1px solid #ececf2; border-radius: 8px; background: #fff; }
+.icc-colhdr { font-size: 12px; font-weight: 700; fill: #555; text-transform: uppercase; letter-spacing: 0.5px; }
+.icc-axis { font-size: 9px; fill: #9a9aa8; font-variant-numeric: tabular-nums; }
+.icc-band { font-size: 10px; fill: #23202a; font-weight: 500; pointer-events: none; }
+.iccchart-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; }
+
 /* --- 노드그룹 (접힌 노드 · 인터페이스 스텁 · breadcrumb) --- */
 .group-node {
   width: 100%; box-sizing: border-box; border: 1.5px dashed #a142f4; border-radius: 10px;

@@ -26,6 +26,9 @@ export const evaluateGraph = (id) =>
 export const bakeGraph = (id) =>
   fetch(`/api/graphs/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
+// 그래프 산출물 → ICC식 중첩 컬럼 차트 데이터 (Eon/Era/Period 밴드).
+export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
+
 // --- 릴리스 / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)

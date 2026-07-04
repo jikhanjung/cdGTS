@@ -78,6 +78,23 @@ def test_bake_graph_produces_icc_table(seeded):
     assert len(resp.data["release"]["records"]) == 36
 
 
+def test_icc_chart_tiles_by_rank(seeded):
+    """ICC 차트 엔드포인트 — Eon/Era/Period 를 rank 별 base 연대로 타일링(top=younger, bottom=older)."""
+    from graph.models import Graph
+    from rest_framework.test import APIClient
+    g = Graph.objects.get(slug="example-icc-partial")
+    resp = APIClient().get(f"/api/graphs/{g.pk}/icc-chart/")
+    assert resp.status_code == 200
+    d = resp.data
+    assert d["max_ma"] == 4567.0
+    lv = {x["rank"]: x["bands"] for x in d["levels"]}
+    assert (len(lv["Eon"]), len(lv["Era"]), len(lv["Period"])) == (4, 10, 22)
+    eon = {b["slug"]: b for b in lv["Eon"]}
+    assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8
+    assert eon["hadean"]["bottom"] == 4567.0
+    assert lv["Period"][0]["slug"] == "quaternary" and lv["Period"][0]["top"] == 0.0
+
+
 def test_finer_boundaries_registry_only(seeded):
     """Epoch/Age 경계는 registry(Boundary)에만 — 네트웍(게이트웨이)엔 없다. period+ 는 네트웍에."""
     from graph.models import Gateway
