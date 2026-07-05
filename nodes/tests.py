@@ -64,7 +64,8 @@ def test_catalog_loads(seeded):
 def test_ports_wired(seeded):
     adm = NodeType.objects.get(slug="age-depth-model")
     assert [p.name for p in adm.input_ports] == ["dated_horizons"]
-    assert [p.name for p in adm.output_ports] == ["horizon_age"]
+    # horizon_age(값) + order 참여용 세로 포트 older/younger (published-age 미러, 순수 배선)
+    assert [p.name for p in adm.output_ports] == ["horizon_age", "older", "younger"]
     assert adm.input_ports.first().multiple is True
 
 
@@ -85,4 +86,4 @@ def test_node_types_api(seeded):
     assert resp.status_code == 200
     adm = next(t for t in resp.data if t["slug"] == "age-depth-model")
     assert adm["category"] == "process"
-    assert {p["name"] for p in adm["ports"]} == {"dated_horizons", "horizon_age"}
+    assert {p["name"] for p in adm["ports"]} == {"dated_horizons", "horizon_age", "older", "younger"}
