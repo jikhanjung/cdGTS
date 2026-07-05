@@ -31,118 +31,6 @@
  {
   "model": "chrono.unit",
   "fields": {
-   "slug": "permian",
-   "name": "Permian",
-   "rank": 3,
-   "parent": null,
-   "color": "#F04028"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "lopingian",
-   "name": "Lopingian",
-   "rank": 4,
-   "parent": [
-    "permian"
-   ],
-   "color": "#FBA794"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "changhsingian",
-   "name": "Changhsingian",
-   "rank": 5,
-   "parent": [
-    "lopingian"
-   ],
-   "color": "#FCC0B2"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "triassic",
-   "name": "Triassic",
-   "rank": 3,
-   "parent": null,
-   "color": "#812B92"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "early-triassic",
-   "name": "Early Triassic",
-   "rank": 4,
-   "parent": [
-    "triassic"
-   ],
-   "color": ""
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "induan",
-   "name": "Induan",
-   "rank": 5,
-   "parent": [
-    "early-triassic"
-   ],
-   "color": "#A4469F"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "ediacaran",
-   "name": "Ediacaran",
-   "rank": 3,
-   "parent": null,
-   "color": "#FED96A"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "cambrian",
-   "name": "Cambrian",
-   "rank": 3,
-   "parent": null,
-   "color": "#7FA056"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "terreneuvian",
-   "name": "Terreneuvian",
-   "rank": 4,
-   "parent": [
-    "cambrian"
-   ],
-   "color": "#8CB06C"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
-   "slug": "fortunian",
-   "name": "Fortunian",
-   "rank": 5,
-   "parent": [
-    "terreneuvian"
-   ],
-   "color": "#99B575"
-  }
- },
- {
-  "model": "chrono.unit",
-  "fields": {
    "slug": "hadean",
    "name": "Hadean",
    "rank": 1,
@@ -278,6 +166,46 @@
     "phanerozoic"
    ],
    "color": "#99C08D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "permian",
+   "name": "Permian",
+   "rank": 3,
+   "parent": null,
+   "color": "#F04028"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "triassic",
+   "name": "Triassic",
+   "rank": 3,
+   "parent": null,
+   "color": "#812B92"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ediacaran",
+   "name": "Ediacaran",
+   "rank": 3,
+   "parent": null,
+   "color": "#FED96A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrian",
+   "name": "Cambrian",
+   "rank": 3,
+   "parent": null,
+   "color": "#7FA056"
   }
  },
  {
@@ -499,10 +427,36 @@
  {
   "model": "chrono.unit",
   "fields": {
-   "slug": "lowermississippian",
-   "name": "LowerMississippian",
+   "slug": "lopingian",
+   "name": "Lopingian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "permian"
+   ],
+   "color": "#FBA794"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "terreneuvian",
+   "name": "Terreneuvian",
+   "rank": 4,
+   "parent": [
+    "cambrian"
+   ],
+   "color": "#8CB06C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowermississippian",
+   "name": "Lower Mississippian",
+   "rank": 4,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#80AB6C"
   }
  },
@@ -510,9 +464,11 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowerpennsylvanian",
-   "name": "LowerPennsylvanian",
+   "name": "Lower Pennsylvanian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#8CBEB4"
   }
  },
@@ -520,9 +476,11 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middlemississippian",
-   "name": "MiddleMississippian",
+   "name": "Middle Mississippian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#99B46C"
   }
  },
@@ -530,9 +488,11 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middlepennsylvanian",
-   "name": "MiddlePennsylvanian",
+   "name": "Middle Pennsylvanian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#A6C7B7"
   }
  },
@@ -540,9 +500,11 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "uppermississippian",
-   "name": "UpperMississippian",
+   "name": "Upper Mississippian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#B3BE6C"
   }
  },
@@ -550,7 +512,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "cambrianseries2",
-   "name": "CambrianSeries2",
+   "name": "Cambrian Series 2",
    "rank": 4,
    "parent": [
     "cambrian"
@@ -562,7 +524,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowerordovician",
-   "name": "LowerOrdovician",
+   "name": "Lower Ordovician",
    "rank": 4,
    "parent": [
     "ordovician"
@@ -574,7 +536,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowertriassic",
-   "name": "LowerTriassic",
+   "name": "Lower Triassic",
    "rank": 4,
    "parent": [
     "triassic"
@@ -598,7 +560,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middledevonian",
-   "name": "MiddleDevonian",
+   "name": "Middle Devonian",
    "rank": 4,
    "parent": [
     "devonian"
@@ -610,7 +572,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middleordovician",
-   "name": "MiddleOrdovician",
+   "name": "Middle Ordovician",
    "rank": 4,
    "parent": [
     "ordovician"
@@ -622,7 +584,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middletriassic",
-   "name": "MiddleTriassic",
+   "name": "Middle Triassic",
    "rank": 4,
    "parent": [
     "triassic"
@@ -658,7 +620,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "upperdevonian",
-   "name": "UpperDevonian",
+   "name": "Upper Devonian",
    "rank": 4,
    "parent": [
     "devonian"
@@ -670,9 +632,11 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "upperpennsylvanian",
-   "name": "UpperPennsylvanian",
+   "name": "Upper Pennsylvanian",
    "rank": 4,
-   "parent": null,
+   "parent": [
+    "carboniferous"
+   ],
    "color": "#BFD0BA"
   }
  },
@@ -740,7 +704,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowerdevonian",
-   "name": "LowerDevonian",
+   "name": "Lower Devonian",
    "rank": 4,
    "parent": [
     "devonian"
@@ -776,7 +740,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "upperjurassic",
-   "name": "UpperJurassic",
+   "name": "Upper Jurassic",
    "rank": 4,
    "parent": [
     "jurassic"
@@ -788,7 +752,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "upperordovician",
-   "name": "UpperOrdovician",
+   "name": "Upper Ordovician",
    "rank": 4,
    "parent": [
     "ordovician"
@@ -800,7 +764,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "uppertriassic",
-   "name": "UpperTriassic",
+   "name": "Upper Triassic",
    "rank": 4,
    "parent": [
     "triassic"
@@ -836,7 +800,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowerjurassic",
-   "name": "LowerJurassic",
+   "name": "Lower Jurassic",
    "rank": 4,
    "parent": [
     "jurassic"
@@ -848,7 +812,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "middlejurassic",
-   "name": "MiddleJurassic",
+   "name": "Middle Jurassic",
    "rank": 4,
    "parent": [
     "jurassic"
@@ -872,7 +836,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "lowercretaceous",
-   "name": "LowerCretaceous",
+   "name": "Lower Cretaceous",
    "rank": 4,
    "parent": [
     "cretaceous"
@@ -896,12 +860,48 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "uppercretaceous",
-   "name": "UpperCretaceous",
+   "name": "Upper Cretaceous",
    "rank": 4,
    "parent": [
     "cretaceous"
    ],
    "color": "#A6D84A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "changhsingian",
+   "name": "Changhsingian",
+   "rank": 5,
+   "parent": [
+    "lopingian"
+   ],
+   "color": "#FCC0B2"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "induan",
+   "name": "Induan",
+   "rank": 5,
+   "parent": [
+    "lowertriassic"
+   ],
+   "color": "#A4469F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "fortunian",
+   "name": "Fortunian",
+   "rank": 5,
+   "parent": [
+    "terreneuvian"
+   ],
+   "color": "#99B575"
   }
  },
  {
@@ -1112,7 +1112,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "cambrianstage10",
-   "name": "CambrianStage10",
+   "name": "Cambrian Stage 10",
    "rank": 5,
    "parent": [
     "furongian"
@@ -1124,7 +1124,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "cambrianstage2",
-   "name": "CambrianStage2",
+   "name": "Cambrian Stage 2",
    "rank": 5,
    "parent": [
     "terreneuvian"
@@ -1136,7 +1136,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "cambrianstage3",
-   "name": "CambrianStage3",
+   "name": "Cambrian Stage 3",
    "rank": 5,
    "parent": [
     "cambrianseries2"
@@ -1148,7 +1148,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "cambrianstage4",
-   "name": "CambrianStage4",
+   "name": "Cambrian Stage 4",
    "rank": 5,
    "parent": [
     "cambrianseries2"
@@ -1988,7 +1988,7 @@
   "model": "chrono.unit",
   "fields": {
    "slug": "upperpleistocene",
-   "name": "UpperPleistocene",
+   "name": "Upper Pleistocene",
    "rank": 5,
    "parent": [
     "pleistocene"

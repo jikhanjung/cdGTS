@@ -28,8 +28,9 @@ def test_separates_and_hierarchy(seeded):
     assert bt.definition_type == Boundary.DefinitionType.GSSP
     assert bt.below.name == "Changhsingian"
     assert bt.above.name == "Induan"
-    # 위계: Induan(Age) < Early Triassic(Epoch) < Triassic(Period)
-    assert bt.above.parent.name == "Early Triassic"
+    # 위계: Induan(Age) < Lower Triassic(Epoch) < Triassic(Period)
+    # (early-triassic 중복 제거 → induan 은 chart.ttl 정본 lowertriassic 아래)
+    assert bt.above.parent.name == "Lower Triassic"
     assert bt.above.parent.parent.name == "Triassic"
 
 

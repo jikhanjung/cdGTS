@@ -28,8 +28,9 @@ def _counts():
 
 def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
-    # ICS chart.ttl 전 rank: units 176(Eon4/Era10/Period22/Epoch38/Age102) · boundary 175 · type 13
-    assert (units, boundaries, types, graphs) == (176, 175, 13, 4)
+    # ICS chart.ttl 전 rank: units 175(Eon4/Era10/Period22/Epoch37/Age102) · boundary 175 · type 13
+    # (early-triassic 중복 orphan 제거로 176→175)
+    assert (units, boundaries, types, graphs) == (175, 175, 13, 4)
     # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 175 bake
     assert (releases, records) == (3, 180)
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
@@ -52,12 +53,12 @@ def test_add_is_idempotent(seeded):
 
 def test_bake_graph_produces_icc_table(seeded):
     """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다.
-    period 이상(Eon/Era/Period) 36경계 = 예제 파이프라인 3 + ICS 공표값 데이터 노드 33."""
+    계층 완성: 그래프가 **전 175 ICC 경계**(Eon…Age)를 재구성 → 공표 릴리스와 대칭."""
     from graph.models import Graph
     from releases.services import bake_graph
     g = Graph.objects.get(slug="example-icc-partial")
     rel, n = bake_graph(g)
-    assert n == 120                                          # period+ 36 + 전 period age 세분 84
+    assert n == 175                                          # 전 ICC 경계 (period+ 36·age 91·epoch 25·첫 age/epoch 23)
     assert rel.version == "graph:example-icc-partial"
     recs = {r.boundary.slug: r for r in rel.records.select_related("boundary")}
     # 예제 파이프라인 값 유지
@@ -69,18 +70,18 @@ def test_bake_graph_produces_icc_table(seeded):
     assert recs["base-hadean"].value_ma == 4567.0 and recs["base-hadean"].definition_type == "GSSA"
     # 재-bake 는 같은 릴리스에 멱등
     rel2, n2 = bake_graph(g)
-    assert n2 == 120 and rel2.pk == rel.pk
+    assert n2 == 175 and rel2.pk == rel.pk
 
     # HTTP 엔드포인트도 확인
     from rest_framework.test import APIClient
     resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
-    assert resp.status_code == 200 and resp.data["baked"] == 120
+    assert resp.status_code == 200 and resp.data["baked"] == 175
     assert resp.data["release"]["version"] == "graph:example-icc-partial"
-    assert len(resp.data["release"]["records"]) == 120
+    assert len(resp.data["release"]["records"]) == 175
 
 
 def test_icc_chart_tiles_by_rank(seeded):
-    """ICC 차트 엔드포인트 — Eon/Era/Period 를 rank 별 base 연대로 타일링(top=younger, bottom=older)."""
+    """ICC 차트 엔드포인트 — 조립 그래프가 Eon…Age 5 rank 를 rank 별 base 연대로 타일링(top=younger, bottom=older)."""
     from graph.models import Graph
     from rest_framework.test import APIClient
     g = Graph.objects.get(slug="example-icc-partial")
@@ -89,7 +90,10 @@ def test_icc_chart_tiles_by_rank(seeded):
     d = resp.data
     assert d["max_ma"] == 4567.0
     lv = {x["rank"]: x["bands"] for x in d["levels"]}
+    # 계층 완성: 그래프-bake 도 공표 릴리스와 대칭인 5 rank 컬럼
+    assert [x["rank"] for x in d["levels"]] == ["Eon", "Era", "Period", "Epoch", "Age"]
     assert (len(lv["Eon"]), len(lv["Era"]), len(lv["Period"])) == (4, 10, 22)
+    assert len(lv["Epoch"]) == 37 and len(lv["Age"]) == 102     # 공표 릴리스와 동일
     eon = {b["slug"]: b for b in lv["Eon"]}
     assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8
     assert eon["hadean"]["bottom"] == 4567.0
@@ -97,6 +101,15 @@ def test_icc_chart_tiles_by_rank(seeded):
     # 공식 ICS 색 주입 확인 (Triassic = #812B92)
     per = {b["slug"]: b for b in lv["Period"]}
     assert per["triassic"]["color"] == "#812B92"
+    # Epoch 은 별도 노드 없이 일치 age pub 에 게이트웨이로 산출 → base(Middle Triassic)=base(Anisian)
+    ep = {b["slug"]: b for b in lv["Epoch"]}
+    age = {b["slug"]: b for b in lv["Age"]}
+    assert ep["middletriassic"]["bottom"] == age["anisian"]["bottom"] == 247.0
+    # 타일링 폐합 회귀: 첫 age/epoch(=period base, coincident GSSP)가 등록돼 밴드가 period 경계에서 닫힘.
+    # (없으면 이전 period 마지막 밴드가 P-T 경계를 넘어 Induan/Lower Triassic 을 삼켰다)
+    assert age["induan"]["bottom"] == ep["lowertriassic"]["bottom"] == 251.9022
+    assert age["changhsingian"]["top"] == 251.9022            # 경계 넘지 않음
+    assert ep["lopingian"]["top"] == 251.9022
 
 
 def test_release_icc_chart_five_ranks(seeded):
@@ -154,29 +167,33 @@ def test_l2_duration_gate(seeded):
     assert cert2.checks["L2"] == "fail" and not cert2.passed
 
 
-def test_finer_boundaries_registry_only(seeded):
-    """대부분 Epoch/Age 경계는 registry(Boundary)에만. period+ 는 네트웍. 단 Triassic age 는 프로토타입 그룹으로 네트웍에."""
-    from graph.models import Gateway
-    assert Boundary.objects.filter(slug="base-fortunian").exists()        # Age → registry
-    assert not Gateway.objects.filter(boundary__slug="base-fortunian").exists()
-    assert Gateway.objects.filter(boundary__slug="base-jurassic").exists()  # Period → 네트웍
+def test_graph_reconstructs_full_icc(seeded):
+    """계층 완성 — 조립 그래프가 전 ICC 경계(Eon…Age)를 게이트웨이로 산출. registry-only 경계 없음."""
+    from graph.models import Graph, Gateway
+    g = Graph.objects.get(slug="example-icc-partial")
+    covered = set(Gateway.objects.filter(graph=g).values_list("boundary__slug", flat=True))
+    assert covered == set(Boundary.objects.values_list("slug", flat=True))    # 모든 경계가 네트웍에
+    assert Gateway.objects.filter(graph=g, boundary__slug="base-fortunian").exists()  # 첫 age 도 coincident 게이트웨이
+    assert Gateway.objects.filter(graph=g, boundary__slug="base-jurassic").exists()   # Period
 
 
 def test_age_groups_all_periods(seeded):
     """전 period age 노드그룹 — Triassic 프로토타입 일반화. 그룹당 내부 age 분할점 + order 체인, tie 는 밖."""
-    from graph.models import Graph, NodeGroup, Gateway
+    from graph.models import Graph, NodeGroup, Gateway, NodeInstance
     from engine.evaluate import evaluate_graph
     g = Graph.objects.get(slug="example-icc-partial")
-    assert g.groups.filter(key__startswith="ages-").count() == 11     # age 세분 있는 period
+    assert g.groups.filter(key__startswith="ages-").count() == 12     # age 세분 있는 period(Carboniferous 포함)
     grp = NodeGroup.objects.get(graph=g, key="ages-triassic")
     keys = set(grp.members.values_list("key", flat=True))
     # 멤버 = 내부 age pub 6 + 내부 order 5 (period 경계에 tie 하는 order 2 는 그룹 밖)
     assert {"pub-olenekian", "pub-anisian", "pub-ladinian", "pub-carnian", "pub-norian", "pub-rhaetian"} <= keys
     assert "oa-olenekian" not in keys and "oa-jurassic" not in keys    # tie order 는 외부
     assert len(keys) == 11
-    # 내부 age 는 네트웍(게이트웨이)에, 공유 경계 induan(=period base) 은 분할점 아님
+    # 내부 age 는 pub 노드 + 게이트웨이. 첫 age induan(=period base)은 pub 없이
+    # period 산출노드에 coincident 게이트웨이로만 등록(하나의 GSSP 가 base-triassic 과 공유).
     assert Gateway.objects.filter(graph=g, boundary__slug="base-olenekian").exists()
-    assert not Gateway.objects.filter(graph=g, boundary__slug="base-induan").exists()
+    assert not NodeInstance.objects.filter(graph=g, key="pub-induan").exists()      # 첫 age = pub 없음
+    assert Gateway.objects.filter(graph=g, boundary__slug="base-induan").exists()    # coincident 게이트웨이는 존재
     # 전 age 체인 통과 → L1·L2 pass
     run = evaluate_graph(g)
     assert run.certificate.passed and run.certificate.checks["L2"] == "pass"
