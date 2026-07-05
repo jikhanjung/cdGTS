@@ -476,6 +476,32 @@
   "model": "nodes.port",
   "fields": {
    "node_type": [
+    "published-age"
+   ],
+   "name": "older",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 1
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "published-age"
+   ],
+   "name": "younger",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 2
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
     "order"
    ],
    "name": "younger",

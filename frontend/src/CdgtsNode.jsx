@@ -9,10 +9,16 @@ export const CATEGORY_COLOR = {
 // 포트를 세로로 분산 배치 (i번째 / (n+1)).
 const topPct = (i, n) => `${((i + 1) / (n + 1)) * 100}%`
 
+// order 참여용 세로 포트(위=older, 아래=younger). 값 자체는 side 'out' 과 동일 —
+// 위치가 '시간축 위의 점' 역할을 표현. 위=older 는 위쪽(younger 이웃) order 로 올라가기 때문.
+const VPORT = { older: Position.Top, younger: Position.Bottom }
+const ORDER_COLOR = '#a24bd8'
+
 export default function CdgtsNode({ data, selected }) {
   const ports = data.ports || []
   const inputs = ports.filter((p) => p.direction === 'in')
-  const outputs = ports.filter((p) => p.direction === 'out')
+  const outputs = ports.filter((p) => p.direction === 'out' && !(p.name in VPORT))
+  const vouts = ports.filter((p) => p.direction === 'out' && p.name in VPORT)
   const color = CATEGORY_COLOR[data.category] || '#888'
   const rows = Math.max(inputs.length, outputs.length, 1)
 
@@ -67,6 +73,17 @@ export default function CdgtsNode({ data, selected }) {
           position={Position.Right}
           id={p.name}
           style={{ top: topPct(i, outputs.length), background: color }}
+        />
+      ))}
+      {vouts.map((p) => (
+        <Handle
+          key={`v-${p.name}`}
+          type="source"
+          position={VPORT[p.name]}
+          id={p.name}
+          title={`${p.name} (order)`}
+          className="vport"
+          style={{ background: ORDER_COLOR }}
         />
       ))}
     </div>
