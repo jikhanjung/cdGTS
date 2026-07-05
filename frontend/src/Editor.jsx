@@ -622,7 +622,7 @@ export default function Editor() {
             autoPanOnSelection={false}           // 선택 중 auto-pan 금지 — pan 하면 screenStart 가 이동해 박스 x 가 튐
             panOnDrag={IS_TOUCH ? true : [1]}    // 터치: 드래그 팬 / 데스크톱: 가운데버튼
             zoomOnPinch                          // 터치: 핀치 줌
-            selectionMode={SelectionMode.Partial}
+            selectionMode={SelectionMode.Full}  // 완전히 감싼 노드만 선택 — 살짝 스친 넓은 노드까지 잡혀 놓는 순간 박스가 커지던 문제 방지
             multiSelectionKeyCode="Shift"        // Shift+클릭 = 추가 선택
             fitView
           >
