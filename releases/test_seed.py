@@ -137,6 +137,23 @@ def test_narrate_release_renders_and_persists(seeded):
     assert per[0]["value_ma"] >= per[-1]["value_ma"]
 
 
+def test_l2_duration_gate(seeded):
+    """L2 지속시간 — 유닛 duration(base−top) 자동 검사. 영-길이면 L1(gap≥0)은 통과해도 L2 fail."""
+    from graph.models import Graph, NodeInstance
+    from engine.evaluate import evaluate_graph
+    g = Graph.objects.get(slug="example-icc-partial")
+    cert = evaluate_graph(g).certificate
+    assert cert.checks["L2"] == "pass" and cert.passed
+
+    # pub-olenekian(250.8, Age) 을 anisian(247.0) 과 동일화 → 같은 rank 영-길이 유닛
+    n = NodeInstance.objects.get(graph=g, key="pub-olenekian")
+    n.params["distribution"]["value_ma"] = 247.0
+    n.save()
+    cert2 = evaluate_graph(g).certificate
+    assert cert2.checks["L1"] == "pass"        # order 는 gap≥0 이라 coincidence 허용
+    assert cert2.checks["L2"] == "fail" and not cert2.passed
+
+
 def test_finer_boundaries_registry_only(seeded):
     """대부분 Epoch/Age 경계는 registry(Boundary)에만. period+ 는 네트웍. 단 Triassic age 는 프로토타입 그룹으로 네트웍에."""
     from graph.models import Gateway

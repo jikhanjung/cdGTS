@@ -117,8 +117,11 @@ def evaluate_graph(graph):
 
 def _certify(run, graph, results):
     """
-    정합성 게이트 — **L1 순서**: authored `order` 제약(노드)이 있으면 그걸로 판정,
-    없으면 게이트웨이 단조 휴리스틱(스텁)으로 폴백. L2/L3 는 skip(후속: joint reconcile).
+    정합성 게이트.
+      L1 순서 — authored `order` 제약(노드)이 있으면 그걸로, 없으면 게이트웨이 단조 휴리스틱 폴백.
+      L2 지속시간 — 게이트웨이가 덮는 **모든 유닛의 [base, top] 길이**를 rank 별 타일링으로 자동(파생) 검사.
+        authored·sparse 한 order(L1) 를 보완하는 안전망. duration ≤ 0(퇴화/영-길이) → fail.
+      L3 은 skip(후속: joint reconcile).
     """
     from .models import CoherenceCertificate
 
@@ -154,5 +157,30 @@ def _certify(run, graph, results):
         if len(vals) >= 2:
             checks["L1"] = "pass" if vals == sorted(vals) or vals == sorted(vals, reverse=True) else "warn"
             passed = checks["L1"] != "warn"
+
+    # L2 지속시간 — 게이트웨이 산출값 → 유닛 base. rank 별로 base 오름차순 타일링해
+    # 각 유닛 duration = base − top(이전 젊은 base, 가장 젊은 것은 0). ≤0 이면 퇴화 유닛 → fail.
+    from chrono.models import Unit
+    unit_base = {}
+    for gw in graph.gateways.select_related("boundary", "node"):
+        if gw.boundary is None or not gw.boundary.slug.startswith("base-"):
+            continue
+        r = results.get(gw.node.key)
+        v = (r["distribution"] or {}).get("value_ma") if r and r["distribution"] else None
+        if v is not None:
+            unit_base[gw.boundary.slug[len("base-"):]] = float(v)
+    if unit_base:
+        rank_of = {u.slug: u.rank for u in Unit.objects.filter(slug__in=unit_base.keys())}
+        degenerate = 0
+        for rank_n in set(rank_of.values()):
+            bases = sorted(b for s, b in unit_base.items() if rank_of.get(s) == rank_n)
+            prev = 0.0
+            for b in bases:
+                if b - prev <= 0:            # 같은 rank 인접 base 동일/역전 = 영-길이 유닛
+                    degenerate += 1
+                prev = b
+        checks["L2"] = "pass" if degenerate == 0 else "fail"
+        if degenerate:
+            passed = False
 
     CoherenceCertificate.objects.create(eval_run=run, passed=passed, checks=checks)
