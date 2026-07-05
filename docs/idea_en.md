@@ -31,6 +31,8 @@ The geologic time scale is published only as a "book / major release" on a rough
 Data is divided into the following layers. Higher layers are derived from lower ones.
 
 > Note: this layered structure is reinterpreted as a **node graph (DAG)** in [node-graph-paradigm_en.md](node-graph-paradigm_en.md). Layer 2 = data nodes, Layers 3–5 = process/model nodes, Layer 6 = the result of evaluating the graph.
+>
+> **[Later reframing]** In implementation this linear layering folded into **tier (registry/graph/release) × category (data/process/clamp)**, and the layer numbers now hold only as a reading order (narrative). §5 below is preserved as the original brainstorming. Current spine: [tier-category-model_en.md](tier-category-model_en.md) · [concept-map_en.md](concept-map_en.md) §1.
 
 ### Layer 0 — Nomenclature / hierarchy
 

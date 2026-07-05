@@ -32,13 +32,15 @@ Like Blender's geometry nodes, the core metaphor is a network (DAG) of **data no
 
 Provenance (the FAIR principles), incremental re-evaluation, and what-if comparison are naturally built into the graph structure.
 
-## The layer spine (Layer 0–6)
+## Structure — tier × category
 
-Nomenclature (0) → boundary definition (1) → primary observations (2) → local age model (3) → correlation (4) → global synthesis · coherence gate (5) → publication (6). Higher layers derive from lower ones. Publication yields two outputs: **ICC = bake (a frozen snapshot)**, **GTS = narrate (a book)**.
+The pipeline is organized into three **tiers**: **registry** (canonical units·boundaries) → **graph** (the evaluated node network) → **release** (frozen output). Nodes inside the graph tier fall into three **categories**: **data / process / clamp**. Publication yields two outputs: **ICC = bake (a frozen snapshot)**, **GTS = narrate (a book)**.
+
+> The original linear layers (nomenclature 0 → boundary 1 → observations 2 → age model 3 → correlation 4 → synthesis 5 → publication 6) now hold only as a **human reading order** — the implementation folded them into tier × category. Details: [docs/tier-category-model_en.md](docs/tier-category-model_en.md).
 
 ## Documents
 
-The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map_en.md) — start here** (the layer spine · document map · five convergence points).
+The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map_en.md) — start here** (the tier × category spine · document map · five convergence points).
 
 **Concept**
 - [docs/naming_en.md](docs/naming_en.md) — name & typography decisions and rationale (Continuously Deployed · geologic · Time Scale)

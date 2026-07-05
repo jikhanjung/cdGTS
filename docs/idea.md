@@ -31,6 +31,8 @@
 데이터를 다음 계층으로 나눈다. 상위 계층은 하위 계층으로부터 파생된다.
 
 > 참고: 이 계층 구조는 [node-graph-paradigm.md](node-graph-paradigm.md)에서 **노드 그래프(DAG)** 로 재해석된다. Layer 2 = 데이터 노드, Layer 3~5 = 프로세스/모델 노드, Layer 6 = 그래프 평가 결과.
+>
+> **[이후 재구성]** 구현에서 이 선형 레이어는 **티어(registry/graph/release) × 카테고리(data/process/clamp)** 로 접혔고, 레이어 번호는 이제 읽기 순서(서사)로만 유효하다. 아래 §5는 그 원래 브레인스토밍으로 보존한다. 현재 척추: [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md) §1.
 
 ### Layer 0 — 명명 / 계층 (Nomenclature)
 - 이중 체계: 연대층서 (Eonothem/Erathem/System/Series/**Stage**) ↔ 지질연대 (Eon/Era/Period/Epoch/**Age**). 같은 경계를 다른 이름으로 부르는 관계이므로 명시적으로 연결.

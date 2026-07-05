@@ -12,37 +12,55 @@ models → boundary ages is a pipeline; scholars continuously integrate new data
 ("CI for science"). The same graph yields two outputs — **ICC (bake, a frozen snapshot)** and **GTS (narrate, a
 book)**.
 
-## 1. The spine — the layer ladder 0–6
+## 1. The spine — tier × category
 
-| Layer | What | Where covered |
+> The original spine was the linear **layer ladder L0–6** (§1b), but the implementation folded it into **two
+> axes**. The layer number pressed two different things onto one axis — a node's *kind* and its *position* in
+> the pipeline — and once it became a DAG, position could no longer be a label, so only **kind survived as a
+> first-class classification**. The development: [tier-category-model](tier-category-model_en.md).
+
+**Tiers** — three clean contracts (§8.2 gateway architecture):
+
+| Tier | What | Implementation (app) |
 |---|---|---|
-| **0 Nomenclature** | dual naming · hierarchy (Stage ↔ Age) | [idea](idea_en.md) §5 |
-| **1 Boundary definition** | GSSP (point) · GSSA (decreed number) | [idea](idea_en.md) · 3 cases |
-| **2 Primary observations** | radiometric·astro·magneto·biostrat (immutable·cited) | [idea](idea_en.md) · [P–T](case-permian-triassic_en.md) |
-| **3 Local age model** | age-depth interpolation within one section | [P–T](case-permian-triassic_en.md) |
-| **4 Correlation** | cross-section correlation (load-bearing) | [Cambrian](case-cambrian-base-correlation_en.md) |
-| **5 Global synthesis / coherence gate** | boundary set → coherent chart | [coherence-gate](coherence-gate_en.md) · [cycles](cycles_en.md) |
-| **6 Publication** | ICC (bake) · GTS (narrate) | [idea](idea_en.md) · [versioning](versioning-global-vs-per-boundary_en.md) |
+| **registry** | canonical contract — units·boundaries·ratifications·localities | chrono (Unit·Boundary·Ratification·Locality) |
+| **graph** | the node network — the evaluated pipeline | graph·engine (NodeInstance·Edge·Gateway) |
+| **release** | frozen output — selection·bake·narrate | releases (Release·Selection·BoundaryRecord) |
+
+**Categories** — the *kind* of node *inside* the graph tier (`nodes.NodeType.category`):
+
+| Category | What | Old layer | Examples |
+|---|---|---|---|
+| **data** | immutable·cited observation leaf (emits its distribution as-is) | L2 | radiometric-uPb · astronomical · published-age |
+| **process** | input distributions → output distribution (compute) | L3·L4·L5 | age-depth-model · cross-section-correlation · joint-inference |
+| **clamp** | pin a value or constrain (cuts across layers: GSSA=pin, ordering=order) | outside the layers | pin · range · order · freeze-version |
 
 ```mermaid
-flowchart TD
-  L0[L0 nomenclature] --> L1[L1 boundary def<br/>GSSP · GSSA]
-  L1 --> L2[L2 primary obs]
-  L2 --> L3[L3 local age model]
-  L3 --> L4[L4 correlation]
-  L4 --> L5[L5 global synthesis · coherence gate]
-  L5 --> L6[L6 publication]
-  L6 --> ICC[/ICC = bake/]
-  L6 --> GTS[/GTS = narrate/]
-
-  L1 -.-> CASE[cases: GSSA · P–T · Cambrian]:::d
-  L4 -.-> CM[competing-models]:::d
-  L5 -.-> CYC[cycles · clamp]:::d
-  L5 -.-> DIST[distribution]:::d
-  L6 -.-> VER[versioning]:::d
-  L6 -.-> TD[topology-diff]:::d
-  classDef d fill:#f3e8fd,stroke:#a142f4;
+flowchart LR
+  R["registry · chrono<br/>Unit · Boundary · Ratification"] --> G["graph · engine<br/>nodes: data · process · clamp"]
+  G --> L["release · releases<br/>Selection · bake · narrate"]
+  L --> ICC[/ICC = bake/]
+  L --> GTS[/GTS = narrate/]
+  classDef t fill:#eef6ff,stroke:#4a72d0;
+  class R,G,L t;
 ```
+
+### 1b. The layer ladder 0–6 — now a narrative (reading) order
+
+The L0–6 linear stack was brainstorming's original spine; today it holds only as a **human reading order**
+(observation → model → synthesis → publication). The ends (L0·L1·L6) were never nodes but **tier contracts**,
+only the middle (L2–L5) folded into categories, and the pure numbering alone was the artifact. The historical
+ladder, kept as a document index:
+
+| Layer | What | → now | Where covered |
+|---|---|---|---|
+| **0 Nomenclature** | dual naming · hierarchy (Stage ↔ Age) | registry | [idea](idea_en.md) §5 |
+| **1 Boundary definition** | GSSP (point) · GSSA (decreed number) | registry · clamp(pin) | [idea](idea_en.md) · 3 cases |
+| **2 Primary observations** | radiometric·astro·magneto·biostrat (immutable·cited) | data | [idea](idea_en.md) · [P–T](case-permian-triassic_en.md) |
+| **3 Local age model** | age-depth interpolation within one section | process | [P–T](case-permian-triassic_en.md) |
+| **4 Correlation** | cross-section correlation (load-bearing) | process | [Cambrian](case-cambrian-base-correlation_en.md) |
+| **5 Global synthesis / coherence gate** | boundary set → coherent chart | process · clamp(order/range) | [coherence-gate](coherence-gate_en.md) · [cycles](cycles_en.md) |
+| **6 Publication** | ICC (bake) · GTS (narrate) | release | [idea](idea_en.md) · [versioning](versioning-global-vs-per-boundary_en.md) |
 
 ## 2. Document map
 
@@ -100,7 +118,7 @@ propagates, checks, diffs. ([cycles](cycles_en.md) §9)
 
 ## 5. Status
 
-**Resolved:** integer layers 0–6 · schema v0 · all five §4 open questions (versioning · competing models ·
+**Resolved:** layers 0–6 → **refactored into tier × category** (in implementation) · schema v0 · all five §4 open questions (versioning · competing models ·
 cycles · topology · distribution) · clamp introduced · three convergences sealed.
 
 **Still open (at the foot of each document):** the gate's minimal clamp set · spiral convergence · accuracy of

@@ -11,37 +11,53 @@
 파이프라인이고, 학자는 새 데이터를 continuously integrate 해 그 영향을 **diff**로 본다("과학을 위한 CI").
 같은 그래프에서 **ICC(bake, 얼린 스냅샷)** 와 **GTS(narrate, 서술한 책)** 두 산출물이 나온다.
 
-## 1. 척추 — 레이어 사다리 0–6
+## 1. 척추 — 티어 × 카테고리
 
-| Layer | 무엇 | 어디서 다뤘나 |
+> 초기엔 선형 **레이어 L0~6**(§1b)을 척추로 삼았으나, 구현이 이를 **두 축**으로 접었다. 레이어 번호는
+> "노드의 *종류*"와 "파이프라인상 *위치*"를 한 축에 눌러담고 있었고, DAG가 되는 순간 위치는 라벨이 될 수
+> 없어 **종류만 1급 분류로** 남았다. 전개: [tier-category-model](tier-category-model.md).
+
+**티어** — 깨끗한 계약 세 칸 (§8.2 게이트웨이 아키텍처):
+
+| 티어 | 무엇 | 구현 (앱) |
 |---|---|---|
-| **0 명명** | 이중 명명·위계 (Stage ↔ Age) | [idea](idea.md) §5 |
-| **1 경계 정의** | GSSP(지점) · GSSA(결정 숫자) | [idea](idea.md) · 3 사례 |
-| **2 원시 관측** | 방사·천문·자기·생층서 (불변·인용) | [idea](idea.md) · [P–T](case-permian-triassic.md) |
-| **3 국소 age model** | 한 섹션 age-depth 보간 | [P–T](case-permian-triassic.md) |
-| **4 상관** | 섹션 간 correlation (load-bearing) | [캄브리아](case-cambrian-base-correlation.md) |
-| **5 전역 종합 / 정합성 게이트** | 경계 집합 → 정합 차트 | [coherence-gate](coherence-gate.md) · [cycles](cycles.md) |
-| **6 배포** | ICC(bake) · GTS(narrate) | [idea](idea.md) · [versioning](versioning-global-vs-per-boundary.md) |
+| **registry** | 정본 계약 — 단위·경계·비준·위치 | chrono (Unit·Boundary·Ratification·Locality) |
+| **graph** | 노드 네트워크 — 평가되는 파이프라인 | graph·engine (NodeInstance·Edge·Gateway) |
+| **release** | 얼린 산출 — 선택·bake·서술 | releases (Release·Selection·BoundaryRecord) |
+
+**카테고리** — graph 티어 *안* 노드의 종류 (`nodes.NodeType.category`):
+
+| 카테고리 | 무엇 | 옛 레이어 | 예 |
+|---|---|---|---|
+| **data** | 불변·인용 관측 leaf (분포를 그대로 출력) | L2 | radiometric-uPb · astronomical · published-age |
+| **process** | 입력 분포 → 산출 분포 (계산) | L3·L4·L5 | age-depth-model · cross-section-correlation · joint-inference |
+| **clamp** | 값 못박기·제약 (레이어를 가로지름: GSSA=pin, 순서=order) | 레이어 밖 | pin · range · order · freeze-version |
 
 ```mermaid
-flowchart TD
-  L0[L0 명명] --> L1[L1 경계정의<br/>GSSP · GSSA]
-  L1 --> L2[L2 원시관측]
-  L2 --> L3[L3 국소 age model]
-  L3 --> L4[L4 상관]
-  L4 --> L5[L5 전역종합 · 정합성게이트]
-  L5 --> L6[L6 배포]
-  L6 --> ICC[/ICC = bake/]
-  L6 --> GTS[/GTS = narrate/]
-
-  L1 -.-> CASE[사례: GSSA · P–T · 캄브리아]:::d
-  L4 -.-> CM[competing-models]:::d
-  L5 -.-> CYC[cycles · clamp]:::d
-  L5 -.-> DIST[distribution]:::d
-  L6 -.-> VER[versioning]:::d
-  L6 -.-> TD[topology-diff]:::d
-  classDef d fill:#f3e8fd,stroke:#a142f4;
+flowchart LR
+  R["registry · chrono<br/>Unit · Boundary · Ratification"] --> G["graph · engine<br/>노드: data · process · clamp"]
+  G --> L["release · releases<br/>Selection · bake · narrate"]
+  L --> ICC[/ICC = bake/]
+  L --> GTS[/GTS = narrate/]
+  classDef t fill:#eef6ff,stroke:#4a72d0;
+  class R,G,L t;
 ```
+
+### 1b. 레이어 사다리 0–6 — 이제는 서사(읽기) 순서
+
+L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사람이 읽는 서사 순서**(관측→모델→종합→배포)로만
+유효하다. 끝단(L0·L1·L6)은 노드가 아니라 **티어 계약**이었고, 중간(L2~L5)만 카테고리로 접혔으며, 순수
+번호매기기만 인공물이었다. 문서 인덱스로서의 역사적 사다리:
+
+| Layer | 무엇 | → 지금 | 어디서 다뤘나 |
+|---|---|---|---|
+| **0 명명** | 이중 명명·위계 (Stage ↔ Age) | registry | [idea](idea.md) §5 |
+| **1 경계 정의** | GSSP(지점) · GSSA(결정 숫자) | registry · clamp(pin) | [idea](idea.md) · 3 사례 |
+| **2 원시 관측** | 방사·천문·자기·생층서 (불변·인용) | data | [idea](idea.md) · [P–T](case-permian-triassic.md) |
+| **3 국소 age model** | 한 섹션 age-depth 보간 | process | [P–T](case-permian-triassic.md) |
+| **4 상관** | 섹션 간 correlation (load-bearing) | process | [캄브리아](case-cambrian-base-correlation.md) |
+| **5 전역 종합 / 정합성 게이트** | 경계 집합 → 정합 차트 | process · clamp(order/range) | [coherence-gate](coherence-gate.md) · [cycles](cycles.md) |
+| **6 배포** | ICC(bake) · GTS(narrate) | release | [idea](idea.md) · [versioning](versioning-global-vs-per-boundary.md) |
 
 ## 2. 문서 지도
 
@@ -96,7 +112,7 @@ flowchart TD
 
 ## 5. 상태
 
-**정리됨:** 레이어 0–6 정수화 · 스키마 v0 · §4 열린 질문 5개(버전·경쟁모델·순환·토폴로지·분포) 전부 ·
+**정리됨:** 레이어 0–6 → **티어×카테고리 재구성**(구현) · 스키마 v0 · §4 열린 질문 5개(버전·경쟁모델·순환·토폴로지·분포) 전부 ·
 clamp 도입 · 세 수렴 봉합.
 
 **아직 열림 (각 문서 말미):** 정합성 게이트의 최소 clamp 집합·나선 수렴 · joint 희소 공분산 재구성 정확도 ·
