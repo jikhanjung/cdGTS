@@ -108,5 +108,6 @@ coherence_gate(
 
 - [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md) — 정합성 게이트가 등장한 맥락(전역 릴리스 = 매니페스트 + coherence 게이트)
 - [boundary-gateway-schema.md](boundary-gateway-schema.md) — `provenance_ref`·`age_model` 필드
+- [evaluation-order.md](evaluation-order.md) — evaluate(의존순 계산) → certify(게이트) 두 층 분리; order = 사후 검사
 - [idea.md](idea.md) §5 (Layer 5) · [node-graph-paradigm.md](node-graph-paradigm.md) (공유 노드·순환)
 - 공유 노드 사례: [case-permian-triassic.md](case-permian-triassic.md)

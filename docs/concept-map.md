@@ -59,6 +59,7 @@ flowchart TD
 - [boundary-gateway-schema.md](boundary-gateway-schema.md) — 경계 게이트웨이 스키마 v0 (§4 열린 질문 5개 모두 정리됨)
 - [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md) — 전역 vs 경계별 (레코드 + 매니페스트)
 - [coherence-gate.md](coherence-gate.md) — Layer 5, 검사 사다리 L0–L3
+- [evaluation-order.md](evaluation-order.md) — 평가 순서 = 의존순(topo) ≠ 연대순 · order = 사후 검사
 - [competing-models.md](competing-models.md) — 네트워크 복수 후보 + 릴리스 선택
 - [cycles.md](cycles.md) — 국소=동시추정 / 전역=버전 나선 + **clamp**
 - [topology-diff.md](topology-diff.md) — 값 diff와 직교하는 구조 diff

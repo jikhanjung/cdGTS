@@ -60,6 +60,7 @@ flowchart TD
 - [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) — boundary gateway schema v0 (all five §4 open questions resolved)
 - [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md) — global vs per-boundary (records + manifest)
 - [coherence-gate_en.md](coherence-gate_en.md) — Layer 5, the check ladder L0–L3
+- [evaluation-order_en.md](evaluation-order_en.md) — evaluation = dependency (topo) order ≠ chronology · order = a post-hoc check
 - [competing-models_en.md](competing-models_en.md) — plural candidates in the network + release selection
 - [cycles_en.md](cycles_en.md) — local = joint inference / global = version spiral + **clamp**
 - [topology-diff_en.md](topology-diff_en.md) — the structural diff orthogonal to the value diff

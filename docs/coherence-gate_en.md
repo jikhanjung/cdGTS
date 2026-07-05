@@ -113,5 +113,6 @@ That is, **the gate's two modes = the gateway's two outputs.** Not a coincidence
 
 - [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md) — the context where the coherence gate appeared (global release = manifest + coherence gate)
 - [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) — the `provenance_ref` · `age_model` fields
+- [evaluation-order_en.md](evaluation-order_en.md) — the evaluate (dependency-order compute) → certify (gate) split; order = a post-hoc check
 - [idea_en.md](idea_en.md) §5 (Layer 5) · [node-graph-paradigm_en.md](node-graph-paradigm_en.md) (shared nodes · cycles)
 - Shared-node case: [case-permian-triassic_en.md](case-permian-triassic_en.md)

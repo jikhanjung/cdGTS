@@ -47,6 +47,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 - [docs/boundary-gateway-schema.md](docs/boundary-gateway-schema.md) — 경계 게이트웨이 스키마 v0 (§4 열린 질문 5개 모두 정리됨)
 - [docs/versioning-global-vs-per-boundary.md](docs/versioning-global-vs-per-boundary.md) — 전역 vs 경계별 버전 (레코드 + 매니페스트)
 - [docs/coherence-gate.md](docs/coherence-gate.md) — 정합성 게이트 (Layer 5): 핀된 경계 집합 → 유효한 차트
+- [docs/evaluation-order.md](docs/evaluation-order.md) — 평가 순서 = 의존순(topo) ≠ 연대순; order 노드 = 사후 정합성 검사
 - [docs/competing-models.md](docs/competing-models.md) — 경쟁 모델 공존 (네트워크 복수 후보 + 릴리스 선택)
 - [docs/cycles.md](docs/cycles.md) — 순환 의존성과 **clamp** (subcommission이 놓는 hand-crafted 게이트)
 - [docs/topology-diff.md](docs/topology-diff.md) — 토폴로지 diff (값 diff와 직교하는 구조 변화의 축)

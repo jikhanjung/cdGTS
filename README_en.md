@@ -47,6 +47,7 @@ The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map
 - [docs/boundary-gateway-schema_en.md](docs/boundary-gateway-schema_en.md) — boundary gateway schema v0 (all five §4 open questions resolved)
 - [docs/versioning-global-vs-per-boundary_en.md](docs/versioning-global-vs-per-boundary_en.md) — global vs per-boundary versioning (records + manifest)
 - [docs/coherence-gate_en.md](docs/coherence-gate_en.md) — the coherence gate (Layer 5): pinned boundary set → valid chart
+- [docs/evaluation-order_en.md](docs/evaluation-order_en.md) — evaluation = dependency (topo) order ≠ chronology; the order node = a post-hoc coherence check
 - [docs/competing-models_en.md](docs/competing-models_en.md) — how competing models coexist (plural candidates + release selection)
 - [docs/cycles_en.md](docs/cycles_en.md) — cyclic dependencies and **clamps** (hand-crafted gates placed by subcommissions)
 - [docs/topology-diff_en.md](docs/topology-diff_en.md) — topology diff (the structural-change axis orthogonal to the value diff)
