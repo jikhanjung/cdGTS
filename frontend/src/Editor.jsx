@@ -70,7 +70,7 @@ function rfToApi(nodes, edges, groups, viewport) {
 
 // (nodes, edges, groups, activeGroup) → ReactFlow 에 넘길 {viewNodes, viewEdges}.
 // 최상위: 그룹은 접힌 노드(경계 넘는 엣지 = 자동 입출력 핸들). 드릴인: 멤버 + 경계 스텁.
-function buildView(nodes, edges, groups, activeGroup, labelMap) {
+function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
   const groupOf = Object.fromEntries(nodes.map((n) => [n.id, n.data.group || null]))
   const lab = (id, port) => `${labelMap[id] || id}·${port}`
 
@@ -116,6 +116,7 @@ function buildView(nodes, edges, groups, activeGroup, labelMap) {
   const groupById = {}
   groups.forEach((g) => {
     const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y },
+      selected: !!selGroups && selGroups.has(g.key),
       data: { key: g.key, name: g.name, inputs: [], outputs: [], count: 0 } }
     groupById[g.key] = gn
     viewNodes.push(gn)
@@ -155,8 +156,8 @@ export default function Editor() {
   const [activeGroup, setActiveGroup] = useState(null)   // null=최상위 / 그룹 key=드릴인
   const [status, setStatus] = useState('로딩 중…')
   const [error, setError] = useState(null)
-  const [selectedIds, setSelectedIds] = useState([])
-  const [selectedGroup, setSelectedGroup] = useState(null)
+  const [selectedIds, setSelectedIds] = useState([])          // 선택된 실제 노드
+  const [selectedGroupKeys, setSelectedGroupKeys] = useState([])  // 선택된 그룹(접힌 노드)
   const [menu, setMenu] = useState(null)   // 우클릭 컨텍스트 메뉴 {x,y,kind,id?,groupKey?}
   const [gateways, setGateways] = useState([])
   const [outputs, setOutputs] = useState([])
@@ -173,8 +174,8 @@ export default function Editor() {
     [nodes],
   )
   const { viewNodes, viewEdges } = useMemo(
-    () => buildView(nodes, edges, groups, activeGroup, labelMap),
-    [nodes, edges, groups, activeGroup, labelMap],
+    () => buildView(nodes, edges, groups, activeGroup, labelMap, new Set(selectedGroupKeys)),
+    [nodes, edges, groups, activeGroup, labelMap, selectedGroupKeys],
   )
 
   const hydrate = useCallback((full, tmap) => {
@@ -237,11 +238,19 @@ export default function Editor() {
   }, [setEdges])
 
   const onConnect = useCallback((c) => {
-    if (['group:', 'stub-'].some((p) => c.source?.startsWith(p) || c.target?.startsWith(p))) return
-    const id = `${c.source}:${c.sourceHandle}->${c.target}:${c.targetHandle}`
+    let { source, sourceHandle, target, targetHandle } = c
+    // 그룹 포트(접힌 노드의 위/아래 order 포트 등)에서/로 그리면 → 멤버 노드의 실제 포트로 환원.
+    // 그룹 핸들 id 규약(buildView): 출력 `out:<member>:<port>` · 입력 `in:<member>:<port>`.
+    if (source?.startsWith('group:') && sourceHandle?.startsWith('out:')) {
+      const [, m, p] = sourceHandle.split(':'); source = m; sourceHandle = p
+    }
+    if (target?.startsWith('group:') && targetHandle?.startsWith('in:')) {
+      const [, m, p] = targetHandle.split(':'); target = m; targetHandle = p
+    }
+    if (['group:', 'stub-'].some((p) => source?.startsWith(p) || target?.startsWith(p))) return
+    const id = `${source}:${sourceHandle}->${target}:${targetHandle}`
     setEdges((eds) => eds.concat({
-      id, source: c.source, target: c.target,
-      sourceHandle: c.sourceHandle, targetHandle: c.targetHandle, data: { kind: 'data' },
+      id, source, target, sourceHandle, targetHandle, data: { kind: 'data' },
     }))
   }, [setEdges])
 
@@ -260,21 +269,40 @@ export default function Editor() {
     }))
   }, [screenToFlowPosition, typeMap, setNodes, activeGroup])
 
-  // --- 그룹 만들기 / 해제 / 드릴인 ---
-  const createGroupFrom = useCallback((ids) => {
-    if (!ids.length || activeGroup) return
-    const key = `grp-${Math.random().toString(36).slice(2, 7)}`
-    const name = (window.prompt('그룹 이름', `Group ${groups.length + 1}`) || '').trim() || `Group ${groups.length + 1}`
-    const mem = nodes.filter((n) => ids.includes(n.id))
+  // --- 그룹 만들기 · 병합 / 해제 / 드릴인 ---
+  // 실제 노드 + 그룹(접힌 노드)을 하나로. 그룹이 섞이면 그 멤버까지 흡수해 **병합**(단일 계층 유지),
+  // 나머지 선택 그룹은 대상 그룹으로 합쳐지며 사라진다.
+  const createOrMergeGroup = useCallback((realIds, groupKeys) => {
+    if (activeGroup) return
+    const memberIds = nodes.filter((n) => n.data.group && groupKeys.includes(n.data.group)).map((n) => n.id)
+    const allIds = [...new Set([...realIds, ...memberIds])]
+    if (!allIds.length) return
+    const merging = groupKeys.length > 0
+    let key, name
+    if (merging) {
+      key = groupKeys[0]
+      name = groups.find((g) => g.key === key)?.name || key
+    } else {
+      key = `grp-${Math.random().toString(36).slice(2, 7)}`
+      name = (window.prompt('그룹 이름', `Group ${groups.length + 1}`) || '').trim() || `Group ${groups.length + 1}`
+    }
+    const drop = new Set(groupKeys.slice(1))   // 대상으로 합쳐지며 사라지는 다른 그룹들
+    const mem = nodes.filter((n) => allIds.includes(n.id))
     const cx = Math.round(mem.reduce((s, n) => s + n.position.x, 0) / mem.length)
     const cy = Math.round(mem.reduce((s, n) => s + n.position.y, 0) / mem.length)
-    setNodes((nds) => nds.map((n) => (ids.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
-    setGroups((gs) => gs.concat({ key, name, collapsed: true, x: cx, y: cy }))
-    setSelectedIds([])
-    setStatus(`그룹 '${name}' 생성 (${mem.length} 노드)`)
-  }, [activeGroup, groups.length, nodes, setNodes])
+    setNodes((nds) => nds.map((n) => (allIds.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
+    setGroups((gs) => {
+      const next = gs.filter((g) => !drop.has(g.key))
+      return merging ? next : next.concat({ key, name, collapsed: true, x: cx, y: cy })
+    })
+    setSelectedIds([]); setSelectedGroupKeys([])
+    setStatus(`그룹 '${name}' ${merging ? '병합' : '생성'} (${allIds.length} 노드)`)
+  }, [activeGroup, groups, nodes, setNodes])
 
-  const onCreateGroup = useCallback(() => createGroupFrom(selectedIds), [createGroupFrom, selectedIds])
+  const onCreateGroup = useCallback(
+    () => createOrMergeGroup(selectedIds, selectedGroupKeys),
+    [createOrMergeGroup, selectedIds, selectedGroupKeys],
+  )
 
   const removeFromGroup = useCallback((id) => {
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: { ...n.data, group: null } } : n)))
@@ -302,12 +330,14 @@ export default function Editor() {
     setNodes((nds) => nds.map((n) => (n.data.group === key ? { ...n, data: { ...n.data, group: null } } : n)))
     setGroups((gs) => gs.filter((g) => g.key !== key))
     if (activeGroup === key) setActiveGroup(null)
-    setSelectedGroup(null)
+    setSelectedGroupKeys((ks) => ks.filter((k) => k !== key))
     setStatus('그룹 해제됨')
   }, [setNodes, activeGroup])
 
+  const onUngroupSelected = useCallback(() => selectedGroupKeys.forEach(onUngroup), [selectedGroupKeys, onUngroup])
+
   const onNodeDoubleClick = useCallback((_e, node) => {
-    if (node.type === 'cdgtsGroup') { setActiveGroup(node.data.key); setSelectedIds([]); setSelectedGroup(null) }
+    if (node.type === 'cdgtsGroup') { setActiveGroup(node.data.key); setSelectedIds([]); setSelectedGroupKeys([]) }
   }, [])
 
   // 컨텍스트 전환 시 fit
@@ -315,8 +345,7 @@ export default function Editor() {
 
   const onSelectionChange = useCallback(({ nodes: sel }) => {
     setSelectedIds(sel.filter((n) => isRealNode(n.type)).map((n) => n.id))
-    const g = sel.find((n) => n.type === 'cdgtsGroup')
-    setSelectedGroup(g ? g.data.key : null)
+    setSelectedGroupKeys(sel.filter((n) => n.type === 'cdgtsGroup').map((n) => n.data.key))
   }, [])
 
   const onSave = useCallback(async () => {
@@ -425,12 +454,17 @@ export default function Editor() {
           <button onClick={onSave}>저장 (PUT)</button>
           <button onClick={onEvaluate}>평가</button>
           {!activeGroup && (
-            <button onClick={onCreateGroup} disabled={!selectedIds.length} title="선택한 노드를 그룹으로 묶기">
-              그룹 만들기{selectedIds.length ? ` (${selectedIds.length})` : ''}
+            <button onClick={onCreateGroup}
+                    disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
+                    title="선택한 노드·그룹을 하나의 그룹으로 (그룹이 섞이면 병합)">
+              {selectedGroupKeys.length ? '그룹 병합' : '그룹 만들기'}
+              {(selectedIds.length + selectedGroupKeys.length) ? ` (${selectedIds.length + selectedGroupKeys.length})` : ''}
             </button>
           )}
-          {!activeGroup && selectedGroup && (
-            <button onClick={() => onUngroup(selectedGroup)} title="그룹 해제">그룹 해제</button>
+          {!activeGroup && selectedGroupKeys.length > 0 && (
+            <button onClick={onUngroupSelected} title="선택한 그룹 해제">
+              그룹 해제{selectedGroupKeys.length > 1 ? ` (${selectedGroupKeys.length})` : ''}
+            </button>
           )}
           <button onClick={() => setShowResults((v) => !v)} className={showResults ? 'active' : ''} disabled={!runMeta} title="최종 노드 출력 보기">
             결과{outputs.length ? ` (${outputs.length})` : ''}
@@ -489,8 +523,8 @@ export default function Editor() {
                  onContextMenu={(e) => { e.preventDefault(); closeMenu() }} />
             <ul className="ctx-menu" style={{ left: menu.x, top: menu.y }}>
               {menu.kind === 'node' && !activeGroup && (
-                <li onClick={() => { createGroupFrom(groupTargets(menu.id)); closeMenu() }}>
-                  선택 노드 그룹으로 묶기 ({groupTargets(menu.id).length})
+                <li onClick={() => { createOrMergeGroup(groupTargets(menu.id), selectedGroupKeys); closeMenu() }}>
+                  {selectedGroupKeys.length ? '선택과 그룹 병합' : '선택 노드 그룹으로 묶기'} ({groupTargets(menu.id).length + selectedGroupKeys.length})
                 </li>
               )}
               {menu.kind === 'node' && activeGroup && (
@@ -499,13 +533,21 @@ export default function Editor() {
               {menu.kind === 'group' && (
                 <>
                   <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>그룹 열기</li>
+                  {(selectedIds.length || selectedGroupKeys.filter((k) => k !== menu.groupKey).length) > 0 && (
+                    <li onClick={() => {
+                      createOrMergeGroup(selectedIds, [menu.groupKey, ...selectedGroupKeys.filter((k) => k !== menu.groupKey)])
+                      closeMenu()
+                    }}>이 그룹에 선택 병합 ({selectedIds.length + selectedGroupKeys.filter((k) => k !== menu.groupKey).length})</li>
+                  )}
                   <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>그룹 해제</li>
                 </>
               )}
               {menu.kind === 'pane' && !activeGroup && (
-                selectedIds.length
-                  ? <li onClick={() => { createGroupFrom(selectedIds); closeMenu() }}>선택 노드 그룹으로 묶기 ({selectedIds.length})</li>
-                  : <li className="disabled">노드를 선택한 뒤 우클릭</li>
+                (selectedIds.length || selectedGroupKeys.length >= 2)
+                  ? <li onClick={() => { createOrMergeGroup(selectedIds, selectedGroupKeys); closeMenu() }}>
+                      {selectedGroupKeys.length ? '선택 그룹·노드 병합' : '선택 노드 그룹으로 묶기'} ({selectedIds.length + selectedGroupKeys.length})
+                    </li>
+                  : <li className="disabled">노드/그룹을 선택한 뒤 우클릭</li>
               )}
               {menu.kind === 'pane' && activeGroup && (
                 <li onClick={() => { setActiveGroup(null); closeMenu() }}>상위로 나가기</li>
