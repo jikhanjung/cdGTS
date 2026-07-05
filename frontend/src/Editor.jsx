@@ -126,13 +126,13 @@ function buildView(nodes, edges, groups, activeGroup, labelMap) {
     if (sg && groupById[sg]) {
       const hid = `out:${e.source}:${e.sourceHandle}`
       if (!groupById[sg].data.outputs.find((h) => h.id === hid))
-        groupById[sg].data.outputs.push({ id: hid, label: lab(e.source, e.sourceHandle) })
+        groupById[sg].data.outputs.push({ id: hid, port: e.sourceHandle, label: lab(e.source, e.sourceHandle) })
       src = `group:${sg}`; srcH = hid
     }
     if (tg && groupById[tg]) {
       const hid = `in:${e.target}:${e.targetHandle}`
       if (!groupById[tg].data.inputs.find((h) => h.id === hid))
-        groupById[tg].data.inputs.push({ id: hid, label: lab(e.target, e.targetHandle) })
+        groupById[tg].data.inputs.push({ id: hid, port: e.targetHandle, label: lab(e.target, e.targetHandle) })
       tgt = `group:${tg}`; tgtH = hid
     }
     viewEdges.push({ ...e, id: `v-${e.id}`, source: src, sourceHandle: srcH, target: tgt, targetHandle: tgtH })
