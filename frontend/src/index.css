@@ -80,6 +80,22 @@ body {
 .icc-band { font-size: 10px; font-weight: 500; pointer-events: none; }
 .iccchart-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; }
 
+/* --- ICC 서술 (narrate 책) --- */
+.narrate { height: 100%; display: flex; flex-direction: column; padding: 14px 20px; box-sizing: border-box; }
+.narrate-controls { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
+.narrate-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
+.narrate-controls select { border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px; font-size: 13px; }
+.narrate-status { font-size: 12px; color: #767688; margin-left: auto; }
+.narrate-book { overflow: auto; flex: 1; border: 1px solid #ececf2; border-radius: 8px; background: #fff; padding: 8px 22px 18px; max-width: 900px; }
+.narrate-book section { margin-top: 12px; }
+.narrate-book h3 { font-size: 15px; color: #3a3a48; border-bottom: 2px solid #eee; padding-bottom: 4px; margin: 18px 0 8px; }
+.narrate-count { font-size: 11px; color: #a0a0b0; font-weight: 400; }
+.narrate-entry { font-size: 13.5px; line-height: 1.7; color: #2a2a33; margin: 5px 0; }
+.narrate-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+.narrate-badge.gssp { background: #e8f0ff; color: #2f5fbf; }
+.narrate-badge.gssa { background: #fdeefc; color: #a02f92; }
+.narrate-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; max-width: 900px; }
+
 /* --- 노드그룹 (접힌 노드 · 인터페이스 스텁 · breadcrumb) --- */
 .group-node {
   width: 100%; box-sizing: border-box; border: 1.5px dashed #a142f4; border-radius: 10px;

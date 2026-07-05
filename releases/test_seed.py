@@ -117,6 +117,26 @@ def test_release_icc_chart_five_ranks(seeded):
     assert lv["Age"][0]["top"] == 0.0
 
 
+def test_narrate_release_renders_and_persists(seeded):
+    """narrate(bake 의 짝) — rank 별 서술 문서 + BoundaryRecord.narrative 저장. 사실 창작 없이 필드 렌더."""
+    from rest_framework.test import APIClient
+    r = Release.objects.get(version="ICS-2024/12")
+    resp = APIClient().post(f"/api/releases/{r.pk}/narrate/")
+    assert resp.status_code == 200
+    secs = {s["rank"]: s["entries"] for s in resp.data["sections"]}
+    assert list(secs) == ["Eon", "Era", "Period", "Epoch", "Age"]
+    # GSSP 는 이중 명명 + 파생 연대 + 오차, GSSA 는 약속값(오차 없음)
+    tri = next(e for e in secs["Period"] if e["boundary"] == "base-triassic")
+    assert "Triassic System" in tri["narrative"] and "251.902 ± 0.024 Ma" in tri["narrative"] and "GSSP" in tri["narrative"]
+    prot = next(e for e in secs["Eon"] if e["boundary"] == "base-proterozoic")
+    assert "약속값" in prot["narrative"] and "±" not in prot["narrative"]
+    # 저장 확인
+    assert BoundaryRecord.objects.get(release=r, boundary__slug="base-triassic").narrative == tri["narrative"]
+    # 오래된→젊은 순
+    per = secs["Period"]
+    assert per[0]["value_ma"] >= per[-1]["value_ma"]
+
+
 def test_finer_boundaries_registry_only(seeded):
     """Epoch/Age 경계는 registry(Boundary)에만 — 네트웍(게이트웨이)엔 없다. period+ 는 네트웍에."""
     from graph.models import Gateway

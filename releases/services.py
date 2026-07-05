@@ -65,6 +65,66 @@ def bake_release(release):
     return len(rows)
 
 
+def _narrate_record(rec, unit):
+    """레코드 하나 → 결정적 서술(사실 창작 없이 구조화 필드만 렌더). 이중 명명(Period/System) 사용."""
+    if unit is not None:
+        name, geo, chrono = unit.name, unit.geochronologic_term, unit.chronostratigraphic_term
+    else:
+        name, geo, chrono = rec.boundary.slug, "", ""
+    dt = (rec.definition_type or "").upper()
+    val = rec.value_ma
+    moe = ((rec.uncertainty or {}).get("budget") or {}).get("analytical") if rec.uncertainty else None
+    if val is None:
+        val_txt = "연대 미상"
+    elif moe:
+        val_txt = f"{val:g} ± {moe:g} Ma"
+    else:
+        val_txt = f"{val:g} Ma"
+    if dt == "GSSP":
+        defn, lead = "GSSP(하부 경계 층서형 단면·지점)으로 정의되며", "파생 연대는"
+        mtxt = f"({rec.get_method_display()})" if rec.method else ""
+    elif dt == "GSSA":
+        defn, lead, mtxt = "GSSA(약속된 표준 연대)로 정의되며", "약속값은", ""
+    else:
+        defn, lead, mtxt = "정의 방식이 기재되지 않았으며", "연대는", ""
+    head = f"{name} {geo}".strip()
+    base = f"{name} {chrono}의 바닥" if chrono else "하부 경계"
+    prov = f" 근거: {rec.provenance_ref}." if rec.provenance_ref else ""
+    return f"{head}의 하부 경계({base})는 {defn}, {lead} {val_txt}{mtxt}이다.{prov}"
+
+
+def narrate_release(release):
+    """bake 의 짝 — 릴리스를 '서술한 책'으로. 각 레코드의 narrative 를 결정적으로 채우고(저장),
+    rank(Eon~Age) 별 · 오래된→젊은 순으로 조립한 문서(sections)를 반환."""
+    from chrono.models import Unit
+    if not release.records.exists():
+        bake_release(release)
+    records = list(release.records.select_related("boundary", "candidate"))
+    slugs = [r.boundary.slug[5:] for r in records if r.boundary.slug.startswith("base-")]
+    units = {u.slug: u for u in Unit.objects.filter(slug__in=slugs)}
+
+    by_rank = {}
+    for r in records:
+        bs = r.boundary.slug
+        u = units.get(bs[5:] if bs.startswith("base-") else bs)
+        r.narrative = _narrate_record(r, u)
+        by_rank.setdefault(u.rank if u else 0, []).append((r, u))
+    BoundaryRecord.objects.bulk_update(records, ["narrative"])
+
+    GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
+    sections = []
+    for rn in (1, 2, 3, 4, 5):
+        rows = by_rank.get(rn, [])
+        rows.sort(key=lambda z: (z[0].value_ma if z[0].value_ma is not None else 0), reverse=True)
+        if not rows:
+            continue
+        sections.append({"rank": GEO[rn], "rank_n": rn, "entries": [
+            {"boundary": r.boundary.slug, "name": (u.name if u else r.boundary.slug),
+             "value_ma": r.value_ma, "definition_type": r.definition_type, "narrative": r.narrative}
+            for r, u in rows]})
+    return sections
+
+
 def diff_releases(rel_a, rel_b):
     """rel_a → rel_b 로의 변화. value_diff 와 topology_diff 를 분리해 반환."""
     a = {r.boundary.slug: r for r in rel_a.records.select_related("boundary")}

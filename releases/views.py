@@ -8,7 +8,7 @@ from graph.models import Graph
 
 from .models import Release
 from .serializers import ReleaseSerializer
-from .services import bake_graph, bake_release, diff_releases
+from .services import bake_graph, bake_release, diff_releases, narrate_release
 
 
 class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -122,3 +122,16 @@ class ReleaseIccChartView(APIView):
             if bslug.startswith("base-"):
                 unit_base[bslug[len("base-"):]] = float(rec.value_ma)
         return Response({"release": release.version, **build_icc_levels(unit_base)})
+
+
+class ReleaseNarrateView(APIView):
+    """
+    POST /api/releases/{id}/narrate/ — bake 의 짝. 릴리스를 rank 별 서술 문서로 렌더하고
+    각 레코드 narrative 를 저장. 반환: {release, sections}.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, pk):
+        release = get_object_or_404(Release, pk=pk)
+        sections = narrate_release(release)
+        return Response({"release": release.version, "sections": sections})

@@ -32,6 +32,10 @@ export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
 // 공표 릴리스 → 전 rank(Eon~Age) ICC 차트 데이터.
 export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).then(j)
 
+// 릴리스 narrate — bake 의 짝. rank 별 서술 문서 + narrative 저장.
+export const narrateRelease = (id) =>
+  fetch(`/api/releases/${id}/narrate/`, { method: 'POST', headers: jsonHeaders }).then(j)
+
 // --- 릴리스 / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)
