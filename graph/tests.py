@@ -61,10 +61,33 @@ def test_group_roundtrip(api, graph):
     put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
     assert put.status_code == 200, put.data
     got = api.get(f"/api/graphs/{graph.pk}/").data
-    assert got["groups"] == [{"key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50}]
+    assert got["groups"] == [{"key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50, "parent": None}]
     by_key = {n["key"]: n for n in got["nodes"]}
     assert by_key["obs1"]["group"] == "g1"
     assert by_key["adm"]["group"] is None
+
+
+def test_nested_group_roundtrip(api, graph):
+    """중첩 노드그룹 — 하위그룹 parent 가 PUT/GET 왕복. 엔진 무관·드릴인 계층."""
+    payload = _payload()
+    payload["groups"] = [
+        {"key": "outer", "name": "Carboniferous", "collapsed": True, "x": 0, "y": 0, "parent": None},
+        {"key": "inner", "name": "Mississippian", "collapsed": True, "x": 10, "y": 10, "parent": "outer"},
+    ]
+    payload["nodes"][0]["group"] = "inner"       # 노드는 하위그룹 소속
+    put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    assert put.status_code == 200, put.data
+    got = {g["key"]: g for g in api.get(f"/api/graphs/{graph.pk}/").data["groups"]}
+    assert got["inner"]["parent"] == "outer" and got["outer"]["parent"] is None
+
+
+def test_group_cycle_rejected(api, graph):
+    payload = _payload()
+    payload["groups"] = [
+        {"key": "a", "name": "A", "collapsed": True, "x": 0, "y": 0, "parent": "b"},
+        {"key": "b", "name": "B", "collapsed": True, "x": 0, "y": 0, "parent": "a"},
+    ]
+    assert api.put(f"/api/graphs/{graph.pk}/", payload, format="json").status_code == 400
 
 
 def test_group_bad_ref_rejected(api, graph):

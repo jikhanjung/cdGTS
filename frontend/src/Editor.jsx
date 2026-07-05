@@ -63,82 +63,89 @@ function rfToApi(nodes, edges, groups, viewport) {
     })),
     groups: groups.map((g) => ({
       key: g.key, name: g.name, collapsed: !!g.collapsed,
-      x: Math.round(g.x), y: Math.round(g.y),
+      x: Math.round(g.x), y: Math.round(g.y), parent: g.parent || null,
     })),
   }
 }
 
 // (nodes, edges, groups, activeGroup) → ReactFlow 에 넘길 {viewNodes, viewEdges}.
-// 최상위: 그룹은 접힌 노드(경계 넘는 엣지 = 자동 입출력 핸들). 드릴인: 멤버 + 경계 스텁.
+// 중첩 지원: 한 레벨(activeGroup=그룹key 또는 null=최상위)에서 **직속 노드 + 직속 하위그룹(접힌 노드)** 만 보인다.
+// 하위그룹은 자기 서브트리 전체를 대표. 서브트리 경계를 넘는 엣지 → 그룹 포트(같은 서브트리 밖 상대) 또는 스텁(현재 서브트리 밖).
 function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
-  const groupOf = Object.fromEntries(nodes.map((n) => [n.id, n.data.group || null]))
   const lab = (id, port) => `${labelMap[id] || id}·${port}`
+  const parentOf = Object.fromEntries(groups.map((g) => [g.key, g.parent || null]))
+  const level = activeGroup || null
 
-  if (activeGroup) {
-    const members = nodes.filter((n) => n.data.group === activeGroup)
-    const memberSet = new Set(members.map((n) => n.id))
-    const viewNodes = [...members]
-    const viewEdges = []
-    const stubSeen = new Set()
-    let ins = 0, outs = 0
-    edges.forEach((e) => {
-      const sIn = memberSet.has(e.source), tIn = memberSet.has(e.target)
-      if (sIn && tIn) { viewEdges.push({ ...e, id: `v-${e.id}` }); return }
-      if (tIn && !sIn) {
-        // 그룹 입력 포트 = 멤버 쪽(e.target·targetHandle), 출처 = 외부(e.source·sourceHandle). 연결별 스텁.
-        const sid = `stub-in:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
-        if (!stubSeen.has(sid)) {
-          stubSeen.add(sid)
-          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
-            data: { dir: 'in', port: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) },
-            draggable: false, selectable: false })
-          ins++
-        }
-        viewEdges.push({ ...e, id: `v-${e.id}`, source: sid, sourceHandle: 'out' })
-      } else if (sIn && !tIn) {
-        // 그룹 출력 포트 = 멤버 쪽(e.source·sourceHandle), 도착 = 외부(e.target·targetHandle). 연결별 스텁.
-        const sid = `stub-out:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
-        if (!stubSeen.has(sid)) {
-          stubSeen.add(sid)
-          viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
-            data: { dir: 'out', port: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) },
-            draggable: false, selectable: false })
-          outs++
-        }
-        viewEdges.push({ ...e, id: `v-${e.id}`, target: sid, targetHandle: 'in' })
-      }
-    })
-    return { viewNodes, viewEdges }
+  // 노드 그룹키 → 현재 레벨 대표: 'node'(직속) | {kind:'group',key} | 'external'(현재 서브트리 밖)
+  const repOf = (gk) => {
+    if (gk === level) return { kind: 'node' }
+    let g = gk
+    while (g != null) {
+      if (parentOf[g] === level) return { kind: 'group', key: g }
+      g = parentOf[g]
+    }
+    return { kind: 'external' }
   }
+  const nodeRep = Object.fromEntries(nodes.map((n) => [n.id, repOf(n.data.group || null)]))
 
-  // 최상위
-  const viewNodes = nodes.filter((n) => !n.data.group)
+  const subtreeCount = {}                          // 그룹별 서브트리 노드 수(뱃지)
+  nodes.forEach((n) => {
+    let g = n.data.group || null
+    while (g != null) { subtreeCount[g] = (subtreeCount[g] || 0) + 1; g = parentOf[g] }
+  })
+
+  const viewNodes = []
+  nodes.forEach((n) => { if (nodeRep[n.id].kind === 'node') viewNodes.push(n) })   // 직속 노드
   const groupById = {}
-  groups.forEach((g) => {
+  groups.forEach((g) => {                          // 직속 하위그룹 = 접힌 노드
+    if (parentOf[g.key] !== level) return
     const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y },
       selected: !!selGroups && selGroups.has(g.key),
-      data: { key: g.key, name: g.name, inputs: [], outputs: [], count: 0 } }
+      data: { key: g.key, name: g.name, inputs: [], outputs: [], count: subtreeCount[g.key] || 0 } }
     groupById[g.key] = gn
     viewNodes.push(gn)
   })
-  nodes.forEach((n) => { if (n.data.group && groupById[n.data.group]) groupById[n.data.group].data.count++ })
 
   const viewEdges = []
+  const stubSeen = new Set()
+  let ins = 0, outs = 0
   edges.forEach((e) => {
-    const sg = groupOf[e.source], tg = groupOf[e.target]
-    if (sg && tg && sg === tg) return          // 그룹 내부 엣지 → 최상위에선 숨김
+    const rs = nodeRep[e.source], rt = nodeRep[e.target]
+    if (!rs || !rt) return
+    if (rs.kind === 'group' && rt.kind === 'group' && rs.key === rt.key) return   // 같은 하위그룹 내부 → 숨김
+    if (rs.kind === 'external' && rt.kind === 'external') return                   // 현재 서브트리 밖 → 숨김
     let src = e.source, srcH = e.sourceHandle, tgt = e.target, tgtH = e.targetHandle
-    if (sg && groupById[sg]) {
-      const hid = `out:${e.source}:${e.sourceHandle}`
-      if (!groupById[sg].data.outputs.find((h) => h.id === hid))
-        groupById[sg].data.outputs.push({ id: hid, port: e.sourceHandle, label: lab(e.source, e.sourceHandle) })
-      src = `group:${sg}`; srcH = hid
+    if (rs.kind === 'group') {
+      const hid = `out:${e.source}:${e.sourceHandle}`, gd = groupById[rs.key].data
+      if (!gd.outputs.find((h) => h.id === hid))
+        gd.outputs.push({ id: hid, port: e.sourceHandle, label: lab(e.source, e.sourceHandle) })
+      src = `group:${rs.key}`; srcH = hid
+    } else if (rs.kind === 'external') {
+      const sid = `stub-in:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
+      if (!stubSeen.has(sid)) {
+        stubSeen.add(sid)
+        viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
+          data: { dir: 'in', port: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) },
+          draggable: false, selectable: false })
+        ins++
+      }
+      src = sid; srcH = 'out'
     }
-    if (tg && groupById[tg]) {
-      const hid = `in:${e.target}:${e.targetHandle}`
-      if (!groupById[tg].data.inputs.find((h) => h.id === hid))
-        groupById[tg].data.inputs.push({ id: hid, port: e.targetHandle, label: lab(e.target, e.targetHandle) })
-      tgt = `group:${tg}`; tgtH = hid
+    if (rt.kind === 'group') {
+      const hid = `in:${e.target}:${e.targetHandle}`, gd = groupById[rt.key].data
+      if (!gd.inputs.find((h) => h.id === hid))
+        gd.inputs.push({ id: hid, port: e.targetHandle, label: lab(e.target, e.targetHandle) })
+      tgt = `group:${rt.key}`; tgtH = hid
+    } else if (rt.kind === 'external') {
+      const sid = `stub-out:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
+      if (!stubSeen.has(sid)) {
+        stubSeen.add(sid)
+        viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
+          data: { dir: 'out', port: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) },
+          draggable: false, selectable: false })
+        outs++
+      }
+      tgt = sid; tgtH = 'in'
     }
     viewEdges.push({ ...e, id: `v-${e.id}`, source: src, sourceHandle: srcH, target: tgt, targetHandle: tgtH })
   })
@@ -273,7 +280,7 @@ export default function Editor() {
   // 실제 노드 + 그룹(접힌 노드)을 하나로. 그룹이 섞이면 그 멤버까지 흡수해 **병합**(단일 계층 유지),
   // 나머지 선택 그룹은 대상 그룹으로 합쳐지며 사라진다.
   const createOrMergeGroup = useCallback((realIds, groupKeys) => {
-    if (activeGroup) return
+    // activeGroup 안에서도 동작 → 그 안에 **하위그룹** 생성(중첩). 새 그룹 parent = 현재 레벨.
     const memberIds = nodes.filter((n) => n.data.group && groupKeys.includes(n.data.group)).map((n) => n.id)
     const allIds = [...new Set([...realIds, ...memberIds])]
     if (!allIds.length) return
@@ -288,12 +295,15 @@ export default function Editor() {
     }
     const drop = new Set(groupKeys.slice(1))   // 대상으로 합쳐지며 사라지는 다른 그룹들
     const mem = nodes.filter((n) => allIds.includes(n.id))
-    const cx = Math.round(mem.reduce((s, n) => s + n.position.x, 0) / mem.length)
-    const cy = Math.round(mem.reduce((s, n) => s + n.position.y, 0) / mem.length)
+    const cx = Math.round(mem.reduce((s, n) => s + n.position.x, 0) / (mem.length || 1))
+    const cy = Math.round(mem.reduce((s, n) => s + n.position.y, 0) / (mem.length || 1))
     setNodes((nds) => nds.map((n) => (allIds.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
     setGroups((gs) => {
-      const next = gs.filter((g) => !drop.has(g.key))
-      return merging ? next : next.concat({ key, name, collapsed: true, x: cx, y: cy })
+      let next = gs
+        .filter((g) => !drop.has(g.key))                                 // 병합돼 사라지는 그룹
+        .map((g) => (drop.has(g.parent) ? { ...g, parent: key } : g))    // 사라진 그룹의 하위그룹 → 대상으로
+      if (!merging) next = next.concat({ key, name, collapsed: true, x: cx, y: cy, parent: activeGroup || null })
+      return next
     })
     setSelectedIds([]); setSelectedGroupKeys([])
     setStatus(`그룹 '${name}' ${merging ? '병합' : '생성'} (${allIds.length} 노드)`)
@@ -305,9 +315,10 @@ export default function Editor() {
   )
 
   const removeFromGroup = useCallback((id) => {
-    setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: { ...n.data, group: null } } : n)))
-    setStatus('노드를 그룹에서 뺐음')
-  }, [setNodes])
+    const up = groups.find((g) => g.key === activeGroup)?.parent || null   // 현재 그룹의 상위로
+    setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: { ...n.data, group: up } } : n)))
+    setStatus('노드를 상위 레벨로 뺐음')
+  }, [setNodes, activeGroup, groups])
 
   // 우클릭 대상 노드가 선택에 없으면 그 노드만, 있으면 현재 선택 전체를 그룹 대상으로.
   const groupTargets = useCallback((id) => {
@@ -327,12 +338,15 @@ export default function Editor() {
   }, [])
 
   const onUngroup = useCallback((key) => {
-    setNodes((nds) => nds.map((n) => (n.data.group === key ? { ...n, data: { ...n.data, group: null } } : n)))
-    setGroups((gs) => gs.filter((g) => g.key !== key))
-    if (activeGroup === key) setActiveGroup(null)
+    const up = groups.find((g) => g.key === key)?.parent || null      // 해제 시 내용물은 상위 레벨로
+    setNodes((nds) => nds.map((n) => (n.data.group === key ? { ...n, data: { ...n.data, group: up } } : n)))
+    setGroups((gs) => gs
+      .filter((g) => g.key !== key)
+      .map((g) => (g.parent === key ? { ...g, parent: up } : g)))     // 하위그룹은 상위로 승격
+    if (activeGroup === key) setActiveGroup(up)
     setSelectedGroupKeys((ks) => ks.filter((k) => k !== key))
     setStatus('그룹 해제됨')
-  }, [setNodes, activeGroup])
+  }, [setNodes, activeGroup, groups])
 
   const onUngroupSelected = useCallback(() => selectedGroupKeys.forEach(onUngroup), [selectedGroupKeys, onUngroup])
 
@@ -422,6 +436,14 @@ export default function Editor() {
   }, [types])
 
   const activeGroupObj = groups.find((g) => g.key === activeGroup)
+  // 중첩 경로: 최상위 → … → 현재 그룹 (breadcrumb)
+  const activeGroupPath = useMemo(() => {
+    const byKey = Object.fromEntries(groups.map((g) => [g.key, g]))
+    const path = []
+    let k = activeGroup
+    while (k && byKey[k] && !path.includes(byKey[k])) { path.unshift(byKey[k]); k = byKey[k].parent || null }
+    return path
+  }, [groups, activeGroup])
 
   return (
     <div className="editor">
@@ -453,15 +475,13 @@ export default function Editor() {
           </select>
           <button onClick={onSave}>저장 (PUT)</button>
           <button onClick={onEvaluate}>평가</button>
-          {!activeGroup && (
-            <button onClick={onCreateGroup}
-                    disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
-                    title="선택한 노드·그룹을 하나의 그룹으로 (그룹이 섞이면 병합)">
-              {selectedGroupKeys.length ? '그룹 병합' : '그룹 만들기'}
-              {(selectedIds.length + selectedGroupKeys.length) ? ` (${selectedIds.length + selectedGroupKeys.length})` : ''}
-            </button>
-          )}
-          {!activeGroup && selectedGroupKeys.length > 0 && (
+          <button onClick={onCreateGroup}
+                  disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
+                  title={activeGroup ? '선택을 이 그룹 안의 하위그룹으로 (중첩)' : '선택한 노드·그룹을 하나의 그룹으로 (그룹이 섞이면 병합)'}>
+            {selectedGroupKeys.length ? '그룹 병합' : (activeGroup ? '하위그룹 만들기' : '그룹 만들기')}
+            {(selectedIds.length + selectedGroupKeys.length) ? ` (${selectedIds.length + selectedGroupKeys.length})` : ''}
+          </button>
+          {selectedGroupKeys.length > 0 && (
             <button onClick={onUngroupSelected} title="선택한 그룹 해제">
               그룹 해제{selectedGroupKeys.length > 1 ? ` (${selectedGroupKeys.length})` : ''}
             </button>
@@ -477,11 +497,20 @@ export default function Editor() {
         {(activeGroup || groups.length > 0) && (
           <div className="breadcrumb">
             <button className={activeGroup ? 'link' : 'link cur'} onClick={() => setActiveGroup(null)}>{graphName || 'graph'}</button>
+            {activeGroupPath.map((g, i) => {
+              const last = i === activeGroupPath.length - 1
+              return (
+                <span key={g.key}>
+                  <span className="sep">›</span>
+                  {last
+                    ? <span className="cur">▤ {g.name || g.key}</span>
+                    : <button className="link" onClick={() => setActiveGroup(g.key)}>▤ {g.name || g.key}</button>}
+                </span>
+              )
+            })}
             {activeGroup && (
               <>
-                <span className="sep">›</span>
-                <span className="cur">▤ {activeGroupObj?.name || activeGroup}</span>
-                <span className="bc-hint">그룹 내부 — 멤버 편집 · 좌우 스텁 = 외부 입출력</span>
+                <span className="bc-hint">그룹 내부 — 멤버·하위그룹 편집 · 좌우 스텁 = 외부 입출력</span>
                 <button className="ungroup" onClick={() => onUngroup(activeGroup)}>그룹 해제</button>
               </>
             )}
@@ -522,13 +551,13 @@ export default function Editor() {
             <div className="ctx-backdrop" onClick={closeMenu}
                  onContextMenu={(e) => { e.preventDefault(); closeMenu() }} />
             <ul className="ctx-menu" style={{ left: menu.x, top: menu.y }}>
-              {menu.kind === 'node' && !activeGroup && (
+              {menu.kind === 'node' && (
                 <li onClick={() => { createOrMergeGroup(groupTargets(menu.id), selectedGroupKeys); closeMenu() }}>
-                  {selectedGroupKeys.length ? '선택과 그룹 병합' : '선택 노드 그룹으로 묶기'} ({groupTargets(menu.id).length + selectedGroupKeys.length})
+                  {selectedGroupKeys.length ? '선택과 그룹 병합' : (activeGroup ? '선택 하위그룹으로 묶기' : '선택 노드 그룹으로 묶기')} ({groupTargets(menu.id).length + selectedGroupKeys.length})
                 </li>
               )}
               {menu.kind === 'node' && activeGroup && (
-                <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>그룹에서 빼기</li>
+                <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>상위 레벨로 빼기</li>
               )}
               {menu.kind === 'group' && (
                 <>
@@ -542,15 +571,15 @@ export default function Editor() {
                   <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>그룹 해제</li>
                 </>
               )}
-              {menu.kind === 'pane' && !activeGroup && (
+              {menu.kind === 'pane' && (
                 (selectedIds.length || selectedGroupKeys.length >= 2)
                   ? <li onClick={() => { createOrMergeGroup(selectedIds, selectedGroupKeys); closeMenu() }}>
-                      {selectedGroupKeys.length ? '선택 그룹·노드 병합' : '선택 노드 그룹으로 묶기'} ({selectedIds.length + selectedGroupKeys.length})
+                      {selectedGroupKeys.length ? '선택 그룹·노드 병합' : (activeGroup ? '선택 하위그룹으로 묶기' : '선택 노드 그룹으로 묶기')} ({selectedIds.length + selectedGroupKeys.length})
                     </li>
                   : <li className="disabled">노드/그룹을 선택한 뒤 우클릭</li>
               )}
               {menu.kind === 'pane' && activeGroup && (
-                <li onClick={() => { setActiveGroup(null); closeMenu() }}>상위로 나가기</li>
+                <li onClick={() => { setActiveGroup(activeGroupObj?.parent || null); closeMenu() }}>상위로 나가기</li>
               )}
             </ul>
           </>

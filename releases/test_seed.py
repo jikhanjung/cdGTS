@@ -189,7 +189,9 @@ def test_age_groups_all_periods(seeded):
     from graph.models import Graph, NodeGroup, Gateway, NodeInstance
     from engine.evaluate import evaluate_graph
     g = Graph.objects.get(slug="example-icc-partial")
-    assert g.groups.filter(key__startswith="ages-").count() == 12     # age 세분 있는 period(Carboniferous 포함)
+    assert g.groups.filter(key__startswith="ages-", parent__isnull=True).count() == 12  # period별 age 그룹
+    assert g.groups.filter(parent__isnull=False).count() == 2         # 중첩 데모: Carb 아계 2 하위그룹
+    assert g.groups.get(key="ages-mississippian").parent.key == "ages-carboniferous"
     grp = NodeGroup.objects.get(graph=g, key="ages-triassic")
     keys = set(grp.members.values_list("key", flat=True))
     # 멤버 = 내부 age pub 6 + 내부 order 5 (period 경계에 tie 하는 order 2 는 그룹 밖)

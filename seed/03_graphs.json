@@ -556,6 +556,40 @@
    "graph": [
     "example-icc-partial"
    ],
+   "key": "ages-mississippian",
+   "name": "Mississippian · Age",
+   "collapsed": true,
+   "x": 2360,
+   "y": 1660,
+   "parent": [
+    "example-icc-partial",
+    "ages-carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodegroup",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ages-pennsylvanian",
+   "name": "Pennsylvanian · Age",
+   "collapsed": true,
+   "x": 2360,
+   "y": 1760,
+   "parent": [
+    "example-icc-partial",
+    "ages-carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodegroup",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
    "key": "ages-devonian",
    "name": "Devonian · Age 세분",
    "collapsed": true,
@@ -11136,7 +11170,7 @@
    "y": 1150,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-mississippian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160
@@ -11182,7 +11216,7 @@
    "y": 1220,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-mississippian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160
@@ -11228,7 +11262,7 @@
    "y": 1290,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-pennsylvanian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160
@@ -11274,7 +11308,7 @@
    "y": 1360,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-pennsylvanian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160
@@ -11320,7 +11354,7 @@
    "y": 1430,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-pennsylvanian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160
@@ -11366,7 +11400,7 @@
    "y": 1500,
    "group": [
     "example-icc-partial",
-    "ages-carboniferous"
+    "ages-pennsylvanian"
    ],
    "description": "Age · ICS 2024-12",
    "width": 160

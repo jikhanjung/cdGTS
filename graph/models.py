@@ -83,6 +83,10 @@ class NodeGroup(models.Model):
     collapsed = models.BooleanField(default=False)
     x = models.FloatField(default=0)
     y = models.FloatField(default=0)
+    parent = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children",
+        help_text="상위 그룹(중첩). null=최상위. 엔진 무관 — 표현/드릴인 계층만.",
+    )
 
     objects = NodeGroupManager()
 
