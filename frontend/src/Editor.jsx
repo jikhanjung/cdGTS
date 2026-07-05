@@ -593,6 +593,7 @@ export default function Editor() {
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
             selectionOnDrag={!IS_TOUCH}          // 데스크톱: 좌-드래그 = 선택 박스
+            autoPanOnSelection={false}           // 선택 중 auto-pan 금지 — pan 하면 screenStart 가 이동해 박스 x 가 튐
             panOnDrag={IS_TOUCH ? true : [1]}    // 터치: 드래그 팬 / 데스크톱: 가운데버튼
             zoomOnPinch                          // 터치: 핀치 줌
             selectionMode={SelectionMode.Partial}
