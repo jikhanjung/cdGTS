@@ -4888,7 +4888,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 100,
+   "y": 70,
    "group": null,
    "description": "base-quaternary (older) ≥ base-calabrian (younger)",
    "width": null
@@ -4948,7 +4948,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 170,
+   "y": 135,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5011,7 +5011,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 240,
+   "y": 205,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5074,7 +5074,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 310,
+   "y": 275,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5137,7 +5137,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 380,
+   "y": 345,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5200,7 +5200,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 450,
+   "y": 415,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5631,7 +5631,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 250,
+   "y": 191,
    "group": null,
    "description": "base-neogene (older) ≥ base-aquitanian (younger)",
    "width": null
@@ -5691,7 +5691,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 320,
+   "y": 285,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5754,7 +5754,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 390,
+   "y": 355,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5817,7 +5817,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 460,
+   "y": 425,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5880,7 +5880,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 530,
+   "y": 495,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5943,7 +5943,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 600,
+   "y": 565,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6006,7 +6006,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 670,
+   "y": 635,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6069,7 +6069,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 740,
+   "y": 705,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6132,7 +6132,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 810,
+   "y": 390,
    "group": null,
    "description": "base-piacenzian (older) ≥ base-quaternary (younger)",
    "width": null
@@ -6560,7 +6560,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 400,
+   "y": 312,
    "group": null,
    "description": "base-paleogene (older) ≥ base-selandian (younger)",
    "width": null
@@ -6620,7 +6620,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 470,
+   "y": 435,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6683,7 +6683,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 540,
+   "y": 505,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6746,7 +6746,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 610,
+   "y": 575,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6809,7 +6809,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 680,
+   "y": 645,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6872,7 +6872,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 750,
+   "y": 715,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6935,7 +6935,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 820,
+   "y": 785,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6998,7 +6998,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 890,
+   "y": 855,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -7061,7 +7061,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 960,
+   "y": 525,
    "group": null,
    "description": "base-chattian (older) ≥ base-neogene (younger)",
    "width": null
@@ -7627,7 +7627,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 550,
+   "y": 479,
    "group": null,
    "description": "base-cretaceous (older) ≥ base-valanginian (younger)",
    "width": null
@@ -7687,7 +7687,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 620,
+   "y": 585,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7750,7 +7750,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 690,
+   "y": 655,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7813,7 +7813,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 760,
+   "y": 725,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7876,7 +7876,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 830,
+   "y": 795,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7939,7 +7939,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 900,
+   "y": 865,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8002,7 +8002,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 970,
+   "y": 935,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8065,7 +8065,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1040,
+   "y": 1005,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8128,7 +8128,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1110,
+   "y": 1075,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8191,7 +8191,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1180,
+   "y": 1145,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8254,7 +8254,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1250,
+   "y": 1215,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -8317,7 +8317,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1320,
+   "y": 737,
    "group": null,
    "description": "base-maastrichtian (older) ≥ base-paleogene (younger)",
    "width": null
@@ -8837,7 +8837,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 700,
+   "y": 600,
    "group": null,
    "description": "base-jurassic (older) ≥ base-sinemurian (younger)",
    "width": null
@@ -8897,7 +8897,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 770,
+   "y": 735,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -8960,7 +8960,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 840,
+   "y": 805,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9023,7 +9023,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 910,
+   "y": 875,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9086,7 +9086,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 980,
+   "y": 945,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9149,7 +9149,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1050,
+   "y": 1015,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9212,7 +9212,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1120,
+   "y": 1085,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9275,7 +9275,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1190,
+   "y": 1155,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9338,7 +9338,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1260,
+   "y": 1225,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9401,7 +9401,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1330,
+   "y": 1295,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -9464,7 +9464,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1400,
+   "y": 896,
    "group": null,
    "description": "base-tithonian (older) ≥ base-cretaceous (younger)",
    "width": null
@@ -9800,7 +9800,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 850,
+   "y": 783,
    "group": null,
    "description": "base-triassic (older) ≥ base-olenekian (younger)",
    "width": null
@@ -9860,7 +9860,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 920,
+   "y": 885,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -9923,7 +9923,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 990,
+   "y": 955,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -9986,7 +9986,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1060,
+   "y": 1025,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -10049,7 +10049,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1130,
+   "y": 1095,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -10112,7 +10112,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1200,
+   "y": 1165,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -10175,7 +10175,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1270,
+   "y": 850,
    "group": null,
    "description": "base-rhaetian (older) ≥ base-jurassic (younger)",
    "width": null
@@ -10603,7 +10603,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1000,
+   "y": 942,
    "group": null,
    "description": "base-permian (older) ≥ base-sakmarian (younger)",
    "width": null
@@ -10663,7 +10663,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1070,
+   "y": 1035,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -10726,7 +10726,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1140,
+   "y": 1105,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -10789,7 +10789,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1210,
+   "y": 1175,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -10852,7 +10852,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1280,
+   "y": 1245,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -10915,7 +10915,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1350,
+   "y": 1315,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -10978,7 +10978,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1420,
+   "y": 1385,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -11041,7 +11041,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1490,
+   "y": 1455,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -11104,7 +11104,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1560,
+   "y": 1087,
    "group": null,
    "description": "base-changhsingian (older) ≥ base-triassic (younger)",
    "width": null
@@ -11440,7 +11440,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1150,
+   "y": 1009,
    "group": null,
    "description": "base-carboniferous (older) ≥ base-visean (younger)",
    "width": null
@@ -11500,7 +11500,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1220,
+   "y": 1185,
    "group": [
     "example-icc-partial",
     "ages-carboniferous"
@@ -11563,7 +11563,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1290,
+   "y": 1255,
    "group": [
     "example-icc-partial",
     "ages-carboniferous"
@@ -11626,7 +11626,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1360,
+   "y": 1325,
    "group": [
     "example-icc-partial",
     "ages-carboniferous"
@@ -11689,7 +11689,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1430,
+   "y": 1395,
    "group": [
     "example-icc-partial",
     "ages-carboniferous"
@@ -11752,7 +11752,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1500,
+   "y": 1465,
    "group": [
     "example-icc-partial",
     "ages-carboniferous"
@@ -11815,7 +11815,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1570,
+   "y": 1179,
    "group": null,
    "description": "base-gzhelian (older) ≥ base-permian (younger)",
    "width": null
@@ -12151,7 +12151,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1300,
+   "y": 1133,
    "group": null,
    "description": "base-devonian (older) ≥ base-pragian (younger)",
    "width": null
@@ -12211,7 +12211,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1370,
+   "y": 1335,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -12274,7 +12274,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1440,
+   "y": 1405,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -12337,7 +12337,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1510,
+   "y": 1475,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -12400,7 +12400,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1580,
+   "y": 1545,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -12463,7 +12463,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1650,
+   "y": 1615,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -12526,7 +12526,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1720,
+   "y": 1297,
    "group": null,
    "description": "base-famennian (older) ≥ base-carboniferous (younger)",
    "width": null
@@ -12908,7 +12908,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1450,
+   "y": 1251,
    "group": null,
    "description": "base-silurian (older) ≥ base-aeronian (younger)",
    "width": null
@@ -12968,7 +12968,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1520,
+   "y": 1485,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13031,7 +13031,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1590,
+   "y": 1555,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13094,7 +13094,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1660,
+   "y": 1625,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13157,7 +13157,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1730,
+   "y": 1695,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13220,7 +13220,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1800,
+   "y": 1765,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13283,7 +13283,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1870,
+   "y": 1835,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -13346,7 +13346,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1940,
+   "y": 1418,
    "group": null,
    "description": "base-pridoli (older) ≥ base-devonian (younger)",
    "width": null
@@ -13682,7 +13682,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1600,
+   "y": 1372,
    "group": null,
    "description": "base-ordovician (older) ≥ base-floian (younger)",
    "width": null
@@ -13742,7 +13742,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1670,
+   "y": 1635,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -13805,7 +13805,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1740,
+   "y": 1705,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -13868,7 +13868,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1810,
+   "y": 1775,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -13931,7 +13931,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1880,
+   "y": 1845,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -13994,7 +13994,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1950,
+   "y": 1915,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -14057,7 +14057,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2020,
+   "y": 1539,
    "group": null,
    "description": "base-hirnantian (older) ≥ base-silurian (younger)",
    "width": null
@@ -14531,7 +14531,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1750,
+   "y": 1493,
    "group": null,
    "description": "base-cambrian (older) ≥ base-cambrianstage2 (younger)",
    "width": null
@@ -14591,7 +14591,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1820,
+   "y": 1785,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14654,7 +14654,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1890,
+   "y": 1855,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14717,7 +14717,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 1960,
+   "y": 1925,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14780,7 +14780,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2030,
+   "y": 1995,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14843,7 +14843,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2100,
+   "y": 2065,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14906,7 +14906,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2170,
+   "y": 2135,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -14969,7 +14969,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2240,
+   "y": 2205,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -15032,7 +15032,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2310,
+   "y": 2275,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -15095,7 +15095,7 @@
     "mode": "hard"
    },
    "x": 2600,
-   "y": 2380,
+   "y": 1727,
    "group": null,
    "description": "base-cambrianstage10 (older) ≥ base-ordovician (younger)",
    "width": null
