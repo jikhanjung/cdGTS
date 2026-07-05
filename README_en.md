@@ -1,12 +1,18 @@
-# cdGTS — Continuously Deployed Geologic Time Scale
+# cdGTS
+
+**Continuously Deployed Geologic Time Scale**
+
+*A graph-based geologic time scale engine.*
 
 *English · [한국어](README.md)*
 
-> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.4** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC-table bake + boundary seed from the ICS chart.ttl). The concept corpus stays in `docs/`.
+> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.9** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart / narrate + node groups and order/L2 coherence gates). The concept corpus stays in `docs/`.
 
 ## What is it
 
-Instead of treating the geologic time scale as a **~decade-cadence major release (a book)**, the idea is to treat it as **data that is version-controlled and continuously deployed, like software**.
+cdGTS is a graph-based geologic time scale engine that represents chronostratigraphic units and boundaries as interconnected nodes. Changes propagate through dependency relationships, allowing the geologic time scale to be rebuilt incrementally and reproducibly.
+
+Beyond that — instead of treating the geologic time scale as a **~decade-cadence major release (a book)**, the idea is to treat it as **data that is version-controlled and continuously deployed, like software**.
 
 - **International Chronostratigraphic Chart (ICC)** — the official consensus time scale published by the ICS.
 - **Geologic Time Scale 2020 (GTS2020)** — a detailed reference work that folds in radiometric and astrochronologic calibration. **GTS2030** is currently in preparation.
@@ -35,6 +41,7 @@ Nomenclature (0) → boundary definition (1) → primary observations (2) → lo
 The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map_en.md) — start here** (the layer spine · document map · five convergence points).
 
 **Concept**
+- [docs/naming_en.md](docs/naming_en.md) — name & typography decisions and rationale (Continuously Deployed · geologic · Time Scale)
 - [docs/idea_en.md](docs/idea_en.md) — background · problem · layers 0–6 · gateways · open questions
 - [docs/node-graph-paradigm_en.md](docs/node-graph-paradigm_en.md) — DAG · gateway/network · cycles · edge = distribution
 

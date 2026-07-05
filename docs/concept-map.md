@@ -46,6 +46,7 @@ flowchart TD
 ## 2. 문서 지도
 
 **개념**
+- [naming.md](naming.md) — 이름·표기 결정과 근거 (Continuously Deployed · geologic · Time Scale)
 - [idea.md](idea.md) — 배경·문제의식·레이어 0–6·게이트웨이·열린 질문
 - [node-graph-paradigm.md](node-graph-paradigm.md) — DAG·게이트웨이/네트워크·순환·엣지=분포
 - [tier-category-model.md](tier-category-model.md) — 구현 후 회고: 레이어 0–6 → 티어 × 카테고리(data/process/clamp)

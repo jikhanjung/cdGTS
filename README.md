@@ -1,12 +1,18 @@
-# cdGTS — Continuously Deployed Geologic Time Scale
+# cdGTS
+
+**Continuously Deployed Geologic Time Scale**
+
+*그래프 기반 지질시대표 엔진 — a graph-based geologic time scale engine.*
 
 *[English](README_en.md) · 한국어*
 
-> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 5개 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.4** 배포 중(ICC 테이블 bake + ICS chart.ttl 경계 시드). 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
+> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 5개 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.9** 배포 중(ICC 테이블·차트·서술 + 노드그룹·order/L2 정합성 게이트). 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
 
 ## 무엇인가
 
-지질시대표를 **~10년 주기의 대형 릴리스(책)** 로만 다루지 말고, **소프트웨어처럼 버전 관리되고 지속적으로 배포되는(continuously deployed) 데이터**로 다루자는 구상입니다.
+cdGTS는 지질시대표(Geologic Time Scale)를 정적인 표·그림이 아니라 **연대층서 단위와 경계를 서로 연결된 노드로 표현한 실행 가능한 의존성 그래프**로 구현하는 엔진입니다. 상류 정보가 바뀌면 의존 관계를 따라 변경이 전파되어, 지질시대표를 **증분적·재현 가능하게** 다시 만들 수 있습니다.
+
+여기에 더해 — 지질시대표를 **~10년 주기의 대형 릴리스(책)** 로만 다루지 말고, **소프트웨어처럼 버전 관리되고 지속적으로 배포되는(continuously deployed) 데이터**로 다루자는 구상입니다.
 
 - **International Chronostratigraphic Chart (ICC)** — ICS가 발행하는 공식 합의 시대표.
 - **Geologic Time Scale 2020 (GTS2020)** — 방사연대·천문연대 보정까지 담은 상세 참조 저작. 현재 **GTS2030** 준비 중.
@@ -35,6 +41,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 전체를 잇는 상위 지도는 **[docs/concept-map.md](docs/concept-map.md) — 여기서 시작하세요** (레이어 척추 · 문서 지도 · 수렴점 5개).
 
 **개념**
+- [docs/naming.md](docs/naming.md) — 이름·표기 결정과 근거 (Continuously Deployed · geologic · Time Scale)
 - [docs/idea.md](docs/idea.md) — 배경·문제의식·레이어 0–6·게이트웨이·열린 질문
 - [docs/node-graph-paradigm.md](docs/node-graph-paradigm.md) — DAG·게이트웨이/네트워크·순환·엣지=분포
 
