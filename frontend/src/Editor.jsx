@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  ReactFlow, Background, Controls, MiniMap,
+  ReactFlow, Background, Controls, MiniMap, SelectionMode,
   applyNodeChanges, applyEdgeChanges, useNodesState, useEdgesState, useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -457,6 +457,10 @@ export default function Editor() {
             onPaneContextMenu={onPaneContextMenu}
             onPaneClick={closeMenu}
             nodeTypes={nodeTypes}
+            selectionOnDrag                     // 좌-드래그 = 선택 박스
+            panOnDrag={[1]}                      // 팬 = 가운데버튼 드래그
+            selectionMode={SelectionMode.Partial}
+            multiSelectionKeyCode="Shift"        // Shift+클릭 = 추가 선택
             fitView
           >
             <Background />
