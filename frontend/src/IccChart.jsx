@@ -8,7 +8,8 @@ const HEADER = 22
 
 // 공식 ICS 색(band.color) 우선, 없으면 slug 해시 폴백(rank 로 명도 차등).
 const hue = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h }
-const bandColor = (b, rank) => b.color || `hsl(${hue(b.slug)} 48% ${[60, 60, 70, 76, 82][rank - 1] || 78}%)`
+// rank_n: 1 Eon · 2 Era · 3 Period · 4 Subperiod · 5 Epoch · 6 Age (색 있으면 폴백 미사용)
+const bandColor = (b, rank) => b.color || `hsl(${hue(b.slug)} 48% ${[60, 60, 70, 74, 78, 82][rank - 1] || 80}%)`
 
 // 배경색 밝기에 따라 라벨을 검/흰으로.
 const textOn = (hex) => {

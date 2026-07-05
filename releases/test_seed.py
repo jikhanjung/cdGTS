@@ -28,11 +28,11 @@ def _counts():
 
 def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
-    # ICS chart.ttl 전 rank: units 175(Eon4/Era10/Period22/Epoch37/Age102) · boundary 175 · type 13
-    # (early-triassic 중복 orphan 제거로 176→175)
-    assert (units, boundaries, types, graphs) == (175, 175, 13, 4)
-    # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 175 bake
-    assert (releases, records) == (3, 180)
+    # ICS chart.ttl 전 rank: units 177(Eon4/Era10/Period22/Subperiod2/Epoch37/Age102) · boundary 177 · type 13
+    # (Carboniferous 아계 Mississippian/Pennsylvanian 추가로 175→177)
+    assert (units, boundaries, types, graphs) == (177, 177, 13, 4)
+    # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 177 bake
+    assert (releases, records) == (3, 182)
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
     assert Unit.objects.filter(parent__isnull=False).exists()
 
@@ -53,12 +53,12 @@ def test_add_is_idempotent(seeded):
 
 def test_bake_graph_produces_icc_table(seeded):
     """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다.
-    계층 완성: 그래프가 **전 175 ICC 경계**(Eon…Age)를 재구성 → 공표 릴리스와 대칭."""
+    계층 완성: 그래프가 **전 177 ICC 경계**(Eon…Age, Subperiod 포함)를 재구성 → 공표 릴리스와 대칭."""
     from graph.models import Graph
     from releases.services import bake_graph
     g = Graph.objects.get(slug="example-icc-partial")
     rel, n = bake_graph(g)
-    assert n == 175                                          # 전 ICC 경계 (period+ 36·age 91·epoch 25·첫 age/epoch 23)
+    assert n == 177                                          # 전 ICC 경계 (period+36·age91·epoch25·subperiod2·첫30)
     assert rel.version == "graph:example-icc-partial"
     recs = {r.boundary.slug: r for r in rel.records.select_related("boundary")}
     # 예제 파이프라인 값 유지
@@ -70,14 +70,14 @@ def test_bake_graph_produces_icc_table(seeded):
     assert recs["base-hadean"].value_ma == 4567.0 and recs["base-hadean"].definition_type == "GSSA"
     # 재-bake 는 같은 릴리스에 멱등
     rel2, n2 = bake_graph(g)
-    assert n2 == 175 and rel2.pk == rel.pk
+    assert n2 == 177 and rel2.pk == rel.pk
 
     # HTTP 엔드포인트도 확인
     from rest_framework.test import APIClient
     resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
-    assert resp.status_code == 200 and resp.data["baked"] == 175
+    assert resp.status_code == 200 and resp.data["baked"] == 177
     assert resp.data["release"]["version"] == "graph:example-icc-partial"
-    assert len(resp.data["release"]["records"]) == 175
+    assert len(resp.data["release"]["records"]) == 177
 
 
 def test_icc_chart_tiles_by_rank(seeded):
@@ -90,10 +90,15 @@ def test_icc_chart_tiles_by_rank(seeded):
     d = resp.data
     assert d["max_ma"] == 4567.0
     lv = {x["rank"]: x["bands"] for x in d["levels"]}
-    # 계층 완성: 그래프-bake 도 공표 릴리스와 대칭인 5 rank 컬럼
-    assert [x["rank"] for x in d["levels"]] == ["Eon", "Era", "Period", "Epoch", "Age"]
+    # 계층 완성: 그래프-bake 도 공표 릴리스와 대칭인 6 rank 컬럼 (Subperiod = Carboniferous 만)
+    assert [x["rank"] for x in d["levels"]] == ["Eon", "Era", "Period", "Subperiod", "Epoch", "Age"]
     assert (len(lv["Eon"]), len(lv["Era"]), len(lv["Period"])) == (4, 10, 22)
-    assert len(lv["Epoch"]) == 37 and len(lv["Age"]) == 102     # 공표 릴리스와 동일
+    assert len(lv["Subperiod"]) == 2 and len(lv["Epoch"]) == 37 and len(lv["Age"]) == 102  # 공표 릴리스와 동일
+    # Subperiod 는 sparse rank — 밴드가 제 구간에서 닫힌다(Pennsylvanian 은 Carboniferous 젊은 끝=Permian base 298.9)
+    sp = {b["slug"]: b for b in lv["Subperiod"]}
+    assert sp["mississippian"]["color"] == "#678F66" and sp["pennsylvanian"]["color"] == "#7EBCC6"
+    assert (sp["mississippian"]["top"], sp["mississippian"]["bottom"]) == (323.4, 358.86)
+    assert (sp["pennsylvanian"]["top"], sp["pennsylvanian"]["bottom"]) == (298.9, 323.4)
     eon = {b["slug"]: b for b in lv["Eon"]}
     assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8
     assert eon["hadean"]["bottom"] == 4567.0
@@ -113,7 +118,7 @@ def test_icc_chart_tiles_by_rank(seeded):
 
 
 def test_release_icc_chart_five_ranks(seeded):
-    """공표 릴리스(ICS-2024/12) ICC 차트 — Age 까지 5 rank 컬럼, 값·색 포함."""
+    """공표 릴리스(ICS-2024/12) ICC 차트 — Age 까지 6 rank 컬럼(Subperiod 포함), 값·색 포함."""
     from rest_framework.test import APIClient
     r = Release.objects.get(version="ICS-2024/12")
     resp = APIClient().get(f"/api/releases/{r.pk}/icc-chart/")
@@ -121,7 +126,7 @@ def test_release_icc_chart_five_ranks(seeded):
     d = resp.data
     assert d["max_ma"] == 4567.0
     ranks = [lv["rank"] for lv in d["levels"]]
-    assert ranks == ["Eon", "Era", "Period", "Epoch", "Age"]     # 5 컬럼
+    assert ranks == ["Eon", "Era", "Period", "Subperiod", "Epoch", "Age"]     # 6 컬럼
     lv = {x["rank"]: x["bands"] for x in d["levels"]}
     assert len(lv["Age"]) >= 90 and len(lv["Epoch"]) >= 30       # stage/epoch 다수
     per = {b["slug"]: b for b in lv["Period"]}
@@ -137,7 +142,9 @@ def test_narrate_release_renders_and_persists(seeded):
     resp = APIClient().post(f"/api/releases/{r.pk}/narrate/")
     assert resp.status_code == 200
     secs = {s["rank"]: s["entries"] for s in resp.data["sections"]}
-    assert list(secs) == ["Eon", "Era", "Period", "Epoch", "Age"]
+    assert list(secs) == ["Eon", "Era", "Period", "Subperiod", "Epoch", "Age"]
+    # Subperiod 서술: Mississippian/Pennsylvanian (이중 명명 Subsystem)
+    assert {e["boundary"] for e in secs["Subperiod"]} == {"base-mississippian", "base-pennsylvanian"}
     # GSSP 는 이중 명명 + 파생 연대 + 오차, GSSA 는 약속값(오차 없음)
     tri = next(e for e in secs["Period"] if e["boundary"] == "base-triassic")
     assert "Triassic System" in tri["narrative"] and "251.902 ± 0.024 Ma" in tri["narrative"] and "GSSP" in tri["narrative"]

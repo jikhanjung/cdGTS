@@ -10,8 +10,8 @@ def seeded(db):
 
 
 def test_fixture_loads_icc_boundaries(seeded):
-    # ICS chart.ttl 확장: 예제 3 + period+/finer 경계. 예제 슬러그는 보존.
-    assert Boundary.objects.count() == 175
+    # ICS chart.ttl 확장: 예제 3 + period+/finer 경계 + Carboniferous 아계 2. 예제 슬러그는 보존.
+    assert Boundary.objects.count() == 177
     assert {"base-triassic", "base-proterozoic", "base-cambrian"} <= set(
         Boundary.objects.values_list("slug", flat=True)
     )
@@ -21,6 +21,17 @@ def test_dual_naming(db):
     u = Unit.objects.create(slug="induan", name="Induan", rank=Rank.AGE)
     assert u.chronostratigraphic_name == "Induan Stage"
     assert u.geochronologic_name == "Induan Age"
+
+
+def test_subperiod_rank_and_naming(seeded):
+    # Carboniferous 아계 — Period 와 Epoch 사이 정식 등급(이중 명명 Subperiod/Subsystem)
+    miss = Unit.objects.get(slug="mississippian")
+    assert miss.rank == Rank.SUB_PERIOD
+    assert miss.geochronologic_name == "Mississippian Subperiod"
+    assert miss.chronostratigraphic_name == "Mississippian Subsystem"
+    # 계보: Carb epoch → subperiod → Carboniferous(Period)
+    assert Unit.objects.get(slug="lowerpennsylvanian").parent.slug == "pennsylvanian"
+    assert miss.parent.slug == "carboniferous"
 
 
 def test_separates_and_hierarchy(seeded):

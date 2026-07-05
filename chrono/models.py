@@ -10,17 +10,19 @@ from django.db import models
 
 
 class Rank(models.IntegerChoices):
-    """이중 명명 사다리 — 한 등급의 두 이름(연대층서 ↔ 지질연대)."""
+    """이중 명명 사다리 — 한 등급의 두 이름(연대층서 ↔ 지질연대).
+    Subperiod(Subsystem)는 Period 와 Epoch 사이 정식 ICS 등급으로 현재 Carboniferous 만 사용."""
     EON = 1, "Eon / Eonothem"
     ERA = 2, "Era / Erathem"
     PERIOD = 3, "Period / System"
-    EPOCH = 4, "Epoch / Series"
-    AGE = 5, "Age / Stage"
+    SUB_PERIOD = 4, "Subperiod / Subsystem"
+    EPOCH = 5, "Epoch / Series"
+    AGE = 6, "Age / Stage"
 
 
 # 이중 명명: 같은 고유명(예: Changhsingian)에 등급어만 다르게 붙는다.
-_CHRONO_TERM = {1: "Eonothem", 2: "Erathem", 3: "System", 4: "Series", 5: "Stage"}
-_GEO_TERM = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
+_CHRONO_TERM = {1: "Eonothem", 2: "Erathem", 3: "System", 4: "Subsystem", 5: "Series", 6: "Stage"}
+_GEO_TERM = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
 
 
 class UnitManager(models.Manager):

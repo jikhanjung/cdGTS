@@ -111,9 +111,9 @@ def narrate_release(release):
         by_rank.setdefault(u.rank if u else 0, []).append((r, u))
     BoundaryRecord.objects.bulk_update(records, ["narrative"])
 
-    GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
+    GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
     sections = []
-    for rn in (1, 2, 3, 4, 5):
+    for rn in (1, 2, 3, 4, 5, 6):
         rows = by_rank.get(rn, [])
         rows.sort(key=lambda z: (z[0].value_ma if z[0].value_ma is not None else 0), reverse=True)
         if not rows:

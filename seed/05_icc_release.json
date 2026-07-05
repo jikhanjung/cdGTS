@@ -5669,5 +5669,73 @@
     "ics/2024-12"
    ]
   }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-mississippian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 358.86,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.19
+    },
+    "note": "ICS 2024-12 chart.ttl (subperiod)"
+   }
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-mississippian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pennsylvanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 323.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl (subperiod)"
+   }
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pennsylvanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
  }
 ]

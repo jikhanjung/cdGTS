@@ -15111,6 +15111,24 @@
    "graph": [
     "example-icc-partial"
    ],
+   "slug": "base-pennsylvanian-gw",
+   "name": "Base of the Pennsylvanian",
+   "node": [
+    "example-icc-partial",
+    "pub-bashkirian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-pennsylvanian"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
    "slug": "base-lopingian-gw",
    "name": "Base of the Lopingian",
    "node": [
@@ -15552,6 +15570,24 @@
    "output_port": "out",
    "boundary": [
     "base-uppercretaceous"
+   ]
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-mississippian-gw",
+   "name": "Base of the Mississippian",
+   "node": [
+    "example-icc-partial",
+    "pub-carboniferous"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-mississippian"
    ]
   }
  },

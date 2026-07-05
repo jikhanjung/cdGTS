@@ -427,9 +427,33 @@
  {
   "model": "chrono.unit",
   "fields": {
+   "slug": "mississippian",
+   "name": "Mississippian",
+   "rank": 4,
+   "color": "#678F66",
+   "parent": [
+    "carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pennsylvanian",
+   "name": "Pennsylvanian",
+   "rank": 4,
+   "color": "#7EBCC6",
+   "parent": [
+    "carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
    "slug": "lopingian",
    "name": "Lopingian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "permian"
    ],
@@ -441,7 +465,7 @@
   "fields": {
    "slug": "terreneuvian",
    "name": "Terreneuvian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cambrian"
    ],
@@ -453,9 +477,9 @@
   "fields": {
    "slug": "lowermississippian",
    "name": "Lower Mississippian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "mississippian"
    ],
    "color": "#80AB6C"
   }
@@ -465,9 +489,9 @@
   "fields": {
    "slug": "lowerpennsylvanian",
    "name": "Lower Pennsylvanian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "pennsylvanian"
    ],
    "color": "#8CBEB4"
   }
@@ -477,9 +501,9 @@
   "fields": {
    "slug": "middlemississippian",
    "name": "Middle Mississippian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "mississippian"
    ],
    "color": "#99B46C"
   }
@@ -489,9 +513,9 @@
   "fields": {
    "slug": "middlepennsylvanian",
    "name": "Middle Pennsylvanian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "pennsylvanian"
    ],
    "color": "#A6C7B7"
   }
@@ -501,9 +525,9 @@
   "fields": {
    "slug": "uppermississippian",
    "name": "Upper Mississippian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "mississippian"
    ],
    "color": "#B3BE6C"
   }
@@ -513,7 +537,7 @@
   "fields": {
    "slug": "cambrianseries2",
    "name": "Cambrian Series 2",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cambrian"
    ],
@@ -525,7 +549,7 @@
   "fields": {
    "slug": "lowerordovician",
    "name": "Lower Ordovician",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "ordovician"
    ],
@@ -537,7 +561,7 @@
   "fields": {
    "slug": "lowertriassic",
    "name": "Lower Triassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "triassic"
    ],
@@ -549,7 +573,7 @@
   "fields": {
    "slug": "ludlow",
    "name": "Ludlow",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "silurian"
    ],
@@ -561,7 +585,7 @@
   "fields": {
    "slug": "middledevonian",
    "name": "Middle Devonian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "devonian"
    ],
@@ -573,7 +597,7 @@
   "fields": {
    "slug": "middleordovician",
    "name": "Middle Ordovician",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "ordovician"
    ],
@@ -585,7 +609,7 @@
   "fields": {
    "slug": "middletriassic",
    "name": "Middle Triassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "triassic"
    ],
@@ -597,7 +621,7 @@
   "fields": {
    "slug": "oligocene",
    "name": "Oligocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "paleogene"
    ],
@@ -609,7 +633,7 @@
   "fields": {
    "slug": "pliocene",
    "name": "Pliocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "neogene"
    ],
@@ -621,7 +645,7 @@
   "fields": {
    "slug": "upperdevonian",
    "name": "Upper Devonian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "devonian"
    ],
@@ -633,9 +657,9 @@
   "fields": {
    "slug": "upperpennsylvanian",
    "name": "Upper Pennsylvanian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
-    "carboniferous"
+    "pennsylvanian"
    ],
    "color": "#BFD0BA"
   }
@@ -645,7 +669,7 @@
   "fields": {
    "slug": "wenlock",
    "name": "Wenlock",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "silurian"
    ],
@@ -657,7 +681,7 @@
   "fields": {
    "slug": "furongian",
    "name": "Furongian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cambrian"
    ],
@@ -669,7 +693,7 @@
   "fields": {
    "slug": "guadalupian",
    "name": "Guadalupian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "permian"
    ],
@@ -681,7 +705,7 @@
   "fields": {
    "slug": "holocene",
    "name": "Holocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "quaternary"
    ],
@@ -693,7 +717,7 @@
   "fields": {
    "slug": "llandovery",
    "name": "Llandovery",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "silurian"
    ],
@@ -705,7 +729,7 @@
   "fields": {
    "slug": "lowerdevonian",
    "name": "Lower Devonian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "devonian"
    ],
@@ -717,7 +741,7 @@
   "fields": {
    "slug": "miaolingian",
    "name": "Miaolingian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cambrian"
    ],
@@ -729,7 +753,7 @@
   "fields": {
    "slug": "paleocene",
    "name": "Paleocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "paleogene"
    ],
@@ -741,7 +765,7 @@
   "fields": {
    "slug": "upperjurassic",
    "name": "Upper Jurassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "jurassic"
    ],
@@ -753,7 +777,7 @@
   "fields": {
    "slug": "upperordovician",
    "name": "Upper Ordovician",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "ordovician"
    ],
@@ -765,7 +789,7 @@
   "fields": {
    "slug": "uppertriassic",
    "name": "Upper Triassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "triassic"
    ],
@@ -777,7 +801,7 @@
   "fields": {
    "slug": "cisuralian",
    "name": "Cisuralian",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "permian"
    ],
@@ -789,7 +813,7 @@
   "fields": {
    "slug": "eocene",
    "name": "Eocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "paleogene"
    ],
@@ -801,7 +825,7 @@
   "fields": {
    "slug": "lowerjurassic",
    "name": "Lower Jurassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "jurassic"
    ],
@@ -813,7 +837,7 @@
   "fields": {
    "slug": "middlejurassic",
    "name": "Middle Jurassic",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "jurassic"
    ],
@@ -825,7 +849,7 @@
   "fields": {
    "slug": "pleistocene",
    "name": "Pleistocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "quaternary"
    ],
@@ -837,7 +861,7 @@
   "fields": {
    "slug": "lowercretaceous",
    "name": "Lower Cretaceous",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cretaceous"
    ],
@@ -849,7 +873,7 @@
   "fields": {
    "slug": "miocene",
    "name": "Miocene",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "neogene"
    ],
@@ -861,7 +885,7 @@
   "fields": {
    "slug": "uppercretaceous",
    "name": "Upper Cretaceous",
-   "rank": 4,
+   "rank": 5,
    "parent": [
     "cretaceous"
    ],
@@ -873,7 +897,7 @@
   "fields": {
    "slug": "changhsingian",
    "name": "Changhsingian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lopingian"
    ],
@@ -885,7 +909,7 @@
   "fields": {
    "slug": "induan",
    "name": "Induan",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowertriassic"
    ],
@@ -897,7 +921,7 @@
   "fields": {
    "slug": "fortunian",
    "name": "Fortunian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "terreneuvian"
    ],
@@ -909,7 +933,7 @@
   "fields": {
    "slug": "aalenian",
    "name": "Aalenian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlejurassic"
    ],
@@ -921,7 +945,7 @@
   "fields": {
    "slug": "aeronian",
    "name": "Aeronian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "llandovery"
    ],
@@ -933,7 +957,7 @@
   "fields": {
    "slug": "albian",
    "name": "Albian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -945,7 +969,7 @@
   "fields": {
    "slug": "anisian",
    "name": "Anisian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middletriassic"
    ],
@@ -957,7 +981,7 @@
   "fields": {
    "slug": "aptian",
    "name": "Aptian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -969,7 +993,7 @@
   "fields": {
    "slug": "aquitanian",
    "name": "Aquitanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -981,7 +1005,7 @@
   "fields": {
    "slug": "artinskian",
    "name": "Artinskian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cisuralian"
    ],
@@ -993,7 +1017,7 @@
   "fields": {
    "slug": "asselian",
    "name": "Asselian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cisuralian"
    ],
@@ -1005,7 +1029,7 @@
   "fields": {
    "slug": "bajocian",
    "name": "Bajocian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlejurassic"
    ],
@@ -1017,7 +1041,7 @@
   "fields": {
    "slug": "barremian",
    "name": "Barremian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -1029,7 +1053,7 @@
   "fields": {
    "slug": "bartonian",
    "name": "Bartonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "eocene"
    ],
@@ -1041,7 +1065,7 @@
   "fields": {
    "slug": "bashkirian",
    "name": "Bashkirian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerpennsylvanian"
    ],
@@ -1053,7 +1077,7 @@
   "fields": {
    "slug": "bathonian",
    "name": "Bathonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlejurassic"
    ],
@@ -1065,7 +1089,7 @@
   "fields": {
    "slug": "berriasian",
    "name": "Berriasian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -1077,7 +1101,7 @@
   "fields": {
    "slug": "burdigalian",
    "name": "Burdigalian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -1089,7 +1113,7 @@
   "fields": {
    "slug": "calabrian",
    "name": "Calabrian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pleistocene"
    ],
@@ -1101,7 +1125,7 @@
   "fields": {
    "slug": "callovian",
    "name": "Callovian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlejurassic"
    ],
@@ -1113,7 +1137,7 @@
   "fields": {
    "slug": "cambrianstage10",
    "name": "Cambrian Stage 10",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "furongian"
    ],
@@ -1125,7 +1149,7 @@
   "fields": {
    "slug": "cambrianstage2",
    "name": "Cambrian Stage 2",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "terreneuvian"
    ],
@@ -1137,7 +1161,7 @@
   "fields": {
    "slug": "cambrianstage3",
    "name": "Cambrian Stage 3",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cambrianseries2"
    ],
@@ -1149,7 +1173,7 @@
   "fields": {
    "slug": "cambrianstage4",
    "name": "Cambrian Stage 4",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cambrianseries2"
    ],
@@ -1161,7 +1185,7 @@
   "fields": {
    "slug": "campanian",
    "name": "Campanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1173,7 +1197,7 @@
   "fields": {
    "slug": "capitanian",
    "name": "Capitanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "guadalupian"
    ],
@@ -1185,7 +1209,7 @@
   "fields": {
    "slug": "carnian",
    "name": "Carnian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppertriassic"
    ],
@@ -1197,7 +1221,7 @@
   "fields": {
    "slug": "cenomanian",
    "name": "Cenomanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1209,7 +1233,7 @@
   "fields": {
    "slug": "chattian",
    "name": "Chattian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "oligocene"
    ],
@@ -1221,7 +1245,7 @@
   "fields": {
    "slug": "chibanian",
    "name": "Chibanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pleistocene"
    ],
@@ -1233,7 +1257,7 @@
   "fields": {
    "slug": "coniacian",
    "name": "Coniacian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1245,7 +1269,7 @@
   "fields": {
    "slug": "danian",
    "name": "Danian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "paleocene"
    ],
@@ -1257,7 +1281,7 @@
   "fields": {
    "slug": "dapingian",
    "name": "Dapingian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middleordovician"
    ],
@@ -1269,7 +1293,7 @@
   "fields": {
    "slug": "darriwilian",
    "name": "Darriwilian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middleordovician"
    ],
@@ -1281,7 +1305,7 @@
   "fields": {
    "slug": "drumian",
    "name": "Drumian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miaolingian"
    ],
@@ -1293,7 +1317,7 @@
   "fields": {
    "slug": "eifelian",
    "name": "Eifelian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middledevonian"
    ],
@@ -1305,7 +1329,7 @@
   "fields": {
    "slug": "emsian",
    "name": "Emsian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerdevonian"
    ],
@@ -1317,7 +1341,7 @@
   "fields": {
    "slug": "famennian",
    "name": "Famennian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperdevonian"
    ],
@@ -1329,7 +1353,7 @@
   "fields": {
    "slug": "floian",
    "name": "Floian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerordovician"
    ],
@@ -1341,7 +1365,7 @@
   "fields": {
    "slug": "frasnian",
    "name": "Frasnian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperdevonian"
    ],
@@ -1353,7 +1377,7 @@
   "fields": {
    "slug": "gelasian",
    "name": "Gelasian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pleistocene"
    ],
@@ -1365,7 +1389,7 @@
   "fields": {
    "slug": "givetian",
    "name": "Givetian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middledevonian"
    ],
@@ -1377,7 +1401,7 @@
   "fields": {
    "slug": "gorstian",
    "name": "Gorstian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "ludlow"
    ],
@@ -1389,7 +1413,7 @@
   "fields": {
    "slug": "greenlandian",
    "name": "Greenlandian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "holocene"
    ],
@@ -1401,7 +1425,7 @@
   "fields": {
    "slug": "guzhangian",
    "name": "Guzhangian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miaolingian"
    ],
@@ -1413,7 +1437,7 @@
   "fields": {
    "slug": "gzhelian",
    "name": "Gzhelian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperpennsylvanian"
    ],
@@ -1425,7 +1449,7 @@
   "fields": {
    "slug": "hauterivian",
    "name": "Hauterivian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -1437,7 +1461,7 @@
   "fields": {
    "slug": "hettangian",
    "name": "Hettangian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerjurassic"
    ],
@@ -1449,7 +1473,7 @@
   "fields": {
    "slug": "hirnantian",
    "name": "Hirnantian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperordovician"
    ],
@@ -1461,7 +1485,7 @@
   "fields": {
    "slug": "homerian",
    "name": "Homerian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "wenlock"
    ],
@@ -1473,7 +1497,7 @@
   "fields": {
    "slug": "jiangshanian",
    "name": "Jiangshanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "furongian"
    ],
@@ -1485,7 +1509,7 @@
   "fields": {
    "slug": "kasimovian",
    "name": "Kasimovian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperpennsylvanian"
    ],
@@ -1497,7 +1521,7 @@
   "fields": {
    "slug": "katian",
    "name": "Katian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperordovician"
    ],
@@ -1509,7 +1533,7 @@
   "fields": {
    "slug": "kimmeridgian",
    "name": "Kimmeridgian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperjurassic"
    ],
@@ -1521,7 +1545,7 @@
   "fields": {
    "slug": "kungurian",
    "name": "Kungurian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cisuralian"
    ],
@@ -1533,7 +1557,7 @@
   "fields": {
    "slug": "ladinian",
    "name": "Ladinian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middletriassic"
    ],
@@ -1545,7 +1569,7 @@
   "fields": {
    "slug": "langhian",
    "name": "Langhian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -1557,7 +1581,7 @@
   "fields": {
    "slug": "lochkovian",
    "name": "Lochkovian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerdevonian"
    ],
@@ -1569,7 +1593,7 @@
   "fields": {
    "slug": "ludfordian",
    "name": "Ludfordian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "ludlow"
    ],
@@ -1581,7 +1605,7 @@
   "fields": {
    "slug": "lutetian",
    "name": "Lutetian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "eocene"
    ],
@@ -1593,7 +1617,7 @@
   "fields": {
    "slug": "maastrichtian",
    "name": "Maastrichtian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1605,7 +1629,7 @@
   "fields": {
    "slug": "meghalayan",
    "name": "Meghalayan",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "holocene"
    ],
@@ -1617,7 +1641,7 @@
   "fields": {
    "slug": "messinian",
    "name": "Messinian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -1629,7 +1653,7 @@
   "fields": {
    "slug": "moscovian",
    "name": "Moscovian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlepennsylvanian"
    ],
@@ -1641,7 +1665,7 @@
   "fields": {
    "slug": "norian",
    "name": "Norian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppertriassic"
    ],
@@ -1653,7 +1677,7 @@
   "fields": {
    "slug": "northgrippian",
    "name": "Northgrippian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "holocene"
    ],
@@ -1665,7 +1689,7 @@
   "fields": {
    "slug": "olenekian",
    "name": "Olenekian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowertriassic"
    ],
@@ -1677,7 +1701,7 @@
   "fields": {
    "slug": "oxfordian",
    "name": "Oxfordian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperjurassic"
    ],
@@ -1689,7 +1713,7 @@
   "fields": {
    "slug": "paibian",
    "name": "Paibian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "furongian"
    ],
@@ -1701,7 +1725,7 @@
   "fields": {
    "slug": "piacenzian",
    "name": "Piacenzian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pliocene"
    ],
@@ -1713,7 +1737,7 @@
   "fields": {
    "slug": "pliensbachian",
    "name": "Pliensbachian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerjurassic"
    ],
@@ -1725,7 +1749,7 @@
   "fields": {
    "slug": "pragian",
    "name": "Pragian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerdevonian"
    ],
@@ -1737,7 +1761,7 @@
   "fields": {
    "slug": "priabonian",
    "name": "Priabonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "eocene"
    ],
@@ -1749,7 +1773,7 @@
   "fields": {
    "slug": "rhaetian",
    "name": "Rhaetian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppertriassic"
    ],
@@ -1761,7 +1785,7 @@
   "fields": {
    "slug": "rhuddanian",
    "name": "Rhuddanian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "llandovery"
    ],
@@ -1773,7 +1797,7 @@
   "fields": {
    "slug": "roadian",
    "name": "Roadian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "guadalupian"
    ],
@@ -1785,7 +1809,7 @@
   "fields": {
    "slug": "rupelian",
    "name": "Rupelian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "oligocene"
    ],
@@ -1797,7 +1821,7 @@
   "fields": {
    "slug": "sakmarian",
    "name": "Sakmarian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "cisuralian"
    ],
@@ -1809,7 +1833,7 @@
   "fields": {
    "slug": "sandbian",
    "name": "Sandbian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperordovician"
    ],
@@ -1821,7 +1845,7 @@
   "fields": {
    "slug": "santonian",
    "name": "Santonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1833,7 +1857,7 @@
   "fields": {
    "slug": "selandian",
    "name": "Selandian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "paleocene"
    ],
@@ -1845,7 +1869,7 @@
   "fields": {
    "slug": "serpukhovian",
    "name": "Serpukhovian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppermississippian"
    ],
@@ -1857,7 +1881,7 @@
   "fields": {
    "slug": "serravallian",
    "name": "Serravallian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -1869,7 +1893,7 @@
   "fields": {
    "slug": "sheinwoodian",
    "name": "Sheinwoodian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "wenlock"
    ],
@@ -1881,7 +1905,7 @@
   "fields": {
    "slug": "sinemurian",
    "name": "Sinemurian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerjurassic"
    ],
@@ -1893,7 +1917,7 @@
   "fields": {
    "slug": "telychian",
    "name": "Telychian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "llandovery"
    ],
@@ -1905,7 +1929,7 @@
   "fields": {
    "slug": "thanetian",
    "name": "Thanetian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "paleocene"
    ],
@@ -1917,7 +1941,7 @@
   "fields": {
    "slug": "tithonian",
    "name": "Tithonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "upperjurassic"
    ],
@@ -1929,7 +1953,7 @@
   "fields": {
    "slug": "toarcian",
    "name": "Toarcian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerjurassic"
    ],
@@ -1941,7 +1965,7 @@
   "fields": {
    "slug": "tortonian",
    "name": "Tortonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miocene"
    ],
@@ -1953,7 +1977,7 @@
   "fields": {
    "slug": "tournaisian",
    "name": "Tournaisian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowermississippian"
    ],
@@ -1965,7 +1989,7 @@
   "fields": {
    "slug": "tremadocian",
    "name": "Tremadocian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowerordovician"
    ],
@@ -1977,7 +2001,7 @@
   "fields": {
    "slug": "turonian",
    "name": "Turonian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "uppercretaceous"
    ],
@@ -1989,7 +2013,7 @@
   "fields": {
    "slug": "upperpleistocene",
    "name": "Upper Pleistocene",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pleistocene"
    ],
@@ -2001,7 +2025,7 @@
   "fields": {
    "slug": "valanginian",
    "name": "Valanginian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lowercretaceous"
    ],
@@ -2013,7 +2037,7 @@
   "fields": {
    "slug": "visean",
    "name": "Visean",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "middlemississippian"
    ],
@@ -2025,7 +2049,7 @@
   "fields": {
    "slug": "wordian",
    "name": "Wordian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "guadalupian"
    ],
@@ -2037,7 +2061,7 @@
   "fields": {
    "slug": "wuchiapingian",
    "name": "Wuchiapingian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "lopingian"
    ],
@@ -2049,7 +2073,7 @@
   "fields": {
    "slug": "wuliuan",
    "name": "Wuliuan",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "miaolingian"
    ],
@@ -2061,7 +2085,7 @@
   "fields": {
    "slug": "ypresian",
    "name": "Ypresian",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "eocene"
    ],
@@ -2073,7 +2097,7 @@
   "fields": {
    "slug": "zanclean",
    "name": "Zanclean",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "pliocene"
    ],
@@ -2085,7 +2109,7 @@
   "fields": {
    "slug": "pridoli",
    "name": "Pridoli",
-   "rank": 5,
+   "rank": 6,
    "parent": [
     "silurian"
    ],
@@ -4189,6 +4213,32 @@
    "level": "23 m above base of Member 2A (Quaco Road Mbr), Chapel Island Fm",
    "latitude": null,
    "longitude": null
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-mississippian",
+   "name": "Base of the Mississippian",
+   "below": null,
+   "above": [
+    "mississippian"
+   ],
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 358.86 Ma. Devonian/Carboniferous GSSP 와 동일 지점(base-carboniferous 공유)."
+  }
+ },
+ {
+  "model": "chrono.boundary",
+  "fields": {
+   "slug": "base-pennsylvanian",
+   "name": "Base of the Pennsylvanian",
+   "below": null,
+   "above": [
+    "pennsylvanian"
+   ],
+   "definition_type": "GSSP",
+   "note": "ICS 2024-12: 323.4 Ma. Mid-Carboniferous(Bashkirian) GSSP 와 동일 지점."
   }
  }
 ]

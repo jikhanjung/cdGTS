@@ -53,27 +53,34 @@ class GraphBakeView(APIView):
         return Response({"baked": n, "release": ReleaseSerializer(release).data})
 
 
-_GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
+_GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
 
 
 def build_icc_levels(unit_base):
-    """{unit_slug: base_ma} → ICC 중첩 컬럼. rank(Eon~Age) 별로 base 연대 타일링:
-    각 rank 안에서 오름차순 → 밴드 [top(younger)=이전 base, bottom(older)=자기 base]. 밴드 없는 rank 는 생략."""
+    """{unit_slug: base_ma} → ICC 중첩 컬럼. rank(Eon~Age) 별 밴드 = [bottom(older)=자기 base,
+    top(younger)= **rank 이하(같거나 굵은) 중 자기보다 젊은 base 의 최대**, 없으면 0].
+    coarser 경계(예: Permian base)가 sparse rank(Subperiod) 밴드를 제 구간에서 닫아준다
+    — Pennsylvanian 은 Carboniferous 의 젊은 끝(=Permian base)에서 멈춘다. 부모 FK 에 의존하지 않는다
+    (시드의 period→era 링크가 불완전해도 안전). gapless rank 는 종전 타일링과 동일 결과."""
     from chrono.models import Unit
     units = {u.slug: u for u in Unit.objects.filter(slug__in=unit_base.keys())}
-    max_ma = max(unit_base.values(), default=0.0)
+    items = [(s, units[s].name, base, units[s].rank, units[s].color)
+             for s, base in unit_base.items() if s in units]
+    max_ma = max((it[2] for it in items), default=0.0)
+    # coincident 경계(같은 GSSP 를 여러 rank/노드가 산출) 허용오차. 같은 지점이 modeled vs published
+    # 로 미세하게(예: 251.902 vs 251.902182) 달라도 younger cap 으로 오인해 sliver 밴드가 생기지 않도록.
+    # 0.001 Ma(1000년)는 ICC 실제 최소 경계 간격(홀로세 세분 ~0.0035 Ma)보다 작아 안전.
+    EPS = 1e-3
     levels = []
-    for rank_n in (1, 2, 3, 4, 5):
-        us = sorted(
-            ((s, units[s].name, base, units[s].color) for s, base in unit_base.items()
-             if s in units and units[s].rank == rank_n),
-            key=lambda z: z[2],
-        )
-        bands, prev = [], 0.0
-        for s, name, base, color in us:
-            bands.append({"slug": s, "name": name, "top": round(prev, 4), "bottom": round(base, 4),
-                          "color": color or None})
-            prev = base
+    for rank_n in (1, 2, 3, 4, 5, 6):
+        # 자기보다 굵거나 같은 rank 의 base 들(정렬) — top(younger cap) 후보
+        caps = sorted(b for _, _, b, rk, _ in items if rk <= rank_n)
+        us = sorted((it for it in items if it[3] == rank_n), key=lambda z: z[2])
+        bands = []
+        for s, name, b, rk, color in us:
+            younger = [c for c in caps if c < b - EPS]
+            bands.append({"slug": s, "name": name, "top": round(max(younger) if younger else 0.0, 4),
+                          "bottom": round(b, 4), "color": color or None})
         if bands:
             levels.append({"rank": _GEO[rank_n], "rank_n": rank_n, "bands": bands})
     return {"max_ma": round(max_ma, 4), "levels": levels}
