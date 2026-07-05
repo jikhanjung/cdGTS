@@ -6,7 +6,7 @@
 
 *[English](README_en.md) · 한국어*
 
-> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 5개 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.9** 배포 중(ICC 테이블·차트·서술 + 노드그룹·order/L2 정합성 게이트). 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
+> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 5개 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.15** 배포 중(ICC 테이블·차트·서술 + 노드그룹·중첩그룹·order/L2 정합성 게이트 + Science CI). 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
 
 ## 무엇인가
 
@@ -76,6 +76,6 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 
 - **스택**: Django 5.2 + SQLite + DRF + React Flow(Vite). 5개 앱(chrono·nodes·graph·engine·releases) + 프론트 노드 에디터·ICC 테이블·릴리스 diff 뷰. 백엔드 `pytest` 65 passed.
 - **엔진**: 값+provenance 전파(pass-through) · 정합성 게이트 · 값/토폴로지 diff 골격. 계산 커널(numpy/scipy)로 age-depth model 실계산.
-- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.4**, 개발/테스트 @ v0.1.1. 원자적 DB 스냅샷 + NAS 오프사이트 백업(04:00 cron).
+- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.15**. 배포는 `deploy-prod.sh`(배포 전 DB 스냅샷) + nginx 점검 페이지. 개발/테스트가 운영 DB 를 일일 pull(NAS 오프사이트 백업, 04:00 cron).
 
 현재 상태 헤드라인은 [HANDOFF.md](HANDOFF.md), 라운드별 변경은 [`devlog/`](devlog/), 미해결 열린 질문은 [TODOs.md](TODOs.md) 참조.

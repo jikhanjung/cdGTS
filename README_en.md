@@ -6,7 +6,7 @@
 
 *English · [한국어](README.md)*
 
-> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.9** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart / narrate + node groups and order/L2 coherence gates). The concept corpus stays in `docs/`.
+> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.15** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart / narrate + node groups, nested groups, order/L2 coherence gates, and Science CI). The concept corpus stays in `docs/`.
 
 ## What is it
 
@@ -76,6 +76,6 @@ Concept (brainstorming) → **implemented & deployed**. Schema v0 (all five §4 
 
 - **Stack**: Django 5.2 + SQLite + DRF + React Flow (Vite). 5 apps (chrono·nodes·graph·engine·releases) + a front-end node editor, ICC-table view, and release-diff view. Backend `pytest` 65 passed.
 - **Engine**: value + provenance propagation (pass-through) · coherence gate · value/topology diff skeleton. A compute kernel (numpy/scipy) runs the real age-depth model.
-- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.4**, dev/test @ v0.1.1. Atomic DB snapshot + NAS offsite backup (04:00 cron).
+- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.15**. Deploys via `deploy-prod.sh` (pre-deploy DB snapshot) + an nginx maintenance page. Dev/test pulls the production DB daily (NAS offsite backup, 04:00 cron).
 
 The current-state headline is in [HANDOFF.md](HANDOFF.md), per-round changes in [`devlog/`](devlog/), and the remaining open questions in [TODOs.md](TODOs.md).
