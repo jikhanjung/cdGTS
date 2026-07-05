@@ -123,6 +123,9 @@ class Release(models.Model):
         "chrono.Authority", null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",
     )
     note = models.TextField(blank=True)
+    is_baseline = models.BooleanField(
+        default=False, help_text="공표 기준 릴리스(Science CI 의 diff 대상). 그래프-bake 를 이것과 비교.",
+    )
     clamps = models.ManyToManyField(Clamp, blank=True, related_name="releases")
     created_at = models.DateTimeField(auto_now_add=True)
 

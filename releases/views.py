@@ -53,6 +53,34 @@ class GraphBakeView(APIView):
         return Response({"baked": n, "release": ReleaseSerializer(release).data})
 
 
+class GraphVerifyView(APIView):
+    """
+    POST /api/graphs/{id}/verify/ — **Science CI 루프**. 그래프를 재-bake 하고 공표 기준(is_baseline)
+    릴리스와 diff. 반환: {from(공표), to(그래프), value_diff, topology_diff, summary}.
+    value_diff.delta = 그래프값 − 공표값 (내 편집이 경계를 얼마나 이동시켰나).
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, pk):
+        graph = get_object_or_404(Graph, pk=pk)
+        baseline = Release.objects.filter(is_baseline=True).order_by("version").first()
+        if baseline is None:
+            return Response({"detail": "공표 기준(is_baseline) 릴리스가 없습니다."}, status=400)
+        release, n = bake_graph(graph)
+        d = diff_releases(baseline, release)          # from=공표 → to=그래프
+        deltas = [x["delta"] for x in d["value_diff"] if x["delta"] is not None]
+        td = d["topology_diff"]
+        d["summary"] = {
+            "baked": n,
+            "moved": len(d["value_diff"]),
+            "max_abs_delta": round(max((abs(x) for x in deltas), default=0.0), 4),
+            "added": sum(1 for t in td if t["op"] == "added"),
+            "removed": sum(1 for t in td if t["op"] == "removed"),
+            "retyped": sum(1 for t in td if t["op"] == "retype"),
+        }
+        return Response(d)
+
+
 _GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
 
 

@@ -3217,7 +3217,8 @@
    "authority": null,
    "note": "공표 ICC (ICS chart.ttl 2024-12) · 전 rank.",
    "created_at": "2026-07-05T00:00:00Z",
-   "clamps": []
+   "clamps": [],
+   "is_baseline": true
   }
  },
  {

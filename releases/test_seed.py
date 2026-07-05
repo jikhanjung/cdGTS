@@ -135,6 +135,31 @@ def test_release_icc_chart_five_ranks(seeded):
     assert lv["Age"][0]["top"] == 0.0
 
 
+def test_graph_verify_vs_published(seeded):
+    """Science CI — 그래프 재bake 후 공표 기준(is_baseline)과 diff. 값 편집이 delta 로 드러난다."""
+    from graph.models import Graph, Gateway, NodeInstance
+    from rest_framework.test import APIClient
+    api = APIClient()
+    g = Graph.objects.get(slug="example-icc-partial")
+
+    resp = api.post(f"/api/graphs/{g.pk}/verify/")
+    assert resp.status_code == 200
+    d = resp.data
+    assert d["from"] == "ICS-2024/12" and d["to"] == "graph:example-icc-partial"
+    assert d["summary"]["baked"] == 177 and "moved" in d["summary"]
+
+    # base-jurassic 산출 데이터 노드 값을 201.4 → 210 편집 → diff 에 그 경계가 delta 로 등장
+    gw = Gateway.objects.get(graph=g, boundary__slug="base-jurassic")
+    n = NodeInstance.objects.get(graph=g, key=gw.node.key)
+    n.params["distribution"]["value_ma"] = 210.0
+    n.save()
+    d2 = api.post(f"/api/graphs/{g.pk}/verify/").data
+    moved = {x["boundary"]: x for x in d2["value_diff"]}
+    assert "base-jurassic" in moved
+    assert moved["base-jurassic"]["to"] == 210.0
+    assert round(moved["base-jurassic"]["delta"], 1) == round(210.0 - 201.4, 1)   # 그래프 − 공표
+
+
 def test_narrate_release_renders_and_persists(seeded):
     """narrate(bake 의 짝) — rank 별 서술 문서 + BoundaryRecord.narrative 저장. 사실 창작 없이 필드 렌더."""
     from rest_framework.test import APIClient

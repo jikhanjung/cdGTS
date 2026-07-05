@@ -26,6 +26,10 @@ export const evaluateGraph = (id) =>
 export const bakeGraph = (id) =>
   fetch(`/api/graphs/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
+// Science CI — 재bake 후 공표 기준과 diff. {from,to,value_diff,topology_diff,summary}.
+export const verifyGraph = (id) =>
+  fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: jsonHeaders }).then(j)
+
 // 그래프 산출물 → ICC식 중첩 컬럼 차트 데이터 (Eon/Era/Period 밴드).
 export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
 

@@ -10,8 +10,9 @@ import { GroupNode, StubNode } from './GroupNode.jsx'
 import OrderNode from './OrderNode.jsx'
 import Inspector from './Inspector.jsx'
 import ResultsPanel from './ResultsPanel.jsx'
+import VerifyPanel from './VerifyPanel.jsx'
 import {
-  listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph,
+  listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode, cdgtsOrder: OrderNode }
@@ -170,6 +171,7 @@ export default function Editor() {
   const [outputs, setOutputs] = useState([])
   const [runMeta, setRunMeta] = useState(null)
   const [showResults, setShowResults] = useState(false)
+  const [verifyData, setVerifyData] = useState(null)        // Science CI: 공표 대비 diff
   const [paletteOpen, setPaletteOpen] = useState(false)     // 폰: 팔레트 서랍
   const [inspectorOpen, setInspectorOpen] = useState(false) // 폰: 인스펙터 서랍
   const [pending, setPending] = useState(null)              // 탭-투-추가: 배치 대기 중인 노드 slug
@@ -435,6 +437,17 @@ export default function Editor() {
     } catch (e) { setError(e.data || String(e)) }
   }, [graphId, setNodes, gateways, nodes, edges])
 
+  // Science CI — 재bake 후 공표 기준과 diff. (편집 전엔 저장부터 하는 게 안전)
+  const onVerify = useCallback(async () => {
+    setError(null)
+    try {
+      const d = await verifyGraph(graphId)
+      setVerifyData(d); setShowResults(false)
+      const s = d.summary || {}
+      setStatus(`공표 대비: ${s.moved} 이동 · 최대 |Δ| ${s.max_abs_delta} Ma · 배선 ＋${s.added}/－${s.removed}/↺${s.retyped}`)
+    } catch (e) { setError(e.data || String(e)) }
+  }, [graphId])
+
   // --- Inspector (선택 실제 노드) ---
   const patchNodeData = useCallback((id, fn) => {
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
@@ -514,6 +527,7 @@ export default function Editor() {
           </select>
           <button onClick={onSave}>저장 (PUT)</button>
           <button onClick={onEvaluate}>평가</button>
+          <button onClick={onVerify} title="Science CI — 재bake 후 공표 기준과 diff (편집 전 저장 권장)">공표 대비 검증</button>
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
                   title={activeGroup ? '선택을 이 그룹 안의 하위그룹으로 (중첩)' : '선택한 노드·그룹을 하나의 그룹으로 (그룹이 섞이면 병합)'}>
@@ -591,6 +605,7 @@ export default function Editor() {
           </ReactFlow>
         </div>
         {showResults && <ResultsPanel outputs={outputs} meta={runMeta} onClose={() => setShowResults(false)} />}
+        {verifyData && <VerifyPanel diff={verifyData} onClose={() => setVerifyData(null)} />}
 
         {menu && (
           <>
