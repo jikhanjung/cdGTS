@@ -185,6 +185,17 @@ export default function Inspector({ node, type, nodeKeys, onLabel, onDescription
         <div className="insp-type">{node.data.nodeType} <span className="insp-cat">{node.data.category}</span></div>
       </div>
 
+      {node.data.result?.distribution?.kind === 'order' && (
+        <div className={`insp-verdict ${node.data.result.distribution.ok ? 'good'
+          : node.data.result.distribution.ok === false ? 'bad' : 'none'}`}>
+          {node.data.result.distribution.ok == null
+            ? '입력 필요'
+            : `아래(older) ≥ 위(younger): gap ${node.data.result.distribution.gap} `
+              + `${node.data.result.distribution.ok ? '≥' : '<'} ${params.min_gap ?? 0} `
+              + `→ ${node.data.result.distribution.ok ? '통과' : '위반'}`}
+        </div>
+      )}
+
       <div className="insp-field">
         <label className="insp-label">label</label>
         <input
