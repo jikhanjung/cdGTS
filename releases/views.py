@@ -1,3 +1,5 @@
+import math
+
 from django.shortcuts import get_object_or_404
 from rest_framework import permissions, viewsets
 from rest_framework.decorators import action
@@ -84,13 +86,33 @@ class GraphVerifyView(APIView):
 _GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
 
 
-def build_icc_levels(unit_base):
+def _pm_from_dist(dist):
+    """distribution dict → 대칭 오차 ±pm(Myr). exact(GSSA 약속값)=0, 예산 sqrt-합, shape=HPD 반폭.
+    ResultsPanel.summarizeDist 와 같은 사다리. 정보 없으면 None."""
+    if not dist:
+        return None
+    if dist.get("fidelity") == "exact":
+        return 0.0                                   # 약속값(GSSA) — 오차 없음
+    budget = dist.get("budget") or {}
+    combined = math.sqrt(sum((float(v) or 0.0) ** 2 for v in budget.values()))
+    if combined > 0:
+        return round(combined, 4)
+    shape = dist.get("shape") or {}
+    hpd = shape.get("hpd95")
+    if isinstance(hpd, (list, tuple)) and len(hpd) == 2 and None not in hpd:
+        return round(abs(hpd[1] - hpd[0]) / 2, 4)
+    return None
+
+
+def build_icc_levels(unit_base, unit_unc=None):
     """{unit_slug: base_ma} → ICC 중첩 컬럼. rank(Eon~Age) 별 밴드 = [bottom(older)=자기 base,
     top(younger)= **rank 이하(같거나 굵은) 중 자기보다 젊은 base 의 최대**, 없으면 0].
     coarser 경계(예: Permian base)가 sparse rank(Subperiod) 밴드를 제 구간에서 닫아준다
     — Pennsylvanian 은 Carboniferous 의 젊은 끝(=Permian base)에서 멈춘다. 부모 FK 에 의존하지 않는다
-    (시드의 period→era 링크가 불완전해도 안전). gapless rank 는 종전 타일링과 동일 결과."""
+    (시드의 period→era 링크가 불완전해도 안전). gapless rank 는 종전 타일링과 동일 결과.
+    unit_unc={slug: ±pm(Myr)} 있으면 밴드에 `pm`(경계 base 의 대칭 오차) 첨부."""
     from chrono.models import Unit
+    unc = unit_unc or {}
     units = {u.slug: u for u in Unit.objects.filter(slug__in=unit_base.keys())}
     items = [(s, units[s].name, base, units[s].rank, units[s].color)
              for s, base in unit_base.items() if s in units]
@@ -108,7 +130,7 @@ def build_icc_levels(unit_base):
         for s, name, b, rk, color in us:
             younger = [c for c in caps if c < b - EPS]
             bands.append({"slug": s, "name": name, "top": round(max(younger) if younger else 0.0, 4),
-                          "bottom": round(b, 4), "color": color or None})
+                          "bottom": round(b, 4), "color": color or None, "pm": unc.get(s)})
         if bands:
             levels.append({"rank": _GEO[rank_n], "rank_n": rank_n, "bands": bands})
     return {"max_ma": round(max_ma, 4), "levels": levels}
@@ -127,15 +149,18 @@ class IccChartView(APIView):
         run = graph.eval_runs.first() or evaluate_graph(graph)
         results = {r.node_key: (r.distribution or {}) for r in run.results.all()}
 
-        unit_base = {}
+        unit_base, unit_unc = {}, {}
         for gw in graph.gateways.select_related("node", "boundary"):
             if gw.boundary is None:
                 continue
-            v = results.get(gw.node.key, {}).get("value_ma")
+            dist = results.get(gw.node.key, {})
+            v = dist.get("value_ma")
             if v is not None and gw.boundary.slug.startswith("base-"):
-                unit_base[gw.boundary.slug[len("base-"):]] = float(v)
+                slug = gw.boundary.slug[len("base-"):]
+                unit_base[slug] = float(v)
+                unit_unc[slug] = _pm_from_dist(dist)
 
-        return Response({"graph": graph.slug, **build_icc_levels(unit_base)})
+        return Response({"graph": graph.slug, **build_icc_levels(unit_base, unit_unc)})
 
 
 class ReleaseIccChartView(APIView):
@@ -149,14 +174,16 @@ class ReleaseIccChartView(APIView):
         release = get_object_or_404(Release, pk=pk)
         if not release.records.exists():
             bake_release(release)
-        unit_base = {}
+        unit_base, unit_unc = {}, {}
         for rec in release.records.select_related("boundary"):
             if rec.value_ma is None:
                 continue
             bslug = rec.boundary.slug
             if bslug.startswith("base-"):
-                unit_base[bslug[len("base-"):]] = float(rec.value_ma)
-        return Response({"release": release.version, **build_icc_levels(unit_base)})
+                slug = bslug[len("base-"):]
+                unit_base[slug] = float(rec.value_ma)
+                unit_unc[slug] = _pm_from_dist(rec.uncertainty)
+        return Response({"release": release.version, **build_icc_levels(unit_base, unit_unc)})
 
 
 class ReleaseNarrateView(APIView):

@@ -133,6 +133,10 @@ def test_release_icc_chart_five_ranks(seeded):
     assert per["triassic"]["color"] == "#812B92"                 # 공식 색 통과
     # Age 컬럼 타일링: 최상단은 최근 age, top=0
     assert lv["Age"][0]["top"] == 0.0
+    # 불확실성 ±pm: GSSP 는 오차(>0), GSSA 약속값은 0
+    eon = {b["slug"]: b for b in lv["Eon"]}
+    assert per["triassic"]["pm"] == 0.024 and per["jurassic"]["pm"] == 0.2
+    assert eon["proterozoic"]["pm"] == 0.0                       # GSSA 약속값 — 오차 없음
 
 
 def test_graph_verify_vs_published(seeded):
