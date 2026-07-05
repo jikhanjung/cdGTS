@@ -28,9 +28,10 @@ def _counts():
 
 def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
-    # ICS chart.ttl 확장: period+ units(42) + 전체 boundary(175) + published-age 타입(13)
-    assert (units, boundaries, types, graphs) == (42, 175, 13, 4)
-    assert (releases, records) == (2, 5)                     # records = 릴리스 bake 산출
+    # ICS chart.ttl 전 rank: units 176(Eon4/Era10/Period22/Epoch38/Age102) · boundary 175 · type 13
+    assert (units, boundaries, types, graphs) == (176, 175, 13, 4)
+    # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 175 bake
+    assert (releases, records) == (3, 180)
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
     assert Unit.objects.filter(parent__isnull=False).exists()
 
@@ -96,6 +97,24 @@ def test_icc_chart_tiles_by_rank(seeded):
     # 공식 ICS 색 주입 확인 (Triassic = #812B92)
     per = {b["slug"]: b for b in lv["Period"]}
     assert per["triassic"]["color"] == "#812B92"
+
+
+def test_release_icc_chart_five_ranks(seeded):
+    """공표 릴리스(ICS-2024/12) ICC 차트 — Age 까지 5 rank 컬럼, 값·색 포함."""
+    from rest_framework.test import APIClient
+    r = Release.objects.get(version="ICS-2024/12")
+    resp = APIClient().get(f"/api/releases/{r.pk}/icc-chart/")
+    assert resp.status_code == 200
+    d = resp.data
+    assert d["max_ma"] == 4567.0
+    ranks = [lv["rank"] for lv in d["levels"]]
+    assert ranks == ["Eon", "Era", "Period", "Epoch", "Age"]     # 5 컬럼
+    lv = {x["rank"]: x["bands"] for x in d["levels"]}
+    assert len(lv["Age"]) >= 90 and len(lv["Epoch"]) >= 30       # stage/epoch 다수
+    per = {b["slug"]: b for b in lv["Period"]}
+    assert per["triassic"]["color"] == "#812B92"                 # 공식 색 통과
+    # Age 컬럼 타일링: 최상단은 최근 age, top=0
+    assert lv["Age"][0]["top"] == 0.0
 
 
 def test_finer_boundaries_registry_only(seeded):

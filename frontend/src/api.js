@@ -29,6 +29,9 @@ export const bakeGraph = (id) =>
 // 그래프 산출물 → ICC식 중첩 컬럼 차트 데이터 (Eon/Era/Period 밴드).
 export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
 
+// 공표 릴리스 → 전 rank(Eon~Age) ICC 차트 데이터.
+export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).then(j)
+
 // --- 릴리스 / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)

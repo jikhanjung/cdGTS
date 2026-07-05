@@ -497,6 +497,1602 @@
   }
  },
  {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowermississippian",
+   "name": "LowerMississippian",
+   "rank": 4,
+   "parent": null,
+   "color": "#80AB6C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowerpennsylvanian",
+   "name": "LowerPennsylvanian",
+   "rank": 4,
+   "parent": null,
+   "color": "#8CBEB4"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middlemississippian",
+   "name": "MiddleMississippian",
+   "rank": 4,
+   "parent": null,
+   "color": "#99B46C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middlepennsylvanian",
+   "name": "MiddlePennsylvanian",
+   "rank": 4,
+   "parent": null,
+   "color": "#A6C7B7"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "uppermississippian",
+   "name": "UpperMississippian",
+   "rank": 4,
+   "parent": null,
+   "color": "#B3BE6C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrianseries2",
+   "name": "CambrianSeries2",
+   "rank": 4,
+   "parent": [
+    "cambrian"
+   ],
+   "color": "#99C078"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowerordovician",
+   "name": "LowerOrdovician",
+   "rank": 4,
+   "parent": [
+    "ordovician"
+   ],
+   "color": "#1A9D6F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowertriassic",
+   "name": "LowerTriassic",
+   "rank": 4,
+   "parent": [
+    "triassic"
+   ],
+   "color": "#983999"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ludlow",
+   "name": "Ludlow",
+   "rank": 4,
+   "parent": [
+    "silurian"
+   ],
+   "color": "#BFE6CF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middledevonian",
+   "name": "MiddleDevonian",
+   "rank": 4,
+   "parent": [
+    "devonian"
+   ],
+   "color": "#F1C868"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middleordovician",
+   "name": "MiddleOrdovician",
+   "rank": 4,
+   "parent": [
+    "ordovician"
+   ],
+   "color": "#4DB47E"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middletriassic",
+   "name": "MiddleTriassic",
+   "rank": 4,
+   "parent": [
+    "triassic"
+   ],
+   "color": "#B168B1"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "oligocene",
+   "name": "Oligocene",
+   "rank": 4,
+   "parent": [
+    "paleogene"
+   ],
+   "color": "#FEC07A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pliocene",
+   "name": "Pliocene",
+   "rank": 4,
+   "parent": [
+    "neogene"
+   ],
+   "color": "#FFFF99"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "upperdevonian",
+   "name": "UpperDevonian",
+   "rank": 4,
+   "parent": [
+    "devonian"
+   ],
+   "color": "#F1E19D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "upperpennsylvanian",
+   "name": "UpperPennsylvanian",
+   "rank": 4,
+   "parent": null,
+   "color": "#BFD0BA"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "wenlock",
+   "name": "Wenlock",
+   "rank": 4,
+   "parent": [
+    "silurian"
+   ],
+   "color": "#B3E1C2"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "furongian",
+   "name": "Furongian",
+   "rank": 4,
+   "parent": [
+    "cambrian"
+   ],
+   "color": "#B3E095"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "guadalupian",
+   "name": "Guadalupian",
+   "rank": 4,
+   "parent": [
+    "permian"
+   ],
+   "color": "#FB745C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "holocene",
+   "name": "Holocene",
+   "rank": 4,
+   "parent": [
+    "quaternary"
+   ],
+   "color": "#FEEBD2"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "llandovery",
+   "name": "Llandovery",
+   "rank": 4,
+   "parent": [
+    "silurian"
+   ],
+   "color": "#99D7B3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowerdevonian",
+   "name": "LowerDevonian",
+   "rank": 4,
+   "parent": [
+    "devonian"
+   ],
+   "color": "#E5AC4D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "miaolingian",
+   "name": "Miaolingian",
+   "rank": 4,
+   "parent": [
+    "cambrian"
+   ],
+   "color": "#A6CF86"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paleocene",
+   "name": "Paleocene",
+   "rank": 4,
+   "parent": [
+    "paleogene"
+   ],
+   "color": "#FDA75F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "upperjurassic",
+   "name": "UpperJurassic",
+   "rank": 4,
+   "parent": [
+    "jurassic"
+   ],
+   "color": "#B3E3EE"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "upperordovician",
+   "name": "UpperOrdovician",
+   "rank": 4,
+   "parent": [
+    "ordovician"
+   ],
+   "color": "#7FCA93"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "uppertriassic",
+   "name": "UpperTriassic",
+   "rank": 4,
+   "parent": [
+    "triassic"
+   ],
+   "color": "#BD8CC3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cisuralian",
+   "name": "Cisuralian",
+   "rank": 4,
+   "parent": [
+    "permian"
+   ],
+   "color": "#EF5845"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "eocene",
+   "name": "Eocene",
+   "rank": 4,
+   "parent": [
+    "paleogene"
+   ],
+   "color": "#FDB46C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowerjurassic",
+   "name": "LowerJurassic",
+   "rank": 4,
+   "parent": [
+    "jurassic"
+   ],
+   "color": "#42AED0"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "middlejurassic",
+   "name": "MiddleJurassic",
+   "rank": 4,
+   "parent": [
+    "jurassic"
+   ],
+   "color": "#80CFD8"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pleistocene",
+   "name": "Pleistocene",
+   "rank": 4,
+   "parent": [
+    "quaternary"
+   ],
+   "color": "#FFEFAF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lowercretaceous",
+   "name": "LowerCretaceous",
+   "rank": 4,
+   "parent": [
+    "cretaceous"
+   ],
+   "color": "#8CCD57"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "miocene",
+   "name": "Miocene",
+   "rank": 4,
+   "parent": [
+    "neogene"
+   ],
+   "color": "#FFFF00"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "uppercretaceous",
+   "name": "UpperCretaceous",
+   "rank": 4,
+   "parent": [
+    "cretaceous"
+   ],
+   "color": "#A6D84A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "aalenian",
+   "name": "Aalenian",
+   "rank": 5,
+   "parent": [
+    "middlejurassic"
+   ],
+   "color": "#9AD9DD"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "aeronian",
+   "name": "Aeronian",
+   "rank": 5,
+   "parent": [
+    "llandovery"
+   ],
+   "color": "#B3E1C2"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "albian",
+   "name": "Albian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#CCEA97"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "anisian",
+   "name": "Anisian",
+   "rank": 5,
+   "parent": [
+    "middletriassic"
+   ],
+   "color": "#BC75B7"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "aptian",
+   "name": "Aptian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#BFE48A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "aquitanian",
+   "name": "Aquitanian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF33"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "artinskian",
+   "name": "Artinskian",
+   "rank": 5,
+   "parent": [
+    "cisuralian"
+   ],
+   "color": "#E37B68"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "asselian",
+   "name": "Asselian",
+   "rank": 5,
+   "parent": [
+    "cisuralian"
+   ],
+   "color": "#E36350"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "bajocian",
+   "name": "Bajocian",
+   "rank": 5,
+   "parent": [
+    "middlejurassic"
+   ],
+   "color": "#A6DDE0"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "barremian",
+   "name": "Barremian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#B3DF7F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "bartonian",
+   "name": "Bartonian",
+   "rank": 5,
+   "parent": [
+    "eocene"
+   ],
+   "color": "#FDC091"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "bashkirian",
+   "name": "Bashkirian",
+   "rank": 5,
+   "parent": [
+    "lowerpennsylvanian"
+   ],
+   "color": "#99C2B5"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "bathonian",
+   "name": "Bathonian",
+   "rank": 5,
+   "parent": [
+    "middlejurassic"
+   ],
+   "color": "#B3E2E3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "berriasian",
+   "name": "Berriasian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#8CCD60"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "burdigalian",
+   "name": "Burdigalian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF41"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "calabrian",
+   "name": "Calabrian",
+   "rank": 5,
+   "parent": [
+    "pleistocene"
+   ],
+   "color": "#FFF2BA"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "callovian",
+   "name": "Callovian",
+   "rank": 5,
+   "parent": [
+    "middlejurassic"
+   ],
+   "color": "#BFE7E5"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrianstage10",
+   "name": "CambrianStage10",
+   "rank": 5,
+   "parent": [
+    "furongian"
+   ],
+   "color": "#E6F5C9"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrianstage2",
+   "name": "CambrianStage2",
+   "rank": 5,
+   "parent": [
+    "terreneuvian"
+   ],
+   "color": "#A6BA80"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrianstage3",
+   "name": "CambrianStage3",
+   "rank": 5,
+   "parent": [
+    "cambrianseries2"
+   ],
+   "color": "#A6C583"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cambrianstage4",
+   "name": "CambrianStage4",
+   "rank": 5,
+   "parent": [
+    "cambrianseries2"
+   ],
+   "color": "#B3CA8E"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "campanian",
+   "name": "Campanian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#E6F47F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "capitanian",
+   "name": "Capitanian",
+   "rank": 5,
+   "parent": [
+    "guadalupian"
+   ],
+   "color": "#FB9A85"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "carnian",
+   "name": "Carnian",
+   "rank": 5,
+   "parent": [
+    "uppertriassic"
+   ],
+   "color": "#C99BCB"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "cenomanian",
+   "name": "Cenomanian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#B3DE53"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "chattian",
+   "name": "Chattian",
+   "rank": 5,
+   "parent": [
+    "oligocene"
+   ],
+   "color": "#FEE6AA"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "chibanian",
+   "name": "Chibanian",
+   "rank": 5,
+   "parent": [
+    "pleistocene"
+   ],
+   "color": "#FFF2C7"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "coniacian",
+   "name": "Coniacian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#CCE968"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "danian",
+   "name": "Danian",
+   "rank": 5,
+   "parent": [
+    "paleocene"
+   ],
+   "color": "#FDB462"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "dapingian",
+   "name": "Dapingian",
+   "rank": 5,
+   "parent": [
+    "middleordovician"
+   ],
+   "color": "#66C092"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "darriwilian",
+   "name": "Darriwilian",
+   "rank": 5,
+   "parent": [
+    "middleordovician"
+   ],
+   "color": "#74C69C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "drumian",
+   "name": "Drumian",
+   "rank": 5,
+   "parent": [
+    "miaolingian"
+   ],
+   "color": "#BFD99D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "eifelian",
+   "name": "Eifelian",
+   "rank": 5,
+   "parent": [
+    "middledevonian"
+   ],
+   "color": "#F1D576"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "emsian",
+   "name": "Emsian",
+   "rank": 5,
+   "parent": [
+    "lowerdevonian"
+   ],
+   "color": "#E5D075"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "famennian",
+   "name": "Famennian",
+   "rank": 5,
+   "parent": [
+    "upperdevonian"
+   ],
+   "color": "#F2EDB3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "floian",
+   "name": "Floian",
+   "rank": 5,
+   "parent": [
+    "lowerordovician"
+   ],
+   "color": "#41B087"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "frasnian",
+   "name": "Frasnian",
+   "rank": 5,
+   "parent": [
+    "upperdevonian"
+   ],
+   "color": "#F2EDAD"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "gelasian",
+   "name": "Gelasian",
+   "rank": 5,
+   "parent": [
+    "pleistocene"
+   ],
+   "color": "#FFEDB3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "givetian",
+   "name": "Givetian",
+   "rank": 5,
+   "parent": [
+    "middledevonian"
+   ],
+   "color": "#F1E185"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "gorstian",
+   "name": "Gorstian",
+   "rank": 5,
+   "parent": [
+    "ludlow"
+   ],
+   "color": "#CCECDD"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "greenlandian",
+   "name": "Greenlandian",
+   "rank": 5,
+   "parent": [
+    "holocene"
+   ],
+   "color": "#FEECDB"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "guzhangian",
+   "name": "Guzhangian",
+   "rank": 5,
+   "parent": [
+    "miaolingian"
+   ],
+   "color": "#CCDFAA"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "gzhelian",
+   "name": "Gzhelian",
+   "rank": 5,
+   "parent": [
+    "upperpennsylvanian"
+   ],
+   "color": "#CCD4C7"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "hauterivian",
+   "name": "Hauterivian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#A6D975"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "hettangian",
+   "name": "Hettangian",
+   "rank": 5,
+   "parent": [
+    "lowerjurassic"
+   ],
+   "color": "#4EB3D3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "hirnantian",
+   "name": "Hirnantian",
+   "rank": 5,
+   "parent": [
+    "upperordovician"
+   ],
+   "color": "#A6DBAB"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "homerian",
+   "name": "Homerian",
+   "rank": 5,
+   "parent": [
+    "wenlock"
+   ],
+   "color": "#CCEBD1"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "jiangshanian",
+   "name": "Jiangshanian",
+   "rank": 5,
+   "parent": [
+    "furongian"
+   ],
+   "color": "#D9F0BB"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "kasimovian",
+   "name": "Kasimovian",
+   "rank": 5,
+   "parent": [
+    "upperpennsylvanian"
+   ],
+   "color": "#BFD0C5"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "katian",
+   "name": "Katian",
+   "rank": 5,
+   "parent": [
+    "upperordovician"
+   ],
+   "color": "#99D69F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "kimmeridgian",
+   "name": "Kimmeridgian",
+   "rank": 5,
+   "parent": [
+    "upperjurassic"
+   ],
+   "color": "#CCECF4"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "kungurian",
+   "name": "Kungurian",
+   "rank": 5,
+   "parent": [
+    "cisuralian"
+   ],
+   "color": "#E38776"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ladinian",
+   "name": "Ladinian",
+   "rank": 5,
+   "parent": [
+    "middletriassic"
+   ],
+   "color": "#C983BF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "langhian",
+   "name": "Langhian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF4D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lochkovian",
+   "name": "Lochkovian",
+   "rank": 5,
+   "parent": [
+    "lowerdevonian"
+   ],
+   "color": "#E5B75A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ludfordian",
+   "name": "Ludfordian",
+   "rank": 5,
+   "parent": [
+    "ludlow"
+   ],
+   "color": "#D9F0DF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "lutetian",
+   "name": "Lutetian",
+   "rank": 5,
+   "parent": [
+    "eocene"
+   ],
+   "color": "#FDB482"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "maastrichtian",
+   "name": "Maastrichtian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#F2FA8C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "meghalayan",
+   "name": "Meghalayan",
+   "rank": 5,
+   "parent": [
+    "holocene"
+   ],
+   "color": "#FDEDEC"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "messinian",
+   "name": "Messinian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF73"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "moscovian",
+   "name": "Moscovian",
+   "rank": 5,
+   "parent": [
+    "middlepennsylvanian"
+   ],
+   "color": "#B3CBB9"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "norian",
+   "name": "Norian",
+   "rank": 5,
+   "parent": [
+    "uppertriassic"
+   ],
+   "color": "#D6AAD3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "northgrippian",
+   "name": "Northgrippian",
+   "rank": 5,
+   "parent": [
+    "holocene"
+   ],
+   "color": "#FDECE4"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "olenekian",
+   "name": "Olenekian",
+   "rank": 5,
+   "parent": [
+    "lowertriassic"
+   ],
+   "color": "#B051A5"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "oxfordian",
+   "name": "Oxfordian",
+   "rank": 5,
+   "parent": [
+    "upperjurassic"
+   ],
+   "color": "#BFE7F1"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "paibian",
+   "name": "Paibian",
+   "rank": 5,
+   "parent": [
+    "furongian"
+   ],
+   "color": "#CCEBAE"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "piacenzian",
+   "name": "Piacenzian",
+   "rank": 5,
+   "parent": [
+    "pliocene"
+   ],
+   "color": "#FFFFBF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pliensbachian",
+   "name": "Pliensbachian",
+   "rank": 5,
+   "parent": [
+    "lowerjurassic"
+   ],
+   "color": "#80C5DD"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pragian",
+   "name": "Pragian",
+   "rank": 5,
+   "parent": [
+    "lowerdevonian"
+   ],
+   "color": "#E5C468"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "priabonian",
+   "name": "Priabonian",
+   "rank": 5,
+   "parent": [
+    "eocene"
+   ],
+   "color": "#FDCDA1"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "rhaetian",
+   "name": "Rhaetian",
+   "rank": 5,
+   "parent": [
+    "uppertriassic"
+   ],
+   "color": "#E3B9DB"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "rhuddanian",
+   "name": "Rhuddanian",
+   "rank": 5,
+   "parent": [
+    "llandovery"
+   ],
+   "color": "#A6DCB5"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "roadian",
+   "name": "Roadian",
+   "rank": 5,
+   "parent": [
+    "guadalupian"
+   ],
+   "color": "#FB8069"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "rupelian",
+   "name": "Rupelian",
+   "rank": 5,
+   "parent": [
+    "oligocene"
+   ],
+   "color": "#FED99A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "sakmarian",
+   "name": "Sakmarian",
+   "rank": 5,
+   "parent": [
+    "cisuralian"
+   ],
+   "color": "#E36F5C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "sandbian",
+   "name": "Sandbian",
+   "rank": 5,
+   "parent": [
+    "upperordovician"
+   ],
+   "color": "#8CD094"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "santonian",
+   "name": "Santonian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#D9EF74"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "selandian",
+   "name": "Selandian",
+   "rank": 5,
+   "parent": [
+    "paleocene"
+   ],
+   "color": "#FEBF65"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "serpukhovian",
+   "name": "Serpukhovian",
+   "rank": 5,
+   "parent": [
+    "uppermississippian"
+   ],
+   "color": "#BFC26B"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "serravallian",
+   "name": "Serravallian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF59"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "sheinwoodian",
+   "name": "Sheinwoodian",
+   "rank": 5,
+   "parent": [
+    "wenlock"
+   ],
+   "color": "#BFE6C3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "sinemurian",
+   "name": "Sinemurian",
+   "rank": 5,
+   "parent": [
+    "lowerjurassic"
+   ],
+   "color": "#67BCD8"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "telychian",
+   "name": "Telychian",
+   "rank": 5,
+   "parent": [
+    "llandovery"
+   ],
+   "color": "#BFE6CF"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "thanetian",
+   "name": "Thanetian",
+   "rank": 5,
+   "parent": [
+    "paleocene"
+   ],
+   "color": "#FDBF6F"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "tithonian",
+   "name": "Tithonian",
+   "rank": 5,
+   "parent": [
+    "upperjurassic"
+   ],
+   "color": "#D9F1F7"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "toarcian",
+   "name": "Toarcian",
+   "rank": 5,
+   "parent": [
+    "lowerjurassic"
+   ],
+   "color": "#99CEE3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "tortonian",
+   "name": "Tortonian",
+   "rank": 5,
+   "parent": [
+    "miocene"
+   ],
+   "color": "#FFFF66"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "tournaisian",
+   "name": "Tournaisian",
+   "rank": 5,
+   "parent": [
+    "lowermississippian"
+   ],
+   "color": "#8CB06C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "tremadocian",
+   "name": "Tremadocian",
+   "rank": 5,
+   "parent": [
+    "lowerordovician"
+   ],
+   "color": "#33A97E"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "turonian",
+   "name": "Turonian",
+   "rank": 5,
+   "parent": [
+    "uppercretaceous"
+   ],
+   "color": "#BFE35D"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "upperpleistocene",
+   "name": "UpperPleistocene",
+   "rank": 5,
+   "parent": [
+    "pleistocene"
+   ],
+   "color": "#FFF2D3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "valanginian",
+   "name": "Valanginian",
+   "rank": 5,
+   "parent": [
+    "lowercretaceous"
+   ],
+   "color": "#99D36A"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "visean",
+   "name": "Visean",
+   "rank": 5,
+   "parent": [
+    "middlemississippian"
+   ],
+   "color": "#A6B96C"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "wordian",
+   "name": "Wordian",
+   "rank": 5,
+   "parent": [
+    "guadalupian"
+   ],
+   "color": "#FB8D76"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "wuchiapingian",
+   "name": "Wuchiapingian",
+   "rank": 5,
+   "parent": [
+    "lopingian"
+   ],
+   "color": "#FCB4A2"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "wuliuan",
+   "name": "Wuliuan",
+   "rank": 5,
+   "parent": [
+    "miaolingian"
+   ],
+   "color": "#B3D492"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "ypresian",
+   "name": "Ypresian",
+   "rank": 5,
+   "parent": [
+    "eocene"
+   ],
+   "color": "#FCA773"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "zanclean",
+   "name": "Zanclean",
+   "rank": 5,
+   "parent": [
+    "pliocene"
+   ],
+   "color": "#FFFFB3"
+  }
+ },
+ {
+  "model": "chrono.unit",
+  "fields": {
+   "slug": "pridoli",
+   "name": "Pridoli",
+   "rank": 5,
+   "parent": [
+    "silurian"
+   ],
+   "color": "#E6F5E1"
+  }
+ },
+ {
   "model": "chrono.boundary",
   "fields": {
    "slug": "base-triassic",

@@ -53,24 +53,45 @@ class GraphBakeView(APIView):
         return Response({"baked": n, "release": ReleaseSerializer(release).data})
 
 
+_GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Epoch", 5: "Age"}
+
+
+def build_icc_levels(unit_base):
+    """{unit_slug: base_ma} → ICC 중첩 컬럼. rank(Eon~Age) 별로 base 연대 타일링:
+    각 rank 안에서 오름차순 → 밴드 [top(younger)=이전 base, bottom(older)=자기 base]. 밴드 없는 rank 는 생략."""
+    from chrono.models import Unit
+    units = {u.slug: u for u in Unit.objects.filter(slug__in=unit_base.keys())}
+    max_ma = max(unit_base.values(), default=0.0)
+    levels = []
+    for rank_n in (1, 2, 3, 4, 5):
+        us = sorted(
+            ((s, units[s].name, base, units[s].color) for s, base in unit_base.items()
+             if s in units and units[s].rank == rank_n),
+            key=lambda z: z[2],
+        )
+        bands, prev = [], 0.0
+        for s, name, base, color in us:
+            bands.append({"slug": s, "name": name, "top": round(prev, 4), "bottom": round(base, 4),
+                          "color": color or None})
+            prev = base
+        if bands:
+            levels.append({"rank": _GEO[rank_n], "rank_n": rank_n, "bands": bands})
+    return {"max_ma": round(max_ma, 4), "levels": levels}
+
+
 class IccChartView(APIView):
     """
-    GET /api/graphs/{id}/icc-chart/ — 그래프 산출물을 chrono 계층(Eon/Era/Period)과 join 해
-    ICC식 중첩 컬럼 차트 데이터로. 각 rank 안에서 base 연대로 타일링해 [top(younger), bottom(older)] 밴드 생성.
+    GET /api/graphs/{id}/icc-chart/ — 그래프 산출물(게이트웨이=period+)을 chrono 계층과 join 한 ICC 차트.
+    네트웍이 period+ 만이라 Eon/Era/Period 3 컬럼.
     """
     permission_classes = [permissions.AllowAny]
 
-    GEO = {1: "Eon", 2: "Era", 3: "Period"}
-
     def get(self, request, pk):
         from engine.evaluate import evaluate_graph
-        from chrono.models import Unit
         graph = get_object_or_404(Graph, pk=pk)
-
         run = graph.eval_runs.first() or evaluate_graph(graph)
         results = {r.node_key: (r.distribution or {}) for r in run.results.all()}
 
-        # 게이트웨이 경계 → 값. 경계 slug 'base-<unit>' → 유닛 slug.
         unit_base = {}
         for gw in graph.gateways.select_related("node", "boundary"):
             if gw.boundary is None:
@@ -79,20 +100,25 @@ class IccChartView(APIView):
             if v is not None and gw.boundary.slug.startswith("base-"):
                 unit_base[gw.boundary.slug[len("base-"):]] = float(v)
 
-        units = {u.slug: u for u in Unit.objects.filter(slug__in=unit_base.keys())}
-        max_ma = max(unit_base.values(), default=0.0)
-        levels = []
-        for rank_n in (1, 2, 3):
-            us = sorted(
-                ((s, units[s].name, base) for s, base in unit_base.items()
-                 if s in units and units[s].rank == rank_n),
-                key=lambda z: z[2],
-            )  # base 오름차순 = 젊은 것부터
-            bands, prev = [], 0.0
-            for s, name, base in us:
-                bands.append({"slug": s, "name": name, "top": round(prev, 4), "bottom": round(base, 4),
-                              "color": units[s].color or None})
-                prev = base
-            levels.append({"rank": self.GEO[rank_n], "rank_n": rank_n, "bands": bands})
+        return Response({"graph": graph.slug, **build_icc_levels(unit_base)})
 
-        return Response({"graph": graph.slug, "max_ma": round(max_ma, 4), "levels": levels})
+
+class ReleaseIccChartView(APIView):
+    """
+    GET /api/releases/{id}/icc-chart/ — 공표 릴리스(BoundaryRecord)를 전 rank(Eon~Age)로.
+    공표 ICC(ICS-2024/12)는 stage 까지 있어 5 컬럼. 미-bake 릴리스는 지연 bake.
+    """
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, pk):
+        release = get_object_or_404(Release, pk=pk)
+        if not release.records.exists():
+            bake_release(release)
+        unit_base = {}
+        for rec in release.records.select_related("boundary"):
+            if rec.value_ma is None:
+                continue
+            bslug = rec.boundary.slug
+            if bslug.startswith("base-"):
+                unit_base[bslug[len("base-"):]] = float(rec.value_ma)
+        return Response({"release": release.version, **build_icc_levels(unit_base)})

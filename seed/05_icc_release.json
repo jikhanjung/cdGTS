@@ -1,0 +1,5673 @@
+[
+ {
+  "model": "releases.modelcandidate",
+  "fields": {
+   "slug": "ics/2024-12",
+   "scope": "global",
+   "kind": "committee-published",
+   "method": "local-interpolation",
+   "provenance_ref": "",
+   "note": "ICS International Chronostratigraphic Chart 2024-12 (chart.ttl)."
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-triassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 251.902,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.024
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-proterozoic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2500.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 538.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-hadean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 4567.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-eoarchean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 4031.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-archean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 4031.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paleoarchean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 3600.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-mesoarchean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 3200.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-neoarchean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2800.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-siderian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2500.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paleoproterozoic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2500.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-rhyacian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2300.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-orosirian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2050.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-statherian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1800.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-calymmian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1600.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-mesoproterozoic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1600.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ectasian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1400.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-stenian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1200.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-tonian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1000.0,
+    "note": "ICS 2024-12 · GSSA"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-neoproterozoic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1000.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cryogenian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 720.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ediacaran"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 635.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-fortunian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 538.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paleozoic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 538.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-phanerozoic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 538.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-terreneuvian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 538.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrianstage2"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 529.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrianstage3"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 521.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrianseries2"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 521.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrianstage4"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 514.5,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-wuliuan"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 506.5,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-miaolingian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 506.5,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-drumian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 504.5,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-guzhangian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 500.5,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paibian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 497.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-furongian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 497.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-jiangshanian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 494.2,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cambrianstage10"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 491.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-tremadocian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 486.85,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ordovician"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 486.85,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowerordovician"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 486.85,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-floian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 477.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-dapingian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 471.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middleordovician"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 471.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-darriwilian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 469.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.9
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-sandbian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 458.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.7
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-upperordovician"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 458.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.7
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-katian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 452.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.7
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-hirnantian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 445.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.9
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-rhuddanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 443.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-silurian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 443.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-llandovery"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 443.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-aeronian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 440.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-telychian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 438.6,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-sheinwoodian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 432.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-wenlock"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 432.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-homerian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 430.6,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-gorstian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 426.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ludlow"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 426.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ludfordian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 425.0,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.5
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pridoli"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 422.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lochkovian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 419.62,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.36
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-devonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 419.62,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.36
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowerdevonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 419.62,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.36
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pragian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 413.02,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.91
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-emsian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 410.62,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.95
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-eifelian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 393.47,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.99
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middledevonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 393.47,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.99
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-givetian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 387.95,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.04
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-frasnian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 382.31,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.36
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-upperdevonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 382.31,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.36
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-famennian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 372.15,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.46
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-tournaisian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 358.86,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.19
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-carboniferous"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 358.86,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.19
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowermississippian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 358.86,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.19
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-visean"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 346.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middlemississippian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 346.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-serpukhovian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 330.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-uppermississippian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 330.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-bashkirian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 323.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowerpennsylvanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 323.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-moscovian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 315.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middlepennsylvanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 315.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-kasimovian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 307.0,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-upperpennsylvanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 307.0,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-gzhelian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 303.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-asselian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 298.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.15
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-permian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 298.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.15
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cisuralian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 298.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.15
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-sakmarian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 293.52,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.17
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-artinskian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 290.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.26
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-kungurian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 283.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-roadian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 274.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-guadalupian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 274.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-wordian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 266.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.4
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-capitanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 264.28,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.16
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-wuchiapingian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 259.857,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.084
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lopingian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 259.857,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.084
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-changhsingian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 254.14,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.07
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-induan"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 251.902,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.024
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-mesozoic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 251.902,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.024
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowertriassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 251.902,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.024
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-olenekian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 250.8,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-anisian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 247.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middletriassic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 247.0,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ladinian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 241.464,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.28
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-carnian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 237.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-uppertriassic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 237.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-norian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 227.3,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-rhaetian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 205.7,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-hettangian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 201.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-jurassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 201.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowerjurassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 201.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-sinemurian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 199.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pliensbachian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 192.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-toarcian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 184.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-aalenian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 174.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.8
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-middlejurassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 174.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.8
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-bajocian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 170.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.8
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-bathonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 168.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-callovian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 165.3,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-oxfordian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 161.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-upperjurassic"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 161.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 1.0
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-kimmeridgian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 154.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.8
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-tithonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 149.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.7
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-berriasian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 143.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cretaceous"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 143.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lowercretaceous"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 143.1,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-valanginian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 137.05,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-hauterivian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 132.6,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-barremian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 125.77,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-aptian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 121.4,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.6
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-albian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 113.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cenomanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 100.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-uppercretaceous"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 100.5,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.1
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-turonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 93.9,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-coniacian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 89.8,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.3
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-santonian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 85.7,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-campanian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 83.6,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-maastrichtian"
+   ],
+   "distribution": {
+    "fidelity": "sym",
+    "value_ma": 72.2,
+    "sigma": 2,
+    "budget": {
+     "analytical": 0.2
+    },
+    "note": "ICS 2024-12 chart.ttl"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-danian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 66.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paleogene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 66.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-cenozoic"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 66.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-paleocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 66.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-selandian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 61.66,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-thanetian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 59.24,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-ypresian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 56.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-eocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 56.0,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-lutetian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 48.07,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-bartonian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 41.03,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-priabonian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 37.71,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-rupelian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 33.9,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-oligocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 33.9,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-chattian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 27.3,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-neogene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 23.04,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-miocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 23.04,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-aquitanian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 23.03,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-burdigalian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 20.45,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-langhian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 15.98,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-serravallian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 13.82,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-tortonian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 11.63,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-messinian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 7.246,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-zanclean"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 5.333,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pliocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 5.333,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-piacenzian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 3.6,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-gelasian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2.58,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-quaternary"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2.58,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-pleistocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 2.58,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-calabrian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 1.8,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-chibanian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.774,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-upperpleistocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.129,
+    "note": "ICS 2024-12 · 공표값"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-greenlandian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.0117,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-holocene"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.0117,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-northgrippian"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.0082,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.candidateoutput",
+  "fields": {
+   "candidate": [
+    "ics/2024-12"
+   ],
+   "boundary": [
+    "base-meghalayan"
+   ],
+   "distribution": {
+    "fidelity": "exact",
+    "value_ma": 0.0042,
+    "note": "ICS 2024-12 · GSSP"
+   }
+  }
+ },
+ {
+  "model": "releases.release",
+  "fields": {
+   "version": "ICS-2024/12",
+   "authority": null,
+   "note": "공표 ICC (ICS chart.ttl 2024-12) · 전 rank.",
+   "created_at": "2026-07-05T00:00:00Z",
+   "clamps": []
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-triassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-proterozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-hadean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-eoarchean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-archean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paleoarchean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-mesoarchean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-neoarchean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-siderian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paleoproterozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-rhyacian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-orosirian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-statherian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-calymmian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-mesoproterozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ectasian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-stenian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-tonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-neoproterozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cryogenian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ediacaran"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-fortunian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paleozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-phanerozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-terreneuvian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrianstage2"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrianstage3"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrianseries2"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrianstage4"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-wuliuan"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-miaolingian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-drumian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-guzhangian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paibian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-furongian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-jiangshanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cambrianstage10"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-tremadocian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ordovician"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowerordovician"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-floian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-dapingian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middleordovician"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-darriwilian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-sandbian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-upperordovician"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-katian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-hirnantian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-rhuddanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-silurian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-llandovery"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-aeronian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-telychian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-sheinwoodian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-wenlock"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-homerian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-gorstian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ludlow"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ludfordian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pridoli"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lochkovian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-devonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowerdevonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pragian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-emsian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-eifelian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middledevonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-givetian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-frasnian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-upperdevonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-famennian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-tournaisian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-carboniferous"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowermississippian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-visean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middlemississippian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-serpukhovian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-uppermississippian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-bashkirian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowerpennsylvanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-moscovian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middlepennsylvanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-kasimovian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-upperpennsylvanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-gzhelian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-asselian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-permian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cisuralian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-sakmarian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-artinskian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-kungurian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-roadian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-guadalupian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-wordian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-capitanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-wuchiapingian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lopingian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-changhsingian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-induan"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-mesozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowertriassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-olenekian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-anisian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middletriassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ladinian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-carnian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-uppertriassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-norian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-rhaetian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-hettangian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-jurassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowerjurassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-sinemurian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pliensbachian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-toarcian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-aalenian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-middlejurassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-bajocian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-bathonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-callovian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-oxfordian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-upperjurassic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-kimmeridgian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-tithonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-berriasian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cretaceous"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lowercretaceous"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-valanginian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-hauterivian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-barremian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-aptian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-albian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cenomanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-uppercretaceous"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-turonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-coniacian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-santonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-campanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-maastrichtian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-danian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paleogene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-cenozoic"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-paleocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-selandian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-thanetian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-ypresian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-eocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-lutetian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-bartonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-priabonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-rupelian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-oligocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-chattian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-neogene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-miocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-aquitanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-burdigalian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-langhian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-serravallian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-tortonian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-messinian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-zanclean"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pliocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-piacenzian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-gelasian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-quaternary"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-pleistocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-calabrian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-chibanian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-upperpleistocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-greenlandian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-holocene"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-northgrippian"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ },
+ {
+  "model": "releases.selection",
+  "fields": {
+   "release": [
+    "ICS-2024/12"
+   ],
+   "boundary": [
+    "base-meghalayan"
+   ],
+   "candidate": [
+    "ics/2024-12"
+   ]
+  }
+ }
+]
