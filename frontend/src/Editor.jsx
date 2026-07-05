@@ -172,7 +172,10 @@ export default function Editor() {
   const [showResults, setShowResults] = useState(false)
   const [paletteOpen, setPaletteOpen] = useState(false)     // 폰: 팔레트 서랍
   const [inspectorOpen, setInspectorOpen] = useState(false) // 폰: 인스펙터 서랍
+  const [pending, setPending] = useState(null)              // 탭-투-추가: 배치 대기 중인 노드 slug
   const wrapperRef = useRef(null)
+  const lpRef = useRef(null)                                // 롱프레스 타이머
+  const lpFiredRef = useRef(false)                          // 롱프레스 직후 click 1회 삼킴
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
@@ -261,20 +264,55 @@ export default function Editor() {
     }))
   }, [setEdges])
 
-  const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }, [])
-
-  const onDrop = useCallback((e) => {
-    e.preventDefault()
-    const slug = e.dataTransfer.getData('application/cdgts')
+  // 노드 생성 공통 — 데스크톱 드롭 · 터치 탭-투-추가 둘 다 사용.
+  const addNodeAt = useCallback((slug, position) => {
     const t = typeMap[slug]
     if (!t) return
-    const position = screenToFlowPosition({ x: e.clientX, y: e.clientY })
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
     setNodes((nds) => nds.concat({
       id: key, type: rfType(slug), position, width: DEFAULT_NODE_WIDTH,
       data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
-  }, [screenToFlowPosition, typeMap, setNodes, activeGroup])
+    setStatus(`${t.name} 추가`)
+  }, [typeMap, setNodes, activeGroup])
+
+  const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }, [])
+  const onDrop = useCallback((e) => {
+    e.preventDefault()
+    const slug = e.dataTransfer.getData('application/cdgts')
+    if (typeMap[slug]) addNodeAt(slug, screenToFlowPosition({ x: e.clientX, y: e.clientY }))
+  }, [screenToFlowPosition, typeMap, addNodeAt])
+
+  // 터치: 팔레트 항목 탭 → 배치 대기(pending), 캔버스 탭 → 그 자리에 생성.
+  const armPending = useCallback((slug) => { setPending(slug); setPaletteOpen(false); setStatus('캔버스를 탭하면 배치 · 다시 탭하면 취소') }, [])
+  // 롱프레스 직후의 합성 click 1회를 삼킨다(메뉴가 바로 닫히는 것 방지).
+  const swallowLongPressClick = useCallback(() => {
+    if (lpFiredRef.current) { lpFiredRef.current = false; return true }
+    return false
+  }, [])
+  const onPaneClick = useCallback((e) => {
+    if (swallowLongPressClick()) return
+    if (pending) { addNodeAt(pending, screenToFlowPosition({ x: e.clientX, y: e.clientY })); setPending(null); return }
+    setMenu(null)
+  }, [swallowLongPressClick, pending, addNodeAt, screenToFlowPosition])
+
+  // 터치: 롱프레스(≈0.5s, 이동 없으면) → 컨텍스트 메뉴. elementFromPoint 로 노드/그룹/빈곳 판별.
+  const cancelLongPress = useCallback(() => { if (lpRef.current) { clearTimeout(lpRef.current); lpRef.current = null } }, [])
+  const onTouchStartFlow = useCallback((e) => {
+    if (!IS_TOUCH || e.touches.length !== 1) return
+    const { clientX: x, clientY: y } = e.touches[0]
+    cancelLongPress()
+    lpFiredRef.current = false
+    lpRef.current = setTimeout(() => {
+      lpRef.current = null
+      lpFiredRef.current = true
+      const nodeEl = document.elementFromPoint(x, y)?.closest?.('.react-flow__node')
+      const id = nodeEl?.getAttribute('data-id')
+      if (id?.startsWith('group:')) setMenu({ x, y, kind: 'group', groupKey: id.slice(6) })
+      else if (id && !id.startsWith('stub-')) setMenu({ x, y, kind: 'node', id })
+      else setMenu({ x, y, kind: 'pane' })
+    }, 500)
+  }, [cancelLongPress])
 
   // --- 그룹 만들기 · 병합 / 해제 / 드릴인 ---
   // 실제 노드 + 그룹(접힌 노드)을 하나로. 그룹이 섞이면 그 멤버까지 흡수해 **병합**(단일 계층 유지),
@@ -452,13 +490,14 @@ export default function Editor() {
       )}
       <aside className={`palette${paletteOpen ? ' open' : ''}`}>
         <h1>cdGTS</h1>
-        <p className="hint">노드를 캔버스로 드래그</p>
+        <p className="hint">{IS_TOUCH ? '노드를 탭 → 캔버스를 탭해 배치' : '노드를 캔버스로 드래그'}</p>
         {['data', 'process', 'clamp'].map((cat) => (
           <div key={cat} className="palette-group">
             <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
             {(grouped[cat] || []).map((t) => (
-              <div key={t.slug} className="palette-item" draggable
+              <div key={t.slug} className={`palette-item${pending === t.slug ? ' armed' : ''}`} draggable
                    onDragStart={(e) => { e.dataTransfer.setData('application/cdgts', t.slug); e.dataTransfer.effectAllowed = 'move' }}
+                   onClick={() => { if (IS_TOUCH) armPending(t.slug) }}
                    title={t.description} style={{ borderLeftColor: CATEGORY_COLOR[cat] }}>
                 {t.name}
               </div>
@@ -519,7 +558,14 @@ export default function Editor() {
         )}
 
         {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
-        <div className="flow" onDrop={onDrop} onDragOver={onDragOver}>
+        {pending && (
+          <div className="place-banner">
+            ▶ <b>{typeMap[pending]?.name || pending}</b> — 캔버스를 탭해 배치
+            <button onClick={() => setPending(null)}>취소</button>
+          </div>
+        )}
+        <div className="flow" onDrop={onDrop} onDragOver={onDragOver}
+             onTouchStart={onTouchStartFlow} onTouchMove={cancelLongPress} onTouchEnd={cancelLongPress}>
           <ReactFlow
             nodes={viewNodes}
             edges={viewEdges}
@@ -530,7 +576,7 @@ export default function Editor() {
             onNodeDoubleClick={onNodeDoubleClick}
             onNodeContextMenu={onNodeContextMenu}
             onPaneContextMenu={onPaneContextMenu}
-            onPaneClick={closeMenu}
+            onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
             selectionOnDrag={!IS_TOUCH}          // 데스크톱: 좌-드래그 = 선택 박스
             panOnDrag={IS_TOUCH ? true : [1]}    // 터치: 드래그 팬 / 데스크톱: 가운데버튼
@@ -548,7 +594,7 @@ export default function Editor() {
 
         {menu && (
           <>
-            <div className="ctx-backdrop" onClick={closeMenu}
+            <div className="ctx-backdrop" onClick={() => { if (!swallowLongPressClick()) closeMenu() }}
                  onContextMenu={(e) => { e.preventDefault(); closeMenu() }} />
             <ul className="ctx-menu" style={{ left: menu.x, top: menu.y }}>
               {menu.kind === 'node' && (
