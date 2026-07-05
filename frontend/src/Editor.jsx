@@ -69,10 +69,13 @@ function rfToApi(nodes, edges, groups, viewport) {
   }
 }
 
-// (nodes, edges, groups, activeGroup) → ReactFlow 에 넘길 {viewNodes, viewEdges}.
+// (nodes, edges, groups, activeGroup) → 구조 뷰 {nodeRep, groupNodes, stubNodes, viewEdges}.
 // 중첩 지원: 한 레벨(activeGroup=그룹key 또는 null=최상위)에서 **직속 노드 + 직속 하위그룹(접힌 노드)** 만 보인다.
 // 하위그룹은 자기 서브트리 전체를 대표. 서브트리 경계를 넘는 엣지 → 그룹 포트(같은 서브트리 밖 상대) 또는 스텁(현재 서브트리 밖).
-function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
+// 여기선 selection·실노드 위치를 다루지 않는다 — 호출측이 가볍게 오버레이하고, 이 함수는 토폴로지 변화 때만 재실행된다
+// (rubber-band 선택/드래그 중 전체 재빌드를 피해 대형 그래프 프레임 저하 방지).
+function buildView(nodes, edges, groups, activeGroup) {
+  const labelMap = Object.fromEntries(nodes.map((n) => [n.id, n.data.label || n.data.nodeType]))
   const lab = (id, port) => `${labelMap[id] || id}·${port}`
   const parentOf = Object.fromEntries(groups.map((g) => [g.key, g.parent || null]))
   const level = activeGroup || null
@@ -95,18 +98,17 @@ function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
     while (g != null) { subtreeCount[g] = (subtreeCount[g] || 0) + 1; g = parentOf[g] }
   })
 
-  const viewNodes = []
-  nodes.forEach((n) => { if (nodeRep[n.id].kind === 'node') viewNodes.push(n) })   // 직속 노드
+  const groupNodes = []                            // 직속 하위그룹 = 접힌 노드(selected 는 오버레이)
   const groupById = {}
-  groups.forEach((g) => {                          // 직속 하위그룹 = 접힌 노드
+  groups.forEach((g) => {
     if (parentOf[g.key] !== level) return
     const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y },
-      selected: !!selGroups && selGroups.has(g.key),
       data: { key: g.key, name: g.name, inputs: [], outputs: [], count: subtreeCount[g.key] || 0 } }
     groupById[g.key] = gn
-    viewNodes.push(gn)
+    groupNodes.push(gn)
   })
 
+  const stubNodes = []
   const viewEdges = []
   const stubSeen = new Set()
   let ins = 0, outs = 0
@@ -125,7 +127,7 @@ function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
       const sid = `stub-in:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
       if (!stubSeen.has(sid)) {
         stubSeen.add(sid)
-        viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
+        stubNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
           data: { dir: 'in', port: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) },
           draggable: false, selectable: false })
         ins++
@@ -141,7 +143,7 @@ function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
       const sid = `stub-out:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
       if (!stubSeen.has(sid)) {
         stubSeen.add(sid)
-        viewNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
+        stubNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
           data: { dir: 'out', port: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) },
           draggable: false, selectable: false })
         outs++
@@ -150,7 +152,7 @@ function buildView(nodes, edges, groups, activeGroup, labelMap, selGroups) {
     }
     viewEdges.push({ ...e, id: `v-${e.id}`, source: src, sourceHandle: srcH, target: tgt, targetHandle: tgtH })
   })
-  return { viewNodes, viewEdges }
+  return { nodeRep, groupNodes, stubNodes, viewEdges }
 }
 
 export default function Editor() {
@@ -181,14 +183,38 @@ export default function Editor() {
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
-  const labelMap = useMemo(
-    () => Object.fromEntries(nodes.map((n) => [n.id, n.data.label || n.data.nodeType])),
+
+  // 토폴로지 시그니처 — selection·위치를 제외한 구조(노드 존재·그룹 소속·라벨 / 엣지 배선)만 담는다.
+  // 이게 바뀔 때만 buildView(그룹/스텁/엣지 라우팅)를 재실행 → rubber-band 선택이나 노드 드래그 중엔
+  // 구조·엣지를 재빌드하지 않아, 밀집한 대형 그래프에서 pointermove 가 밀려 선택 박스가 얼어붙던 문제를 없앤다.
+  const topoSig = useMemo(
+    () => nodes.map((n) => `${n.id}~${n.data.group || ''}~${n.data.label || n.data.nodeType || ''}`).join('|'),
     [nodes],
   )
-  const { viewNodes, viewEdges } = useMemo(
-    () => buildView(nodes, edges, groups, activeGroup, labelMap, new Set(selectedGroupKeys)),
-    [nodes, edges, groups, activeGroup, labelMap, selectedGroupKeys],
+  const edgeSig = useMemo(
+    () => edges.map((e) => `${e.id}~${e.source}~${e.sourceHandle}~${e.target}~${e.targetHandle}`).join('|'),
+    [edges],
   )
+  const struct = useMemo(
+    () => buildView(nodes, edges, groups, activeGroup),
+    // nodes·edges 는 클로저로 최신 참조; 재실행 트리거는 구조 시그니처뿐(선택/위치 변화엔 캐시 유지).
+    [topoSig, edgeSig, groups, activeGroup], // eslint-disable-line react-hooks/exhaustive-deps
+  )
+  // 선택 오버레이(가벼움) — 직속 실노드는 현재 객체 그대로(선택 반영), 그룹·엣지엔 selected 만 덧입힌다.
+  const viewNodes = useMemo(() => {
+    const selG = new Set(selectedGroupKeys)
+    const out = nodes.filter((n) => struct.nodeRep[n.id]?.kind === 'node')
+    struct.groupNodes.forEach((gn) => out.push(selG.has(gn.data.key) ? { ...gn, selected: true } : gn))
+    struct.stubNodes.forEach((sn) => out.push(sn))
+    return out
+  }, [nodes, struct, selectedGroupKeys])
+  const viewEdges = useMemo(() => {
+    const selById = new Map(edges.map((e) => [e.id, !!e.selected]))
+    return struct.viewEdges.map((ve) => {
+      const sel = selById.get(ve.id.slice(2)) || false   // viewEdge id = 'v-' + 원본 id
+      return ve.selected === sel ? ve : { ...ve, selected: sel }
+    })
+  }, [struct, edges])
 
   const hydrate = useCallback((full, tmap) => {
     setGraphId(full.id)
