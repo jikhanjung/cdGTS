@@ -25,6 +25,10 @@ const IS_TOUCH = typeof window !== 'undefined' && typeof window.matchMedia === '
 // 노드타입 slug → React Flow 노드 컴포넌트 종류. order 는 세로 핸들 전용 컴포넌트.
 const rfType = (slug) => (slug === 'order' ? 'cdgtsOrder' : 'cdgts')
 const isRealNode = (t) => t === 'cdgts' || t === 'cdgtsOrder'
+// order 노드는 CSS 로 40px 고정(.order-node). 명시 width 를 주면 React Flow 가 그 값으로 bounds·hit-test 를
+// 계산해 화면(40px)보다 넓게 선택 판정한다 → width 를 생략해 실측(40px)을 쓰게 한다. data/process 는
+// .cdgts-node{width:100%} 라 래퍼 폭이 필요하므로 기본폭을 준다.
+const nodeWidth = (slug, w) => (rfType(slug) === 'cdgtsOrder' ? undefined : (w || DEFAULT_NODE_WIDTH))
 
 // --- API ↔ React Flow 변환 (nodes/edges 는 항상 '전체 실제' 집합; 뷰는 buildView 로 파생) ---
 function apiToRF(graph, typeMap) {
@@ -32,7 +36,7 @@ function apiToRF(graph, typeMap) {
     const t = typeMap[n.node_type] || { category: 'process', ports: [] }
     return {
       id: n.key, type: rfType(n.node_type), position: { x: n.x, y: n.y },
-      width: n.width || DEFAULT_NODE_WIDTH,
+      width: nodeWidth(n.node_type, n.width),
       data: {
         nodeType: n.node_type, label: n.label, description: n.description || '',
         params: n.params, category: t.category, ports: t.ports, group: n.group || null,
@@ -298,7 +302,7 @@ export default function Editor() {
     if (!t) return
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
     setNodes((nds) => nds.concat({
-      id: key, type: rfType(slug), position, width: DEFAULT_NODE_WIDTH,
+      id: key, type: rfType(slug), position, width: nodeWidth(slug),
       data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
     setStatus(`${t.name} 추가`)
