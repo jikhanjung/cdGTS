@@ -169,9 +169,10 @@ function DistributionField({ name, value, onDist }) {
 }
 
 // --- 인스펙터 패널 ---
-export default function Inspector({ node, type, nodeKeys, onLabel, onDescription, onParam, onDist, onReplaceParams }) {
+export default function Inspector({ node, type, nodeKeys, open, onClose, onLabel, onDescription, onParam, onDist, onReplaceParams }) {
+  const cls = `inspector${open ? ' open' : ''}`
   if (!node) {
-    return <aside className="inspector empty"><p className="hint">노드를 선택하면 속성이 여기 표시됩니다.</p></aside>
+    return <aside className={`${cls} empty`}><p className="hint">노드를 선택하면 속성이 여기 표시됩니다.</p></aside>
   }
 
   const params = node.data.params || {}
@@ -180,9 +181,10 @@ export default function Inspector({ node, type, nodeKeys, onLabel, onDescription
   const color = CATEGORY_COLOR[node.data.category] || '#888'
 
   return (
-    <aside className="inspector">
+    <aside className={cls}>
       <div className="insp-head" style={{ borderTopColor: color }}>
         <div className="insp-type">{node.data.nodeType} <span className="insp-cat">{node.data.category}</span></div>
+        <button className="mobile-only insp-close" onClick={onClose} title="닫기">✕</button>
       </div>
 
       {node.data.result?.distribution?.kind === 'order' && (

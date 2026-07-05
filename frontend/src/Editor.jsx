@@ -17,6 +17,10 @@ import {
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode, cdgtsOrder: OrderNode }
 const DEFAULT_NODE_WIDTH = 172   // 기본 폭(px). 사용자가 우측 핸들로 조정 가능.
 
+// 주 포인터가 터치(폰/태블릿)인가 — 팬/선택 상호작용을 다르게(터치=드래그 팬·핀치줌).
+const IS_TOUCH = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+  && window.matchMedia('(pointer: coarse)').matches
+
 // 노드타입 slug → React Flow 노드 컴포넌트 종류. order 는 세로 핸들 전용 컴포넌트.
 const rfType = (slug) => (slug === 'order' ? 'cdgtsOrder' : 'cdgts')
 const isRealNode = (t) => t === 'cdgts' || t === 'cdgtsOrder'
@@ -158,6 +162,8 @@ export default function Editor() {
   const [outputs, setOutputs] = useState([])
   const [runMeta, setRunMeta] = useState(null)
   const [showResults, setShowResults] = useState(false)
+  const [paletteOpen, setPaletteOpen] = useState(false)     // 폰: 팔레트 서랍
+  const [inspectorOpen, setInspectorOpen] = useState(false) // 폰: 인스펙터 서랍
   const wrapperRef = useRef(null)
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
@@ -390,7 +396,10 @@ export default function Editor() {
 
   return (
     <div className="editor">
-      <aside className="palette">
+      {(paletteOpen || inspectorOpen) && (
+        <div className="drawer-backdrop" onClick={() => { setPaletteOpen(false); setInspectorOpen(false) }} />
+      )}
+      <aside className={`palette${paletteOpen ? ' open' : ''}`}>
         <h1>cdGTS</h1>
         <p className="hint">노드를 캔버스로 드래그</p>
         {['data', 'process', 'clamp'].map((cat) => (
@@ -409,6 +418,7 @@ export default function Editor() {
 
       <main className="canvas" ref={wrapperRef}>
         <div className="toolbar">
+          <button className="mobile-only drawer-toggle" onClick={() => { setPaletteOpen((v) => !v); setInspectorOpen(false) }} title="팔레트">☰</button>
           <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="그래프 선택">
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
@@ -425,6 +435,8 @@ export default function Editor() {
           <button onClick={() => setShowResults((v) => !v)} className={showResults ? 'active' : ''} disabled={!runMeta} title="최종 노드 출력 보기">
             결과{outputs.length ? ` (${outputs.length})` : ''}
           </button>
+          <button className="mobile-only drawer-toggle" onClick={() => { setInspectorOpen((v) => !v); setPaletteOpen(false) }} title="속성"
+                  disabled={!selectedNode}>속성</button>
           <span className="status">{status}</span>
         </div>
 
@@ -457,8 +469,9 @@ export default function Editor() {
             onPaneContextMenu={onPaneContextMenu}
             onPaneClick={closeMenu}
             nodeTypes={nodeTypes}
-            selectionOnDrag                     // 좌-드래그 = 선택 박스
-            panOnDrag={[1]}                      // 팬 = 가운데버튼 드래그
+            selectionOnDrag={!IS_TOUCH}          // 데스크톱: 좌-드래그 = 선택 박스
+            panOnDrag={IS_TOUCH ? true : [1]}    // 터치: 드래그 팬 / 데스크톱: 가운데버튼
+            zoomOnPinch                          // 터치: 핀치 줌
             selectionMode={SelectionMode.Partial}
             multiSelectionKeyCode="Shift"        // Shift+클릭 = 추가 선택
             fitView
@@ -504,6 +517,8 @@ export default function Editor() {
 
       <Inspector
         key={selectedNode?.id || 'none'}
+        open={inspectorOpen}
+        onClose={() => setInspectorOpen(false)}
         node={selectedNode}
         type={selectedNode ? typeMap[selectedNode.data.nodeType] : null}
         nodeKeys={nodeKeys}
