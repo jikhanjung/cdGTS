@@ -447,6 +447,19 @@
   }
  },
  {
+  "model": "graph.nodegroup",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "triassic-ages",
+   "name": "Triassic · Age 세분",
+   "collapsed": false,
+   "x": 2500,
+   "y": 520
+  }
+ },
+ {
   "model": "graph.nodeinstance",
   "fields": {
    "graph": [
@@ -4401,6 +4414,721 @@
    "target": [
     "example-icc-partial",
     "ord-34"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-rhaetian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Rhaetian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 205.7,
+     "note": "ICS 2024-12"
+    }
+   },
+   "x": 2560,
+   "y": 560,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · ICS · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-rhaetian-gw",
+   "name": "Base of the Rhaetian",
+   "node": [
+    "example-icc-partial",
+    "pub-rhaetian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-rhaetian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-norian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Norian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 227.3,
+     "note": "ICS 2024-12"
+    }
+   },
+   "x": 2560,
+   "y": 650,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · ICS · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-norian-gw",
+   "name": "Base of the Norian",
+   "node": [
+    "example-icc-partial",
+    "pub-norian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-norian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-carnian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Carnian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 237.0,
+     "note": "ICS 2024-12"
+    }
+   },
+   "x": 2560,
+   "y": 740,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · GSSP · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-carnian-gw",
+   "name": "Base of the Carnian",
+   "node": [
+    "example-icc-partial",
+    "pub-carnian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-carnian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-ladinian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Ladinian",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 241.464,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.28
+     },
+     "note": "ICS 2024-12 chart.ttl"
+    }
+   },
+   "x": 2560,
+   "y": 830,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · GSSP · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-ladinian-gw",
+   "name": "Base of the Ladinian",
+   "node": [
+    "example-icc-partial",
+    "pub-ladinian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-ladinian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-anisian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Anisian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 247.0,
+     "note": "ICS 2024-12"
+    }
+   },
+   "x": 2560,
+   "y": 920,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · ICS · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-anisian-gw",
+   "name": "Base of the Anisian",
+   "node": [
+    "example-icc-partial",
+    "pub-anisian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-anisian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "pub-olenekian",
+   "node_type": [
+    "published-age"
+   ],
+   "label": "Olenekian",
+   "params": {
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 250.8,
+     "note": "ICS 2024-12"
+    }
+   },
+   "x": 2560,
+   "y": 1010,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "Age · ICS · ICS 2024-12",
+   "width": 168
+  }
+ },
+ {
+  "model": "graph.gateway",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "slug": "base-olenekian-gw",
+   "name": "Base of the Olenekian",
+   "node": [
+    "example-icc-partial",
+    "pub-olenekian"
+   ],
+   "output_port": "out",
+   "boundary": [
+    "base-olenekian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-35",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 530,
+   "group": null,
+   "description": "base-triassic (older) ≥ base-olenekian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "adm"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "ord-35"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-olenekian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-35"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-36",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 620,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "base-olenekian (older) ≥ base-anisian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-olenekian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-36"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-anisian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-36"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-37",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 710,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "base-anisian (older) ≥ base-ladinian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-anisian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-37"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ladinian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-37"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-38",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 800,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "base-ladinian (older) ≥ base-carnian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ladinian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-38"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carnian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-38"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-39",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 890,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "base-carnian (older) ≥ base-norian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carnian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-39"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-norian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-39"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-40",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 980,
+   "group": [
+    "example-icc-partial",
+    "triassic-ages"
+   ],
+   "description": "base-norian (older) ≥ base-rhaetian (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-norian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-40"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhaetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-40"
+   ],
+   "target_port": "younger",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ord-41",
+   "node_type": [
+    "order"
+   ],
+   "label": "",
+   "params": {
+    "min_gap": 0,
+    "mode": "hard"
+   },
+   "x": 2820,
+   "y": 1070,
+   "group": null,
+   "description": "base-rhaetian (older) ≥ base-jurassic (younger)",
+   "width": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhaetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-41"
+   ],
+   "target_port": "older",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-jurassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "ord-41"
    ],
    "target_port": "younger",
    "kind": "data"

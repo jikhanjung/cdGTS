@@ -57,7 +57,7 @@ def test_bake_graph_produces_icc_table(seeded):
     from releases.services import bake_graph
     g = Graph.objects.get(slug="example-icc-partial")
     rel, n = bake_graph(g)
-    assert n == 36
+    assert n == 42                                           # period+ 36 + Triassic age 세분 6
     assert rel.version == "graph:example-icc-partial"
     recs = {r.boundary.slug: r for r in rel.records.select_related("boundary")}
     # 예제 파이프라인 값 유지
@@ -69,14 +69,14 @@ def test_bake_graph_produces_icc_table(seeded):
     assert recs["base-hadean"].value_ma == 4567.0 and recs["base-hadean"].definition_type == "GSSA"
     # 재-bake 는 같은 릴리스에 멱등
     rel2, n2 = bake_graph(g)
-    assert n2 == 36 and rel2.pk == rel.pk
+    assert n2 == 42 and rel2.pk == rel.pk
 
     # HTTP 엔드포인트도 확인
     from rest_framework.test import APIClient
     resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
-    assert resp.status_code == 200 and resp.data["baked"] == 36
+    assert resp.status_code == 200 and resp.data["baked"] == 42
     assert resp.data["release"]["version"] == "graph:example-icc-partial"
-    assert len(resp.data["release"]["records"]) == 36
+    assert len(resp.data["release"]["records"]) == 42
 
 
 def test_icc_chart_tiles_by_rank(seeded):
@@ -138,11 +138,30 @@ def test_narrate_release_renders_and_persists(seeded):
 
 
 def test_finer_boundaries_registry_only(seeded):
-    """Epoch/Age 경계는 registry(Boundary)에만 — 네트웍(게이트웨이)엔 없다. period+ 는 네트웍에."""
+    """대부분 Epoch/Age 경계는 registry(Boundary)에만. period+ 는 네트웍. 단 Triassic age 는 프로토타입 그룹으로 네트웍에."""
     from graph.models import Gateway
     assert Boundary.objects.filter(slug="base-fortunian").exists()        # Age → registry
     assert not Gateway.objects.filter(boundary__slug="base-fortunian").exists()
     assert Gateway.objects.filter(boundary__slug="base-jurassic").exists()  # Period → 네트웍
+
+
+def test_triassic_age_group(seeded):
+    """Triassic age 세분 노드그룹 — period 경계 사이에 내부 age 분할점 6개(order 체인). 공유 경계라 induan≠분할점."""
+    from graph.models import Graph, NodeGroup, Gateway
+    from engine.evaluate import evaluate_graph
+    g = Graph.objects.get(slug="example-icc-partial")
+    grp = NodeGroup.objects.get(graph=g, key="triassic-ages")
+    keys = set(grp.members.values_list("key", flat=True))
+    # 멤버 = 내부 age pub 6 + 내부 order 5 (period 경계에 tie 하는 order 2 는 그룹 밖)
+    assert {"pub-olenekian", "pub-anisian", "pub-ladinian", "pub-carnian", "pub-norian", "pub-rhaetian"} <= keys
+    assert "ord-35" not in keys and "ord-41" not in keys      # tie order 는 외부
+    assert len(keys) == 11
+    # 내부 age 는 네트웍(게이트웨이)에, 공유 경계 induan 은 별도 분할점 아님
+    assert Gateway.objects.filter(graph=g, boundary__slug="base-olenekian").exists()
+    assert not Gateway.objects.filter(graph=g, boundary__slug="base-induan").exists()
+    # order 체인 통과 → L1 pass
+    run = evaluate_graph(g)
+    assert run.certificate.passed
 
 
 def test_seed_content_canonical(seeded):

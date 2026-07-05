@@ -22,6 +22,11 @@ class NodeInstanceManager(models.Manager):
         return self.get(graph__slug=graph_slug, key=key)
 
 
+class NodeGroupManager(models.Manager):
+    def get_by_natural_key(self, graph_slug, key):
+        return self.get(graph__slug=graph_slug, key=key)
+
+
 class GatewayManager(models.Manager):
     def get_by_natural_key(self, graph_slug, slug):
         return self.get(graph__slug=graph_slug, slug=slug)
@@ -79,6 +84,8 @@ class NodeGroup(models.Model):
     x = models.FloatField(default=0)
     y = models.FloatField(default=0)
 
+    objects = NodeGroupManager()
+
     class Meta:
         constraints = [
             models.UniqueConstraint(fields=["graph", "key"], name="uniq_group_key_per_graph")
@@ -86,6 +93,11 @@ class NodeGroup(models.Model):
 
     def __str__(self):
         return f"{self.graph.slug}/{self.key}"
+
+    def natural_key(self):
+        return (self.graph.slug, self.key)
+
+    natural_key.dependencies = ["graph.graph"]
 
 
 class NodeInstance(models.Model):
@@ -116,7 +128,7 @@ class NodeInstance(models.Model):
     def natural_key(self):
         return (self.graph.slug, self.key)
 
-    natural_key.dependencies = ["graph.graph", "nodes.nodetype"]
+    natural_key.dependencies = ["graph.graph", "nodes.nodetype", "graph.nodegroup"]
 
     @property
     def is_cycle_breaker(self):
