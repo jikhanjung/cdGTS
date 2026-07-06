@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { CATEGORY_COLOR } from './CdgtsNode.jsx'
 
-// distribution 충실도 사다리 (nodes/distribution.py FIDELITY_LADDER 와 동기).
+// distribution fidelity ladder (kept in sync with nodes/distribution.py FIDELITY_LADDER).
 const FIDELITY = ['exact', 'sym', 'decomposed', 'shape', 'joint', 'full']
 const BUDGET_KEYS = ['analytical', 'systematic', 'model']
 
 const numOrUndef = (v) => (v === '' || v == null ? undefined : Number(v))
 
-// --- 개별 파라미터 컨트롤 ---
+// --- Individual parameter controls ---
 function ParamField({ name, spec, value, nodeKeys, onParam, onDist }) {
   const help = spec.help
   const label = (
@@ -101,13 +101,13 @@ function ParamField({ name, spec, value, nodeKeys, onParam, onDist }) {
       return (
         <div className="insp-field">
           {label}
-          <div className="insp-note">지원하지 않는 타입 <code>{spec.type}</code> — 아래 JSON 에서 편집.</div>
+          <div className="insp-note">Unsupported type <code>{spec.type}</code> — edit in the JSON below.</div>
         </div>
       )
   }
 }
 
-// distribution 값 객체 서브폼 (자주 쓰는 필드만; 깊은 필드는 고급 JSON).
+// distribution value-object subform (common fields only; deep fields use the advanced JSON).
 function DistributionField({ name, value, onDist }) {
   const isExact = value.fidelity === 'exact'
   return (
@@ -168,11 +168,14 @@ function DistributionField({ name, value, onDist }) {
   )
 }
 
-// --- 인스펙터 패널 ---
-export default function Inspector({ node, type, nodeKeys, open, onClose, onLabel, onDescription, onParam, onDist, onReplaceParams }) {
+// --- Inspector panel ---
+export default function Inspector({ node, type, group, groupExtra, nodeKeys, open, onClose, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
   const cls = `inspector${open ? ' open' : ''}`
+  if (!node && group) {
+    return <GroupInspector cls={cls} group={group} extra={groupExtra} onClose={onClose} onGroupName={onGroupName} />
+  }
   if (!node) {
-    return <aside className={`${cls} empty`}><p className="hint">노드를 선택하면 속성이 여기 표시됩니다.</p></aside>
+    return <aside className={`${cls} empty`}><p className="hint">Select a node or group to see its properties here.</p></aside>
   }
 
   const params = node.data.params || {}
@@ -184,17 +187,17 @@ export default function Inspector({ node, type, nodeKeys, open, onClose, onLabel
     <aside className={cls}>
       <div className="insp-head" style={{ borderTopColor: color }}>
         <div className="insp-type">{node.data.nodeType} <span className="insp-cat">{node.data.category}</span></div>
-        <button className="mobile-only insp-close" onClick={onClose} title="닫기">✕</button>
+        <button className="mobile-only insp-close" onClick={onClose} title="Close">✕</button>
       </div>
 
       {node.data.result?.distribution?.kind === 'order' && (
         <div className={`insp-verdict ${node.data.result.distribution.ok ? 'good'
           : node.data.result.distribution.ok === false ? 'bad' : 'none'}`}>
           {node.data.result.distribution.ok == null
-            ? '입력 필요'
-            : `아래(older) ≥ 위(younger): gap ${node.data.result.distribution.gap} `
+            ? 'Input required'
+            : `below (older) ≥ above (younger): gap ${node.data.result.distribution.gap} `
               + `${node.data.result.distribution.ok ? '≥' : '<'} ${params.min_gap ?? 0} `
-              + `→ ${node.data.result.distribution.ok ? '통과' : '위반'}`}
+              + `→ ${node.data.result.distribution.ok ? 'pass' : 'violation'}`}
         </div>
       )}
 
@@ -212,13 +215,13 @@ export default function Inspector({ node, type, nodeKeys, open, onClose, onLabel
         <textarea
           className="insp-input insp-desc" rows={3}
           defaultValue={node.data.description ?? ''}
-          placeholder="상세 설명 — 제목은 짧게, 여기 자세히 (노드 제목 툴팁에 표시)"
+          placeholder="Detailed description — keep the title short, put details here (shown in the node title tooltip)"
           onChange={(e) => onDescription(e.target.value)}
         />
       </div>
 
       {schemaKeys.length === 0
-        ? <p className="insp-note">이 노드 타입은 정의된 파라미터가 없습니다.</p>
+        ? <p className="insp-note">This node type has no defined parameters.</p>
         : schemaKeys.map((k) => (
             <ParamField
               key={k} name={k} spec={schema[k]} value={params[k]}
@@ -228,17 +231,62 @@ export default function Inspector({ node, type, nodeKeys, open, onClose, onLabel
 
       <RawJson params={params} onReplaceParams={onReplaceParams} />
 
-      <p className="insp-foot">변경 후 툴바의 <b>저장</b> 을 눌러 반영하세요.</p>
+      <p className="insp-foot">After making changes, click <b>Save</b> in the toolbar to apply them.</p>
     </aside>
   )
 }
 
-// 폼에 없는 깊은 필드(shape·shared_components 등) 편집용 원본 JSON.
+// --- Group inspector (shown when a node group / collapsed group node is selected) ---
+function GroupInspector({ cls, group, extra, onClose, onGroupName }) {
+  const isUnit = group.kind === 'unit'
+  const color = '#a142f4'   // lavender — matches the group node
+  return (
+    <aside className={cls}>
+      <div className="insp-head" style={{ borderTopColor: color }}>
+        <div className="insp-type">node group <span className="insp-cat">{group.kind || 'container'}</span></div>
+        <button className="mobile-only insp-close" onClick={onClose} title="Close">✕</button>
+      </div>
+
+      <div className="insp-field">
+        <label className="insp-label">name</label>
+        <input
+          type="text" className="insp-input"
+          defaultValue={group.name ?? ''} placeholder={group.key}
+          onChange={(e) => onGroupName(e.target.value)}
+        />
+      </div>
+
+      <dl className="insp-meta">
+        <dt>key</dt><dd><code>{group.key}</code></dd>
+        <dt>members</dt>
+        <dd>{extra?.count ?? 0}{extra?.subgroups ? ` · ${extra.subgroups} subgroup${extra.subgroups > 1 ? 's' : ''}` : ''}</dd>
+        <dt>collapsed</dt><dd>{group.collapsed ? 'yes' : 'no'}</dd>
+        {isUnit && (
+          <>
+            <dt>unit</dt><dd>{group.unit ? <code>{group.unit}</code> : '—'}</dd>
+            <dt>upper · younger</dt><dd>{extra?.upperLabel || '—'}</dd>
+            <dt>lower · older</dt><dd>{extra?.lowerLabel || '—'}</dd>
+          </>
+        )}
+      </dl>
+
+      {isUnit && (
+        <p className="insp-note">
+          Time-span group (1-cell): bounded by its lower/older and upper/younger boundary nodes,
+          and bound to a canonical chrono unit. Its bounding boundaries stay visible when you drill in.
+        </p>
+      )}
+      <p className="insp-foot">After making changes, click <b>Save</b> in the toolbar to apply them.</p>
+    </aside>
+  )
+}
+
+// Raw JSON for editing deep fields not in the form (shape, shared_components, etc.).
 function RawJson({ params, onReplaceParams }) {
   const [err, setErr] = useState(null)
   return (
     <details className="insp-raw">
-      <summary>고급: 원본 JSON</summary>
+      <summary>Advanced: raw JSON</summary>
       <textarea
         className="insp-json" spellCheck={false}
         defaultValue={JSON.stringify(params, null, 2)}

@@ -1,19 +1,19 @@
 import { Handle, Position } from '@xyflow/react'
 
-// order 참여 세로 포트: 위=older / 아래=younger (CdgtsNode·OrderNode 와 동일 규약).
-const VPORT = { older: Position.Top, younger: Position.Bottom }
-const ORDER_COLOR = '#a24bd8'
+// order-participating vertical ports: younger=top / older=bottom (same convention as CdgtsNode).
+const VPORT = { younger: Position.Top, older: Position.Bottom }
+const ORDER_COLOR = '#8b5cf6'
 const isV = (h) => h.port in VPORT
-// 상/하 포트가 여러 개면 가로로 분산 (좌/우 포트의 topPct 대응).
+// If there are multiple top/bottom ports, spread them horizontally (mirrors topPct for left/right ports).
 const leftPct = (i, n) => `${((i + 1) / (n + 1)) * 100}%`
 
-// 접힌 노드그룹 = 하나의 노드로 표현. 경계를 넘는 엣지가 자동으로 입출력 핸들이 된다(입출력 자동 정합).
-// 더블클릭 → 그룹 내부로 드릴인(Editor 가 처리).
+// A collapsed node group = represented as a single node. Edges crossing the boundary automatically become I/O handles (automatic I/O matching).
+// Double-click → drill into the group (handled by Editor).
 export function GroupNode({ data, selected }) {
   const { name, inputs = [], outputs = [], count = 0 } = data
-  const hIn = inputs.filter((h) => !isV(h))    // 좌측 입력
-  const hOut = outputs.filter((h) => !isV(h))  // 우측 출력
-  // order 세로 포트: 입력=target, 출력=source. 위/아래로 나눠 각 축에서 가로 분산.
+  const hIn = inputs.filter((h) => !isV(h))    // left inputs
+  const hOut = outputs.filter((h) => !isV(h))  // right outputs
+  // order vertical ports: input=target, output=source. Split into top/bottom and spread horizontally on each axis.
   const vAll = [
     ...inputs.filter(isV).map((h) => ({ ...h, htype: 'target' })),
     ...outputs.filter(isV).map((h) => ({ ...h, htype: 'source' })),
@@ -23,7 +23,7 @@ export function GroupNode({ data, selected }) {
   const rows = Math.max(hIn.length, hOut.length, 1)
   return (
     <div className={`group-node${selected ? ' selected' : ''}`} style={{ minHeight: 40 + rows * 20 }}
-         title="더블클릭: 그룹 열기">
+         title="Double-click: open group">
       <div className="group-node__bar">
         <span className="group-node__icon">▤</span>
         <span className="group-node__name">{name}</span>
@@ -55,8 +55,8 @@ export function GroupNode({ data, selected }) {
   )
 }
 
-// 드릴인 내부에서 경계를 넘는 연결을 보여주는 읽기전용 인터페이스 스텁.
-// 그룹 포트(멤버 쪽) + 외부 출처/도착을 함께 표기: 입력 `port ← peer`, 출력 `port → peer`.
+// Read-only interface stub that shows boundary-crossing connections inside a drill-in.
+// Shows the group port (member side) together with the external source/destination: input `port ← peer`, output `port → peer`.
 export function StubNode({ data }) {
   const inp = data.dir === 'in'
   const arrow = inp ? '←' : '→'

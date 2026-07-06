@@ -7,6 +7,8 @@ import '@xyflow/react/dist/style.css'
 
 import CdgtsNode, { CATEGORY_COLOR } from './CdgtsNode.jsx'
 import { GroupNode, StubNode } from './GroupNode.jsx'
+import GroupIoNode from './GroupIoNode.jsx'
+import BoundNode from './BoundNode.jsx'
 import OrderNode from './OrderNode.jsx'
 import Inspector from './Inspector.jsx'
 import ResultsPanel from './ResultsPanel.jsx'
@@ -15,22 +17,23 @@ import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
 } from './api.js'
 
-const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode, cdgtsOrder: OrderNode }
-const DEFAULT_NODE_WIDTH = 172   // 기본 폭(px). 사용자가 우측 핸들로 조정 가능.
+const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
+  cdgtsGroupIo: GroupIoNode, cdgtsBound: BoundNode, cdgtsOrder: OrderNode }
+const DEFAULT_NODE_WIDTH = 172   // Default width (px). User can adjust via the right handle.
 
-// 주 포인터가 터치(폰/태블릿)인가 — 팬/선택 상호작용을 다르게(터치=드래그 팬·핀치줌).
+// Is the primary pointer touch (phone/tablet)? — pan/selection interactions differ (touch = drag pan · pinch zoom).
 const IS_TOUCH = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
   && window.matchMedia('(pointer: coarse)').matches
 
-// 노드타입 slug → React Flow 노드 컴포넌트 종류. order 는 세로 핸들 전용 컴포넌트.
+// node type slug → React Flow node component kind. order is a vertical-handle-only component.
 const rfType = (slug) => (slug === 'order' ? 'cdgtsOrder' : 'cdgts')
 const isRealNode = (t) => t === 'cdgts' || t === 'cdgtsOrder'
-// order 노드는 CSS 로 40px 고정(.order-node). 명시 width 를 주면 React Flow 가 그 값으로 bounds·hit-test 를
-// 계산해 화면(40px)보다 넓게 선택 판정한다 → width 를 생략해 실측(40px)을 쓰게 한다. data/process 는
-// .cdgts-node{width:100%} 라 래퍼 폭이 필요하므로 기본폭을 준다.
+// order nodes are fixed at 40px via CSS (.order-node). Giving an explicit width makes React Flow compute bounds·hit-test
+// with that value, so selection is judged wider than the on-screen 40px → omit width so the measured (40px) is used. data/process
+// use .cdgts-node{width:100%}, so the wrapper needs a width; give them the default width.
 const nodeWidth = (slug, w) => (rfType(slug) === 'cdgtsOrder' ? undefined : (w || DEFAULT_NODE_WIDTH))
 
-// --- API ↔ React Flow 변환 (nodes/edges 는 항상 '전체 실제' 집합; 뷰는 buildView 로 파생) ---
+// --- API ↔ React Flow conversion (nodes/edges are always the 'full real' set; the view is derived via buildView) ---
 function apiToRF(graph, typeMap) {
   const nodes = graph.nodes.map((n) => {
     const t = typeMap[n.node_type] || { category: 'process', ports: [] }
@@ -38,7 +41,8 @@ function apiToRF(graph, typeMap) {
       id: n.key, type: rfType(n.node_type), position: { x: n.x, y: n.y },
       width: nodeWidth(n.node_type, n.width),
       data: {
-        nodeType: n.node_type, label: n.label, description: n.description || '',
+        nodeType: n.node_type, nature: n.nature || 'generic',
+        label: n.label, description: n.description || '',
         params: n.params, category: t.category, ports: t.ports, group: n.group || null,
       },
     }
@@ -47,7 +51,11 @@ function apiToRF(graph, typeMap) {
     id: `${e.source}:${e.source_port}->${e.target}:${e.target_port}`,
     source: e.source, target: e.target,
     sourceHandle: e.source_port, targetHandle: e.target_port,
+    // order edge = boundary vertical port connection (ordering constraint) — shown distinctly from data flow.
     data: { kind: e.kind },
+    ...(e.kind === 'order'
+      ? { className: 'order-edge', style: { stroke: '#8b5cf6', strokeDasharray: '4 3' } }
+      : {}),
   }))
   const groups = (graph.groups || []).map((g) => ({ ...g }))
   return { nodes, edges, groups }
@@ -57,8 +65,8 @@ function rfToApi(nodes, edges, groups, viewport) {
   return {
     viewport,
     nodes: nodes.map((n) => ({
-      key: n.id, node_type: n.data.nodeType, label: n.data.label || '',
-      description: n.data.description || '',
+      key: n.id, node_type: n.data.nodeType, nature: n.data.nature || 'generic',
+      label: n.data.label || '', description: n.data.description || '',
       params: n.data.params || {}, x: Math.round(n.position.x), y: Math.round(n.position.y),
       width: n.width ? Math.round(n.width) : null, group: n.data.group || null,
     })),
@@ -69,22 +77,26 @@ function rfToApi(nodes, edges, groups, viewport) {
     groups: groups.map((g) => ({
       key: g.key, name: g.name, collapsed: !!g.collapsed,
       x: Math.round(g.x), y: Math.round(g.y), parent: g.parent || null,
+      // span group meta — prevent loss on save (boundary·unit references).
+      kind: g.kind || 'container', unit: g.unit || null,
+      lower: g.lower || null, upper: g.upper || null,
     })),
   }
 }
 
-// (nodes, edges, groups, activeGroup) → 구조 뷰 {nodeRep, groupNodes, stubNodes, viewEdges}.
-// 중첩 지원: 한 레벨(activeGroup=그룹key 또는 null=최상위)에서 **직속 노드 + 직속 하위그룹(접힌 노드)** 만 보인다.
-// 하위그룹은 자기 서브트리 전체를 대표. 서브트리 경계를 넘는 엣지 → 그룹 포트(같은 서브트리 밖 상대) 또는 스텁(현재 서브트리 밖).
-// 여기선 selection·실노드 위치를 다루지 않는다 — 호출측이 가볍게 오버레이하고, 이 함수는 토폴로지 변화 때만 재실행된다
-// (rubber-band 선택/드래그 중 전체 재빌드를 피해 대형 그래프 프레임 저하 방지).
+// (nodes, edges, groups, activeGroup) → structure view {nodeRep, groupNodes, ioNodes, viewEdges}.
+// Nesting support: at one level (activeGroup=group key or null=top level), only **direct nodes + direct subgroups (collapsed nodes)** are shown.
+// A subgroup represents its entire subtree. Edges crossing a subtree boundary → group port (peer within the same subtree) or stub (outside the current subtree).
+// This does not handle selection·real-node positions — the caller overlays them lightly, and this function reruns only on topology changes
+// (avoids a full rebuild during rubber-band selection/drag to prevent frame degradation on large graphs).
 function buildView(nodes, edges, groups, activeGroup) {
   const labelMap = Object.fromEntries(nodes.map((n) => [n.id, n.data.label || n.data.nodeType]))
   const lab = (id, port) => `${labelMap[id] || id}·${port}`
   const parentOf = Object.fromEntries(groups.map((g) => [g.key, g.parent || null]))
+  const groupByKey = Object.fromEntries(groups.map((g) => [g.key, g]))
   const level = activeGroup || null
 
-  // 노드 그룹키 → 현재 레벨 대표: 'node'(직속) | {kind:'group',key} | 'external'(현재 서브트리 밖)
+  // node group key → current-level representative: 'node' (direct) | {kind:'group',key} | 'external' (outside the current subtree)
   const repOf = (gk) => {
     if (gk === level) return { kind: 'node' }
     let g = gk
@@ -96,13 +108,13 @@ function buildView(nodes, edges, groups, activeGroup) {
   }
   const nodeRep = Object.fromEntries(nodes.map((n) => [n.id, repOf(n.data.group || null)]))
 
-  const subtreeCount = {}                          // 그룹별 서브트리 노드 수(뱃지)
+  const subtreeCount = {}                          // per-group subtree node count (badge)
   nodes.forEach((n) => {
     let g = n.data.group || null
     while (g != null) { subtreeCount[g] = (subtreeCount[g] || 0) + 1; g = parentOf[g] }
   })
 
-  const groupNodes = []                            // 직속 하위그룹 = 접힌 노드(selected 는 오버레이)
+  const groupNodes = []                            // direct subgroups = collapsed nodes (selected is overlaid)
   const groupById = {}
   groups.forEach((g) => {
     if (parentOf[g.key] !== level) return
@@ -112,51 +124,88 @@ function buildView(nodes, edges, groups, activeGroup) {
     groupNodes.push(gn)
   })
 
-  const stubNodes = []
+  // Drilling into a unit (interval) group shows that span's upper/lower bounding boundaries as fixed frames at top (upper)·bottom (lower).
+  // An order frame separate from the left/right Group I/O — no matter which nested interval you drill into, that interval's upper/lower boundaries are shown consistently.
+  const activeUnit = level ? groupByKey[level] : null
+  const isUnit = !!activeUnit && activeUnit.kind === 'unit'
+  const lowerKey = isUnit ? (activeUnit.lower || null) : null
+  const upperKey = isUnit ? (activeUnit.upper || null) : null
+  // Wrap 4 frames around the bounding box of the inner (direct member) nodes: left input · right output · top younger · bottom older.
+  let cnt = 0, minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+  nodes.forEach((n) => {
+    if (repOf(n.data.group || null).kind !== 'node') return
+    cnt += 1
+    if (n.position.x < minX) minX = n.position.x
+    if (n.position.x > maxX) maxX = n.position.x
+    if (n.position.y < minY) minY = n.position.y
+    if (n.position.y > maxY) maxY = n.position.y
+  })
+  if (!cnt) { minX = 0; maxX = 400; minY = 0; maxY = 400 }
+  const cx = Math.round((minX + maxX) / 2)
+  const cy = Math.round((minY + maxY) / 2)
+  const boundUpper = { id: 'bound:upper', type: 'cdgtsBound', position: { x: cx, y: minY - 120 },
+    data: { side: 'upper', label: upperKey ? (labelMap[upperKey] || upperKey) : null } }
+  const boundLower = { id: 'bound:lower', type: 'cdgtsBound', position: { x: cx, y: maxY + 90 },
+    data: { side: 'lower', label: lowerKey ? (labelMap[lowerKey] || lowerKey) : null } }
+
+  // Blender-style interface nodes — aggregate the drilled-in group's external **data** connections into **one node** each for input/output.
+  // Placed left/right relative to the inner-node bounding box (vertically centered). Position is overridden by the caller's ioPos overlay.
+  const ioIn = { id: 'gio:in', type: 'cdgtsGroupIo', position: { x: minX - 340, y: cy },
+    data: { dir: 'in', ports: [] } }
+  const ioOut = { id: 'gio:out', type: 'cdgtsGroupIo', position: { x: maxX + 240, y: cy },
+    data: { dir: 'out', ports: [] } }
+  const portSeen = new Set()
   const viewEdges = []
-  const stubSeen = new Set()
-  let ins = 0, outs = 0
   edges.forEach((e) => {
     const rs = nodeRep[e.source], rt = nodeRep[e.target]
     if (!rs || !rt) return
-    if (rs.kind === 'group' && rt.kind === 'group' && rs.key === rt.key) return   // 같은 하위그룹 내부 → 숨김
-    if (rs.kind === 'external' && rt.kind === 'external') return                   // 현재 서브트리 밖 → 숨김
+    if (rs.kind === 'group' && rt.kind === 'group' && rs.key === rt.key) return   // within the same subgroup → hide
+    if (rs.kind === 'external' && rt.kind === 'external') return                   // outside the current subtree → hide
+    const isOrder = e.data?.kind === 'order'
     let src = e.source, srcH = e.sourceHandle, tgt = e.target, tgtH = e.targetHandle
     if (rs.kind === 'group') {
       const hid = `out:${e.source}:${e.sourceHandle}`, gd = groupById[rs.key].data
       if (!gd.outputs.find((h) => h.id === hid))
         gd.outputs.push({ id: hid, port: e.sourceHandle, label: lab(e.source, e.sourceHandle) })
       src = `group:${rs.key}`; srcH = hid
+    } else if (rs.kind === 'external' && isOrder && e.source === lowerKey) {
+      src = 'bound:lower'; srcH = e.sourceHandle   // order rising from the lower boundary
+    } else if (rs.kind === 'external' && isOrder && e.source === upperKey) {
+      src = 'bound:upper'; srcH = e.sourceHandle
     } else if (rs.kind === 'external') {
-      const sid = `stub-in:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
-      if (!stubSeen.has(sid)) {
-        stubSeen.add(sid)
-        stubNodes.push({ id: sid, type: 'cdgtsStub', position: { x: -280, y: ins * 64 },
-          data: { dir: 'in', port: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) },
-          draggable: false, selectable: false })
-        ins++
+      const pid = `gin:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
+      if (!portSeen.has(pid)) {
+        portSeen.add(pid)
+        ioIn.data.ports.push({ id: pid, label: lab(e.target, e.targetHandle), peer: lab(e.source, e.sourceHandle) })
       }
-      src = sid; srcH = 'out'
+      src = 'gio:in'; srcH = pid
     }
     if (rt.kind === 'group') {
       const hid = `in:${e.target}:${e.targetHandle}`, gd = groupById[rt.key].data
       if (!gd.inputs.find((h) => h.id === hid))
         gd.inputs.push({ id: hid, port: e.targetHandle, label: lab(e.target, e.targetHandle) })
       tgt = `group:${rt.key}`; tgtH = hid
+    } else if (rt.kind === 'external' && isOrder && e.target === upperKey) {
+      tgt = 'bound:upper'; tgtH = e.targetHandle   // order rising to the upper boundary
+    } else if (rt.kind === 'external' && isOrder && e.target === lowerKey) {
+      tgt = 'bound:lower'; tgtH = e.targetHandle
     } else if (rt.kind === 'external') {
-      const sid = `stub-out:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
-      if (!stubSeen.has(sid)) {
-        stubSeen.add(sid)
-        stubNodes.push({ id: sid, type: 'cdgtsStub', position: { x: 760, y: outs * 64 },
-          data: { dir: 'out', port: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) },
-          draggable: false, selectable: false })
-        outs++
+      const pid = `gout:${e.source}:${e.sourceHandle}:${e.target}:${e.targetHandle}`
+      if (!portSeen.has(pid)) {
+        portSeen.add(pid)
+        ioOut.data.ports.push({ id: pid, label: lab(e.source, e.sourceHandle), peer: lab(e.target, e.targetHandle) })
       }
-      tgt = sid; tgtH = 'in'
+      tgt = 'gio:out'; tgtH = pid
     }
     viewEdges.push({ ...e, id: `v-${e.id}`, source: src, sourceHandle: srcH, target: tgt, targetHandle: tgtH })
   })
-  return { nodeRep, groupNodes, stubNodes, viewEdges }
+  const ioNodes = []
+  if (ioIn.data.ports.length) ioNodes.push(ioIn)
+  if (ioOut.data.ports.length) ioNodes.push(ioOut)
+  const boundNodes = []
+  if (isUnit && upperKey) boundNodes.push(boundUpper)
+  if (isUnit && lowerKey) boundNodes.push(boundLower)
+  return { nodeRep, groupNodes, ioNodes, boundNodes, viewEdges }
 }
 
 export default function Editor() {
@@ -164,33 +213,34 @@ export default function Editor() {
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [graphName, setGraphName] = useState('')
-  const [nodes, setNodes] = useNodesState([])       // 전체 실제 노드
-  const [edges, setEdges] = useEdgesState([])       // 전체 실제 엣지
-  const [groups, setGroups] = useState([])          // 그룹 메타 [{key,name,collapsed,x,y}]
-  const [activeGroup, setActiveGroup] = useState(null)   // null=최상위 / 그룹 key=드릴인
-  const [status, setStatus] = useState('로딩 중…')
+  const [nodes, setNodes] = useNodesState([])       // all real nodes
+  const [edges, setEdges] = useEdgesState([])       // all real edges
+  const [groups, setGroups] = useState([])          // group meta [{key,name,collapsed,x,y}]
+  const [activeGroup, setActiveGroup] = useState(null)   // null=top level / group key=drilled in
+  const [ioPos, setIoPos] = useState({})   // per-drill-in interface node positions { [group]: { 'gio:in':{x,y}, 'gio:out':{x,y} } }
+  const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
-  const [selectedIds, setSelectedIds] = useState([])          // 선택된 실제 노드
-  const [selectedGroupKeys, setSelectedGroupKeys] = useState([])  // 선택된 그룹(접힌 노드)
-  const [menu, setMenu] = useState(null)   // 우클릭 컨텍스트 메뉴 {x,y,kind,id?,groupKey?}
+  const [selectedIds, setSelectedIds] = useState([])          // selected real nodes
+  const [selectedGroupKeys, setSelectedGroupKeys] = useState([])  // selected groups (collapsed nodes)
+  const [menu, setMenu] = useState(null)   // right-click context menu {x,y,kind,id?,groupKey?}
   const [gateways, setGateways] = useState([])
   const [outputs, setOutputs] = useState([])
   const [runMeta, setRunMeta] = useState(null)
   const [showResults, setShowResults] = useState(false)
-  const [verifyData, setVerifyData] = useState(null)        // Science CI: 공표 대비 diff
-  const [paletteOpen, setPaletteOpen] = useState(false)     // 폰: 팔레트 서랍
-  const [inspectorOpen, setInspectorOpen] = useState(false) // 폰: 인스펙터 서랍
-  const [pending, setPending] = useState(null)              // 탭-투-추가: 배치 대기 중인 노드 slug
+  const [verifyData, setVerifyData] = useState(null)        // Science CI: diff against the published baseline
+  const [paletteOpen, setPaletteOpen] = useState(false)     // phone: palette drawer
+  const [inspectorOpen, setInspectorOpen] = useState(false) // phone: inspector drawer
+  const [pending, setPending] = useState(null)              // tap-to-add: node slug awaiting placement
   const wrapperRef = useRef(null)
-  const lpRef = useRef(null)                                // 롱프레스 타이머
-  const lpFiredRef = useRef(false)                          // 롱프레스 직후 click 1회 삼킴
+  const lpRef = useRef(null)                                // long-press timer
+  const lpFiredRef = useRef(false)                          // swallow the one click right after a long press
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
 
-  // 토폴로지 시그니처 — selection·위치를 제외한 구조(노드 존재·그룹 소속·라벨 / 엣지 배선)만 담는다.
-  // 이게 바뀔 때만 buildView(그룹/스텁/엣지 라우팅)를 재실행 → rubber-band 선택이나 노드 드래그 중엔
-  // 구조·엣지를 재빌드하지 않아, 밀집한 대형 그래프에서 pointermove 가 밀려 선택 박스가 얼어붙던 문제를 없앤다.
+  // topology signature — captures only the structure (node existence·group membership·label / edge wiring), excluding selection·position.
+  // buildView (group/stub/edge routing) reruns only when this changes → during rubber-band selection or node drag,
+  // structure·edges are not rebuilt, eliminating the issue where pointermove backed up and the selection box froze on dense large graphs.
   const topoSig = useMemo(
     () => nodes.map((n) => `${n.id}~${n.data.group || ''}~${n.data.label || n.data.nodeType || ''}`).join('|'),
     [nodes],
@@ -201,21 +251,25 @@ export default function Editor() {
   )
   const struct = useMemo(
     () => buildView(nodes, edges, groups, activeGroup),
-    // nodes·edges 는 클로저로 최신 참조; 재실행 트리거는 구조 시그니처뿐(선택/위치 변화엔 캐시 유지).
+    // nodes·edges are latest via closure; the rerun trigger is only the structure signature (cache kept on selection/position changes).
     [topoSig, edgeSig, groups, activeGroup], // eslint-disable-line react-hooks/exhaustive-deps
   )
-  // 선택 오버레이(가벼움) — 직속 실노드는 현재 객체 그대로(선택 반영), 그룹·엣지엔 selected 만 덧입힌다.
+  // selection overlay (lightweight) — direct real nodes stay as-is (selection reflected); only selected is layered onto groups·edges.
   const viewNodes = useMemo(() => {
     const selG = new Set(selectedGroupKeys)
     const out = nodes.filter((n) => struct.nodeRep[n.id]?.kind === 'node')
     struct.groupNodes.forEach((gn) => out.push(selG.has(gn.data.key) ? { ...gn, selected: true } : gn))
-    struct.stubNodes.forEach((sn) => out.push(sn))
+    // interface nodes (gio:in/out) — overlay the per-drill-in remembered position (fall back to buildView default).
+    const pos = ioPos[activeGroup || ''] || {}
+    struct.ioNodes.forEach((io) => out.push(pos[io.id] ? { ...io, position: pos[io.id] } : io))
+    // bound frames (upper/lower boundary) — selectable·draggable, position remembered per drill-in (same as gio).
+    struct.boundNodes.forEach((bn) => out.push(pos[bn.id] ? { ...bn, position: pos[bn.id] } : bn))
     return out
-  }, [nodes, struct, selectedGroupKeys])
+  }, [nodes, struct, selectedGroupKeys, ioPos, activeGroup])
   const viewEdges = useMemo(() => {
     const selById = new Map(edges.map((e) => [e.id, !!e.selected]))
     return struct.viewEdges.map((ve) => {
-      const sel = selById.get(ve.id.slice(2)) || false   // viewEdge id = 'v-' + 원본 id
+      const sel = selById.get(ve.id.slice(2)) || false   // viewEdge id = 'v-' + original id
       return ve.selected === sel ? ve : { ...ve, selected: sel }
     })
   }, [struct, edges])
@@ -233,7 +287,7 @@ export default function Editor() {
     setOutputs([])
     setRunMeta(null)
     if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
-    setStatus(`불러옴: ${full.name} (노드 ${rn.length}${rg.length ? ` · 그룹 ${rg.length}` : ''})`)
+    setStatus(`Loaded: ${full.name} (nodes ${rn.length}${rg.length ? ` · groups ${rg.length}` : ''})`)
   }, [setNodes, setEdges, setViewport])
 
   useEffect(() => {
@@ -247,32 +301,50 @@ export default function Editor() {
         if (!g) { g = await createGraph({ slug: 'sandbox', name: 'Sandbox', nodes: [], edges: [], viewport: {} }); gs = [g] }
         setGraphs(gs)
         hydrate(await getGraph(g.id), tmap)
-      } catch (e) { setError(e.data || String(e)); setStatus('로드 실패') }
+      } catch (e) { setError(e.data || String(e)); setStatus('Load failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadGraph = useCallback(async (id) => {
     setError(null)
     try { hydrate(await getGraph(id), typeMap) }
-    catch (e) { setError(e.data || String(e)); setStatus('로드 실패') }
+    catch (e) { setError(e.data || String(e)); setStatus('Load failed') }
   }, [typeMap, hydrate])
 
-  // 뷰 → 실제 상태 매핑. 실제 노드 변경만 반영, 그룹 노드는 위치만, 스텁은 무시.
+  // view → real state mapping. Apply only real node changes; group nodes position only; interface nodes remember position per drill-in.
   const onNodesChange = useCallback((changes) => {
     const real = []
     const gpos = []
+    const gsel = []
+    const iopos = []
     changes.forEach((c) => {
       const id = c.id
-      if (id && id.startsWith('group:')) { if (c.type === 'position' && c.position) gpos.push({ key: id.slice(6), pos: c.position }) }
-      else if (id && id.startsWith('stub-')) { /* 무시 */ }
+      if (id && id.startsWith('group:')) {
+        // group nodes are derived (rebuilt each view) — reflect their position AND selection into real state.
+        if (c.type === 'position' && c.position) gpos.push({ key: id.slice(6), pos: c.position })
+        else if (c.type === 'select') gsel.push({ key: id.slice(6), selected: c.selected })
+      }
+      else if (id && (id === 'gio:in' || id === 'gio:out' || id === 'bound:upper' || id === 'bound:lower')) { if (c.type === 'position' && c.position) iopos.push({ id, pos: c.position }) }
+      else if (id && id.startsWith('stub-')) { /* stub — ignore */ }
       else real.push(c)
     })
     if (real.length) setNodes((nds) => applyNodeChanges(real, nds))
+    if (gsel.length) setSelectedGroupKeys((prev) => {
+      const set = new Set(prev)
+      gsel.forEach(({ key, selected }) => { if (selected) set.add(key); else set.delete(key) })
+      return [...set]
+    })
     if (gpos.length) setGroups((gs) => gs.map((g) => {
       const p = gpos.find((x) => x.key === g.key)
       return p ? { ...g, x: Math.round(p.pos.x), y: Math.round(p.pos.y) } : g
     }))
-  }, [setNodes])
+    if (iopos.length) setIoPos((prev) => {
+      const k = activeGroup || ''
+      const cur = { ...(prev[k] || {}) }
+      iopos.forEach(({ id, pos }) => { cur[id] = { x: Math.round(pos.x), y: Math.round(pos.y) } })
+      return { ...prev, [k]: cur }
+    })
+  }, [setNodes, activeGroup])
 
   const onEdgesChange = useCallback((changes) => {
     const real = changes.map((c) => (c.id && c.id.startsWith('v-') ? { ...c, id: c.id.slice(2) } : c))
@@ -281,8 +353,8 @@ export default function Editor() {
 
   const onConnect = useCallback((c) => {
     let { source, sourceHandle, target, targetHandle } = c
-    // 그룹 포트(접힌 노드의 위/아래 order 포트 등)에서/로 그리면 → 멤버 노드의 실제 포트로 환원.
-    // 그룹 핸들 id 규약(buildView): 출력 `out:<member>:<port>` · 입력 `in:<member>:<port>`.
+    // Drawing from/to a group port (e.g. a collapsed node's upper/lower order port) → resolve to the member node's real port.
+    // Group handle id convention (buildView): output `out:<member>:<port>` · input `in:<member>:<port>`.
     if (source?.startsWith('group:') && sourceHandle?.startsWith('out:')) {
       const [, m, p] = sourceHandle.split(':'); source = m; sourceHandle = p
     }
@@ -296,7 +368,7 @@ export default function Editor() {
     }))
   }, [setEdges])
 
-  // 노드 생성 공통 — 데스크톱 드롭 · 터치 탭-투-추가 둘 다 사용.
+  // shared node creation — used by both desktop drop and touch tap-to-add.
   const addNodeAt = useCallback((slug, position) => {
     const t = typeMap[slug]
     if (!t) return
@@ -305,7 +377,7 @@ export default function Editor() {
       id: key, type: rfType(slug), position, width: nodeWidth(slug),
       data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
-    setStatus(`${t.name} 추가`)
+    setStatus(`${t.name} added`)
   }, [typeMap, setNodes, activeGroup])
 
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }, [])
@@ -315,9 +387,9 @@ export default function Editor() {
     if (typeMap[slug]) addNodeAt(slug, screenToFlowPosition({ x: e.clientX, y: e.clientY }))
   }, [screenToFlowPosition, typeMap, addNodeAt])
 
-  // 터치: 팔레트 항목 탭 → 배치 대기(pending), 캔버스 탭 → 그 자리에 생성.
-  const armPending = useCallback((slug) => { setPending(slug); setPaletteOpen(false); setStatus('캔버스를 탭하면 배치 · 다시 탭하면 취소') }, [])
-  // 롱프레스 직후의 합성 click 1회를 삼킨다(메뉴가 바로 닫히는 것 방지).
+  // touch: tap a palette item → await placement (pending), tap the canvas → create at that spot.
+  const armPending = useCallback((slug) => { setPending(slug); setPaletteOpen(false); setStatus('Tap the canvas to place · tap again to cancel') }, [])
+  // swallow the one synthetic click right after a long press (prevents the menu from closing immediately).
   const swallowLongPressClick = useCallback(() => {
     if (lpFiredRef.current) { lpFiredRef.current = false; return true }
     return false
@@ -328,7 +400,7 @@ export default function Editor() {
     setMenu(null)
   }, [swallowLongPressClick, pending, addNodeAt, screenToFlowPosition])
 
-  // 터치: 롱프레스(≈0.5s, 이동 없으면) → 컨텍스트 메뉴. elementFromPoint 로 노드/그룹/빈곳 판별.
+  // touch: long press (≈0.5s, if no movement) → context menu. Use elementFromPoint to detect node/group/empty area.
   const cancelLongPress = useCallback(() => { if (lpRef.current) { clearTimeout(lpRef.current); lpRef.current = null } }, [])
   const onTouchStartFlow = useCallback((e) => {
     if (!IS_TOUCH || e.touches.length !== 1) return
@@ -346,11 +418,11 @@ export default function Editor() {
     }, 500)
   }, [cancelLongPress])
 
-  // --- 그룹 만들기 · 병합 / 해제 / 드릴인 ---
-  // 실제 노드 + 그룹(접힌 노드)을 하나로. 그룹이 섞이면 그 멤버까지 흡수해 **병합**(단일 계층 유지),
-  // 나머지 선택 그룹은 대상 그룹으로 합쳐지며 사라진다.
+  // --- create · merge / ungroup / drill-in groups ---
+  // Combine real nodes + groups (collapsed nodes) into one. If groups are mixed in, absorb their members too and **merge** (single hierarchy kept);
+  // the remaining selected groups are folded into the target group and disappear.
   const createOrMergeGroup = useCallback((realIds, groupKeys) => {
-    // activeGroup 안에서도 동작 → 그 안에 **하위그룹** 생성(중첩). 새 그룹 parent = 현재 레벨.
+    // Also works inside activeGroup → creates a **subgroup** within it (nesting). New group parent = current level.
     const memberIds = nodes.filter((n) => n.data.group && groupKeys.includes(n.data.group)).map((n) => n.id)
     const allIds = [...new Set([...realIds, ...memberIds])]
     if (!allIds.length) return
@@ -361,22 +433,22 @@ export default function Editor() {
       name = groups.find((g) => g.key === key)?.name || key
     } else {
       key = `grp-${Math.random().toString(36).slice(2, 7)}`
-      name = (window.prompt('그룹 이름', `Group ${groups.length + 1}`) || '').trim() || `Group ${groups.length + 1}`
+      name = (window.prompt('Group name', `Group ${groups.length + 1}`) || '').trim() || `Group ${groups.length + 1}`
     }
-    const drop = new Set(groupKeys.slice(1))   // 대상으로 합쳐지며 사라지는 다른 그룹들
+    const drop = new Set(groupKeys.slice(1))   // other groups that merge into the target and disappear
     const mem = nodes.filter((n) => allIds.includes(n.id))
     const cx = Math.round(mem.reduce((s, n) => s + n.position.x, 0) / (mem.length || 1))
     const cy = Math.round(mem.reduce((s, n) => s + n.position.y, 0) / (mem.length || 1))
     setNodes((nds) => nds.map((n) => (allIds.includes(n.id) ? { ...n, data: { ...n.data, group: key } } : n)))
     setGroups((gs) => {
       let next = gs
-        .filter((g) => !drop.has(g.key))                                 // 병합돼 사라지는 그룹
-        .map((g) => (drop.has(g.parent) ? { ...g, parent: key } : g))    // 사라진 그룹의 하위그룹 → 대상으로
+        .filter((g) => !drop.has(g.key))                                 // groups that merge away and disappear
+        .map((g) => (drop.has(g.parent) ? { ...g, parent: key } : g))    // subgroups of a removed group → reparent to the target
       if (!merging) next = next.concat({ key, name, collapsed: true, x: cx, y: cy, parent: activeGroup || null })
       return next
     })
     setSelectedIds([]); setSelectedGroupKeys([])
-    setStatus(`그룹 '${name}' ${merging ? '병합' : '생성'} (${allIds.length} 노드)`)
+    setStatus(`Group '${name}' ${merging ? 'merged' : 'created'} (${allIds.length} nodes)`)
   }, [activeGroup, groups, nodes, setNodes])
 
   const onCreateGroup = useCallback(
@@ -385,12 +457,12 @@ export default function Editor() {
   )
 
   const removeFromGroup = useCallback((id) => {
-    const up = groups.find((g) => g.key === activeGroup)?.parent || null   // 현재 그룹의 상위로
+    const up = groups.find((g) => g.key === activeGroup)?.parent || null   // to the current group's parent
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: { ...n.data, group: up } } : n)))
-    setStatus('노드를 상위 레벨로 뺐음')
+    setStatus('Node moved out to the parent level')
   }, [setNodes, activeGroup, groups])
 
-  // 우클릭 대상 노드가 선택에 없으면 그 노드만, 있으면 현재 선택 전체를 그룹 대상으로.
+  // If the right-clicked node is not in the selection, target just that node; otherwise target the whole current selection.
   const groupTargets = useCallback((id) => {
     if (id && !selectedIds.includes(id)) return [id]
     return selectedIds.length ? selectedIds : (id ? [id] : [])
@@ -408,14 +480,14 @@ export default function Editor() {
   }, [])
 
   const onUngroup = useCallback((key) => {
-    const up = groups.find((g) => g.key === key)?.parent || null      // 해제 시 내용물은 상위 레벨로
+    const up = groups.find((g) => g.key === key)?.parent || null      // on ungroup, contents go up to the parent level
     setNodes((nds) => nds.map((n) => (n.data.group === key ? { ...n, data: { ...n.data, group: up } } : n)))
     setGroups((gs) => gs
       .filter((g) => g.key !== key)
-      .map((g) => (g.parent === key ? { ...g, parent: up } : g)))     // 하위그룹은 상위로 승격
+      .map((g) => (g.parent === key ? { ...g, parent: up } : g)))     // subgroups are promoted to the parent
     if (activeGroup === key) setActiveGroup(up)
     setSelectedGroupKeys((ks) => ks.filter((k) => k !== key))
-    setStatus('그룹 해제됨')
+    setStatus('Group ungrouped')
   }, [setNodes, activeGroup, groups])
 
   const onUngroupSelected = useCallback(() => selectedGroupKeys.forEach(onUngroup), [selectedGroupKeys, onUngroup])
@@ -424,20 +496,22 @@ export default function Editor() {
     if (node.type === 'cdgtsGroup') { setActiveGroup(node.data.key); setSelectedIds([]); setSelectedGroupKeys([]) }
   }, [])
 
-  // 컨텍스트 전환 시 fit
+  // fit on context switch
   useEffect(() => { const id = setTimeout(() => fitView({ duration: 200 }), 0); return () => clearTimeout(id) }, [activeGroup, fitView])
 
+  // Real-node selection tracked here; group-node selection is driven by onNodesChange 'select' changes
+  // (groups are derived nodes — routing their selection through onSelectionChange too caused a stale-empty
+  //  report to clobber the just-made selection, so it took two clicks). See onNodesChange gsel.
   const onSelectionChange = useCallback(({ nodes: sel }) => {
     setSelectedIds(sel.filter((n) => isRealNode(n.type)).map((n) => n.id))
-    setSelectedGroupKeys(sel.filter((n) => n.type === 'cdgtsGroup').map((n) => n.data.key))
   }, [])
 
   const onSave = useCallback(async () => {
     setError(null)
     try {
       await saveGraph(graphId, rfToApi(nodes, edges, groups, getViewport()))
-      setStatus(`저장됨 · ${new Date().toLocaleTimeString()}`)
-    } catch (e) { setError(e.data || String(e)); setStatus('저장 실패 (검증 오류?)') }
+      setStatus(`Saved · ${new Date().toLocaleTimeString()}`)
+    } catch (e) { setError(e.data || String(e)); setStatus('Save failed (validation error?)') }
   }, [graphId, nodes, edges, groups, getViewport])
 
   const onEvaluate = useCallback(async () => {
@@ -462,23 +536,23 @@ export default function Editor() {
       setRunMeta({ id: run.id, stats: run.stats, certificate: run.certificate })
       setShowResults(true)
       const cert = run.certificate
-      setStatus(`평가 run#${run.id} · computed ${run.stats.computed} / cached ${run.stats.cached}`
-        + (cert ? ` · 정합성 ${cert.passed ? 'pass' : 'warn'}` : ''))
+      setStatus(`Evaluation run#${run.id} · computed ${run.stats.computed} / cached ${run.stats.cached}`
+        + (cert ? ` · consistency ${cert.passed ? 'pass' : 'warn'}` : ''))
     } catch (e) { setError(e.data || String(e)) }
   }, [graphId, setNodes, gateways, nodes, edges])
 
-  // Science CI — 재bake 후 공표 기준과 diff. (편집 전엔 저장부터 하는 게 안전)
+  // Science CI — re-bake, then diff against the published baseline. (Safer to save first before editing.)
   const onVerify = useCallback(async () => {
     setError(null)
     try {
       const d = await verifyGraph(graphId)
       setVerifyData(d); setShowResults(false)
       const s = d.summary || {}
-      setStatus(`공표 대비: ${s.moved} 이동 · 최대 |Δ| ${s.max_abs_delta} Ma · 배선 ＋${s.added}/－${s.removed}/↺${s.retyped}`)
+      setStatus(`vs published: ${s.moved} moved · max |Δ| ${s.max_abs_delta} Ma · wiring ＋${s.added}/－${s.removed}/↺${s.retyped}`)
     } catch (e) { setError(e.data || String(e)) }
   }, [graphId])
 
-  // --- Inspector (선택 실제 노드) ---
+  // --- Inspector (selected real node) ---
   const patchNodeData = useCallback((id, fn) => {
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
   }, [setNodes])
@@ -510,6 +584,32 @@ export default function Editor() {
     [nodes, selectedId],
   )
 
+  // --- Inspector (selected node group) — when no real node is selected, show the selected group's info ---
+  const onGroupName = useCallback(
+    (key, name) => setGroups((gs) => gs.map((g) => (g.key === key ? { ...g, name } : g))),
+    [setGroups],
+  )
+  const selectedGroup = useMemo(
+    () => (selectedNode ? null : groups.find((g) => g.key === selectedGroupKeys[0]) || null),
+    [selectedNode, groups, selectedGroupKeys],
+  )
+  const groupExtra = useMemo(() => {
+    if (!selectedGroup) return null
+    const parentOf = Object.fromEntries(groups.map((g) => [g.key, g.parent || null]))
+    let count = 0
+    nodes.forEach((n) => {
+      let g = n.data.group || null
+      while (g != null) { if (g === selectedGroup.key) { count += 1; break } g = parentOf[g] }
+    })
+    const labelOf = (id) => { const n = nodes.find((x) => x.id === id); return n ? (n.data.label || n.data.nodeType) : id }
+    return {
+      count,
+      subgroups: groups.filter((g) => g.parent === selectedGroup.key).length,
+      lowerLabel: selectedGroup.lower ? labelOf(selectedGroup.lower) : null,
+      upperLabel: selectedGroup.upper ? labelOf(selectedGroup.upper) : null,
+    }
+  }, [selectedGroup, groups, nodes])
+
   const grouped = useMemo(() => {
     const g = { data: [], process: [], clamp: [] }
     types.forEach((t) => (g[t.category] || (g[t.category] = [])).push(t))
@@ -517,7 +617,7 @@ export default function Editor() {
   }, [types])
 
   const activeGroupObj = groups.find((g) => g.key === activeGroup)
-  // 중첩 경로: 최상위 → … → 현재 그룹 (breadcrumb)
+  // nesting path: top level → … → current group (breadcrumb)
   const activeGroupPath = useMemo(() => {
     const byKey = Object.fromEntries(groups.map((g) => [g.key, g]))
     const path = []
@@ -533,7 +633,7 @@ export default function Editor() {
       )}
       <aside className={`palette${paletteOpen ? ' open' : ''}`}>
         <h1>cdGTS</h1>
-        <p className="hint">{IS_TOUCH ? '노드를 탭 → 캔버스를 탭해 배치' : '노드를 캔버스로 드래그'}</p>
+        <p className="hint">{IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas'}</p>
         {['data', 'process', 'clamp'].map((cat) => (
           <div key={cat} className="palette-group">
             <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
@@ -551,29 +651,29 @@ export default function Editor() {
 
       <main className="canvas" ref={wrapperRef}>
         <div className="toolbar">
-          <button className="mobile-only drawer-toggle" onClick={() => { setPaletteOpen((v) => !v); setInspectorOpen(false) }} title="팔레트">☰</button>
-          <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="그래프 선택">
+          <button className="mobile-only drawer-toggle" onClick={() => { setPaletteOpen((v) => !v); setInspectorOpen(false) }} title="Palette">☰</button>
+          <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="Select graph">
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
-          <button onClick={onSave}>저장 (PUT)</button>
-          <button onClick={onEvaluate}>평가</button>
-          <button onClick={onVerify} title="Science CI — 재bake 후 공표 기준과 diff (편집 전 저장 권장)">공표 대비 검증</button>
+          <button onClick={onSave}>Save (PUT)</button>
+          <button onClick={onEvaluate}>Evaluate</button>
+          <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
-                  title={activeGroup ? '선택을 이 그룹 안의 하위그룹으로 (중첩)' : '선택한 노드·그룹을 하나의 그룹으로 (그룹이 섞이면 병합)'}>
-            {selectedGroupKeys.length ? '그룹 병합' : (activeGroup ? '하위그룹 만들기' : '그룹 만들기')}
+                  title={activeGroup ? 'Nest the selection as a subgroup inside this group' : 'Combine the selected nodes·groups into one group (merges if groups are mixed in)'}>
+            {selectedGroupKeys.length ? 'Merge groups' : (activeGroup ? 'Make subgroup' : 'Make group')}
             {(selectedIds.length + selectedGroupKeys.length) ? ` (${selectedIds.length + selectedGroupKeys.length})` : ''}
           </button>
           {selectedGroupKeys.length > 0 && (
-            <button onClick={onUngroupSelected} title="선택한 그룹 해제">
-              그룹 해제{selectedGroupKeys.length > 1 ? ` (${selectedGroupKeys.length})` : ''}
+            <button onClick={onUngroupSelected} title="Ungroup the selected group">
+              Ungroup{selectedGroupKeys.length > 1 ? ` (${selectedGroupKeys.length})` : ''}
             </button>
           )}
-          <button onClick={() => setShowResults((v) => !v)} className={showResults ? 'active' : ''} disabled={!runMeta} title="최종 노드 출력 보기">
-            결과{outputs.length ? ` (${outputs.length})` : ''}
+          <button onClick={() => setShowResults((v) => !v)} className={showResults ? 'active' : ''} disabled={!runMeta} title="View final node outputs">
+            Results{outputs.length ? ` (${outputs.length})` : ''}
           </button>
-          <button className="mobile-only drawer-toggle" onClick={() => { setInspectorOpen((v) => !v); setPaletteOpen(false) }} title="속성"
-                  disabled={!selectedNode}>속성</button>
+          <button className="mobile-only drawer-toggle" onClick={() => { setInspectorOpen((v) => !v); setPaletteOpen(false) }} title="Properties"
+                  disabled={!selectedNode}>Properties</button>
           <span className="status">{status}</span>
         </div>
 
@@ -593,19 +693,19 @@ export default function Editor() {
             })}
             {activeGroup && (
               <>
-                <span className="bc-hint">그룹 내부 — 멤버·하위그룹 편집 · 좌우 스텁 = 외부 입출력</span>
-                <button className="ungroup" onClick={() => onUngroup(activeGroup)}>그룹 해제</button>
+                <span className="bc-hint">Inside group — edit members·subgroups · left/right stubs = external I/O</span>
+                <button className="ungroup" onClick={() => onUngroup(activeGroup)}>Ungroup</button>
               </>
             )}
-            {!activeGroup && <span className="bc-hint">그룹 더블클릭 → 내부 편집</span>}
+            {!activeGroup && <span className="bc-hint">Double-click a group → edit inside</span>}
           </div>
         )}
 
         {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
         {pending && (
           <div className="place-banner">
-            ▶ <b>{typeMap[pending]?.name || pending}</b> — 캔버스를 탭해 배치
-            <button onClick={() => setPending(null)}>취소</button>
+            ▶ <b>{typeMap[pending]?.name || pending}</b> — tap the canvas to place
+            <button onClick={() => setPending(null)}>Cancel</button>
           </div>
         )}
         <div className="flow" onDrop={onDrop} onDragOver={onDragOver}
@@ -622,12 +722,12 @@ export default function Editor() {
             onPaneContextMenu={onPaneContextMenu}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
-            selectionOnDrag={!IS_TOUCH}          // 데스크톱: 좌-드래그 = 선택 박스
-            autoPanOnSelection={false}           // 선택 중 auto-pan 금지 — pan 하면 screenStart 가 이동해 박스 x 가 튐
-            panOnDrag={IS_TOUCH ? true : [1]}    // 터치: 드래그 팬 / 데스크톱: 가운데버튼
-            zoomOnPinch                          // 터치: 핀치 줌
-            selectionMode={SelectionMode.Full}  // 완전히 감싼 노드만 선택 — 살짝 스친 넓은 노드까지 잡혀 놓는 순간 박스가 커지던 문제 방지
-            multiSelectionKeyCode="Shift"        // Shift+클릭 = 추가 선택
+            selectionOnDrag={!IS_TOUCH}          // desktop: left-drag = selection box
+            autoPanOnSelection={false}           // no auto-pan during selection — panning moves screenStart so the box x jumps
+            panOnDrag={IS_TOUCH ? true : [1]}    // touch: drag pan / desktop: middle button
+            zoomOnPinch                          // touch: pinch zoom
+            selectionMode={SelectionMode.Full}  // select only fully enclosed nodes — prevents the box growing when a wide node is barely grazed and released
+            multiSelectionKeyCode="Shift"        // Shift+click = add to selection
             fitView
           >
             <Background />
@@ -645,33 +745,33 @@ export default function Editor() {
             <ul className="ctx-menu" style={{ left: menu.x, top: menu.y }}>
               {menu.kind === 'node' && (
                 <li onClick={() => { createOrMergeGroup(groupTargets(menu.id), selectedGroupKeys); closeMenu() }}>
-                  {selectedGroupKeys.length ? '선택과 그룹 병합' : (activeGroup ? '선택 하위그룹으로 묶기' : '선택 노드 그룹으로 묶기')} ({groupTargets(menu.id).length + selectedGroupKeys.length})
+                  {selectedGroupKeys.length ? 'Merge selection with group' : (activeGroup ? 'Group selection into a subgroup' : 'Group selected nodes')} ({groupTargets(menu.id).length + selectedGroupKeys.length})
                 </li>
               )}
               {menu.kind === 'node' && activeGroup && (
-                <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>상위 레벨로 빼기</li>
+                <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>Move out to parent level</li>
               )}
               {menu.kind === 'group' && (
                 <>
-                  <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>그룹 열기</li>
+                  <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>Open group</li>
                   {(selectedIds.length || selectedGroupKeys.filter((k) => k !== menu.groupKey).length) > 0 && (
                     <li onClick={() => {
                       createOrMergeGroup(selectedIds, [menu.groupKey, ...selectedGroupKeys.filter((k) => k !== menu.groupKey)])
                       closeMenu()
-                    }}>이 그룹에 선택 병합 ({selectedIds.length + selectedGroupKeys.filter((k) => k !== menu.groupKey).length})</li>
+                    }}>Merge selection into this group ({selectedIds.length + selectedGroupKeys.filter((k) => k !== menu.groupKey).length})</li>
                   )}
-                  <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>그룹 해제</li>
+                  <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>Ungroup</li>
                 </>
               )}
               {menu.kind === 'pane' && (
                 (selectedIds.length || selectedGroupKeys.length >= 2)
                   ? <li onClick={() => { createOrMergeGroup(selectedIds, selectedGroupKeys); closeMenu() }}>
-                      {selectedGroupKeys.length ? '선택 그룹·노드 병합' : (activeGroup ? '선택 하위그룹으로 묶기' : '선택 노드 그룹으로 묶기')} ({selectedIds.length + selectedGroupKeys.length})
+                      {selectedGroupKeys.length ? 'Merge selected groups·nodes' : (activeGroup ? 'Group selection into a subgroup' : 'Group selected nodes')} ({selectedIds.length + selectedGroupKeys.length})
                     </li>
-                  : <li className="disabled">노드/그룹을 선택한 뒤 우클릭</li>
+                  : <li className="disabled">Select nodes/groups, then right-click</li>
               )}
               {menu.kind === 'pane' && activeGroup && (
-                <li onClick={() => { setActiveGroup(activeGroupObj?.parent || null); closeMenu() }}>상위로 나가기</li>
+                <li onClick={() => { setActiveGroup(activeGroupObj?.parent || null); closeMenu() }}>Exit to parent</li>
               )}
             </ul>
           </>
@@ -679,11 +779,14 @@ export default function Editor() {
       </main>
 
       <Inspector
-        key={selectedNode?.id || 'none'}
+        key={selectedNode?.id || (selectedGroup && `group:${selectedGroup.key}`) || 'none'}
         open={inspectorOpen}
         onClose={() => setInspectorOpen(false)}
         node={selectedNode}
         type={selectedNode ? typeMap[selectedNode.data.nodeType] : null}
+        group={selectedGroup}
+        groupExtra={groupExtra}
+        onGroupName={(v) => selectedGroup && onGroupName(selectedGroup.key, v)}
         nodeKeys={nodeKeys}
         onLabel={(v) => onLabel(selectedNode.id, v)}
         onDescription={(v) => onDescription(selectedNode.id, v)}

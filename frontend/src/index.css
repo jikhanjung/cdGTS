@@ -5,7 +5,7 @@ body {
   color: #1c1c22;
 }
 
-/* --- 앱 셸 / 상단 nav --- */
+/* --- app shell / top nav --- */
 .app { display: flex; flex-direction: column; height: 100vh; }
 .topnav {
   display: flex; align-items: center; gap: 6px;
@@ -18,7 +18,7 @@ body {
 }
 .topnav button:hover { background: #2c2c36; color: #fff; }
 .topnav button.active { background: #3b3b48; color: #fff; }
-.view { flex: 1; min-height: 0; overflow: hidden; }   /* 각 뷰가 내부 스크롤 관리 — 바디 가로 스크롤 방지 */
+.view { flex: 1; min-height: 0; overflow: hidden; }   /* each view manages its own scroll — prevents horizontal body scroll */
 
 .editor { display: flex; height: 100%; }
 .toolbar .graph-select {
@@ -26,7 +26,7 @@ body {
   font-size: 13px; background: #fff; max-width: 340px;
 }
 
-/* --- 릴리스 diff --- */
+/* --- release diff --- */
 .diff { height: 100%; overflow-y: auto; padding: 18px 24px; }
 .diff h2 { font-size: 18px; margin: 0 0 10px; }
 .diff .empty { color: #767688; font-size: 14px; max-width: 560px; line-height: 1.6; }
@@ -65,7 +65,7 @@ body {
 .topo-removed .op { background: #c0392b; }
 .topo-retype .op { background: #a142f4; }
 
-/* --- ICC 차트 (중첩 컬럼) --- */
+/* --- ICC chart (nested columns) --- */
 .iccchart { height: 100%; display: flex; flex-direction: column; padding: 14px 20px; box-sizing: border-box; }
 .iccchart-controls { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
 .iccchart-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
@@ -83,10 +83,10 @@ body {
 .icc-band { font-size: 10px; font-weight: 500; pointer-events: none; }
 .iccchart-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; }
 
-/* order 참여용 세로 포트 (위=older, 아래=younger).
-   크기·테두리는 좌/우 in·out 핸들(react-flow 기본)과 동일하게 — 색만 인라인(order 보라)으로 구분. */
+/* vertical ports for order participation (top=older, bottom=younger).
+   size/border match the left/right in·out handles (react-flow default) — only the color (order purple) is set inline to distinguish them. */
 
-/* --- ICC 서술 (narrate 책) --- */
+/* --- ICC narration (narrate book) --- */
 .narrate { height: 100%; display: flex; flex-direction: column; padding: 14px 20px; box-sizing: border-box; }
 .narrate-controls { display: flex; align-items: center; gap: 14px; margin-bottom: 10px; }
 .narrate-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
@@ -102,7 +102,7 @@ body {
 .narrate-badge.gssa { background: #fdeefc; color: #a02f92; }
 .narrate-note { margin-top: 10px; font-size: 12px; color: #767688; line-height: 1.6; max-width: 900px; }
 
-/* --- 노드그룹 (접힌 노드 · 인터페이스 스텁 · breadcrumb) --- */
+/* --- node groups (collapsed node · interface stub · breadcrumb) --- */
 .group-node {
   width: 100%; box-sizing: border-box; border: 1.5px dashed #a142f4; border-radius: 10px;
   background: #faf5ff; color: #3a2450; font-size: 12px; position: relative; min-width: 150px;
@@ -139,6 +139,34 @@ body {
 .stub-node .stub-arrow { color: #a142f4; }
 .stub-node .stub-peer { color: #9a8ab0; }
 
+/* Blender-style group I/O interface node (aggregates external connections on drill-in, selectable/movable) */
+.group-io-node {
+  min-width: 128px; border: 1px solid #b9a0d0; border-radius: 7px; background: #fbfaff;
+  font-size: 10px; font-family: ui-monospace, Menlo, monospace; padding-bottom: 6px;
+}
+.group-io-node.in { border-left: 3px solid #4a9d5b; }
+.group-io-node.out { border-right: 3px solid #b0662c; }
+.group-io-node.selected { box-shadow: 0 0 0 2px #a142f4; }
+.group-io__bar {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.4px; color: #fff;
+  padding: 3px 8px; border-radius: 6px 6px 0 0;
+}
+.group-io-node.in .group-io__bar { background: #4a9d5b; }
+.group-io-node.out .group-io__bar { background: #b0662c; text-align: right; }
+.group-io__ports { list-style: none; margin: 4px 0 0; padding: 0; }
+.group-io__ports li { padding: 2px 9px; white-space: nowrap; color: #3a2450; height: 18px; }
+.group-io-node.out .group-io__ports li { text-align: right; }
+.group-io__ports .a { color: #a142f4; }
+
+/* upper/lower span boundary frame shown when drilling into a unit group (order constraint · read-only) */
+.bound-node {
+  display: flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border: 1px solid #8b5cf6; border-radius: 14px; background: #f5f1ff;
+  font-size: 10px; font-family: ui-monospace, Menlo, monospace; white-space: nowrap;
+}
+.bound-node .bound-tag { font-weight: 700; color: #6d28d9; }
+.bound-node .bound-label { color: #3a2450; }
+
 .breadcrumb {
   display: flex; align-items: center; gap: 8px; padding: 5px 12px; font-size: 12px;
   background: #f7f2fd; border-bottom: 1px solid #ece2f8;
@@ -156,7 +184,7 @@ body {
 }
 .breadcrumb .ungroup:hover { background: #f0e6fa; }
 
-/* --- order 제약 노드 (세로 핸들 · 선후 검사) --- */
+/* --- order constraint node (vertical handles · precedence check) --- */
 .order-node {
   width: 40px; height: 36px; box-sizing: border-box; border: 1.5px solid #a24bd8; border-radius: 9px;
   background: #fbf6ff; display: flex; align-items: center; justify-content: center; position: relative;
@@ -173,7 +201,7 @@ body {
 .insp-verdict.bad { background: #fbe3e3; color: #b0332f; }
 .insp-verdict.none { background: #f0edf5; color: #9a8ab0; }
 
-/* --- 우클릭 컨텍스트 메뉴 --- */
+/* --- right-click context menu --- */
 .ctx-backdrop { position: fixed; inset: 0; z-index: 40; }
 .ctx-menu {
   position: fixed; z-index: 41; margin: 0; padding: 4px; list-style: none;
@@ -187,7 +215,7 @@ body {
 .ctx-menu li.disabled { color: #a9a9b8; cursor: default; }
 .ctx-menu li.disabled:hover { background: none; color: #a9a9b8; }
 
-/* --- ICC 테이블 --- */
+/* --- ICC table --- */
 .icc { height: 100%; overflow-y: auto; padding: 18px 24px; }
 .icc-controls { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
 .icc-controls label { font-size: 12px; color: #767688; display: flex; align-items: center; gap: 6px; }
@@ -217,7 +245,7 @@ body {
 .deftype.GSSP { background: #e3f0fb; color: #2c6cb0; }
 .deftype.GSSA { background: #f0eaf9; color: #7a2fbf; }
 
-/* --- 팔레트 --- */
+/* --- palette --- */
 .palette {
   width: 220px; flex-shrink: 0; background: #f6f6f9; border-right: 1px solid #e2e2ea;
   padding: 12px 14px; overflow-y: auto;
@@ -234,7 +262,7 @@ body {
 .palette-item:hover { background: #eef1f8; }
 .palette-item.armed { background: #e7f0ff; border-color: #4a90d9; box-shadow: 0 0 0 2px #4a90d955; }
 
-/* 탭-투-추가 배치 안내 배너 (터치) */
+/* tap-to-add placement hint banner (touch) */
 .place-banner {
   position: absolute; top: 8px; left: 50%; transform: translateX(-50%); z-index: 20;
   display: flex; align-items: center; gap: 8px;
@@ -246,7 +274,7 @@ body {
   padding: 2px 10px; font-size: 12px; cursor: pointer;
 }
 
-/* Science CI verify 패널 (하단, results 와 동일 골격) */
+/* Science CI verify panel (bottom, same skeleton as results) */
 .verify-body { overflow: auto; padding: 4px 0; }
 .verify-topo { list-style: none; margin: 0; padding: 6px 14px; display: flex; flex-wrap: wrap; gap: 6px; }
 .verify-topo li { font-size: 12px; padding: 2px 8px; border-radius: 10px; background: #eee; }
@@ -261,7 +289,7 @@ body {
 .verify-table td.vt-d.down { color: #c0392b; }
 .verify-table td.vt-d.noise { color: #9a9aa8; }
 
-/* --- 캔버스 --- */
+/* --- canvas --- */
 .canvas { flex: 1; display: flex; flex-direction: column; min-width: 0; position: relative; }
 .toolbar {
   display: flex; align-items: center; gap: 10px;
@@ -279,7 +307,7 @@ body {
 }
 .flow { flex: 1; min-height: 0; }
 
-/* --- 커스텀 노드 --- */
+/* --- custom node --- */
 .cdgts-node {
   width: 100%; background: #fff; border: 2px solid #888; border-radius: 8px;
   font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
@@ -288,13 +316,18 @@ body {
   color: #fff; padding: 5px 9px; border-radius: 5px 5px 0 0;
   display: flex; align-items: center; gap: 6px;
 }
-/* 제목은 폭에 맞춰 말줄임 — 노드가 제목 길이로 늘어나지 않게. 상세는 description 툴팁으로. */
+/* time span (unit) — same lavender/dashed style as node groups (Age subdivision), marks a span with no value */
+.cdgts-node.unit { border-style: dashed; background: #faf5ff; }
+/* boundary — title only (half height). No body, so round all header corners and reduce padding. */
+.cdgts-node.boundary { border-width: 1.5px; }
+.cdgts-node.boundary .cdgts-node__header { border-radius: 4px; padding: 3px 9px; }
+/* title ellipsizes to fit width — so the node doesn't stretch to the title length. Details go in the description tooltip. */
 .cdgts-node__title {
   font-weight: 600; flex: 1 1 auto; min-width: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .cdgts-node__cat { flex: 0 0 auto; font-size: 9px; opacity: 0.8; text-transform: uppercase; }
-/* 우측 폭 조정 핸들 (노드 선택 시 표시) */
+/* right-side width-resize handle (shown when node is selected) */
 .cdgts-resize { width: 7px; right: -4px; cursor: ew-resize; }
 .cdgts-node__body { display: flex; justify-content: space-between; padding: 6px 4px; }
 .cdgts-node__body .ports { list-style: none; margin: 0; padding: 0; }
@@ -310,7 +343,7 @@ body {
 }
 .cdgts-node__result .cached { color: #2d7d46; font-size: 14px; line-height: 1; }
 
-/* --- 인스펙터 (우측 속성 패널) --- */
+/* --- inspector (right-side properties panel) --- */
 .inspector {
   width: 280px; flex-shrink: 0; background: #f6f6f9; border-left: 1px solid #e2e2ea;
   padding: 12px 14px; overflow-y: auto;
@@ -335,6 +368,11 @@ body {
 .insp-dist legend { font-size: 11px; color: #55555f; padding: 0 4px; font-weight: 600; }
 .insp-note { font-size: 12px; color: #767688; line-height: 1.5; margin: 6px 0; }
 .insp-note code { background: #ececf2; padding: 1px 4px; border-radius: 4px; }
+/* group inspector meta list */
+.insp-meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 8px 0 4px; font-size: 12px; align-items: baseline; }
+.insp-meta dt { color: #767688; white-space: nowrap; }
+.insp-meta dd { margin: 0; color: #2a2a33; overflow-wrap: anywhere; }
+.insp-meta code { background: #ececf2; padding: 1px 4px; border-radius: 4px; }
 .insp-raw { margin-top: 8px; }
 .insp-raw summary { font-size: 12px; color: #767688; cursor: pointer; }
 .insp-json {
@@ -345,7 +383,7 @@ body {
 .insp-json-err { color: #a3271b; font-size: 11px; margin-top: 4px; }
 .insp-foot { font-size: 11px; color: #909098; margin-top: 12px; line-height: 1.5; }
 
-/* --- 결과 패널 (하단 드로어) --- */
+/* --- results panel (bottom drawer) --- */
 .toolbar button.active { background: #eae4f7; border-color: #c9b6ec; }
 .toolbar button:disabled { opacity: 0.5; cursor: default; }
 .results {
@@ -405,7 +443,7 @@ body {
 .rc-empty { font-size: 12px; color: #909098; padding: 6px 0; }
 
 /* ============================================================
-   반응형 — 폰/태블릿 (보기 + 가벼운 편집)
+   responsive — phone/tablet (viewing + light editing)
    ============================================================ */
 .mobile-only { display: none; }
 .topnav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
@@ -420,7 +458,7 @@ body {
   .topnav .brand { margin-right: 6px; }
   .topnav button { padding: 5px 9px; font-size: 12px; }
 
-  /* 에디터: 3단 → 캔버스 풀폭 + 팔레트/인스펙터 서랍 */
+  /* editor: 3 columns → full-width canvas + palette/inspector drawers */
   .editor { position: relative; }
   .palette, .inspector {
     position: absolute; top: 0; bottom: 0; z-index: 30;
@@ -438,7 +476,7 @@ body {
   .toolbar .status { width: 100%; margin-left: 0; order: 9; }
   .results { max-height: 52%; }
 
-  /* 뷰 화면 여백 축소 · 넓은 표는 컨테이너 안에서 가로 스크롤 */
+  /* reduce view padding · wide tables scroll horizontally within their container */
   .iccchart, .narrate { padding: 10px 12px; }
   .icc { padding: 12px 14px; overflow-x: auto; }
   .diff { padding: 12px 14px; overflow-x: auto; }
