@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { listGraphs, listReleases, getGraph, iccChart, releaseIccChart } from './api.js'
 
 const H = 1600        // chart height (px, scroll)
@@ -30,8 +30,11 @@ export default function IccChart() {
   const [data, setData] = useState(null)
   const [scale, setScale] = useState('log')           // 'log' (zoom recent) | 'linear' (proportional)
   const [showUnc, setShowUnc] = useState(false)        // uncertainty (±pm) band overlay
+  const [zoom, setZoom] = useState(1)                  // chart zoom (viewBox scale); scroll = pan
   const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
+  const scrollRef = useRef(null)
+  const pendingScroll = useRef(null)                   // scroll to apply after a zoom re-render (keep cursor point fixed)
 
   async function loadGraph(id, node) {
     setError(null); setStatus('Loading…')
@@ -92,6 +95,47 @@ export default function IccChart() {
     return [...m.values()]
   }, [data])
 
+  // --- zoom (viewBox scale) + pan (scroll) ---
+  const W = AXIS + nCol * COLW + 8
+  const Hh = H + HEADER + 10
+  const clampZoom = (z) => Math.min(6, Math.max(0.15, z))
+  // Zoom keeping the (clientX,clientY) point fixed on screen by adjusting scroll after re-render.
+  function zoomAt(clientX, clientY, factor) {
+    const el = scrollRef.current
+    const nz = clampZoom(zoom * factor)
+    if (el) {
+      const rect = el.getBoundingClientRect()
+      const ox = clientX - rect.left, oy = clientY - rect.top
+      const px = el.scrollLeft + ox, py = el.scrollTop + oy
+      pendingScroll.current = { left: px * (nz / zoom) - ox, top: py * (nz / zoom) - oy }
+    }
+    setZoom(nz)
+  }
+  function zoomCenter(factor) {
+    const el = scrollRef.current
+    if (!el) { setZoom((z) => clampZoom(z * factor)); return }
+    const rect = el.getBoundingClientRect()
+    zoomAt(rect.left + rect.width / 2, rect.top + rect.height / 2, factor)
+  }
+  function onWheelZoom(e) {
+    if (!(e.ctrlKey || e.metaKey)) return   // plain wheel = scroll/pan; ctrl/⌘+wheel = zoom
+    e.preventDefault()
+    zoomAt(e.clientX, e.clientY, e.deltaY < 0 ? 1.15 : 1 / 1.15)
+  }
+  function fitHeight() {
+    const el = scrollRef.current
+    if (!el) return
+    pendingScroll.current = { left: 0, top: 0 }
+    setZoom(clampZoom((el.clientHeight - 12) / Hh))
+  }
+  useLayoutEffect(() => {
+    if (pendingScroll.current && scrollRef.current) {
+      scrollRef.current.scrollLeft = pendingScroll.current.left
+      scrollRef.current.scrollTop = pendingScroll.current.top
+      pendingScroll.current = null
+    }
+  }, [zoom])
+
   return (
     <div className="iccchart">
       <div className="iccchart-controls">
@@ -129,14 +173,20 @@ export default function IccChart() {
         </div>
         <button className={`unc-toggle${showUnc ? ' active' : ''}`} onClick={() => setShowUnc((v) => !v)}
                 title="Symmetric error (±) band on boundary ages. GSSA agreed values have no error.">± Uncertainty</button>
+        <div className="scale-toggle zoom-ctrl" title="Ctrl/⌘ + wheel to zoom toward the cursor; scroll to pan">
+          <button onClick={() => zoomCenter(1 / 1.25)}>−</button>
+          <button onClick={() => { pendingScroll.current = null; setZoom(1) }}>{Math.round(zoom * 100)}%</button>
+          <button onClick={() => zoomCenter(1.25)}>+</button>
+          <button onClick={fitHeight}>Fit</button>
+        </div>
         <span className="iccchart-status">{status}</span>
       </div>
 
       {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
 
       {data && (
-        <div className="iccchart-scroll">
-          <svg width={AXIS + nCol * COLW + 8} height={H + HEADER + 10}>
+        <div className="iccchart-scroll" ref={scrollRef} onWheel={onWheelZoom}>
+          <svg width={W * zoom} height={Hh * zoom} viewBox={`0 0 ${W} ${Hh}`}>
             <g transform={`translate(0,${HEADER})`}>
               {ticks.map((t) => (
                 <g key={t}>
@@ -184,6 +234,7 @@ export default function IccChart() {
         <b> Published ICC</b> (ICS-2024/12) reads a baked release. <b>Graph (merge)</b> is the live output of the graph's
         terminal merge node (evaluate → tile); pick a <b>Merge</b> to view a single column merge's partial chart.
         When labels overlap on log scale, hover a band (age-range tooltip).
+        <b> Zoom</b>: Ctrl/⌘ + mouse wheel zooms toward the cursor (or use −/+/Fit); scroll to pan.
         <b> ± Uncertainty</b> toggle shows the symmetric error band of each lower boundary (GSSP derived-age error) — GSSA agreed values have no error.
       </p>
     </div>
