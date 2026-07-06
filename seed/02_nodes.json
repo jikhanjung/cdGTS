@@ -651,5 +651,54 @@
    "multiple": false,
    "order": 1
   }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "unit"
+   ],
+   "name": "out",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 2
+  }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "merge",
+   "name": "Merge (chart)",
+   "category": "process",
+   "description": "terminal geometry merge — 모든 boundary/time-period 조각을 union 해 ICC 차트를 구성. 순서 무관(배열은 order 엣지·연대가 결정).",
+   "params_schema": {}
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "merge"
+   ],
+   "name": "parts",
+   "direction": "in",
+   "datatype": "distribution",
+   "multiple": true,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "merge"
+   ],
+   "name": "out",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 0
+  }
  }
 ]

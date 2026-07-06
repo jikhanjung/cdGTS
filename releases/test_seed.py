@@ -30,7 +30,7 @@ def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
     # ICS chart.ttl 전 rank: units 177(Eon4/Era10/Period22/Subperiod2/Epoch37/Age102) · boundary 177 · type 13
     # (Carboniferous 아계 Mississippian/Pennsylvanian 추가로 175→177)
-    assert (units, boundaries, types, graphs) == (177, 177, 15, 4)
+    assert (units, boundaries, types, graphs) == (177, 177, 16, 4)
     # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 177 bake
     assert (releases, records) == (3, 182)
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.

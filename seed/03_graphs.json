@@ -452,6 +452,402 @@
    "graph": [
     "example-icc-partial"
    ],
+   "key": "merge-ages-quaternary",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Quaternary · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 3025.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-quaternary"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-neogene",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Neogene · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2805.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-neogene"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-paleogene",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Paleogene · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2655.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-paleogene"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-cretaceous",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Cretaceous · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2400.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-cretaceous"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-jurassic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Jurassic · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2285.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-jurassic"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-triassic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Triassic · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2275.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-triassic"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-permian",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Permian · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 2055.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-permian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-carboniferous",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Carboniferous · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 1975.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-carboniferous"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-devonian",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Devonian · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 1825.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-devonian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-silurian",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Silurian · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 1640.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-silurian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-ordovician",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Ordovician · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 1525.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-ordovician"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-ages-cambrian",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Cambrian · Age subdivisions out",
+   "description": "",
+   "params": {},
+   "x": 2640,
+   "y": 1270.0,
+   "width": null,
+   "group": [
+    "example-icc-partial",
+    "ages-cambrian"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-cenozoic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Cenozoic column",
+   "description": "",
+   "params": {},
+   "x": 590,
+   "y": 234.0,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-mesozoic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Mesozoic column",
+   "description": "",
+   "params": {},
+   "x": 1290,
+   "y": 234.0,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-paleozoic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Paleozoic column",
+   "description": "",
+   "params": {},
+   "x": 1990,
+   "y": 411.0,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-proterozoic",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Proterozoic column",
+   "description": "",
+   "params": {},
+   "x": 2690,
+   "y": 569.0,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "merge-archean",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "Archean column",
+   "description": "",
+   "params": {},
+   "x": 3390,
+   "y": 294.0,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "icc-chart",
+   "node_type": [
+    "merge"
+   ],
+   "nature": "generic",
+   "label": "ICC chart\n(final merge of columns)",
+   "description": "",
+   "params": {},
+   "x": 3720,
+   "y": 1200,
+   "width": null,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
    "key": "bnd-base-triassic",
    "node_type": [
     "boundary"
@@ -10548,6 +10944,2856 @@
    ],
    "target_port": "older",
    "kind": "order"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-calabrian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-chibanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-upperpleistocene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-greenlandian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-northgrippian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-meghalayan"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-aquitanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-burdigalian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-langhian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-serravallian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-tortonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-messinian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-zanclean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-piacenzian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-selandian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-thanetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ypresian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-lutetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-bartonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-priabonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rupelian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-chattian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-valanginian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-hauterivian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-barremian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-aptian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-albian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cenomanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-turonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-coniacian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-santonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-campanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-maastrichtian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-sinemurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-pliensbachian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-toarcian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-aalenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-bajocian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-bathonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-callovian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-oxfordian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-kimmeridgian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-tithonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-olenekian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-anisian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ladinian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carnian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-norian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhaetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-sakmarian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-artinskian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-kungurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-roadian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-wordian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-capitanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-wuchiapingian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-changhsingian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-visean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-serpukhovian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-bashkirian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-moscovian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-kasimovian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-gzhelian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-pragian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-emsian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-eifelian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-givetian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-frasnian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-famennian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-aeronian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-telychian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-sheinwoodian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-homerian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-gorstian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ludfordian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-pridoli"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-floian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-dapingian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-darriwilian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-sandbian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-katian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-hirnantian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cambrianstage2"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cambrianstage3"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cambrianstage4"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-wuliuan"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-drumian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-guzhangian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paibian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-jiangshanian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cambrianstage10"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-quaternary"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-quaternary"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-neogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-paleogene"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-cenozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "icc-chart"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cretaceous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-jurassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bnd-base-triassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-cretaceous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-jurassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-triassic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-mesozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "icc-chart"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-permian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-carboniferous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-devonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-silurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ordovician"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bnd-base-cambrian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-permian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-carboniferous"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-devonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-silurian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-ordovician"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-ages-cambrian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-paleozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "icc-chart"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ediacaran"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-cryogenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-tonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-stenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-ectasian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-calymmian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-statherian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-orosirian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-rhyacian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bnd-base-siderian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-ediacaran"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-cryogenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-tonian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-stenian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-ectasian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-calymmian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-statherian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-orosirian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-rhyacian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-siderian"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-proterozoic"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "icc-chart"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-neoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-mesoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-paleoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-eoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "pub-hadean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-neoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-mesoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-paleoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-eoarchean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "unit-hadean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "merge-archean"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "icc-chart"
+   ],
+   "target_port": "parts",
+   "kind": "data"
   }
  }
 ]
