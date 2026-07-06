@@ -119,7 +119,7 @@ function buildView(nodes, edges, groups, activeGroup) {
   groups.forEach((g) => {
     if (parentOf[g.key] !== level) return
     const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y },
-      data: { key: g.key, name: g.name, inputs: [], outputs: [], count: subtreeCount[g.key] || 0 } }
+      data: { key: g.key, name: g.name, kind: g.kind || 'container', inputs: [], outputs: [], count: subtreeCount[g.key] || 0 } }
     groupById[g.key] = gn
     groupNodes.push(gn)
   })

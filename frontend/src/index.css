@@ -117,6 +117,12 @@ body {
 .group-node__count {
   background: #a142f4; color: #fff; border-radius: 9px; font-size: 10px; padding: 0 6px; font-weight: 600;
 }
+/* composition/geometry output on time-period(unit) groups — merges contents into the higher unit / final chart */
+.group-node__compout {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  font-size: 9px; font-weight: 600; color: #a142f4; pointer-events: none;
+}
+.comp-out { background: #a142f4; }
 .group-node__io { display: flex; justify-content: space-between; gap: 8px; padding: 4px 8px 8px; }
 .group-node__io .gio { list-style: none; margin: 0; padding: 0; font-size: 10px; color: #6b5a80; max-width: 46%; }
 .group-node__io .gio.out { text-align: right; }

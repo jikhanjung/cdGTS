@@ -51,6 +51,15 @@ export function GroupNode({ data, selected }) {
                 className="vport" title={`${h.port} (order)`}
                 style={{ left: leftPct(i, vBot.length), background: ORDER_COLOR }} />
       ))}
+      {/* time-period(unit) group: composition/geometry output — merges contents into the higher unit / final chart */}
+      {data.kind === 'unit' && (
+        <>
+          <span className="group-node__compout" title="composition output — merge of contents (period → era → chart)">out ▸</span>
+          <Handle id="comp-out" type="source" position={Position.Right} className="comp-out"
+                  title="composition output — merge of contents (period → era → chart)"
+                  style={{ background: '#a142f4' }} />
+        </>
+      )}
     </div>
   )
 }
