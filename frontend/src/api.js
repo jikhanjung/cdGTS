@@ -31,7 +31,8 @@ export const verifyGraph = (id) =>
   fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
 // Graph output → ICC-style nested column chart data (Eon/Era/Period bands).
-export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
+export const iccChart = (id, node) =>
+  fetch(`/api/graphs/${id}/icc-chart/${node ? `?node=${encodeURIComponent(node)}` : ''}`).then(j)
 
 // Published release → ICC chart data across all ranks (Eon–Age).
 export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).then(j)

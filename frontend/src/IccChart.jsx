@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { listGraphs, listReleases, iccChart, releaseIccChart } from './api.js'
+import { listGraphs, listReleases, getGraph, iccChart, releaseIccChart } from './api.js'
 
 const H = 1600        // chart height (px, scroll)
 const COLW = 132
@@ -20,22 +20,40 @@ const textOn = (hex) => {
 
 // Render outputs as nested Eon/Era/Period(/Epoch/Age) columns (ICC style). oldest=bottom, most recent=top.
 export default function IccChart() {
-  const [source, setSource] = useState('release')     // 'release' (published, 5 columns) | 'graph' (bake, 3 columns)
+  const [source, setSource] = useState('release')     // 'release' (published bake) | 'graph' (live merge output)
   const [graphs, setGraphs] = useState([])
   const [releases, setReleases] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [releaseId, setReleaseId] = useState(null)
+  const [mergeNodes, setMergeNodes] = useState([])    // group==null merge nodes (terminal + column merges)
+  const [nodeKey, setNodeKey] = useState(null)        // which merge's geometry to view
   const [data, setData] = useState(null)
   const [scale, setScale] = useState('log')           // 'log' (zoom recent) | 'linear' (proportional)
   const [showUnc, setShowUnc] = useState(false)        // uncertainty (±pm) band overlay
   const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
 
-  async function loadGraph(id) {
+  async function loadGraph(id, node) {
     setError(null); setStatus('Loading…')
-    try { const d = await iccChart(id); setData(d); setStatus(`${d.graph} · max ${d.max_ma} Ma`) }
-    catch (e) { setError(e.data || String(e)); setStatus('Failed') }
+    try {
+      const d = await iccChart(id, node)
+      setData(d)
+      setStatus(`${d.graph}${d.node ? ` · ${d.node}` : ''} · max ${d.max_ma} Ma`)
+    } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
   }
+
+  // Enter graph mode: fetch its merge nodes (terminal + column merges), view the terminal by default.
+  async function selectGraphSource(id) {
+    setSource('graph')
+    const g = await getGraph(id).catch(() => null)
+    const ms = (g?.nodes || []).filter((n) => n.node_type === 'merge' && !n.group)
+    const ordered = [...ms.filter((n) => n.key === 'icc-chart'), ...ms.filter((n) => n.key !== 'icc-chart')]
+    setMergeNodes(ordered)
+    const k = ordered[0]?.key || null
+    setNodeKey(k)
+    loadGraph(id, k)
+  }
+  const nodeLabel = (n) => n.key === 'icc-chart' ? 'Full chart (all columns)' : (n.label?.split('\n')[0] || n.key)
   async function loadRelease(id) {
     setError(null); setStatus('Loading…')
     try { const d = await releaseIccChart(id); setData(d); setStatus(`${d.release} · max ${d.max_ma} Ma`) }
@@ -50,7 +68,7 @@ export default function IccChart() {
         const gp = gs.find((g) => g.slug === 'example-icc-partial') || gs[0]
         const rp = rs.find((r) => r.version === 'ICS-2024/12') || rs[0]
         if (gp) setGraphId(gp.id)
-        if (rp) { setReleaseId(rp.id); loadRelease(rp.id) } else if (gp) { setSource('graph'); loadGraph(gp.id) }
+        if (rp) { setReleaseId(rp.id); loadRelease(rp.id) } else if (gp) { selectGraphSource(gp.id) }
       } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
@@ -81,7 +99,7 @@ export default function IccChart() {
           <button className={source === 'release' ? 'active' : ''}
                   onClick={() => { setSource('release'); if (releaseId) loadRelease(releaseId) }}>Published ICC</button>
           <button className={source === 'graph' ? 'active' : ''}
-                  onClick={() => { setSource('graph'); if (graphId) loadGraph(graphId) }}>Graph bake</button>
+                  onClick={() => { if (graphId) selectGraphSource(graphId) }}>Graph (merge)</button>
         </div>
         {source === 'release' ? (
           <label>Release
@@ -90,11 +108,20 @@ export default function IccChart() {
             </select>
           </label>
         ) : (
-          <label>Graph
-            <select value={graphId || ''} onChange={(e) => { const id = Number(e.target.value); setGraphId(id); loadGraph(id) }}>
-              {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
-            </select>
-          </label>
+          <>
+            <label>Graph
+              <select value={graphId || ''} onChange={(e) => { const id = Number(e.target.value); setGraphId(id); selectGraphSource(id) }}>
+                {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+              </select>
+            </label>
+            {mergeNodes.length > 0 && (
+              <label>Merge
+                <select value={nodeKey || ''} onChange={(e) => { const k = e.target.value; setNodeKey(k); loadGraph(graphId, k) }}>
+                  {mergeNodes.map((n) => <option key={n.key} value={n.key}>{nodeLabel(n)}</option>)}
+                </select>
+              </label>
+            )}
+          </>
         )}
         <div className="scale-toggle">
           <button className={scale === 'log' ? 'active' : ''} onClick={() => setScale('log')}>Log (zoom recent)</button>
@@ -154,7 +181,8 @@ export default function IccChart() {
       )}
       <p className="iccchart-note">
         Nested columns (ICC style) tiling base ages per rank. oldest=bottom · most recent=top. Ma scale on the left.
-        <b> Published ICC</b> (ICS-2024/12) has 5 columns down to Age; <b>Graph bake</b> has 3 columns (network, period+).
+        <b> Published ICC</b> (ICS-2024/12) reads a baked release. <b>Graph (merge)</b> is the live output of the graph's
+        terminal merge node (evaluate → tile); pick a <b>Merge</b> to view a single column merge's partial chart.
         When labels overlap on log scale, hover a band (age-range tooltip).
         <b> ± Uncertainty</b> toggle shows the symmetric error band of each lower boundary (GSSP derived-age error) — GSSA agreed values have no error.
       </p>
