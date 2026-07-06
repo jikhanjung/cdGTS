@@ -136,10 +136,63 @@ def build_icc_levels(unit_base, unit_unc=None):
     return {"max_ma": round(max_ma, 4), "levels": levels}
 
 
+def _merge_source_boundaries(graph, merge_key):
+    """merge 노드로 data 엣지를 통해 (재귀적으로) 흘러드는 boundary 노드 key 집합.
+    merge 트리(그룹 내부 merge → 컬럼 merge → 최종)를 거슬러 올라가 tick(경계)들을 모은다.
+    종단 merge 면 그래프의 전 boundary, 컬럼 merge 면 그 컬럼 소속 boundary 만 → 부분 차트."""
+    from collections import defaultdict
+    nature = dict(graph.nodes.values_list("key", "nature"))
+    incoming = defaultdict(list)
+    for s, t in graph.edges.filter(kind="data").values_list("source__key", "target__key"):
+        incoming[t].append(s)
+    seen, bnds, stack = set(), set(), [merge_key]
+    while stack:
+        for s in incoming.get(stack.pop(), []):
+            if s in seen:
+                continue
+            seen.add(s)
+            if nature.get(s) == "boundary":
+                bnds.add(s)
+            stack.append(s)          # merge/unit 는 계속 거슬러 올라간다
+    return bnds
+
+
+def merge_geometry(graph, merge_key, results):
+    """merge 노드의 산출 = 그로 흘러드는 boundary(게이트웨이=chrono 정체성)들을 rank 별로 타일링.
+    build_icc_levels 를 그대로 재사용하되, 전-게이트웨이가 아니라 이 merge 의 입력 subtree 로 한정."""
+    bnds = _merge_source_boundaries(graph, merge_key)
+    unit_base, unit_unc = {}, {}
+    for gw in graph.gateways.select_related("node", "boundary"):
+        if gw.boundary is None or gw.node.key not in bnds:
+            continue
+        if not gw.boundary.slug.startswith("base-"):
+            continue
+        dist = results.get(gw.node.key, {})
+        v = dist.get("value_ma")
+        if v is None:
+            continue
+        slug = gw.boundary.slug[len("base-"):]
+        unit_base[slug] = float(v)
+        unit_unc[slug] = _pm_from_dist(dist)
+    return build_icc_levels(unit_base, unit_unc)
+
+
+def _terminal_merge_key(graph):
+    """종단 merge = 다른 노드로 나가는 data 엣지가 없는 merge 노드. 없으면 None."""
+    merges = set(graph.nodes.filter(node_type__slug="merge").values_list("key", flat=True))
+    if not merges:
+        return None
+    with_out = set(graph.edges.filter(kind="data", source__key__in=merges)
+                   .values_list("source__key", flat=True))
+    terminals = sorted(merges - with_out)
+    return terminals[0] if terminals else None
+
+
 class IccChartView(APIView):
     """
-    GET /api/graphs/{id}/icc-chart/ — 그래프 산출물(게이트웨이=period+)을 chrono 계층과 join 한 ICC 차트.
-    네트웍이 period+ 만이라 Eon/Era/Period 3 컬럼.
+    GET /api/graphs/{id}/icc-chart/ — 그래프 산출물을 ICC 차트로.
+    산출 주체는 **종단 merge 노드**(그로 흘러든 경계들을 타일링). `?node=<merge-key>` 로 특정
+    컬럼 merge 의 부분 차트도 조회 가능. merge 없는 그래프는 종전대로 전 게이트웨이 타일링.
     """
     permission_classes = [permissions.AllowAny]
 
@@ -149,6 +202,12 @@ class IccChartView(APIView):
         run = graph.eval_runs.first() or evaluate_graph(graph)
         results = {r.node_key: (r.distribution or {}) for r in run.results.all()}
 
+        merge_key = request.query_params.get("node") or _terminal_merge_key(graph)
+        if merge_key:
+            return Response({"graph": graph.slug, "node": merge_key,
+                             **merge_geometry(graph, merge_key, results)})
+
+        # merge 없는 그래프 — 종전 전-게이트웨이 경로
         unit_base, unit_unc = {}, {}
         for gw in graph.gateways.select_related("node", "boundary"):
             if gw.boundary is None:
@@ -159,7 +218,6 @@ class IccChartView(APIView):
                 slug = gw.boundary.slug[len("base-"):]
                 unit_base[slug] = float(v)
                 unit_unc[slug] = _pm_from_dist(dist)
-
         return Response({"graph": graph.slug, **build_icc_levels(unit_base, unit_unc)})
 
 

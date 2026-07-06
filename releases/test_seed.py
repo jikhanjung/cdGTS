@@ -117,6 +117,27 @@ def test_icc_chart_tiles_by_rank(seeded):
     assert age["induan"]["bottom"] == ep["lowertriassic"]["bottom"] == 251.9022
     assert age["changhsingian"]["top"] == 251.9022            # 경계 넘지 않음
     assert ep["lopingian"]["top"] == 251.9022
+    # Stage 2b: 차트 산출 주체가 종단 merge 노드
+    assert d["node"] == "icc-chart"
+
+
+def test_icc_chart_driven_by_merge_tree(seeded):
+    """Stage 2b — 차트는 merge 노드가 받은 경계 subtree 로 타일링. 종단 merge=전 차트,
+    컬럼 merge(?node=)=그 컬럼 부분 차트. geometry 가 merge 구조의 진짜 산출임을 고정."""
+    from graph.models import Graph
+    from rest_framework.test import APIClient
+    g = Graph.objects.get(slug="example-icc-partial")
+    api = APIClient()
+    # ?node=merge-paleozoic → Paleozoic period 만 (Mesozoic 이후 없음)
+    resp = api.get(f"/api/graphs/{g.pk}/icc-chart/?node=merge-paleozoic")
+    assert resp.status_code == 200 and resp.data["node"] == "merge-paleozoic"
+    per = {b["slug"] for lv in resp.data["levels"] if lv["rank"] == "Period" for b in lv["bands"]}
+    assert per == {"cambrian", "ordovician", "silurian", "devonian", "carboniferous", "permian"}
+    assert "cretaceous" not in per and "quaternary" not in per
+    # 종단(기본) 은 전 22 period
+    full = api.get(f"/api/graphs/{g.pk}/icc-chart/").data
+    fper = [b for lv in full["levels"] if lv["rank"] == "Period" for b in lv["bands"]]
+    assert len(fper) == 22
 
 
 def test_release_icc_chart_five_ranks(seeded):
