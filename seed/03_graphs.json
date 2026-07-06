@@ -461,7 +461,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3270,
+   "y": 3236,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -760,7 +760,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2490,
+   "y": 2524,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -783,7 +783,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2970,
+   "y": 2936,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -967,7 +967,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2340,
+   "y": 2374,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -990,7 +990,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2820,
+   "y": 2786,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1243,7 +1243,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1980,
+   "y": 2014,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1266,7 +1266,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2670,
+   "y": 2636,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1496,7 +1496,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1900,
+   "y": 1934,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1519,7 +1519,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2520,
+   "y": 2486,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1657,7 +1657,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2030,
+   "y": 2064,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1680,7 +1680,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2370,
+   "y": 2336,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1864,7 +1864,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1740,
+   "y": 1774,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1887,7 +1887,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2220,
+   "y": 2186,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2025,7 +2025,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1730,
+   "y": 1764,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2048,7 +2048,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2070,
+   "y": 2036,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2186,7 +2186,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1580,
+   "y": 1614,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2209,7 +2209,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1920,
+   "y": 1886,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2370,7 +2370,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1360,
+   "y": 1394,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2393,7 +2393,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1770,
+   "y": 1736,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2531,7 +2531,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1280,
+   "y": 1314,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2554,7 +2554,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1620,
+   "y": 1586,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2761,7 +2761,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 920,
+   "y": 954,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3060,7 +3060,7 @@
    "description": "",
    "params": {},
    "x": 590,
-   "y": 234.0,
+   "y": -60,
    "width": null,
    "group": null
   }
@@ -3080,7 +3080,7 @@
    "description": "",
    "params": {},
    "x": 1290,
-   "y": 234.0,
+   "y": -60,
    "width": null,
    "group": null
   }
@@ -3100,7 +3100,7 @@
    "description": "",
    "params": {},
    "x": 1990,
-   "y": 411.0,
+   "y": -60,
    "width": null,
    "group": null
   }
@@ -3120,7 +3120,7 @@
    "description": "",
    "params": {},
    "x": 2690,
-   "y": 569.0,
+   "y": -60,
    "width": null,
    "group": null
   }
@@ -3140,7 +3140,7 @@
    "description": "",
    "params": {},
    "x": 3390,
-   "y": 294.0,
+   "y": -60,
    "width": null,
    "group": null
   }
@@ -3160,7 +3160,7 @@
    "description": "",
    "params": {},
    "x": 3720,
-   "y": 1200,
+   "y": -180,
    "width": null,
    "group": null
   }
