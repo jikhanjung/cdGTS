@@ -216,6 +216,10 @@ def compute(category, slug, inputs, params):
         if d is not None and lo is not None and hi is not None:
             return range_clamp(d, float(lo), float(hi))
         return d
+    if slug == "boundary":
+        # 경계 점 — 상류 계산(data/process)이 준 연대를 통과. 입력 없으면 자기 공표값(fallback).
+        d = _first_non_null([i["dist"] for i in inputs])
+        return d if d is not None else (params or {}).get("distribution")
     fn = KERNELS.get(slug)
     if fn is not None:
         return fn(inputs, params)

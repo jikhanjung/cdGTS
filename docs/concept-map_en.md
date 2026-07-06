@@ -76,6 +76,7 @@ ladder, kept as a document index:
 
 **Schema & design**
 - [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) — boundary gateway schema v0 (all five §4 open questions resolved)
+- [boundary-span-duality_en.md](boundary-span-duality_en.md) — boundary(point)/span(group) duality in the graph layer: boundaries referenced & independent, order nodes → order edges
 - [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md) — global vs per-boundary (records + manifest)
 - [coherence-gate_en.md](coherence-gate_en.md) — Layer 5, the check ladder L0–L3
 - [evaluation-order_en.md](evaluation-order_en.md) — evaluation = dependency (topo) order ≠ chronology · order = a post-hoc check

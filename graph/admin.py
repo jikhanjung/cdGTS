@@ -32,16 +32,18 @@ class GraphAdmin(admin.ModelAdmin):
 
 @admin.register(NodeInstance)
 class NodeInstanceAdmin(admin.ModelAdmin):
-    list_display = ("key", "graph", "node_type", "label")
-    list_filter = ("graph", "node_type__category")
+    list_display = ("key", "graph", "node_type", "nature", "label")
+    list_filter = ("graph", "nature", "node_type__category")
     search_fields = ("key", "label", "graph__slug")
     autocomplete_fields = ("node_type", "graph", "group")
 
 
 @admin.register(NodeGroup)
 class NodeGroupAdmin(admin.ModelAdmin):
-    list_display = ("key", "graph", "name", "collapsed")
+    list_display = ("key", "graph", "name", "kind", "unit", "collapsed")
+    list_filter = ("kind",)
     search_fields = ("key", "name")
+    autocomplete_fields = ("unit", "lower", "upper", "parent")
 
 
 @admin.register(Gateway)

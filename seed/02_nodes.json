@@ -5,14 +5,14 @@
    "slug": "radiometric-uPb",
    "name": "Radiometric U-Pb",
    "category": "data",
-   "description": "U-Pb 방사연대 관측 (불변·인용·leaf).",
+   "description": "U–Pb radiometric age observation (immutable · cited · leaf).",
    "params_schema": {
     "distribution": {
      "type": "distribution"
     },
     "depth": {
      "type": "number",
-     "help": "층서 깊이/높이(age-depth 용)"
+     "help": "Stratigraphic depth/height (for age–depth)"
     }
    }
   }
@@ -23,14 +23,14 @@
    "slug": "astronomical",
    "name": "Astronomical tuning",
    "category": "data",
-   "description": "천문 주기 조정 연대 (불변·leaf).",
+   "description": "Astronomically tuned age (immutable · leaf).",
    "params_schema": {
     "distribution": {
      "type": "distribution"
     },
     "depth": {
      "type": "number",
-     "help": "층서 깊이/높이"
+     "help": "Stratigraphic depth/height"
     }
    }
   }
@@ -41,7 +41,7 @@
    "slug": "magnetostratigraphic",
    "name": "Magnetostratigraphy",
    "category": "data",
-   "description": "자기 반전 패턴 신호 (상관용).",
+   "description": "Magnetic-reversal pattern signal (for correlation).",
    "params_schema": {}
   }
  },
@@ -51,7 +51,7 @@
    "slug": "biostratigraphic",
    "name": "Biostratigraphy",
    "category": "data",
-   "description": "생층서 datum (FAD/LAD) 신호.",
+   "description": "Biostratigraphic datum (FAD/LAD) signal.",
    "params_schema": {}
   }
  },
@@ -61,7 +61,7 @@
    "slug": "age-depth-model",
    "name": "Age-depth model",
    "category": "process",
-   "description": "한 섹션의 age-depth 보간(국소). dated_horizons(각 depth+age)에서 target_depth 의 연대.",
+   "description": "Age–depth interpolation within one section (local). Age at target_depth from dated_horizons (each depth+age).",
    "params_schema": {
     "method": {
      "type": "enum",
@@ -73,7 +73,7 @@
     },
     "target_depth": {
      "type": "number",
-     "help": "보간할 층준(예: GSSP 레벨)"
+     "help": "Horizon to interpolate (e.g. GSSP level)"
     }
    }
   }
@@ -84,7 +84,7 @@
    "slug": "cross-section-correlation",
    "name": "Cross-section correlation",
    "category": "process",
-   "description": "섹션 간 상관 종합(load-bearing).",
+   "description": "Synthesis of cross-section correlations (load-bearing).",
    "params_schema": {
     "correlation_via": {
      "type": "multi-enum",
@@ -103,7 +103,7 @@
    "slug": "calibration-transfer",
    "name": "Calibration transfer",
    "category": "process",
-   "description": "기준 연대를 대상 신호로 전이.",
+   "description": "Transfers a reference age onto a target signal.",
    "params_schema": {}
   }
  },
@@ -113,7 +113,7 @@
    "slug": "joint-inference",
    "name": "Joint inference",
    "category": "process",
-   "description": "국소 상호제약 동시추정 — 순환을 접는 노드(cycles §).",
+   "description": "Locally co-constrained joint estimation — the node that folds cycles (cycles §).",
    "params_schema": {}
   }
  },
@@ -123,7 +123,7 @@
    "slug": "pin",
    "name": "Clamp: pin",
    "category": "clamp",
-   "description": "값 고정. GSSA = Clamp{pin} 의 특수사례.",
+   "description": "Fixes a value. GSSA = special case of Clamp{pin}.",
    "params_schema": {
     "value": {
      "type": "number"
@@ -137,7 +137,7 @@
    "slug": "range",
    "name": "Clamp: range",
    "category": "clamp",
-   "description": "구간 절단 [min, max].",
+   "description": "Interval clamp [min, max].",
    "params_schema": {
     "min": {
      "type": "number"
@@ -154,11 +154,11 @@
    "slug": "order",
    "name": "Clamp: order",
    "category": "clamp",
-   "description": "두 경계의 시간적 선후 검사 (아래=older ≥ 위=younger + Δ). 검사만·값 불변.",
+   "description": "Checks temporal order of two boundaries (bottom=older ≥ top=younger + Δ). Check only · value unchanged.",
    "params_schema": {
     "min_gap": {
      "type": "number",
-     "help": "최소 지속시간 Δ (Ma). 0 = 단순 선후."
+     "help": "Minimum duration Δ (Ma). 0 = plain ordering."
     },
     "mode": {
      "type": "enum",
@@ -166,7 +166,7 @@
       "hard",
       "warn"
      ],
-     "help": "hard=위반 시 FAIL · warn=경고"
+     "help": "hard = FAIL on violation · warn = warning"
     }
    }
   }
@@ -177,7 +177,7 @@
    "slug": "freeze-version",
    "name": "Clamp: freeze-version",
    "category": "clamp",
-   "description": "버전 나선 절단 — 특정 릴리스 값으로 고정.",
+   "description": "Cuts the version spiral — freezes to a specific release value.",
    "params_schema": {
     "version": {
      "type": "string"
@@ -477,7 +477,7 @@
    "slug": "published-age",
    "name": "Published age",
    "category": "data",
-   "description": "공표된 경계 연대(ICS/GTS chart) 참조 leaf. 편집 없이 값만 보유.",
+   "description": "Reference leaf for published boundary ages (ICS/GTS chart). Holds the value only, no editing.",
    "params_schema": {
     "distribution": {
      "type": "distribution"
@@ -545,6 +545,108 @@
    ],
    "name": "older",
    "direction": "in",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 1
+  }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "boundary",
+   "name": "Boundary",
+   "category": "process",
+   "description": "Boundary point (0-cell). Receives the age from an upstream computation (data/process) as input and displays it. Shared by multiple units.",
+   "params_schema": {
+    "distribution": {
+     "type": "distribution"
+    }
+   }
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "boundary"
+   ],
+   "name": "age",
+   "direction": "in",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "boundary"
+   ],
+   "name": "out",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "boundary"
+   ],
+   "name": "older",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 1
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "boundary"
+   ],
+   "name": "younger",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 2
+  }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "unit",
+   "name": "Time period",
+   "category": "process",
+   "description": "Time unit (1-cell, span). Represents an unsubdivided interval as a single node — sits between its lower/upper boundaries. Holds no value (boundaries carry the ages).",
+   "params_schema": {}
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "unit"
+   ],
+   "name": "older",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "unit"
+   ],
+   "name": "younger",
+   "direction": "out",
    "datatype": "distribution",
    "multiple": false,
    "order": 1

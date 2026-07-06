@@ -105,15 +105,21 @@ class Command(BaseCommand):
 
     def _load_all(self, paths):
         count = 0
+        deferred = []
         for obj in _load(paths):
             obj.save()
             count += 1
+            if getattr(obj, "deferred_fields", None):
+                deferred.append(obj)
+        for obj in deferred:                     # 2패스: 지연된 forward-ref FK 확정
+            obj.save_deferred_fields()
         return count
 
     # --- add: 없는 것만 insert (그래프/릴리스 원자) ---
     def _add_load(self, paths):
         skip_graphs, skip_releases = set(), set()
         inserted, skipped, new_versions = 0, 0, []
+        deferred = []
 
         for obj in _load(paths):
             inst = obj.object
@@ -137,7 +143,11 @@ class Command(BaseCommand):
 
             obj.save()
             inserted += 1
+            if getattr(obj, "deferred_fields", None):
+                deferred.append(obj)
 
+        for obj in deferred:                     # 2패스: 지연된 forward-ref FK 확정
+            obj.save_deferred_fields()
         return inserted, skipped, new_versions
 
     def _bake(self, only):
@@ -160,8 +170,11 @@ def _model(label):
 
 def _load(paths):
     for p in paths:
+        # handle_forward_references: 순환 자연키 FK(예: NodeGroup.lower/upper ↔ NodeInstance.group)를
+        # 지연 해석. 해석 안 된 필드는 obj.deferred_fields 로 남아 전체 로드 후 save_deferred_fields() 로 확정.
         yield from serializers.deserialize(
-            "json", p.read_text(encoding="utf-8"), use_natural_foreign_keys=True,
+            "json", p.read_text(encoding="utf-8"),
+            use_natural_foreign_keys=True, handle_forward_references=True,
         )
 
 

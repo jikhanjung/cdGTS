@@ -61,7 +61,10 @@ def test_group_roundtrip(api, graph):
     put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
     assert put.status_code == 200, put.data
     got = api.get(f"/api/graphs/{graph.pk}/").data
-    assert got["groups"] == [{"key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50, "parent": None}]
+    assert got["groups"] == [{
+        "key": "g1", "name": "Meishan", "collapsed": True, "x": 100, "y": 50,
+        "parent": None, "kind": "container", "unit": None, "lower": None, "upper": None,
+    }]
     by_key = {n["key"]: n for n in got["nodes"]}
     assert by_key["obs1"]["group"] == "g1"
     assert by_key["adm"]["group"] is None
@@ -133,7 +136,7 @@ def test_cycle_rejected(api, graph):
     }
     resp = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
     assert resp.status_code == 400
-    assert "순환" in str(resp.data)
+    assert "cycle" in str(resp.data)
 
 
 def test_cycle_through_joint_inference_allowed(api, graph):
@@ -164,4 +167,113 @@ def test_bad_port_rejected(api, graph):
     }
     resp = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
     assert resp.status_code == 400
-    assert "입력 포트" in str(resp.data)
+    assert "input port" in str(resp.data)
+
+
+# --- 경계·구간 이중성 (boundary-span-duality) ---
+
+@pytest.fixture
+def chrono(db):
+    call_command("loaddata", "01_chrono", verbosity=0)
+
+
+def _boundary_node(key, value_ma):
+    """경계 점 = boundary nature 의 published-age leaf (값을 담음)."""
+    return {"key": key, "node_type": "published-age", "nature": "boundary",
+            "x": 0, "y": 0, "params": {"distribution": {"value_ma": value_ma}}}
+
+
+def test_span_group_and_boundary_roundtrip(api, graph, chrono):
+    """span 그룹(kind=unit·unit·lower/upper) + boundary nature 노드가 PUT/GET 왕복."""
+    payload = {
+        "nodes": [_boundary_node("base-cambrian", 538.8), _boundary_node("base-ordovician", 486.85)],
+        "edges": [],
+        "groups": [{
+            "key": "cambrian", "name": "Cambrian", "collapsed": True, "x": 0, "y": 0,
+            "kind": "unit", "unit": "cambrian", "lower": "base-cambrian", "upper": "base-ordovician",
+        }],
+        "viewport": {},
+    }
+    put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    assert put.status_code == 200, put.data
+    got = api.get(f"/api/graphs/{graph.pk}/").data
+    g = got["groups"][0]
+    assert g["kind"] == "unit" and g["unit"] == "cambrian"
+    assert g["lower"] == "base-cambrian" and g["upper"] == "base-ordovician"
+    by_key = {n["key"]: n for n in got["nodes"]}
+    assert by_key["base-cambrian"]["nature"] == "boundary"
+    # 경계는 담기지 않고 참조된다 — 그룹 멤버가 아님.
+    assert by_key["base-cambrian"]["group"] is None
+
+
+def test_shared_boundary_referenced_by_two_groups(api, graph, chrono):
+    """한 경계 노드가 인접 두 구간의 lower/upper 로 공유(에디아카라기 upper ≡ 캄브리아기 lower)."""
+    payload = {
+        "nodes": [
+            _boundary_node("base-ediacaran", 635.0),
+            _boundary_node("base-cambrian", 538.8),
+            _boundary_node("base-ordovician", 486.85),
+        ],
+        "edges": [],
+        "groups": [
+            {"key": "ediacaran", "name": "Ediacaran", "collapsed": True, "x": 0, "y": 0,
+             "kind": "unit", "unit": "ediacaran", "lower": "base-ediacaran", "upper": "base-cambrian"},
+            {"key": "cambrian", "name": "Cambrian", "collapsed": True, "x": 0, "y": 100,
+             "kind": "unit", "unit": "cambrian", "lower": "base-cambrian", "upper": "base-ordovician"},
+        ],
+        "viewport": {},
+    }
+    put = api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    assert put.status_code == 200, put.data
+    got = {g["key"]: g for g in api.get(f"/api/graphs/{graph.pk}/").data["groups"]}
+    # 같은 경계 노드가 한쪽엔 upper, 다른쪽엔 lower.
+    assert got["ediacaran"]["upper"] == "base-cambrian"
+    assert got["cambrian"]["lower"] == "base-cambrian"
+
+
+def test_group_bad_boundary_ref_rejected(api, graph, chrono):
+    payload = {
+        "nodes": [_boundary_node("base-cambrian", 538.8)],
+        "edges": [],
+        "groups": [{"key": "cambrian", "name": "Cambrian", "collapsed": True, "x": 0, "y": 0,
+                    "kind": "unit", "lower": "base-cambrian", "upper": "ghost-boundary"}],
+        "viewport": {},
+    }
+    assert api.put(f"/api/graphs/{graph.pk}/", payload, format="json").status_code == 400
+
+
+def _order_graph(v_older, v_younger):
+    """오래된 경계 → order edge → 젊은 경계. source=older(큰 Ma), target=younger(작은 Ma)."""
+    return {
+        "nodes": [_boundary_node("older", v_older), _boundary_node("younger", v_younger)],
+        "edges": [{"source": "older", "source_port": "younger", "target": "younger",
+                   "target_port": "older", "kind": "order"}],
+        "viewport": {},
+    }
+
+
+def test_order_edge_roundtrip_and_cycle_exempt(api, graph):
+    """order edge 는 세로 포트 연결(제약) — 포트 방향 검증·데이터 사이클 판정에서 제외, 왕복."""
+    put = api.put(f"/api/graphs/{graph.pk}/", _order_graph(500.0, 480.0), format="json")
+    assert put.status_code == 200, put.data
+    edges = api.get(f"/api/graphs/{graph.pk}/").data["edges"]
+    assert edges[0]["kind"] == "order"
+
+
+def test_certify_l1_reads_order_edges(api, graph):
+    """정합성 게이트 L1 이 order edge 체인에서 판정: 순서 정상=pass, 역전=fail."""
+    from engine.evaluate import evaluate_graph
+    from engine.models import CoherenceCertificate
+
+    api.put(f"/api/graphs/{graph.pk}/", _order_graph(500.0, 480.0), format="json")
+    g = Graph.objects.get(pk=graph.pk)
+    evaluate_graph(g)
+    cert = CoherenceCertificate.objects.filter(eval_run__graph=g).latest("id")
+    assert cert.checks["L1"] == "pass"
+
+    # 역전: 오래된 쪽 값이 젊은 쪽보다 작음 → L1 fail.
+    api.put(f"/api/graphs/{graph.pk}/", _order_graph(480.0, 500.0), format="json")
+    g = Graph.objects.get(pk=graph.pk)
+    evaluate_graph(g)
+    cert = CoherenceCertificate.objects.filter(eval_run__graph=g).latest("id")
+    assert cert.checks["L1"] == "fail" and cert.passed is False

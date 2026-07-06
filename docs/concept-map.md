@@ -74,6 +74,7 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 
 **스키마 & 설계**
 - [boundary-gateway-schema.md](boundary-gateway-schema.md) — 경계 게이트웨이 스키마 v0 (§4 열린 질문 5개 모두 정리됨)
+- [boundary-span-duality.md](boundary-span-duality.md) — 그래프 계층의 경계(점)·구간(그룹) 이중성: 경계는 참조·독립, order 노드→order edge
 - [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md) — 전역 vs 경계별 (레코드 + 매니페스트)
 - [coherence-gate.md](coherence-gate.md) — Layer 5, 검사 사다리 L0–L3
 - [evaluation-order.md](evaluation-order.md) — 평가 순서 = 의존순(topo) ≠ 연대순 · order = 사후 검사

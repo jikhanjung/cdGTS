@@ -1,10 +1,10 @@
 """
-graph — 실제 DAG (네트워크). 학자가 캔버스에서 만든 한 개의 네트워크.
+graph — the actual DAG (network). A single network a scholar builds on the canvas.
 
-drag&drop 에디터(React Flow)의 백엔드 상태. 노드 *타입*은 nodes 앱, 평가는 engine 앱.
-게이트웨이/네트워크 2계층: Gateway = 비준·인용 대상 계약, NodeInstance/Edge = 자유 churn.
+Backend state of the drag&drop editor (React Flow). Node *types* live in the nodes app, evaluation in the engine app.
+Two layers, gateway/network: Gateway = the contract that gets ratified/cited, NodeInstance/Edge = free churn.
 
-설계: docs/app-architecture.md §2.3 / DAG 불변식: graph/dag.py
+Design: docs/app-architecture.md §2.3 / DAG invariants: graph/dag.py
 """
 from django.conf import settings
 from django.db import models
@@ -42,7 +42,7 @@ class EdgeManager(models.Manager):
 
 
 class Graph(models.Model):
-    """네트워크 컨테이너 (브랜치/샌드박스 단위). viewport = React Flow 팬/줌 상태."""
+    """Network container (branch/sandbox unit). viewport = React Flow pan/zoom state."""
     class Status(models.TextChoices):
         SANDBOX = "sandbox", "Sandbox"
         PROPOSED = "proposed", "Proposed"
@@ -74,8 +74,8 @@ class Graph(models.Model):
 
 class NodeGroup(models.Model):
     """
-    지역/경계별 서브그래프 (node-graph: node group = locality). 접으면 게이트웨이처럼.
-    엔진에는 영향 없음(평탄 평가) — 편집/표현용 컨테이너. x/y = 접힌 그룹 노드의 캔버스 위치.
+    Per-locality/boundary subgraph (node-graph: node group = locality). Collapses like a gateway.
+    No effect on the engine (flat evaluation) — an editing/presentation container. x/y = canvas position of the collapsed group node.
     """
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="groups")
     key = models.CharField(max_length=100)
@@ -85,7 +85,29 @@ class NodeGroup(models.Model):
     y = models.FloatField(default=0)
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.CASCADE, related_name="children",
-        help_text="상위 그룹(중첩). null=최상위. 엔진 무관 — 표현/드릴인 계층만.",
+        help_text="Parent group (nesting). null=top-level. Engine-agnostic — presentation/drill-in hierarchy only.",
+    )
+
+    class Kind(models.TextChoices):
+        CONTAINER = "container", "Container (presentation grouping)"
+        UNIT = "unit", "Unit (chronostratigraphic span)"
+
+    kind = models.CharField(
+        max_length=12, choices=Kind.choices, default=Kind.CONTAINER,
+        help_text="Group nature. unit=chronostratigraphic span — references the canonical unit/boundaries via unit/lower/upper.",
+    )
+    unit = models.ForeignKey(
+        "chrono.Unit", null=True, blank=True, on_delete=models.SET_NULL, related_name="span_groups",
+        help_text="Canonical unit this span group represents (if any). Inherits rank and dual naming.",
+    )
+    # Boundaries are referenced, not contained (cell complex). One boundary node can be shared as lower/upper of several groups.
+    lower = models.ForeignKey(
+        "NodeInstance", null=True, blank=True, on_delete=models.SET_NULL, related_name="lower_of_groups",
+        help_text="Lower (older) bounding boundary node. Can be shared with adjacent/child groups.",
+    )
+    upper = models.ForeignKey(
+        "NodeInstance", null=True, blank=True, on_delete=models.SET_NULL, related_name="upper_of_groups",
+        help_text="Upper (younger) bounding boundary node. Can be shared with adjacent/parent groups.",
     )
 
     objects = NodeGroupManager()
@@ -105,16 +127,25 @@ class NodeGroup(models.Model):
 
 
 class NodeInstance(models.Model):
-    """캔버스에 놓인 노드. key = React Flow 노드 id(클라이언트 제공, 그래프 내 유일)."""
+    """A node placed on the canvas. key = React Flow node id (client-provided, unique within the graph)."""
+
+    class Nature(models.TextChoices):
+        GENERIC = "generic", "Generic (data/process/clamp machinery)"
+        BOUNDARY = "boundary", "Boundary (boundary point / 0-cell · independent citizen)"
+
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="nodes")
-    key = models.CharField(max_length=100, help_text="React Flow 노드 id (그래프 내 유일)")
+    key = models.CharField(max_length=100, help_text="React Flow node id (unique within the graph)")
     node_type = models.ForeignKey(NodeType, on_delete=models.PROTECT, related_name="instances")
+    nature = models.CharField(
+        max_length=12, choices=Nature.choices, default=Nature.GENERIC,
+        help_text="Node nature. boundary=boundary point (0-cell) — independent citizen, not contained in a group but referenced via lower/upper. Orthogonal to node_type.",
+    )
     label = models.CharField(max_length=200, blank=True)
-    description = models.TextField(blank=True, help_text="사용자 설명(제목은 짧게, 상세는 여기 · 노드 툴팁). params 의 note 와 별개.")
+    description = models.TextField(blank=True, help_text="User description (keep the title short, put detail here · node tooltip). Separate from the note in params.")
     params = models.JSONField(default=dict, blank=True)
     x = models.FloatField(default=0)
     y = models.FloatField(default=0)
-    width = models.FloatField(null=True, blank=True, help_text="사용자가 조정한 노드 폭(px). null=기본 폭.")
+    width = models.FloatField(null=True, blank=True, help_text="User-adjusted node width (px). null=default width.")
     group = models.ForeignKey(
         NodeGroup, null=True, blank=True, on_delete=models.SET_NULL, related_name="members",
     )
@@ -136,16 +167,17 @@ class NodeInstance(models.Model):
 
     @property
     def is_cycle_breaker(self):
-        """사이클을 접는/끊는 노드 — joint-inference 또는 clamp (cycles §)."""
+        """Node that folds/breaks a cycle — joint-inference or clamp (cycles §)."""
         return self.node_type.category == NodeType.Category.CLAMP or self.node_type.slug == "joint-inference"
 
 
 class Edge(models.Model):
-    """데이터 흐름. kind: 일반 data / provenance(co-location·calibration-transfer)로 게이트가 사이클 탐지."""
+    """Data flow. kind: plain data / provenance (co-location, calibration-transfer) so the gate detects cycles."""
     class Kind(models.TextChoices):
         DATA = "data", "data"
         CO_LOCATION = "co-location", "co-location"
         CALIBRATION_TRANSFER = "calibration-transfer", "calibration-transfer"
+        ORDER = "order", "order"  # boundary vertical-port connection = order constraint (replaces the order node). Not data flow.
 
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="edges")
     source = models.ForeignKey(NodeInstance, on_delete=models.CASCADE, related_name="out_edges")
@@ -167,20 +199,20 @@ class Edge(models.Model):
 
 class Gateway(models.Model):
     """
-    비준·인용·버전의 단위(계약). 노드그룹/노드의 출력을 고정 타입으로 노출.
-    스키마 BoundaryGateway 가 참조하는 대상. 경계 추정 게이트웨이는 chrono.Boundary 를 가리킨다.
+    Unit of ratification/citation/versioning (contract). Exposes a node-group's/node's output as a fixed type.
+    The target the schema BoundaryGateway references. A boundary-estimating gateway points at chrono.Boundary.
     """
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="gateways")
     slug = models.SlugField()
     name = models.CharField(max_length=200)
     node = models.ForeignKey(
         NodeInstance, on_delete=models.CASCADE, related_name="gateways",
-        help_text="출력을 노출하는 노드",
+        help_text="The node whose output is exposed",
     )
     output_port = models.CharField(max_length=100, default="out")
     boundary = models.ForeignKey(
         "chrono.Boundary", null=True, blank=True, on_delete=models.SET_NULL,
-        related_name="gateways", help_text="이 게이트웨이가 추정하는 경계(있으면)",
+        related_name="gateways", help_text="The boundary this gateway estimates (if any)",
     )
 
     objects = GatewayManager()

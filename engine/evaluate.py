@@ -63,7 +63,8 @@ def evaluate_graph(graph):
     from .models import EvalRun, NodeResult
 
     insts = list(graph.nodes.select_related("node_type"))
-    edges = list(graph.edges.select_related("source", "target"))
+    # order edge 는 데이터 흐름이 아니라 제약(경계 세로 포트 연결) — 평가 위상에서 제외, _certify 만 읽음.
+    edges = [e for e in graph.edges.select_related("source", "target") if e.kind != "order"]
 
     node_meta = {
         n.key: {
@@ -128,8 +129,26 @@ def _certify(run, graph, results):
     checks = {"L0": "pass", "L1": "skip", "L2": "skip", "L3": "skip"}
     passed = True
 
+    # L1 우선순위: order edge(경계 세로 포트 연결) > order 노드 > 게이트웨이 단조 휴리스틱.
+    order_edges = list(graph.edges.filter(kind="order").select_related("source", "target"))
     order_nodes = [n for n in graph.nodes.select_related("node_type") if n.node_type.slug == "order"]
-    if order_nodes:
+    if order_edges:
+        # 각 order edge: source=더 오래된(큰 Ma), target=더 젊은(작은 Ma). source.value ≥ target.value 여야.
+        violations, checked = 0, 0
+        for e in order_edges:
+            rs, rt = results.get(e.source.key), results.get(e.target.key)
+            vs = (rs["distribution"] or {}).get("value_ma") if rs and rs["distribution"] else None
+            vt = (rt["distribution"] or {}).get("value_ma") if rt and rt["distribution"] else None
+            if vs is None or vt is None:
+                continue
+            checked += 1
+            if float(vs) < float(vt):        # 오래된 경계가 젊은 경계보다 작음 = 역전
+                violations += 1
+        if checked:
+            checks["L1"] = "pass" if violations == 0 else "fail"
+            if violations:
+                passed = False
+    elif order_nodes:
         # 사람이 명시한 선후 제약 — 국소·authored·provenance. 위반 시 mode 로 FAIL/WARN.
         violations, hard_fail = 0, False
         for n in order_nodes:

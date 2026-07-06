@@ -30,7 +30,7 @@ def test_replace_populates(seeded):
     units, boundaries, types, graphs, releases, records = _counts()
     # ICS chart.ttl 전 rank: units 177(Eon4/Era10/Period22/Subperiod2/Epoch37/Age102) · boundary 177 · type 13
     # (Carboniferous 아계 Mississippian/Pennsylvanian 추가로 175→177)
-    assert (units, boundaries, types, graphs) == (177, 177, 13, 4)
+    assert (units, boundaries, types, graphs) == (177, 177, 15, 4)
     # releases 3(예시 2 + 공표 ICS-2024/12) · records = 예시 5 + 공표 177 bake
     assert (releases, records) == (3, 182)
     # 자기참조 계보가 실제로 존재 → 아래 재-replace 가 self-FK 삭제 경로를 밟는다.
@@ -100,7 +100,9 @@ def test_icc_chart_tiles_by_rank(seeded):
     assert (sp["mississippian"]["top"], sp["mississippian"]["bottom"]) == (323.4, 358.86)
     assert (sp["pennsylvanian"]["top"], sp["pennsylvanian"]["bottom"]) == (298.9, 323.4)
     eon = {b["slug"]: b for b in lv["Eon"]}
-    assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8
+    # base-Cambrian/Paleozoic/Phanerozoic 동일 GSSP → 하나의 boundary 노드(bnd-base-cambrian, global-age-model 산출).
+    # 이전 published 538.8 이 아니라 계산값 538.795284 로 통일(같은 점이 같은 값).
+    assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.7953
     assert eon["hadean"]["bottom"] == 4567.0
     assert lv["Period"][0]["slug"] == "quaternary" and lv["Period"][0]["top"] == 0.0
     # 공식 ICS 색 주입 확인 (Triassic = #812B92)
@@ -178,7 +180,7 @@ def test_narrate_release_renders_and_persists(seeded):
     tri = next(e for e in secs["Period"] if e["boundary"] == "base-triassic")
     assert "Triassic System" in tri["narrative"] and "251.902 ± 0.024 Ma" in tri["narrative"] and "GSSP" in tri["narrative"]
     prot = next(e for e in secs["Eon"] if e["boundary"] == "base-proterozoic")
-    assert "약속값" in prot["narrative"] and "±" not in prot["narrative"]
+    assert "agreed value" in prot["narrative"] and "±" not in prot["narrative"]
     # 저장 확인
     assert BoundaryRecord.objects.get(release=r, boundary__slug="base-triassic").narrative == tri["narrative"]
     # 오래된→젊은 순
@@ -222,19 +224,22 @@ def test_age_groups_all_periods(seeded):
     assert g.groups.filter(parent__isnull=False).count() == 2         # 중첩 데모: Carb 아계 2 하위그룹
     assert g.groups.get(key="ages-mississippian").parent.key == "ages-carboniferous"
     grp = NodeGroup.objects.get(graph=g, key="ages-triassic")
+    # span 그룹 — 정본 단위 바인딩 + bounding 경계 참조(경계는 담기지 않고 참조됨).
+    assert grp.kind == "unit" and grp.unit.slug == "triassic"
+    assert grp.lower.key == "bnd-base-triassic" and grp.upper.key == "pub-jurassic"   # base-triassic(경계, adm 이 연대 산출) ~ base-jurassic
     keys = set(grp.members.values_list("key", flat=True))
-    # 멤버 = 내부 age pub 6 + 내부 order 5 (period 경계에 tie 하는 order 2 는 그룹 밖)
+    # 멤버 = 내부 age pub 6 (order 노드는 order edge 로 대체돼 더 이상 노드가 아님)
     assert {"pub-olenekian", "pub-anisian", "pub-ladinian", "pub-carnian", "pub-norian", "pub-rhaetian"} <= keys
-    assert "oa-olenekian" not in keys and "oa-jurassic" not in keys    # tie order 는 외부
-    assert len(keys) == 11
+    assert not NodeInstance.objects.filter(graph=g, node_type__slug="order").exists()   # order 노드 전멸
+    assert g.edges.filter(kind="order").count() == 132                # boundary↔(period 그룹/선캄브리아 unit 노드) 교호 — boundary 직접연결 없음
     # 내부 age 는 pub 노드 + 게이트웨이. 첫 age induan(=period base)은 pub 없이
     # period 산출노드에 coincident 게이트웨이로만 등록(하나의 GSSP 가 base-triassic 과 공유).
     assert Gateway.objects.filter(graph=g, boundary__slug="base-olenekian").exists()
     assert not NodeInstance.objects.filter(graph=g, key="pub-induan").exists()      # 첫 age = pub 없음
     assert Gateway.objects.filter(graph=g, boundary__slug="base-induan").exists()    # coincident 게이트웨이는 존재
-    # 전 age 체인 통과 → L1·L2 pass
+    # 전 age 체인(order edge) 통과 → L1·L2 pass
     run = evaluate_graph(g)
-    assert run.certificate.passed and run.certificate.checks["L2"] == "pass"
+    assert run.certificate.passed and run.certificate.checks["L1"] == "pass" and run.certificate.checks["L2"] == "pass"
 
 
 def test_seed_content_canonical(seeded):
