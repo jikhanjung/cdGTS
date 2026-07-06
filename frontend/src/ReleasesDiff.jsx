@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listReleases, bakeRelease, diffReleases } from './api.js'
 
-// 두 릴리스 간 값 diff(같은 경계의 연대 이동)와 토폴로지 diff(배선: 추가/삭제/retype)를
-// 직교 축으로 보여준다. 백엔드: GET /api/releases/diff/?a=&b= (releases/services.diff_releases).
+// Shows the value diff (age shifts of the same boundary) and topology diff (wiring: add/remove/retype)
+// between two releases along orthogonal axes. Backend: GET /api/releases/diff/?a=&b= (releases/services.diff_releases).
 
 const fmtMa = (v) => (v == null ? '—' : `${Number(v).toFixed(3)} Ma`)
 const deltaClass = (d) => (d == null ? '' : d > 0 ? 'up' : d < 0 ? 'down' : '')
@@ -51,15 +51,15 @@ export default function ReleasesDiff() {
     } catch (e) { setError(e.data || String(e)) }
   }
 
-  if (loading) return <div className="diff"><p className="hint">로딩 중…</p></div>
+  if (loading) return <div className="diff"><p className="hint">Loading…</p></div>
 
   if (releases.length === 0) {
     return (
       <div className="diff">
-        <h2>릴리스 Diff</h2>
+        <h2>Releases Diff</h2>
         <p className="empty">
-          릴리스가 없습니다. 시드 <code>example_releases</code> 를 로드하거나,
-          릴리스를 만들어 bake 하면 여기서 비교할 수 있습니다.
+          No releases. Load the seed <code>example_releases</code>, or
+          create a release and bake it to compare them here.
         </p>
       </div>
     )
@@ -71,19 +71,19 @@ export default function ReleasesDiff() {
   return (
     <div className="diff">
       <div className="diff-controls">
-        <label>기준 A
+        <label>Base A
           <select value={a} onChange={(e) => setA(e.target.value)}>
             {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
           </select>
         </label>
         <span className="arrow">→</span>
-        <label>대상 B
+        <label>Target B
           <select value={b} onChange={(e) => setB(e.target.value)}>
             {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
           </select>
         </label>
         <span className="diff-meta">
-          {relA && `${relA.records?.length ?? 0}개 경계`} → {relB && `${relB.records?.length ?? 0}개 경계`}
+          {relA && `${relA.records?.length ?? 0} boundaries`} → {relB && `${relB.records?.length ?? 0} boundaries`}
         </span>
       </div>
 
@@ -91,7 +91,7 @@ export default function ReleasesDiff() {
 
       {relA && (relA.records?.length ?? 0) === 0 && (
         <p className="none">
-          A(<code>{relA.version}</code>)에 bake 된 레코드가 없습니다.
+          A (<code>{relA.version}</code>) has no baked records.
           <button className="link" onClick={() => onBake(relA.id)}>bake</button>
         </p>
       )}
@@ -99,10 +99,10 @@ export default function ReleasesDiff() {
       {diff && (
         <>
           <section className="diff-section">
-            <h3>값 diff <small>value_diff · 같은 경계의 연대 이동</small></h3>
-            {diff.value_diff.length === 0 ? <p className="none">변화 없음</p> : (
+            <h3>Value diff <small>value_diff · age shift of the same boundary</small></h3>
+            {diff.value_diff.length === 0 ? <p className="none">No changes</p> : (
               <table className="difftable">
-                <thead><tr><th>경계</th><th>A</th><th>B</th><th>Δ (Myr)</th></tr></thead>
+                <thead><tr><th>Boundary</th><th>A</th><th>B</th><th>Δ (Myr)</th></tr></thead>
                 <tbody>
                   {diff.value_diff.map((d) => (
                     <tr key={d.boundary}>
@@ -120,8 +120,8 @@ export default function ReleasesDiff() {
           </section>
 
           <section className="diff-section">
-            <h3>토폴로지 diff <small>topology_diff · 배선(경계 추가·삭제·retype)</small></h3>
-            {diff.topology_diff.length === 0 ? <p className="none">변화 없음</p> : (
+            <h3>Topology diff <small>topology_diff · wiring (boundary add · remove · retype)</small></h3>
+            {diff.topology_diff.length === 0 ? <p className="none">No changes</p> : (
               <ul className="topolist">
                 {diff.topology_diff.map((t, i) => (
                   <li key={i} className={`topo topo-${t.op}`}>

@@ -1,6 +1,6 @@
-// 평가 결과에서 최종 출력(gateway/말단 노드)의 분포를 읽기 좋게 요약.
+// Readable summary of the distributions of the final outputs (gateway / terminal nodes) from an evaluation.
 
-// distribution 값 객체 → 표시용 요약 (nodes/distribution.py 사다리 대응).
+// distribution value object → display summary (matches the nodes/distribution.py ladder).
 export function summarizeDist(dist) {
   if (!dist) return null
   const f = dist.fidelity
@@ -26,14 +26,14 @@ const fmt = (x) => (x == null ? '—' : `${Number(x.toPrecision(7))}`)
 
 function Uncertainty({ s }) {
   if (!s) return null
-  if (s.kind === 'exact') return <span className="rc-unc exact">exact · 오차 없음</span>
+  if (s.kind === 'exact') return <span className="rc-unc exact">exact · no error</span>
   if (s.kind === 'shape' && s.lo != null && s.hi != null) {
     return <span className="rc-unc">95% HPD [{fmt(s.lo)}, {fmt(s.hi)}]</span>
   }
   if (s.pm != null) {
     return <span className="rc-unc">± {fmt(s.pm)}{s.sigma ? ` (${s.sigma}σ)` : ''} Myr</span>
   }
-  return <span className="rc-unc muted">불확실성 정보 없음</span>
+  return <span className="rc-unc muted">no uncertainty information</span>
 }
 
 function ResultCard({ out }) {
@@ -44,23 +44,23 @@ function ResultCard({ out }) {
       <div className="rc-head">
         <span className="rc-title" title={out.title}>{out.title}</span>
         {out.boundary && <span className="rc-boundary">{out.boundary}</span>}
-        <span className={`rc-src ${out.source}`}>{out.source === 'gateway' ? '게이트웨이' : '말단'}</span>
+        <span className={`rc-src ${out.source}`}>{out.source === 'gateway' ? 'gateway' : 'terminal'}</span>
       </div>
 
       {out.missing ? (
-        <div className="rc-empty">평가 결과 없음 — <b>평가</b> 를 실행하세요.</div>
+        <div className="rc-empty">No evaluation result — run <b>Evaluate</b>.</div>
       ) : hasVal ? (
         <>
           <div className="rc-value">{fmt(s.value)} <span className="rc-ma">Ma</span></div>
           <Uncertainty s={s} />
           <div className="rc-meta">
             {s.kind && <span className="rc-fidelity">{s.kind}</span>}
-            {out.provenance?.length > 0 && <span className="rc-prov">출처 노드 {out.provenance.length}</span>}
+            {out.provenance?.length > 0 && <span className="rc-prov">{out.provenance.length} source nodes</span>}
           </div>
           {out.dist?.note && <div className="rc-note" title={out.dist.note}>{out.dist.note}</div>}
         </>
       ) : (
-        <div className="rc-empty">수치 출력 없음 (신호/무데이터 노드).</div>
+        <div className="rc-empty">No numeric output (signal / no-data node).</div>
       )}
     </div>
   )
@@ -71,7 +71,7 @@ export default function ResultsPanel({ outputs, meta, onClose }) {
   return (
     <section className="results">
       <header className="results-head">
-        <span className="results-title">결과 <b>{outputs.length}</b></span>
+        <span className="results-title">Results <b>{outputs.length}</b></span>
         {meta?.stats && (
           <span className="results-stats">
             run#{meta.id} · computed {meta.stats.computed} / cached {meta.stats.cached}
@@ -79,13 +79,13 @@ export default function ResultsPanel({ outputs, meta, onClose }) {
         )}
         {cert && (
           <span className={`results-cert ${cert.passed ? 'pass' : 'warn'}`}>
-            정합성 {cert.passed ? 'pass' : 'warn'}
+            consistency {cert.passed ? 'pass' : 'warn'}
           </span>
         )}
-        <button className="results-close" onClick={onClose} title="닫기">✕</button>
+        <button className="results-close" onClick={onClose} title="Close">✕</button>
       </header>
       {outputs.length === 0 ? (
-        <div className="results-empty">출력 노드가 없습니다. 게이트웨이를 지정하거나 말단 노드를 연결하세요.</div>
+        <div className="results-empty">No output nodes. Designate a gateway or connect a terminal node.</div>
       ) : (
         <div className="results-cards">
           {outputs.map((out) => <ResultCard key={out.id} out={out} />)}

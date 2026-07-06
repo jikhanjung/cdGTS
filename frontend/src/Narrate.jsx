@@ -1,21 +1,21 @@
 import { useEffect, useState } from 'react'
 import { listReleases, narrateRelease } from './api.js'
 
-// bake(얼린 표)의 짝 — 릴리스를 rank 별 '서술한 책'으로. 오래된→젊은 순.
+// The counterpart to bake (frozen table) — renders a release as a "narrated book" by rank. Oldest to youngest.
 export default function Narrate() {
   const [releases, setReleases] = useState([])
   const [releaseId, setReleaseId] = useState(null)
   const [doc, setDoc] = useState(null)
-  const [status, setStatus] = useState('로딩 중…')
+  const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
 
   async function load(id) {
-    setError(null); setStatus('서술 생성 중…')
+    setError(null); setStatus('Generating narrative…')
     try {
       const d = await narrateRelease(id); setDoc(d)
       const n = d.sections.reduce((a, s) => a + s.entries.length, 0)
-      setStatus(`${d.release} · ${n}개 경계 서술`)
-    } catch (e) { setError(e.data || String(e)); setStatus('실패') }
+      setStatus(`${d.release} · ${n} boundaries narrated`)
+    } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
   }
 
   useEffect(() => {
@@ -23,15 +23,15 @@ export default function Narrate() {
       try {
         const rs = await listReleases(); setReleases(rs)
         const rp = rs.find((r) => r.version === 'ICS-2024/12') || rs[0]
-        if (rp) { setReleaseId(rp.id); load(rp.id) } else setStatus('릴리스 없음')
-      } catch (e) { setError(e.data || String(e)); setStatus('실패') }
+        if (rp) { setReleaseId(rp.id); load(rp.id) } else setStatus('No releases')
+      } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div className="narrate">
       <div className="narrate-controls">
-        <label>릴리스
+        <label>Release
           <select value={releaseId || ''} onChange={(e) => { const id = Number(e.target.value); setReleaseId(id); load(id) }}>
             {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
           </select>
@@ -59,8 +59,8 @@ export default function Narrate() {
         </div>
       )}
       <p className="narrate-note">
-        bake(얼린 표)의 짝 — 구조화 필드(정의·연대·오차·방법·이중명명)를 <b>사실 창작 없이</b> 결정적으로 렌더.
-        각 서술은 <code>BoundaryRecord.narrative</code> 에 저장(재현 가능). rank 별 · 오래된→젊은 순.
+        The counterpart to bake (frozen table) — deterministically renders structured fields (definition, age, error, method, dual naming) <b>without inventing facts</b>.
+        Each narrative is stored in <code>BoundaryRecord.narrative</code> (reproducible). By rank · oldest to youngest.
       </p>
     </div>
   )

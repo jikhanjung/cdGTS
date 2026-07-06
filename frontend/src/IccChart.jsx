@@ -1,45 +1,45 @@
 import { useEffect, useMemo, useState } from 'react'
 import { listGraphs, listReleases, iccChart, releaseIccChart } from './api.js'
 
-const H = 1600        // 차트 높이(px, 스크롤)
+const H = 1600        // chart height (px, scroll)
 const COLW = 132
 const AXIS = 64
 const HEADER = 22
 
-// 공식 ICS 색(band.color) 우선, 없으면 slug 해시 폴백(rank 로 명도 차등).
+// Prefer official ICS color (band.color); if absent, fall back to slug hash (lightness varies by rank).
 const hue = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360; return h }
-// rank_n: 1 Eon · 2 Era · 3 Period · 4 Subperiod · 5 Epoch · 6 Age (색 있으면 폴백 미사용)
+// rank_n: 1 Eon · 2 Era · 3 Period · 4 Subperiod · 5 Epoch · 6 Age (fallback unused when color exists)
 const bandColor = (b, rank) => b.color || `hsl(${hue(b.slug)} 48% ${[60, 60, 70, 74, 78, 82][rank - 1] || 80}%)`
 
-// 배경색 밝기에 따라 라벨을 검/흰으로.
+// Set label to black/white depending on background brightness.
 const textOn = (hex) => {
   if (!hex || hex[0] !== '#' || hex.length < 7) return '#23202a'
   const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16)
   return (0.299 * r + 0.587 * g + 0.114 * b) > 150 ? '#23202a' : '#fff'
 }
 
-// 산출물을 Eon/Era/Period(/Epoch/Age) 중첩 컬럼(ICC식)으로. 오래된=아래, 최근=위.
+// Render outputs as nested Eon/Era/Period(/Epoch/Age) columns (ICC style). oldest=bottom, most recent=top.
 export default function IccChart() {
-  const [source, setSource] = useState('release')     // 'release'(공표, 5컬럼) | 'graph'(bake, 3컬럼)
+  const [source, setSource] = useState('release')     // 'release' (published, 5 columns) | 'graph' (bake, 3 columns)
   const [graphs, setGraphs] = useState([])
   const [releases, setReleases] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [releaseId, setReleaseId] = useState(null)
   const [data, setData] = useState(null)
-  const [scale, setScale] = useState('log')           // 'log'(최근 확대) | 'linear'(비례)
-  const [showUnc, setShowUnc] = useState(false)        // 불확실성(±pm) 밴드 오버레이
-  const [status, setStatus] = useState('로딩 중…')
+  const [scale, setScale] = useState('log')           // 'log' (zoom recent) | 'linear' (proportional)
+  const [showUnc, setShowUnc] = useState(false)        // uncertainty (±pm) band overlay
+  const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
 
   async function loadGraph(id) {
-    setError(null); setStatus('불러오는 중…')
-    try { const d = await iccChart(id); setData(d); setStatus(`${d.graph} · 최고 ${d.max_ma} Ma`) }
-    catch (e) { setError(e.data || String(e)); setStatus('실패') }
+    setError(null); setStatus('Loading…')
+    try { const d = await iccChart(id); setData(d); setStatus(`${d.graph} · max ${d.max_ma} Ma`) }
+    catch (e) { setError(e.data || String(e)); setStatus('Failed') }
   }
   async function loadRelease(id) {
-    setError(null); setStatus('불러오는 중…')
-    try { const d = await releaseIccChart(id); setData(d); setStatus(`${d.release} · 최고 ${d.max_ma} Ma`) }
-    catch (e) { setError(e.data || String(e)); setStatus('실패') }
+    setError(null); setStatus('Loading…')
+    try { const d = await releaseIccChart(id); setData(d); setStatus(`${d.release} · max ${d.max_ma} Ma`) }
+    catch (e) { setError(e.data || String(e)); setStatus('Failed') }
   }
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function IccChart() {
         const rp = rs.find((r) => r.version === 'ICS-2024/12') || rs[0]
         if (gp) setGraphId(gp.id)
         if (rp) { setReleaseId(rp.id); loadRelease(rp.id) } else if (gp) { setSource('graph'); loadGraph(gp.id) }
-      } catch (e) { setError(e.data || String(e)); setStatus('실패') }
+      } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -64,7 +64,7 @@ export default function IccChart() {
   const ticks = scale === 'log' ? [0, 50, 200, 540, 1000, 2500, max] : [0, 1000, 2000, 3000, 4000, max]
   const nCol = data?.levels.length || 0
 
-  // 경계별 대칭 오차(±pm). 경계는 여러 rank가 공유 → base 로 dedup.
+  // Symmetric error (±pm) per boundary. A boundary is shared by multiple ranks → dedup by base.
   const uncBoundaries = useMemo(() => {
     if (!data) return []
     const m = new Map()
@@ -79,29 +79,29 @@ export default function IccChart() {
       <div className="iccchart-controls">
         <div className="scale-toggle">
           <button className={source === 'release' ? 'active' : ''}
-                  onClick={() => { setSource('release'); if (releaseId) loadRelease(releaseId) }}>공표 ICC</button>
+                  onClick={() => { setSource('release'); if (releaseId) loadRelease(releaseId) }}>Published ICC</button>
           <button className={source === 'graph' ? 'active' : ''}
-                  onClick={() => { setSource('graph'); if (graphId) loadGraph(graphId) }}>그래프 bake</button>
+                  onClick={() => { setSource('graph'); if (graphId) loadGraph(graphId) }}>Graph bake</button>
         </div>
         {source === 'release' ? (
-          <label>릴리스
+          <label>Release
             <select value={releaseId || ''} onChange={(e) => { const id = Number(e.target.value); setReleaseId(id); loadRelease(id) }}>
               {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
             </select>
           </label>
         ) : (
-          <label>그래프
+          <label>Graph
             <select value={graphId || ''} onChange={(e) => { const id = Number(e.target.value); setGraphId(id); loadGraph(id) }}>
               {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
             </select>
           </label>
         )}
         <div className="scale-toggle">
-          <button className={scale === 'log' ? 'active' : ''} onClick={() => setScale('log')}>로그 (최근 확대)</button>
-          <button className={scale === 'linear' ? 'active' : ''} onClick={() => setScale('linear')}>선형 (비례)</button>
+          <button className={scale === 'log' ? 'active' : ''} onClick={() => setScale('log')}>Log (zoom recent)</button>
+          <button className={scale === 'linear' ? 'active' : ''} onClick={() => setScale('linear')}>Linear (proportional)</button>
         </div>
         <button className={`unc-toggle${showUnc ? ' active' : ''}`} onClick={() => setShowUnc((v) => !v)}
-                title="경계 연대의 대칭 오차(±) 밴드. GSSA 약속값은 오차 없음.">± 불확실성</button>
+                title="Symmetric error (±) band on boundary ages. GSSA agreed values have no error.">± Uncertainty</button>
         <span className="iccchart-status">{status}</span>
       </div>
 
@@ -128,7 +128,7 @@ export default function IccChart() {
                   <g key={lv.rank + b.slug}>
                     <rect x={AXIS + ci * COLW + 1} y={yt} width={COLW - 2} height={h}
                           fill={bandColor(b, lv.rank_n)} stroke="#fff" strokeWidth="0.6">
-                      <title>{`${b.name} · ${b.top}–${b.bottom} Ma${b.pm > 0 ? ` · 하부경계 ± ${b.pm} Ma` : b.pm === 0 ? ' · 약속값' : ''}`}</title>
+                      <title>{`${b.name} · ${b.top}–${b.bottom} Ma${b.pm > 0 ? ` · lower boundary ± ${b.pm} Ma` : b.pm === 0 ? ' · agreed value' : ''}`}</title>
                     </rect>
                     {h > 13 && (
                       <text x={AXIS + ci * COLW + COLW / 2} y={yt + h / 2 + 3} textAnchor="middle"
@@ -144,7 +144,7 @@ export default function IccChart() {
                 const top = Math.min(ya, yb), hgt = Math.max(Math.abs(yb - ya), 2)
                 return (
                   <rect key={`unc-${u.age}`} className="icc-unc" x={AXIS} width={nCol * COLW} y={top} height={hgt}>
-                    <title>{`${u.name} 하부경계: ${u.age} ± ${u.pm} Ma`}</title>
+                    <title>{`${u.name} lower boundary: ${u.age} ± ${u.pm} Ma`}</title>
                   </rect>
                 )
               })}
@@ -153,10 +153,10 @@ export default function IccChart() {
         </div>
       )}
       <p className="iccchart-note">
-        rank 별로 base 연대를 타일링한 중첩 컬럼(ICC식). 오래된=아래 · 최근=위. Ma 눈금은 좌측.
-        <b> 공표 ICC</b>(ICS-2024/12)는 Age 까지 5 컬럼, <b>그래프 bake</b>는 네트웍(period+) 3 컬럼.
-        로그 스케일에서 라벨이 겹치면 밴드에 hover(연대범위 툴팁).
-        <b> ± 불확실성</b> 토글 시 각 하부경계의 대칭 오차 밴드(GSSP 파생연대 오차)를 표시 — GSSA 약속값은 오차 없음.
+        Nested columns (ICC style) tiling base ages per rank. oldest=bottom · most recent=top. Ma scale on the left.
+        <b> Published ICC</b> (ICS-2024/12) has 5 columns down to Age; <b>Graph bake</b> has 3 columns (network, period+).
+        When labels overlap on log scale, hover a band (age-range tooltip).
+        <b> ± Uncertainty</b> toggle shows the symmetric error band of each lower boundary (GSSP derived-age error) — GSSA agreed values have no error.
       </p>
     </div>
   )

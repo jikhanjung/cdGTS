@@ -6,18 +6,18 @@ import IccTable from './IccTable.jsx'
 import IccChart from './IccChart.jsx'
 import Narrate from './Narrate.jsx'
 
-// 상단 nav 로 에디터 / 릴리스 Diff 전환. useReactFlow 훅은 Provider 안이어야 하므로 Editor 만 감싼다.
+// Top nav switches between Editor / Releases Diff. The useReactFlow hook must be inside a Provider, so only Editor is wrapped.
 export default function App() {
   const [view, setView] = useState('editor')
   return (
     <div className="app">
       <nav className="topnav">
         <span className="brand">cdGTS</span>
-        <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>에디터</button>
-        <button className={view === 'icc' ? 'active' : ''} onClick={() => setView('icc')}>ICC 테이블</button>
-        <button className={view === 'chart' ? 'active' : ''} onClick={() => setView('chart')}>ICC 차트</button>
-        <button className={view === 'narrate' ? 'active' : ''} onClick={() => setView('narrate')}>ICC 서술</button>
-        <button className={view === 'diff' ? 'active' : ''} onClick={() => setView('diff')}>릴리스 Diff</button>
+        <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
+        <button className={view === 'icc' ? 'active' : ''} onClick={() => setView('icc')}>ICC Table</button>
+        <button className={view === 'chart' ? 'active' : ''} onClick={() => setView('chart')}>ICC Chart</button>
+        <button className={view === 'narrate' ? 'active' : ''} onClick={() => setView('narrate')}>ICC Narrative</button>
+        <button className={view === 'diff' ? 'active' : ''} onClick={() => setView('diff')}>Releases Diff</button>
       </nav>
       <div className="view">
         {view === 'editor'

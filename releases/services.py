@@ -23,7 +23,7 @@ def bake_graph(graph):
 
     release, _ = Release.objects.get_or_create(
         version=f"graph:{graph.slug}",
-        defaults={"note": f"'{graph.name}' 그래프 bake (자동 생성 ICC 스냅샷)"},
+        defaults={"note": f"Bake of graph '{graph.name}' (auto-generated ICC snapshot)"},
     )
     release.records.all().delete()
     rows = []
@@ -66,7 +66,7 @@ def bake_release(release):
 
 
 def _narrate_record(rec, unit):
-    """레코드 하나 → 결정적 서술(사실 창작 없이 구조화 필드만 렌더). 이중 명명(Period/System) 사용."""
+    """One record → deterministic prose (renders structured fields only, no invented facts). Uses dual naming (Period/System)."""
     if unit is not None:
         name, geo, chrono = unit.name, unit.geochronologic_term, unit.chronostratigraphic_term
     else:
@@ -75,22 +75,22 @@ def _narrate_record(rec, unit):
     val = rec.value_ma
     moe = ((rec.uncertainty or {}).get("budget") or {}).get("analytical") if rec.uncertainty else None
     if val is None:
-        val_txt = "연대 미상"
+        val_txt = "an unknown age"
     elif moe:
         val_txt = f"{val:g} ± {moe:g} Ma"
     else:
         val_txt = f"{val:g} Ma"
     if dt == "GSSP":
-        defn, lead = "GSSP(하부 경계 층서형 단면·지점)으로 정의되며", "파생 연대는"
-        mtxt = f"({rec.get_method_display()})" if rec.method else ""
+        defn, lead = "is defined by a GSSP (Global Boundary Stratotype Section and Point)", "its derived age is"
+        mtxt = f" ({rec.get_method_display()})" if rec.method else ""
     elif dt == "GSSA":
-        defn, lead, mtxt = "GSSA(약속된 표준 연대)로 정의되며", "약속값은", ""
+        defn, lead, mtxt = "is defined by a GSSA (Global Standard Stratigraphic Age)", "its agreed value is", ""
     else:
-        defn, lead, mtxt = "정의 방식이 기재되지 않았으며", "연대는", ""
+        defn, lead, mtxt = "has no stated definition method", "its age is", ""
     head = f"{name} {geo}".strip()
-    base = f"{name} {chrono}의 바닥" if chrono else "하부 경계"
-    prov = f" 근거: {rec.provenance_ref}." if rec.provenance_ref else ""
-    return f"{head}의 하부 경계({base})는 {defn}, {lead} {val_txt}{mtxt}이다.{prov}"
+    base = f"base of the {name} {chrono}" if chrono else "lower boundary"
+    prov = f" Source: {rec.provenance_ref}." if rec.provenance_ref else ""
+    return f"The lower boundary of {head} ({base}) {defn}, and {lead} {val_txt}{mtxt}.{prov}"
 
 
 def narrate_release(release):

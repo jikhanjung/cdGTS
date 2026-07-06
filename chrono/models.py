@@ -1,17 +1,17 @@
 """
-chrono — 정본 registry (Layer 0).
+chrono — canonical registry (Layer 0).
 
-값이 아니라 *이름과 계보*를 관리한다. 경계 연대 숫자·정의 스냅샷은 releases 앱(BoundaryRecord)에,
-평가 그래프는 graph 앱에 산다. 여기는 모두가 가리키는 안정적 정본.
+Manages *names and lineage*, not values. Boundary age numbers and definition snapshots live in the releases app (BoundaryRecord),
+evaluation graphs in the graph app. This is the stable canon everyone points at.
 
-설계: docs/app-architecture.md §2.1 / 스키마: docs/boundary-gateway-schema.md
+Design: docs/app-architecture.md §2.1 / Schema: docs/boundary-gateway-schema.md
 """
 from django.db import models
 
 
 class Rank(models.IntegerChoices):
-    """이중 명명 사다리 — 한 등급의 두 이름(연대층서 ↔ 지질연대).
-    Subperiod(Subsystem)는 Period 와 Epoch 사이 정식 ICS 등급으로 현재 Carboniferous 만 사용."""
+    """Dual-naming ladder — the two names of a rank (chronostratigraphic ↔ geochronologic).
+    Subperiod (Subsystem) is an official ICS rank between Period and Epoch, currently used only by the Carboniferous."""
     EON = 1, "Eon / Eonothem"
     ERA = 2, "Era / Erathem"
     PERIOD = 3, "Period / System"
@@ -20,7 +20,7 @@ class Rank(models.IntegerChoices):
     AGE = 6, "Age / Stage"
 
 
-# 이중 명명: 같은 고유명(예: Changhsingian)에 등급어만 다르게 붙는다.
+# Dual naming: the same proper name (e.g. Changhsingian) takes only a different rank term.
 _CHRONO_TERM = {1: "Eonothem", 2: "Erathem", 3: "System", 4: "Subsystem", 5: "Series", 6: "Stage"}
 _GEO_TERM = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
 
@@ -57,18 +57,18 @@ class LocalityManager(models.Manager):
 
 class Unit(models.Model):
     """
-    이중 명명 단위 (Layer 0). 같은 엔티티가 연대층서(System…)와 지질연대(Period…) 두 얼굴을 갖는다.
-    고유명은 공유되고 등급어만 다르다: "Changhsingian Stage" = "Changhsingian Age".
-    위계는 self-FK(부모 = 상위 등급 단위).
+    Dual-naming unit (Layer 0). The same entity has two faces: chronostratigraphic (System…) and geochronologic (Period…).
+    The proper name is shared and only the rank term differs: "Changhsingian Stage" = "Changhsingian Age".
+    Hierarchy is a self-FK (parent = higher-rank unit).
     """
-    slug = models.SlugField(unique=True, help_text="안정 식별자. 예: changhsingian")
-    name = models.CharField(max_length=100, help_text="고유명(등급어 제외). 예: Changhsingian")
+    slug = models.SlugField(unique=True, help_text="Stable identifier. e.g. changhsingian")
+    name = models.CharField(max_length=100, help_text="Proper name (without the rank term). e.g. Changhsingian")
     rank = models.IntegerField(choices=Rank.choices)
     color = models.CharField(max_length=7, blank=True, default="",
-                             help_text="ICS 공식 색 (#RRGGBB). ICC 차트 표시용.")
+                             help_text="Official ICS color (#RRGGBB). For ICC chart display.")
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.PROTECT, related_name="children",
-        help_text="상위 등급 단위. 예: Changhsingian(Age) → Lopingian(Epoch)",
+        help_text="Higher-rank unit. e.g. Changhsingian(Age) → Lopingian(Epoch)",
     )
 
     objects = UnitManager()
@@ -84,12 +84,12 @@ class Unit(models.Model):
 
     @property
     def chronostratigraphic_term(self):
-        """연대층서 등급어. 예: Stage."""
+        """Chronostratigraphic rank term. e.g. Stage."""
         return _CHRONO_TERM[self.rank]
 
     @property
     def geochronologic_term(self):
-        """지질연대 등급어. 예: Age."""
+        """Geochronologic rank term. e.g. Age."""
         return _GEO_TERM[self.rank]
 
     @property
@@ -102,7 +102,7 @@ class Unit(models.Model):
 
 
 class Authority(models.Model):
-    """비준·clamp의 주체. ICS·subcommission·샌드박스·fork."""
+    """The agent behind ratifications/clamps. ICS, subcommission, sandbox, fork."""
     class Kind(models.TextChoices):
         ICS = "ICS", "ICS"
         SUBCOMMISSION = "subcommission", "Subcommission"
@@ -114,7 +114,7 @@ class Authority(models.Model):
     kind = models.CharField(max_length=20, choices=Kind.choices, default=Kind.ICS)
     parent = models.ForeignKey(
         "self", null=True, blank=True, on_delete=models.PROTECT, related_name="children",
-        help_text="상위 권위. 예: Cambrian Subcommission → ICS",
+        help_text="Parent authority. e.g. Cambrian Subcommission → ICS",
     )
 
     objects = AuthorityManager()
@@ -132,26 +132,26 @@ class Authority(models.Model):
 
 class Boundary(models.Model):
     """
-    경계 정체성 (안정 슬러그). 값·정의 스냅샷은 여기 두지 않는다 — releases.BoundaryRecord.
-    definition_type 은 *현재* 분류(재배선 시 releases 스냅샷이 버전별 진실).
+    Boundary identity (stable slug). Value/definition snapshots do not live here — releases.BoundaryRecord.
+    definition_type is the *current* classification (on rewiring, the releases snapshot is the per-version truth).
     """
     class DefinitionType(models.TextChoices):
-        GSSP = "GSSP", "GSSP (지점)"
-        GSSA = "GSSA", "GSSA (결정 숫자)"
+        GSSP = "GSSP", "GSSP (point)"
+        GSSA = "GSSA", "GSSA (decreed number)"
 
-    slug = models.SlugField(unique=True, help_text="안정 슬러그. 예: base-triassic")
-    name = models.CharField(max_length=200, help_text="사람용 이름. 예: Base of the Triassic")
+    slug = models.SlugField(unique=True, help_text="Stable slug. e.g. base-triassic")
+    name = models.CharField(max_length=200, help_text="Human-readable name. e.g. Base of the Triassic")
     below = models.ForeignKey(
         Unit, null=True, blank=True, on_delete=models.PROTECT, related_name="boundaries_above",
-        help_text="경계 아래(더 오래된) 단위",
+        help_text="Unit below (older than) the boundary",
     )
     above = models.ForeignKey(
         Unit, null=True, blank=True, on_delete=models.PROTECT, related_name="boundaries_below",
-        help_text="경계 위(더 젊은) 단위",
+        help_text="Unit above (younger than) the boundary",
     )
     definition_type = models.CharField(
         max_length=8, choices=DefinitionType.choices, null=True, blank=True,
-        help_text="현재 정의 방식. 버전별 진실은 releases 스냅샷.",
+        help_text="Current definition method. Per-version truth is the releases snapshot.",
     )
     note = models.TextField(blank=True)
 
@@ -170,8 +170,8 @@ class Boundary(models.Model):
 
 class BoundaryLineage(models.Model):
     """
-    버전 간 경계 정체성 계보 (토폴로지 diff의 전제). 스키마 identity.lineage.
-    op=renamed 는 sources 에 이전 경계, split/merge 는 원본(들).
+    Cross-version boundary identity lineage (premise of the topology diff). Schema identity.lineage.
+    op=renamed puts the previous boundary in sources; split/merge the origin(s).
     """
     class Op(models.TextChoices):
         CREATED = "created", "created"
@@ -185,7 +185,7 @@ class BoundaryLineage(models.Model):
     op = models.CharField(max_length=12, choices=Op.choices)
     sources = models.ManyToManyField(
         Boundary, blank=True, related_name="lineage_targets",
-        help_text="split/merge 원본(들), rename 의 이전 경계",
+        help_text="split/merge origin(s), the previous boundary of a rename",
     )
     note = models.TextField(blank=True)
 
@@ -201,7 +201,7 @@ class BoundaryLineage(models.Model):
 
 
 class Ratification(models.Model):
-    """경계 비준 사건. 스키마 definition.ratified {year, by}."""
+    """Boundary ratification event. Schema definition.ratified {year, by}."""
     boundary = models.ForeignKey(Boundary, on_delete=models.CASCADE, related_name="ratifications")
     authority = models.ForeignKey(Authority, on_delete=models.PROTECT, related_name="ratifications")
     year = models.IntegerField()
@@ -223,15 +223,15 @@ class Ratification(models.Model):
 
 class Locality(models.Model):
     """
-    GSSP 노두(stratotype 지점). GSSA 는 노두 없음. 스키마 definition.stratotype.
-    지금은 lat/lon 스칼라 — PostGIS 착수 시 PointField 로 승격(공간 차원 트리거).
+    GSSP outcrop (stratotype point). GSSA has no outcrop. Schema definition.stratotype.
+    Currently lat/lon scalars — promote to PointField when PostGIS is adopted (spatial-dimension trigger).
     """
     boundary = models.OneToOneField(
         Boundary, on_delete=models.CASCADE, related_name="stratotype",
-        help_text="이 노두가 정의하는 경계(GSSP)",
+        help_text="The boundary this outcrop defines (GSSP)",
     )
-    name = models.CharField(max_length=300, help_text='예: "Meishan D, Changxing, Zhejiang, China"')
-    level = models.CharField(max_length=300, blank=True, help_text='예: "base of Bed 27c"')
+    name = models.CharField(max_length=300, help_text='e.g. "Meishan D, Changxing, Zhejiang, China"')
+    level = models.CharField(max_length=300, blank=True, help_text='e.g. "base of Bed 27c"')
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
 

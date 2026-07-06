@@ -1,11 +1,11 @@
 """
-releases — 버전·배포·diff (최상위 조립자).
+releases — versions, deployment, diff (top-level assembler).
 
-경쟁 후보(ModelCandidate)는 네트워크에 복수 공존하고, Release 가 selection 으로 하나를 바인딩한다
-(경계 레코드가 아니라 릴리스가 selection 소유). BoundaryRecord = 한 릴리스에서 얼린 스냅샷 = ICC bake.
-Diff = 두 릴리스 간 값 diff + 토폴로지 diff(직교 축).
+Competing candidates (ModelCandidate) coexist in the network, and a Release binds one via selection
+(the release owns the selection, not the boundary record). BoundaryRecord = a snapshot frozen in one release = ICC bake.
+Diff = value diff between two releases + topology diff (orthogonal axes).
 
-설계: docs/app-architecture.md §2.5 / 스키마: docs/boundary-gateway-schema.md §2
+Design: docs/app-architecture.md §2.5 / Schema: docs/boundary-gateway-schema.md §2
 """
 from django.db import models
 
@@ -42,16 +42,16 @@ class SelectionManager(models.Manager):
 
 
 class ModelCandidate(models.Model):
-    """네트워크에 공존하는 경쟁 후보 (독립 주소지정). 릴리스가 그중 하나를 선택."""
+    """Competing candidate coexisting in the network (independently addressable). A release selects one of them."""
     class Scope(models.TextChoices):
         BOUNDARY = "boundary", "boundary"
-        GLOBAL = "global", "global (다경계 동시)"
+        GLOBAL = "global", "global (multiple boundaries at once)"
 
-    slug = models.SlugField(unique=True, help_text="예: ediacaran-cambrian/bowyer2022-modelAB")
+    slug = models.SlugField(unique=True, help_text="e.g. ediacaran-cambrian/bowyer2022-modelAB")
     scope = models.CharField(max_length=10, choices=Scope.choices, default=Scope.BOUNDARY)
-    kind = models.CharField(max_length=100, help_text="예: global-d13C-age-model, committee-decision")
+    kind = models.CharField(max_length=100, help_text="e.g. global-d13C-age-model, committee-decision")
     method = models.CharField(max_length=28, choices=AgeMethod.choices)
-    provenance_ref = models.CharField(max_length=300, blank=True, help_text="값을 내는 서브그래프 참조")
+    provenance_ref = models.CharField(max_length=300, blank=True, help_text="Reference to the subgraph that produces the value")
     note = models.TextField(blank=True)
 
     objects = ModelCandidateManager()
@@ -64,7 +64,7 @@ class ModelCandidate(models.Model):
 
 
 class CandidateOutput(models.Model):
-    """후보가 특정 경계에 대해 내는 값(분포)."""
+    """The value (distribution) a candidate produces for a specific boundary."""
     candidate = models.ForeignKey(ModelCandidate, on_delete=models.CASCADE, related_name="outputs")
     boundary = models.ForeignKey("chrono.Boundary", on_delete=models.CASCADE, related_name="candidate_outputs")
     distribution = models.JSONField(help_text="Distribution.to_dict (nodes.distribution)")
@@ -87,8 +87,8 @@ class CandidateOutput(models.Model):
 
 class Clamp(models.Model):
     """
-    subcommission 이 놓는 거버넌스 clamp (스키마 Clamp). GSSA = Clamp{pin} 의 특수사례.
-    graph 의 clamp *노드*는 그래프 내 표현, 이건 릴리스가 적용하는 *authored* 거버넌스 레코드.
+    Governance clamp placed by a subcommission (schema Clamp). GSSA = a special case of Clamp{pin}.
+    A clamp *node* in graph is the in-graph representation; this is the *authored* governance record a release applies.
     """
     class Kind(models.TextChoices):
         PIN = "pin", "pin"
@@ -102,7 +102,7 @@ class Clamp(models.Model):
         "chrono.Boundary", null=True, blank=True, on_delete=models.CASCADE, related_name="clamps",
     )
     kind = models.CharField(max_length=16, choices=Kind.choices)
-    value = models.JSONField(default=dict, blank=True, help_text="pin=값 / range=[min,max] / order=이웃 / freeze=버전")
+    value = models.JSONField(default=dict, blank=True, help_text="pin=value / range=[min,max] / order=neighbors / freeze=version")
     rationale = models.TextField(blank=True)
     ratified_year = models.IntegerField(null=True, blank=True)
     overridable_in_sandbox = models.BooleanField(default=True)
@@ -117,14 +117,14 @@ class Clamp(models.Model):
 
 
 class Release(models.Model):
-    """전역 릴리스 매니페스트. selection 과 clamps 를 소유."""
-    version = models.CharField(max_length=50, unique=True, help_text="예: ICC-2024/12")
+    """Global release manifest. Owns the selection and clamps."""
+    version = models.CharField(max_length=50, unique=True, help_text="e.g. ICC-2024/12")
     authority = models.ForeignKey(
         "chrono.Authority", null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",
     )
     note = models.TextField(blank=True)
     is_baseline = models.BooleanField(
-        default=False, help_text="공표 기준 릴리스(Science CI 의 diff 대상). 그래프-bake 를 이것과 비교.",
+        default=False, help_text="Published baseline release (the diff target of Science CI). Graph bakes are compared against this.",
     )
     clamps = models.ManyToManyField(Clamp, blank=True, related_name="releases")
     created_at = models.DateTimeField(auto_now_add=True)
@@ -142,7 +142,7 @@ class Release(models.Model):
 
 
 class Selection(models.Model):
-    """릴리스의 경계별 후보 선택 (정합한 선택)."""
+    """A release's per-boundary candidate selection (coherent selection)."""
     release = models.ForeignKey(Release, on_delete=models.CASCADE, related_name="selections")
     boundary = models.ForeignKey("chrono.Boundary", on_delete=models.CASCADE, related_name="selections")
     candidate = models.ForeignKey(ModelCandidate, on_delete=models.PROTECT, related_name="selections")
@@ -165,12 +165,12 @@ class Selection(models.Model):
 
 class BoundaryRecord(models.Model):
     """
-    한 릴리스에서 얼린 BoundaryGateway 스냅샷 = ICC bake.
-    definition_type 은 그 시점 분류(버전별 진실), value/uncertainty 는 선택된 후보 출력의 bake 사본.
+    A BoundaryGateway snapshot frozen in one release = ICC bake.
+    definition_type is the classification at that point (per-version truth); value/uncertainty are the baked copy of the selected candidate's output.
     """
     release = models.ForeignKey(Release, on_delete=models.CASCADE, related_name="records")
     boundary = models.ForeignKey("chrono.Boundary", on_delete=models.CASCADE, related_name="records")
-    definition_type = models.CharField(max_length=8, blank=True)   # GSSP|GSSA 스냅샷
+    definition_type = models.CharField(max_length=8, blank=True)   # GSSP|GSSA snapshot
     value_ma = models.FloatField(null=True, blank=True)
     uncertainty = models.JSONField(null=True, blank=True, help_text="Distribution.to_dict")
     method = models.CharField(max_length=28, choices=AgeMethod.choices, blank=True)
@@ -178,7 +178,7 @@ class BoundaryRecord(models.Model):
         ModelCandidate, null=True, blank=True, on_delete=models.SET_NULL, related_name="records",
     )
     provenance_ref = models.CharField(max_length=300, blank=True)
-    narrative = models.TextField(blank=True, help_text="GTS narrate 서술(스텁)")
+    narrative = models.TextField(blank=True, help_text="GTS narrate prose (stub)")
 
     class Meta:
         constraints = [

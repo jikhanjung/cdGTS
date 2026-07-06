@@ -1,4 +1,4 @@
-// 백엔드 REST 왕복. dev 는 vite 프록시(/api → :8000).
+// Backend REST round-trips. In dev, vite proxies (/api → :8000).
 
 async function j(resp) {
   const text = await resp.text()
@@ -22,25 +22,25 @@ export const saveGraph = (id, body) =>
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
-// 그래프 → ICC 테이블 bake (게이트웨이 출력 스냅샷 → 릴리스 graph:<slug>).
+// Bake graph → ICC table (snapshot gateway outputs → release graph:<slug>).
 export const bakeGraph = (id) =>
   fetch(`/api/graphs/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
-// Science CI — 재bake 후 공표 기준과 diff. {from,to,value_diff,topology_diff,summary}.
+// Science CI — re-bake, then diff against the published baseline. {from,to,value_diff,topology_diff,summary}.
 export const verifyGraph = (id) =>
   fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
-// 그래프 산출물 → ICC식 중첩 컬럼 차트 데이터 (Eon/Era/Period 밴드).
+// Graph output → ICC-style nested column chart data (Eon/Era/Period bands).
 export const iccChart = (id) => fetch(`/api/graphs/${id}/icc-chart/`).then(j)
 
-// 공표 릴리스 → 전 rank(Eon~Age) ICC 차트 데이터.
+// Published release → ICC chart data across all ranks (Eon–Age).
 export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).then(j)
 
-// 릴리스 narrate — bake 의 짝. rank 별 서술 문서 + narrative 저장.
+// Release narrate — counterpart to bake. Per-rank narrative documents + saved narrative.
 export const narrateRelease = (id) =>
   fetch(`/api/releases/${id}/narrate/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
-// --- 릴리스 / diff ---
+// --- releases / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)
 export const bakeRelease = (id) =>

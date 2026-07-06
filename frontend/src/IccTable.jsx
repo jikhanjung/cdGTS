@@ -4,34 +4,34 @@ import { summarizeDist } from './ResultsPanel.jsx'
 
 const fmt = (x) => (x == null ? '—' : `${Number(x.toPrecision(7))}`)
 
-// distribution → 불확실성 표시 텍스트 (fidelity 별).
+// distribution → uncertainty display text (per fidelity).
 function uncertaintyText(dist) {
   const s = summarizeDist(dist)
   if (!s) return '—'
-  if (s.kind === 'exact') return '오차 없음'
+  if (s.kind === 'exact') return 'No error'
   if (s.lo != null && s.hi != null) return `95% HPD [${fmt(s.lo)}, ${fmt(s.hi)}]`
   if (s.pm != null) return `± ${fmt(s.pm)}${s.sigma ? ` (${s.sigma}σ)` : ''}`
   return '—'
 }
 
-// 그래프를 bake 해 게이트웨이 출력을 ICC 테이블(경계 스냅샷)로 보여준다.
+// Bake the graph and show gateway outputs as an ICC table (boundary snapshot).
 export default function IccTable() {
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [release, setRelease] = useState(null)
-  const [status, setStatus] = useState('로딩 중…')
+  const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
 
   async function bake(id) {
     setError(null)
-    setStatus('bake 중…')
+    setStatus('Baking…')
     try {
       const res = await bakeGraph(id)
       setRelease(res.release)
-      setStatus(`bake 완료 · ${res.baked} 경계`)
+      setStatus(`Bake complete · ${res.baked} boundaries`)
     } catch (e) {
       setError(e.data || String(e))
-      setStatus('bake 실패')
+      setStatus('Bake failed')
     }
   }
 
@@ -41,19 +41,19 @@ export default function IccTable() {
         const gs = await listGraphs()
         setGraphs(gs)
         const pref = gs.find((g) => g.slug === 'example-icc-partial') || gs[0]
-        if (pref) { setGraphId(pref.id); bake(pref.id) } else setStatus('그래프 없음')
-      } catch (e) { setError(e.data || String(e)); setStatus('로드 실패') }
+        if (pref) { setGraphId(pref.id); bake(pref.id) } else setStatus('No graph')
+      } catch (e) { setError(e.data || String(e)); setStatus('Load failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const rows = (release?.records || []).slice()
-    .sort((a, b) => (b.value_ma ?? -Infinity) - (a.value_ma ?? -Infinity))   // 오래된(큰 Ma)→젊은
+    .sort((a, b) => (b.value_ma ?? -Infinity) - (a.value_ma ?? -Infinity))   // oldest (large Ma) → youngest
   const curSlug = graphs.find((g) => g.id === graphId)?.slug
 
   return (
     <div className="icc">
       <div className="icc-controls">
-        <label>그래프
+        <label>Graph
           <select
             value={graphId || ''}
             onChange={(e) => { const id = Number(e.target.value); setGraphId(id); bake(id) }}
@@ -61,7 +61,7 @@ export default function IccTable() {
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
         </label>
-        <button onClick={() => graphId && bake(graphId)}>다시 bake</button>
+        <button onClick={() => graphId && bake(graphId)}>Re-bake</button>
         <span className="icc-status">{status}</span>
       </div>
 
@@ -69,15 +69,15 @@ export default function IccTable() {
 
       {rows.length === 0 ? (
         <p className="icc-empty">
-          게이트웨이(경계 출력)가 있는 그래프를 고르세요. 그래프를 bake 하면 게이트웨이 출력이 ICC 테이블로 얼려집니다.
+          Choose a graph that has gateways (boundary outputs). Baking a graph freezes its gateway outputs into an ICC table.
         </p>
       ) : (
         <>
           <table className="icctable">
             <thead>
               <tr>
-                <th>경계</th><th>정의</th><th className="num">연대 (Ma)</th>
-                <th>불확실성</th><th>출처</th>
+                <th>Boundary</th><th>Definition</th><th className="num">Age (Ma)</th>
+                <th>Uncertainty</th><th>Source</th>
               </tr>
             </thead>
             <tbody>
@@ -93,8 +93,8 @@ export default function IccTable() {
             </tbody>
           </table>
           <p className="icc-note">
-            <b>bake</b> = 그래프 게이트웨이 출력을 얼린 ICC 스냅샷. 릴리스 <code>graph:{curSlug}</code> 로
-            저장되어 <b>릴리스 Diff</b> 에서 다른 버전과 비교할 수 있습니다.
+            <b>bake</b> = an ICC snapshot freezing the graph's gateway outputs. Saved as release <code>graph:{curSlug}</code>,
+            so you can compare it against other versions in <b>Release Diff</b>.
           </p>
         </>
       )}
