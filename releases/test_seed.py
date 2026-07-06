@@ -252,7 +252,11 @@ def test_age_groups_all_periods(seeded):
     # 멤버 = 내부 age pub 6 (order 노드는 order edge 로 대체돼 더 이상 노드가 아님)
     assert {"pub-olenekian", "pub-anisian", "pub-ladinian", "pub-carnian", "pub-norian", "pub-rhaetian"} <= keys
     assert not NodeInstance.objects.filter(graph=g, node_type__slug="order").exists()   # order 노드 전멸
-    assert g.edges.filter(kind="order").count() == 132                # boundary↔(period 그룹/선캄브리아 unit 노드) 교호 — boundary 직접연결 없음
+    assert g.edges.filter(kind="order").count() == 233                # boundary↔unit 교호 — period 그룹 안에도 age unit 을 끼워 boundary 직접연결 없음
+    # period 그룹 안 boundary+unit 교호: 각 age 사이에 age unit 노드(총 101, Precambrian 15 포함 unit 116)
+    assert g.nodes.filter(node_type__slug="unit").count() == 116
+    assert g.nodes.filter(node_type__slug="unit", group__key="ages-triassic").count() == 7
+    assert g.nodes.filter(key="unit-induan", group__key="ages-triassic").exists()   # 첫 age = pub 없지만 unit 은 존재
     # 내부 age 는 pub 노드 + 게이트웨이. 첫 age induan(=period base)은 pub 없이
     # period 산출노드에 coincident 게이트웨이로만 등록(하나의 GSSP 가 base-triassic 과 공유).
     assert Gateway.objects.filter(graph=g, boundary__slug="base-olenekian").exists()
