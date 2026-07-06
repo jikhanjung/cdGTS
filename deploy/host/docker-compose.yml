@@ -6,7 +6,10 @@ services:
     image: honestjung/cdgts:${IMAGE_TAG}
     container_name: cdgts
     ports:
-      - "127.0.0.1:8011:8000"     # 리버스 프록시(nginx) 뒤. 호스트 8011 → 컨테이너 8000 (8010은 strati2026 사용)
+      # 기본 127.0.0.1(리버스 프록시 뒤). 호스트 8011 → 컨테이너 8000 (8010은 strati2026 사용).
+      # dev(m710q)는 /srv/cdGTS/.env 에 HTTP_BIND=0.0.0.0 으로 LAN/tailscale 직접 접근 허용.
+      # prod(dolfinid)는 미설정(127.0.0.1 유지) — 공인 IP 직접 노출 금지, nginx 경유만.
+      - "${HTTP_BIND:-127.0.0.1}:8011:8000"
     volumes:
       - /srv/cdGTS/db.sqlite3:/app/db.sqlite3
     env_file:
