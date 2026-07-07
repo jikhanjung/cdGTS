@@ -323,11 +323,13 @@ def _narrate_record(rec, unit):
     return f"The lower boundary of {head} ({base}) {defn}, and {lead} {val_txt}{mtxt}.{prov}"
 
 
-def narrate_release(release):
-    """bake 의 짝 — 릴리스를 '서술한 책'으로. 각 레코드의 narrative 를 결정적으로 채우고(저장),
-    rank(Eon~Age) 별 · 오래된→젊은 순으로 조립한 문서(sections)를 반환."""
+def narrate_release(release, persist=True):
+    """bake 의 짝 — 릴리스를 '서술한 책'으로. 각 레코드의 narrative 를 결정적으로 렌더(persist=True 면 저장),
+    rank(Eon~Age) 별 · 오래된→젊은 순으로 조립한 문서(sections)를 반환. persist=False = 뷰어용 렌더-온리."""
     from chrono.models import Unit
     if not release.records.exists():
+        if not persist:
+            return []                                    # nothing to render, and not allowed to bake
         bake_release(release)
     records = list(release.records.select_related("boundary", "candidate"))
     slugs = [r.boundary.slug[5:] for r in records if r.boundary.slug.startswith("base-")]
@@ -339,7 +341,8 @@ def narrate_release(release):
         u = units.get(bs[5:] if bs.startswith("base-") else bs)
         r.narrative = _narrate_record(r, u)
         by_rank.setdefault(u.rank if u else 0, []).append((r, u))
-    BoundaryRecord.objects.bulk_update(records, ["narrative"])
+    if persist:
+        BoundaryRecord.objects.bulk_update(records, ["narrative"])
 
     GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}
     sections = []

@@ -91,7 +91,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # DRF (P05.1): session auth for the same-origin SPA; read public / write authenticated by default.
-# NOTE: viewsets that still set permission_classes=[AllowAny] keep open writes until P05.2 tightens ownership.
+# NOTE: Release/Proposal viewsets are intentionally AllowAny for *public read* (Vault browsing, CI review),
+# but their querysets — and every auxiliary bake/verify/narrate/icc-chart endpoint — filter by
+# visible_graphs()/visible_releases() so private sandboxes never leak, and writes are gated to owner/staff.
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',

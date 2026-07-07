@@ -1,10 +1,8 @@
-from django.db.models import Q
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from .models import Graph
-from .permissions import GraphAccessPermission
+from .permissions import GraphAccessPermission, visible_graphs
 from .serializers import GraphSerializer
 from .services import fork_graph
 
@@ -21,12 +19,7 @@ class GraphViewSet(viewsets.ModelViewSet):
     permission_classes = [GraphAccessPermission]
 
     def get_queryset(self):
-        qs = Graph.objects.prefetch_related("nodes__node_type", "edges", "gateways")
-        user = self.request.user
-        public = Q(status__in=["proposed", "ratified"]) | Q(owner__isnull=True)
-        if user.is_authenticated:
-            return qs.filter(public | Q(owner=user))
-        return qs.filter(public)
+        return visible_graphs(self.request.user).prefetch_related("nodes__node_type", "edges", "gateways")
 
     def perform_create(self, serializer):
         user = self.request.user

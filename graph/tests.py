@@ -335,6 +335,19 @@ def test_fork_requires_auth(graph):
     assert APIClient().post(f"/api/graphs/{graph.pk}/fork/").status_code in (401, 403)
 
 
+def test_aux_graph_endpoints_dont_leak_private_sandbox(api, graph, node_types):
+    """bake / verify / icc-chart must not expose another user's private sandbox graph by pk."""
+    from django.contrib.auth import get_user_model
+    api.put(f"/api/graphs/{graph.pk}/", _payload(), format="json")   # ann's private sandbox has content
+    other = APIClient()
+    other.force_authenticate(user=get_user_model().objects.create_user("mallory", password="pw12345"))
+    assert other.get(f"/api/graphs/{graph.pk}/icc-chart/").status_code == 404
+    assert other.post(f"/api/graphs/{graph.pk}/verify/").status_code == 404
+    assert other.post(f"/api/graphs/{graph.pk}/bake/").status_code == 404
+    # anonymous likewise cannot read a private sandbox's chart
+    assert APIClient().get(f"/api/graphs/{graph.pk}/icc-chart/").status_code == 404
+
+
 def test_sandbox_visibility(api, graph, node_types):
     """샌드박스는 owner 전용; 공개(proposed/ratified)·시스템(owner=null)은 모두 열람."""
     from django.contrib.auth import get_user_model

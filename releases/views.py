@@ -9,8 +9,10 @@ from rest_framework.views import APIView
 from graph.models import Graph
 
 from accounts.permissions import can_ratify
+from graph.permissions import visible_graphs
 
 from .models import Proposal, Release
+from .permissions import can_write_release, visible_releases
 from .serializers import ProposalSerializer, ReleaseListSerializer, ReleaseSerializer
 from .services import (
     bake_release, create_sandbox_release, diff_graph_vs_release, diff_releases, narrate_release,
@@ -32,33 +34,29 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        # Vault = kept artifacts; hide the scratch verify release (transient) and others' private sandboxes.
-        from django.db.models import Q
-        qs = super().get_queryset().exclude(kind=Release.Kind.TRANSIENT)
-        user = self.request.user
-        if user.is_authenticated:
-            qs = qs.exclude(Q(kind=Release.Kind.SANDBOX) & ~Q(owner=user))
-        else:
-            qs = qs.exclude(kind=Release.Kind.SANDBOX)
+        # Vault = kept artifacts; hides the scratch verify release (transient) and others' private sandboxes.
+        qs = visible_releases(self.request.user).prefetch_related(
+            "records__boundary", "records__candidate", "clamps")
         kind = self.request.query_params.get("kind")
-        if kind:
-            qs = qs.filter(kind=kind)
-        return qs
+        return qs.filter(kind=kind) if kind else qs
 
     def get_serializer_class(self):
         return ReleaseListSerializer if self.action == "list" else ReleaseSerializer
 
     @action(detail=True, methods=["post"])
     def bake(self, request, pk=None):
-        release = self.get_object()
+        release = self.get_object()                       # visible-only
+        if not can_write_release(request.user, release):
+            return Response({"detail": "Only the owner (or staff) can re-bake this release."}, status=403)
         n = bake_release(release)
         release = self.get_queryset().get(pk=release.pk)
         return Response({"baked": n, "release": ReleaseSerializer(release).data})
 
     @action(detail=False, methods=["get"])
     def diff(self, request):
-        a = get_object_or_404(Release, pk=request.query_params.get("a"))
-        b = get_object_or_404(Release, pk=request.query_params.get("b"))
+        vis = visible_releases(request.user)              # can only diff releases you can see
+        a = get_object_or_404(vis, pk=request.query_params.get("a"))
+        b = get_object_or_404(vis, pk=request.query_params.get("b"))
         return Response(diff_releases(a, b))
 
     # --- P05.5 sandbox overrides ---
@@ -107,12 +105,12 @@ class GraphBakeView(APIView):
     def get(self, request, pk):
         # Editable default name for the Bake dialog (includes the <user> segment once signed in).
         from .services import next_release_version
-        get_object_or_404(Graph, pk=pk)
+        get_object_or_404(visible_graphs(request.user), pk=pk)
         user = request.user if request.user.is_authenticated else None
         return Response({"suggested": next_release_version(user=user)})
 
     def post(self, request, pk):
-        graph = get_object_or_404(Graph, pk=pk)
+        graph = get_object_or_404(visible_graphs(request.user), pk=pk)
         release, n = snapshot_graph(graph, label=request.data.get("label"), user=request.user)
         release = (Release.objects
                    .prefetch_related("records__boundary", "records__candidate")
@@ -129,7 +127,7 @@ class GraphVerifyView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, pk):
-        graph = get_object_or_404(Graph, pk=pk)
+        graph = get_object_or_404(visible_graphs(request.user), pk=pk)
         baseline, d = verify_graph(graph)
         if baseline is None:
             return Response({"detail": "공표 기준(is_baseline) 릴리스가 없습니다."}, status=400)
@@ -314,7 +312,7 @@ class IccChartView(APIView):
 
     def get(self, request, pk):
         from engine.evaluate import evaluate_graph
-        graph = get_object_or_404(Graph, pk=pk)
+        graph = get_object_or_404(visible_graphs(request.user), pk=pk)
         run = graph.eval_runs.first() or evaluate_graph(graph)
         results = {r.node_key: (r.distribution or {}) for r in run.results.all()}
 
@@ -345,8 +343,8 @@ class ReleaseIccChartView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, pk):
-        release = get_object_or_404(Release, pk=pk)
-        if not release.records.exists():
+        release = get_object_or_404(visible_releases(request.user), pk=pk)
+        if not release.records.exists() and can_write_release(request.user, release):
             bake_release(release)
         unit_base, unit_unc = {}, {}
         for rec in release.records.select_related("boundary"):
@@ -368,6 +366,7 @@ class ReleaseNarrateView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, pk):
-        release = get_object_or_404(Release, pk=pk)
-        sections = narrate_release(release)
+        release = get_object_or_404(visible_releases(request.user), pk=pk)
+        # Render for anyone who can see it; only owner/staff persist the narrative onto the shared records.
+        sections = narrate_release(release, persist=can_write_release(request.user, release))
         return Response({"release": release.version, "sections": sections})

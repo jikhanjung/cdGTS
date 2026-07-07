@@ -195,9 +195,12 @@ def test_graph_verify_vs_published(seeded):
 
 def test_narrate_release_renders_and_persists(seeded):
     """narrate(bake 의 짝) — rank 별 서술 문서 + BoundaryRecord.narrative 저장. 사실 창작 없이 필드 렌더."""
+    from django.contrib.auth import get_user_model
     from rest_framework.test import APIClient
     r = Release.objects.get(version="ICS-2024/12")
-    resp = APIClient().post(f"/api/releases/{r.pk}/narrate/")
+    api = APIClient()
+    api.force_authenticate(user=get_user_model().objects.create_user("ed", password="pw12345", is_staff=True))
+    resp = api.post(f"/api/releases/{r.pk}/narrate/")   # staff → persists narrative onto the shared release
     assert resp.status_code == 200
     secs = {s["rank"]: s["entries"] for s in resp.data["sections"]}
     assert list(secs) == ["Eon", "Era", "Period", "Subperiod", "Epoch", "Age"]

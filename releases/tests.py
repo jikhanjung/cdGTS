@@ -123,6 +123,23 @@ def test_sandbox_endpoints_and_visibility(sandbox_setup):
     assert APIClient().post(f"/api/releases/{s['baseline'].pk}/sandbox/").status_code in (401, 403)
 
 
+def test_aux_release_endpoints_dont_leak_private_sandbox(sandbox_setup):
+    """release icc-chart / narrate / diff / bake must not expose another user's private sandbox by pk."""
+    from django.contrib.auth import get_user_model
+    from releases.services import create_sandbox_release
+    s = sandbox_setup
+    sb = create_sandbox_release(s["baseline"], s["user"])          # ann's private sandbox
+    other = APIClient()
+    other.force_authenticate(user=get_user_model().objects.create_user("bob", password="pw12345"))
+    assert other.get(f"/api/releases/{sb.pk}/icc-chart/").status_code == 404
+    assert other.post(f"/api/releases/{sb.pk}/narrate/").status_code == 404
+    assert other.post(f"/api/releases/{sb.pk}/bake/").status_code == 404
+    assert other.get(f"/api/releases/diff/?a={s['baseline'].pk}&b={sb.pk}").status_code == 404
+    # owner still reaches it
+    owner = APIClient(); owner.force_authenticate(user=s["user"])
+    assert owner.get(f"/api/releases/{sb.pk}/icc-chart/").status_code == 200
+
+
 # --- P05.4: propose / review / ratify (= CI) ---
 
 @pytest.fixture
@@ -284,10 +301,12 @@ def test_added_removed_topology(chrono):
 # --- API ---
 
 def test_bake_and_diff_endpoints(chrono):
+    from django.contrib.auth import get_user_model
     camb = Boundary.objects.get(slug="base-cambrian")
     r1 = _release("v1", camb, _candidate("c1", camb, 538.8))
     r2 = _release("v2", camb, _candidate("c2", camb, 536.0))
     api = APIClient()
+    api.force_authenticate(user=get_user_model().objects.create_user("ed", password="pw12345", is_staff=True))
     assert api.post(f"/api/releases/{r1.pk}/bake/").data["baked"] == 1
     api.post(f"/api/releases/{r2.pk}/bake/")
     d = api.get(f"/api/releases/diff/?a={r1.pk}&b={r2.pk}").data
