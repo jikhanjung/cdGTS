@@ -2,7 +2,7 @@
 
 **Last updated**: 2026-07-07. 운영 **cdgts.paleobytes.info @ 0.1.25** — 0.1.22~0.1.25 UI/UX 다듬기 일괄
 릴리스(이미지 빌드·푸시 완료, 운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011`.
-백엔드 **pytest 96 passed**. devlog 001~104 + 리뷰/계획(R01·P04·P05) push. P04(불변 Bake·Vault 허브) 구현 완료 → **테스트 서버 0.1.26 배포·검증**(운영은 0.1.25).
+백엔드 **pytest 112 passed**. devlog 001~110 + 리뷰/계획(R01·P04·P05) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5) 전체** → **테스트 서버 0.1.27 배포·검증**(로그인·fork·propose·ratify·sandbox override 실동작). 운영은 0.1.25.
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -55,7 +55,8 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영**:
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.25**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.26**(P04).
+  - **운영서버** `cdgts.paleobytes.info` @ **0.1.25**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.27**(P04+P05).
+    테스트 DB(prod 미러)에 P05 검증용 계정 세팅: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 분리 + prod→test sync.
     이 호스트(m710q)는 **빌드 호스트이자 테스트 서버** — deploy-dev.sh 로 스냅샷 없이 즉시 스왑.
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 cron.
@@ -117,10 +118,10 @@
     reject + `can_ratify`(중앙) + Proposals 리뷰 뷰(verify diff 재사용). **아크 C MVP 완성.**
   - **P05.5 ✅**([110](devlog/20260707_110_p05-5-sandbox-overrides.md)) — 샌드박스 오버라이드(baseline + 경계별
     경쟁 후보 교체·재bake·diff, Vault Overrides 모드). 아크 B seam.
-  - **P05 전체 완료**. 흐름: 로그인 → fork → 편집 → (bake→Vault) / propose → review → **ratify**(새 baseline) ·
-    baseline **sandbox → override**. pytest **112**.
-    ⚠ **미배포** — 스키마 migration(accounts.0001, releases.0006·0007, graph.0008) 포함. 배포 시 관리자 계정·
-    ICS Authority·Membership 세팅 필요(초대제).
+  - **P05 전체 완료 · 테스트 0.1.27 배포·검증**. 흐름: 로그인 → fork → 편집 → (bake→Vault) / propose → review →
+    **ratify**(새 baseline) · baseline **sandbox → override**. pytest **112**. 스키마 migration 5개(accounts.0001,
+    releases.0006·0007·0008, graph.0008)는 entrypoint `migrate`로 자동 적용. **운영 배포는 사용자 승인 후**
+    (관리자·ICS Authority·Membership 세팅 필요, 초대제).
 
 ### 후속 (선택, 우선순위 대략순)
 
