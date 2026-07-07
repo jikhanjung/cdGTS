@@ -15,6 +15,7 @@ import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
+  bakeGraph, suggestBakeName,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
@@ -243,7 +244,7 @@ function buildView(nodes, edges, groups, activeGroup) {
   return { nodeRep, groupNodes, ioNodes, boundNodes, viewEdges }
 }
 
-export default function Editor() {
+export default function Editor({ onBaked } = {}) {
   const [types, setTypes] = useState([])
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
@@ -665,6 +666,32 @@ export default function Editor() {
     } catch (e) { setError(e.data || String(e)) }
   }, [graphId])
 
+  // Bake — freeze the current graph's gateway outputs into a new immutable Release (Vault artifact).
+  // Saves first (bake evaluates the server-side graph), then opens a dialog with an editable suggested name.
+  const [bakeDialog, setBakeDialog] = useState(null)   // { name, busy } | null
+  const onOpenBake = useCallback(async () => {
+    setError(null)
+    try {
+      if (dirty) {
+        await saveGraph(graphId, rfToApi(nodes, edges, groups, getViewport()))
+        setSavedSig(graphSig(nodes, edges, groups))
+      }
+      const { suggested } = await suggestBakeName(graphId)
+      setBakeDialog({ name: suggested, busy: false })
+    } catch (e) { setError(e.data || String(e)); setStatus('Bake preparation failed') }
+  }, [dirty, graphId, nodes, edges, groups, getViewport, graphSig])
+
+  const onConfirmBake = useCallback(async () => {
+    const name = (bakeDialog?.name || '').trim()
+    setBakeDialog((d) => d && ({ ...d, busy: true }))
+    try {
+      const { baked, release } = await bakeGraph(graphId, name)
+      setBakeDialog(null)
+      setStatus(`Baked → ${release.version} (${baked} boundaries) · saved to Vault`)
+      if (onBaked) onBaked(release)
+    } catch (e) { setError(e.data || String(e)); setBakeDialog((d) => d && ({ ...d, busy: false })) }
+  }, [bakeDialog, graphId, onBaked])
+
   // --- Inspector (selected real node) ---
   const patchNodeData = useCallback((id, fn) => {
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
@@ -749,6 +776,27 @@ export default function Editor() {
       {(paletteOpen || inspectorOpen) && (
         <div className="drawer-backdrop" onClick={() => { setPaletteOpen(false); setInspectorOpen(false) }} />
       )}
+      {bakeDialog && (
+        <div className="modal-backdrop" onClick={() => !bakeDialog.busy && setBakeDialog(null)}>
+          <div className="bake-dialog" onClick={(e) => e.stopPropagation()}>
+            <h3>Bake a Release</h3>
+            <p className="hint">Freezes this graph's current boundary outputs into an immutable artifact kept in the Vault.</p>
+            <label className="bake-name">
+              Name
+              <input type="text" value={bakeDialog.name} autoFocus disabled={bakeDialog.busy}
+                     onChange={(e) => setBakeDialog((d) => ({ ...d, name: e.target.value }))}
+                     onKeyDown={(e) => { if (e.key === 'Enter' && bakeDialog.name.trim()) onConfirmBake() }} />
+            </label>
+            <div className="bake-actions">
+              <button onClick={() => setBakeDialog(null)} disabled={bakeDialog.busy}>Cancel</button>
+              <button className="bake-btn primary" onClick={onConfirmBake}
+                      disabled={bakeDialog.busy || !bakeDialog.name.trim()}>
+                {bakeDialog.busy ? 'Baking…' : 'Bake'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       <aside className={`palette${paletteOpen ? ' open' : ''}`}>
         <h1>cdGTS</h1>
         <p className="hint">{IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas'}</p>
@@ -783,6 +831,8 @@ export default function Editor() {
           </span>
           <button onClick={onEvaluate}>Evaluate</button>
           <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
+          <button onClick={onOpenBake} className="bake-btn" disabled={!graphId}
+                  title="Bake — freeze this graph's outputs into a new immutable Release kept in the Vault">Bake…</button>
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
                   title={activeGroup ? 'Nest the selection as a subgroup inside this group' : 'Combine the selected nodes·groups into one group (merges if groups are mixed in)'}>

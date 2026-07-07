@@ -338,6 +338,26 @@ body {
 .toolbar .save-state { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 5px; }
 .toolbar .save-state.dirty { color: #8a5a00; background: #fdf1d8; }
 .toolbar .save-state.clean { color: #2f7d45; background: #e8f5ec; }
+/* bake = distinct artifact-producing action (accent) */
+.toolbar button.bake-btn { border-color: #c9b6ec; background: #f4efff; color: #6a3fb0; font-weight: 600; }
+.toolbar button.bake-btn:hover { background: #eae0ff; }
+/* --- modal (bake dialog) --- */
+.modal-backdrop { position: absolute; inset: 0; z-index: 40; display: flex; align-items: center;
+  justify-content: center; background: rgba(20, 14, 40, 0.32); }
+.bake-dialog { background: #fff; border-radius: 10px; padding: 20px 22px; width: min(420px, 90vw);
+  box-shadow: 0 12px 40px rgba(20, 14, 40, 0.25); }
+.bake-dialog h3 { margin: 0 0 6px; font-size: 16px; }
+.bake-dialog .hint { margin: 0 0 14px; font-size: 12px; color: #767688; }
+.bake-name { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: #55556a; font-weight: 600; }
+.bake-name input { font-size: 13px; padding: 7px 9px; border: 1px solid #cfcfe0; border-radius: 6px; font-family: inherit; }
+.bake-name input:focus { outline: none; border-color: #a142f4; }
+.bake-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; }
+.bake-actions button { border: 1px solid #cfcfe0; background: #fff; border-radius: 6px; padding: 6px 14px;
+  font-size: 13px; cursor: pointer; }
+.bake-actions button:hover { background: #f0f0f6; }
+.bake-actions button.primary { border-color: #a142f4; background: #a142f4; color: #fff; font-weight: 600; }
+.bake-actions button.primary:hover { background: #8f33e0; }
+.bake-actions button:disabled { opacity: 0.5; cursor: default; }
 .error {
   margin: 0; padding: 8px 14px; background: #fdecea; color: #a3271b;
   font-size: 12px; white-space: pre-wrap; border-bottom: 1px solid #f5c6c0;

@@ -22,9 +22,15 @@ export const saveGraph = (id, body) =>
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: jsonHeaders }).then(j)
 
-// Bake graph → ICC table (snapshot gateway outputs → release graph:<slug>).
-export const bakeGraph = (id) =>
-  fetch(`/api/graphs/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
+// Bake graph → a new immutable Release (kind=bake) kept in the Vault. Optional label; else server auto-names it.
+export const bakeGraph = (id, label) =>
+  fetch(`/api/graphs/${id}/bake/`, {
+    method: 'POST', headers: jsonHeaders,
+    body: JSON.stringify(label ? { label } : {}),
+  }).then(j)
+
+// Editable default name for the Bake dialog → { suggested }.
+export const suggestBakeName = (id) => fetch(`/api/graphs/${id}/bake/`).then(j)
 
 // Science CI — re-bake, then diff against the published baseline. {from,to,value_diff,topology_diff,summary}.
 export const verifyGraph = (id) =>
