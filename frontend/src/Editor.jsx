@@ -864,7 +864,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
                   title={!canEdit
                     ? (authed ? 'Read-only — not your graph (fork to edit)' : 'Sign in to edit your own graphs')
                     : (dirty ? 'Unsaved changes — click to save' : 'No changes since last save')}>
-            Save (PUT)
+            Save
           </button>
           {canEdit ? (
             <span className={`save-state ${dirty ? 'dirty' : 'clean'}`}
