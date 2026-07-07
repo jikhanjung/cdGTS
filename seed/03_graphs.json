@@ -3180,7 +3180,7 @@
    "description": "Mesozoic · age computed by the age–depth model",
    "params": {},
    "x": 950,
-   "y": 352,
+   "y": 388,
    "width": null,
    "group": null
   }
@@ -3500,7 +3500,7 @@
    "description": "Paleozoic · Phanerozoic · age computed by the global δ13C age model",
    "params": {},
    "x": 1650,
-   "y": 706,
+   "y": 796,
    "width": null,
    "group": null
   }
@@ -3557,7 +3557,7 @@
    "name": "Neogene · Age subdivisions",
    "collapsed": true,
    "x": 250,
-   "y": 158,
+   "y": 176,
    "kind": "unit",
    "unit": [
     "neogene"
@@ -3582,7 +3582,7 @@
    "name": "Paleogene · Age subdivisions",
    "collapsed": true,
    "x": 250,
-   "y": 276,
+   "y": 312,
    "kind": "unit",
    "unit": [
     "paleogene"
@@ -3632,7 +3632,7 @@
    "name": "Jurassic · Age subdivisions",
    "collapsed": true,
    "x": 950,
-   "y": 158,
+   "y": 176,
    "kind": "unit",
    "unit": [
     "jurassic"
@@ -3657,7 +3657,7 @@
    "name": "Triassic · Age subdivisions",
    "collapsed": true,
    "x": 950,
-   "y": 276,
+   "y": 312,
    "kind": "unit",
    "unit": [
     "triassic"
@@ -3707,7 +3707,7 @@
    "name": "Carboniferous · Age subdivisions",
    "collapsed": true,
    "x": 1650,
-   "y": 158,
+   "y": 176,
    "kind": "unit",
    "unit": [
     "carboniferous"
@@ -3790,7 +3790,7 @@
    "name": "Devonian · Age subdivisions",
    "collapsed": true,
    "x": 1650,
-   "y": 276,
+   "y": 312,
    "kind": "unit",
    "unit": [
     "devonian"
@@ -3815,7 +3815,7 @@
    "name": "Silurian · Age subdivisions",
    "collapsed": true,
    "x": 1650,
-   "y": 394,
+   "y": 448,
    "kind": "unit",
    "unit": [
     "silurian"
@@ -3840,7 +3840,7 @@
    "name": "Ordovician · Age subdivisions",
    "collapsed": true,
    "x": 1650,
-   "y": 512,
+   "y": 584,
    "kind": "unit",
    "unit": [
     "ordovician"
@@ -3865,7 +3865,7 @@
    "name": "Cambrian · Age subdivisions",
    "collapsed": true,
    "x": 1650,
-   "y": 630,
+   "y": 720,
    "kind": "unit",
    "unit": [
     "cambrian"
@@ -3924,7 +3924,7 @@
     },
     "depth": -0.14
    },
-   "x": 590,
+   "x": 470,
    "y": 307,
    "group": null,
    "description": "",
@@ -3954,7 +3954,7 @@
     },
     "depth": 0.08
    },
-   "x": 590,
+   "x": 470,
    "y": 397,
    "group": null,
    "description": "",
@@ -4005,7 +4005,7 @@
      "note": "classic 542.0±0.3 → recent CA-ID-TIMS revised value (illustrative · approximate)"
     }
    },
-   "x": 1290,
+   "x": 1170,
    "y": 571,
    "group": null,
    "description": "",
@@ -4034,7 +4034,7 @@
      "note": "illustrative · approximate value"
     }
    },
-   "x": 1290,
+   "x": 1170,
    "y": 661,
    "group": null,
    "description": "",
@@ -4063,7 +4063,7 @@
      "note": "illustrative · approximate value"
     }
    },
-   "x": 1290,
+   "x": 1170,
    "y": 751,
    "group": null,
    "description": "",
@@ -4082,7 +4082,7 @@
    ],
    "label": "T. pedum FAD · Fortune Head (Canada)\n= boundary position · not directly datable",
    "params": {},
-   "x": 1290,
+   "x": 1170,
    "y": 841,
    "group": null,
    "description": "",
@@ -4668,7 +4668,7 @@
     }
    },
    "x": 1650,
-   "y": 588,
+   "y": 660,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4698,7 +4698,7 @@
     }
    },
    "x": 1650,
-   "y": 470,
+   "y": 524,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4728,7 +4728,7 @@
     }
    },
    "x": 1650,
-   "y": 352,
+   "y": 388,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4758,7 +4758,7 @@
     }
    },
    "x": 1650,
-   "y": 234,
+   "y": 252,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4818,7 +4818,7 @@
     }
    },
    "x": 950,
-   "y": 234,
+   "y": 252,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4874,7 +4874,7 @@
     }
    },
    "x": 250,
-   "y": 352,
+   "y": 388,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4900,7 +4900,7 @@
     }
    },
    "x": 250,
-   "y": 234,
+   "y": 252,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
