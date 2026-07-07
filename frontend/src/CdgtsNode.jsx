@@ -27,6 +27,7 @@ export default function CdgtsNode({ data, selected }) {
   // boundary age = evaluated result (from the `age` input, per engine) → fall back to its own published value.
   const boundaryMa = data.result?.distribution?.value_ma ?? data.params?.distribution?.value_ma
   const isUnit = data.nodeType === 'unit'
+  const isMerge = data.nodeType === 'merge'
   const color = isBoundary ? BOUNDARY_COLOR : isUnit ? UNIT_COLOR : (CATEGORY_COLOR[data.category] || '#888')
   const rows = Math.max(inputs.length, outputs.length, 1)
 
@@ -42,7 +43,7 @@ export default function CdgtsNode({ data, selected }) {
         <span className="cdgts-node__title" title={data.description || undefined}>
           {data.label || data.nodeType}
         </span>
-        <span className="cdgts-node__cat">{isBoundary ? '◈ boundary' : isUnit ? '▭ time period' : data.category}</span>
+        <span className="cdgts-node__cat">{isBoundary ? '◈ boundary' : isUnit ? '▭ time period' : isMerge ? '▽ Merge' : data.category}</span>
       </div>
       {isBoundary && boundaryMa != null && (
         <div className="cdgts-node__bage"
