@@ -107,9 +107,13 @@
   - **P05.2 ✅**([107](devlog/20260707_107_p05-2-ownership-visibility.md)) — Graph 소유/가시성(공개+시스템+내
     것; 남 샌드박스 404), 쓰기=owner, Release.owner + `<user>` 이름 세그먼트. 프론트 Save/Bake 게이팅·🔒배지.
   - **P05.3 ✅**([108](devlog/20260707_108_p05-3-fork.md)) — Fork 깊은 복제(`forked_from`), `POST fork/`,
-    프론트 Fork 버튼. **여기까지 = 로그인→fork→편집→bake→Vault 흐름 작동.**
-  - **P05.4 ⬜(다음, MVP 마지막)** — Propose/Review = CI: proposed 전이 + 얇은 Proposal + verify diff 리뷰 + ratify.
-  - **P05.5 ⬜(MVP 밖)** — 샌드박스 오버라이드(아크 B seam). pytest **105**.
+    프론트 Fork 버튼.
+  - **P05.4 ✅**([109](devlog/20260707_109_p05-4-propose-review-ratify.md)) — Proposal 모델 + propose/ratify/
+    reject + `can_ratify`(중앙) + Proposals 리뷰 뷰(verify diff 재사용). **아크 C MVP 완성.**
+  - **P05.5 ⬜(MVP 밖)** — 샌드박스 오버라이드(아크 B seam).
+  - **MVP 흐름**: 로그인 → fork → 편집 → (bake→Vault) / propose → review → **ratify**(새 baseline). pytest **110**.
+    ⚠ **미배포** — 스키마 migration(accounts.0001, releases.0006·0007, graph.0008) 포함. 배포 시 관리자 계정·
+    ICS Authority·Membership 세팅 필요(초대제).
 
 ### 후속 (선택, 우선순위 대략순)
 
