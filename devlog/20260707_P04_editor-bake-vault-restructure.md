@@ -39,17 +39,17 @@
   (version 표기 = 순번/timestamp/사용자 라벨 중 택), provenance 필드(source graph FK + 편집 시점/graph
   content-hash + baked_at). "종류" 구분(bake 스냅샷 vs published 공표 vs baseline). 목록/조회 API.
 - **P04.2 Editor Bake 액션(프론트)** — Save/Evaluate/Bake 3버튼 명확화(상태표시와 함께). Bake → 라벨 입력
-  (**편집 가능한 기본값 자동 제안**: `TimeScale.Release.YYYYMMDD.NN`, NN=그날 순번 zero-pad) → Release 생성
-  → Vault로 이동 옵션.
+  (**편집 가능한 기본값 자동 제안**: `GeologicTimeScale.Release.YYYYMMDD.NN`, NN=그날 순번 zero-pad) →
+  Release 생성 → Vault로 이동 옵션.
 - **P04.3 Vault 허브(프론트)** — nav 2개로 축소. Vault: 목록 + 표현 토글(뷰 4종 재사용) + Diff(2선택).
 - **P04.4 live vs baked 경계** — 라이브 미리보기는 Editor 문맥 유지, Vault는 baked Release만.
 
 ## 열린 결정
 
-- bake 버전 표기 — **기본 제안 `TimeScale.Release.YYYYMMDD.NN`**(편집 가능). NN은 그날 순번(zero-pad),
-  기존 bake 조회로 증가. `version` 필드는 유니크여야 하므로 충돌 회피 필요 — 전역 일일 순번이면 충분하나,
-  그래프별 계보를 이름에 담으려면 graph slug 포함도 고려(예: `TimeScale.Release.<slug>.YYYYMMDD.NN`). 기존
-  `graph:<slug>`·`ICS-2024/12` 표기와 공존.
+- bake 버전 표기 — **기본 제안 `GeologicTimeScale.Release.YYYYMMDD.NN`**(편집 가능). NN은 그날 순번(zero-pad),
+  기존 bake 조회로 증가. **멀티유저(아크 C) 전환 시 중간에 user id 삽입 →
+  `GeologicTimeScale.Release.<userid>.YYYYMMDD.NN`**(사용자별 네임스페이스 + `version` 유니크성 자연 확보).
+  기존 `graph:<slug>`·`ICS-2024/12` 표기와 공존.
 - Release "종류" 명시 필드(kind: bake|published|baseline) 도입 여부 — 현재는 version 문자열/is_baseline로 부분 구분.
 - Vault 목록 범위·가시성 — 현재 전부 공개, C에서 소유·가시성 부여.
 
@@ -58,3 +58,5 @@
 - Vault의 아티팩트(불변 Release + provenance)가 **C의 공유·fork·PR·비교 단위**. P04에서 아티팩트를 1급으로
   세우면 C는 "아티팩트에 owner·가시성·리뷰를 붙이는 일"로 축소된다.
 - **Bake = CD의 deploy/release 순간.** proposed→ratified 승격 워크플로우는 P05(아크 C).
+- bake 이름에 **user id 세그먼트 삽입**(`...Release.<userid>.YYYYMMDD.NN`)이 C 전환의 자연스러운 접점 —
+  사용자별 네임스페이스가 곧 소유·가시성의 씨앗.
