@@ -802,6 +802,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const canEdit = authed && (currentGraph?.owner === user.username || user.is_staff)
   const canBake = authed
   const canPropose = canEdit && currentGraph?.status === 'sandbox'
+  const [actionsOpen, setActionsOpen] = useState(false)
 
   // Reload the visible graph list when auth identity changes (login reveals your graphs; logout hides them).
   useEffect(() => {
@@ -875,21 +876,38 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               🔒 Read-only
             </span>
           )}
-          {authed && (
-            <button onClick={onFork} className={canEdit ? 'fork-btn' : 'fork-btn primary'} disabled={!graphId}
-                    title="Fork — copy this graph into a new sandbox you own">Fork</button>
-          )}
-          <button onClick={onEvaluate}>Evaluate</button>
-          <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
-          <button onClick={onOpenBake} className="bake-btn" disabled={!graphId || !canBake}
-                  title={canBake ? 'Bake — freeze this graph\'s outputs into a new immutable Release kept in the Vault' : 'Sign in to bake a Release'}>Bake…</button>
-          {canEdit && (
-            <button onClick={onPropose} className="propose-btn" disabled={!canPropose}
-                    title={canPropose ? 'Propose this graph for review against the published baseline (CI)'
-                                      : (currentGraph?.status !== 'sandbox' ? `Already ${currentGraph?.status}` : 'Propose')}>
-              {currentGraph?.status === 'proposed' ? 'Proposed' : 'Propose'}
-            </button>
-          )}
+          <div className="tb-menu">
+            <button className={`tb-menu-btn${actionsOpen ? ' open' : ''}`} onClick={() => setActionsOpen((v) => !v)}
+                    disabled={!graphId} title="Graph actions — evaluate, verify, bake, propose, fork">Actions ▾</button>
+            {actionsOpen && (
+              <>
+                <div className="tb-menu-backdrop" onClick={() => setActionsOpen(false)} />
+                <div className="tb-menu-list" role="menu">
+                  <button role="menuitem" onClick={() => { setActionsOpen(false); onEvaluate() }}
+                          title="Re-run the graph and attach per-node results">Evaluate</button>
+                  <button role="menuitem" onClick={() => { setActionsOpen(false); onVerify() }}
+                          title="Science CI — re-bake, then diff against the published baseline">Verify vs published</button>
+                  <div className="tb-menu-sep" />
+                  <button role="menuitem" disabled={!graphId || !canBake} onClick={() => { setActionsOpen(false); onOpenBake() }}
+                          title={canBake ? 'Freeze outputs into a new immutable Release kept in the Vault' : 'Sign in to bake a Release'}>Bake…</button>
+                  {canEdit && (
+                    <button role="menuitem" className="propose-item" disabled={!canPropose} onClick={() => { setActionsOpen(false); onPropose() }}
+                            title={canPropose ? 'Propose this graph for review against the published baseline (CI)'
+                                              : (currentGraph?.status !== 'sandbox' ? `Already ${currentGraph?.status}` : 'Propose')}>
+                      {currentGraph?.status === 'proposed' ? 'Proposed ✓' : 'Propose…'}
+                    </button>
+                  )}
+                  {authed && (
+                    <>
+                      <div className="tb-menu-sep" />
+                      <button role="menuitem" disabled={!graphId} onClick={() => { setActionsOpen(false); onFork() }}
+                              title="Copy this graph into a new sandbox you own">Fork</button>
+                    </>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
                   title={activeGroup ? 'Nest the selection as a subgroup inside this group' : 'Combine the selected nodes·groups into one group (merges if groups are mixed in)'}>
@@ -901,6 +919,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               Ungroup{selectedGroupKeys.length > 1 ? ` (${selectedGroupKeys.length})` : ''}
             </button>
           )}
+          <div className="tb-spacer" />
           <button onClick={() => setShowResults((v) => !v)} className={showResults ? 'active' : ''} disabled={!runMeta} title="View final node outputs">
             Results{outputs.length ? ` (${outputs.length})` : ''}
           </button>
@@ -910,7 +929,6 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
                   title={inspectorCollapsed ? 'Show the properties panel' : 'Hide the properties panel'}>
             {inspectorCollapsed ? 'Properties ▸' : 'Properties ◂'}
           </button>
-          <span className="status">{status}</span>
         </div>
 
         {(activeGroup || groups.length > 0) && (
@@ -983,6 +1001,11 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         </div>
         {showResults && <ResultsPanel outputs={outputs} meta={runMeta} onClose={() => setShowResults(false)} />}
         {verifyData && <VerifyPanel diff={verifyData} onClose={() => setVerifyData(null)} />}
+
+        <div className="editor-statusbar" title="Latest editor status">
+          <span className={`sb-dot ${dirty ? 'dirty' : 'clean'}`} />
+          <span className="sb-text">{status || 'Ready'}</span>
+        </div>
 
         {menu && (
           <>
