@@ -212,6 +212,11 @@ body {
 .order-node.ok .order-node__ineq { color: #3e9455; }
 .order-node.violated .order-node__ineq { color: #d24b4b; }
 .order-node__ineq.none { color: #cbbcdd; }
+/* evaluated result age readout (all node types with a value) */
+.insp-result { display: flex; align-items: center; gap: 8px; margin: 8px 0; padding: 6px 10px; background: #f4f0fb; border-radius: 6px; font-variant-numeric: tabular-nums; }
+.insp-result-lbl { font-size: 10px; color: #7a6b90; text-transform: uppercase; letter-spacing: 0.4px; }
+.insp-result-val { font-size: 14px; font-weight: 700; color: #2b1c3f; margin-left: auto; }
+.insp-result-cached { color: #2d7d46; }
 .insp-verdict { margin: 8px 0; padding: 6px 8px; border-radius: 6px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .insp-verdict.good { background: #e5f4e9; color: #2f7d45; }
 .insp-verdict.bad { background: #fbe3e3; color: #b0332f; }
@@ -342,6 +347,10 @@ body {
 /* boundary — title only (half height). No body, so round all header corners and reduce padding. */
 .cdgts-node.boundary { border-width: 1.5px; }
 .cdgts-node.boundary .cdgts-node__header { border-radius: 4px; padding: 3px 9px; }
+/* boundary age readout: input-derived (or published fallback) age, shown below the title. Header rounds top-only when present. */
+.cdgts-node.boundary:has(.cdgts-node__bage) .cdgts-node__header { border-radius: 4px 4px 0 0; }
+.cdgts-node__bage { padding: 2px 9px; text-align: center; font-size: 11px; font-weight: 600; color: #4a2f6b; background: #f3ecfb; border-radius: 0 0 3px 3px; font-variant-numeric: tabular-nums; }
+.cdgts-node__bage .cached { color: #2d7d46; }
 /* title ellipsizes to fit width — so the node doesn't stretch to the title length. Details go in the description tooltip. */
 .cdgts-node__title {
   font-weight: 600; flex: 1 1 auto; min-width: 0;

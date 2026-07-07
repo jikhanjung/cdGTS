@@ -24,6 +24,8 @@ export default function CdgtsNode({ data, selected }) {
   const outputs = ports.filter((p) => p.direction === 'out' && !(p.name in VPORT))
   const vports = ports.filter((p) => p.name in VPORT)
   const isBoundary = data.nature === 'boundary'
+  // boundary age = evaluated result (from the `age` input, per engine) → fall back to its own published value.
+  const boundaryMa = data.result?.distribution?.value_ma ?? data.params?.distribution?.value_ma
   const isUnit = data.nodeType === 'unit'
   const color = isBoundary ? BOUNDARY_COLOR : isUnit ? UNIT_COLOR : (CATEGORY_COLOR[data.category] || '#888')
   const rows = Math.max(inputs.length, outputs.length, 1)
@@ -42,6 +44,12 @@ export default function CdgtsNode({ data, selected }) {
         </span>
         <span className="cdgts-node__cat">{isBoundary ? '◈ boundary' : isUnit ? '▭ time period' : data.category}</span>
       </div>
+      {isBoundary && boundaryMa != null && (
+        <div className="cdgts-node__bage"
+             title={data.result ? (data.result.cached ? 'age (cache reuse)' : 'age (recomputed)') : 'published value — evaluate to resolve inputs'}>
+          {boundaryMa} Ma{data.result?.cached && <span className="cached"> •</span>}
+        </div>
+      )}
       {/* boundary shows title only (half height). Hide port labels and result but keep the handles. */}
       {!isBoundary && (
         <div className="cdgts-node__body" style={{ minHeight: rows * 22 }}>

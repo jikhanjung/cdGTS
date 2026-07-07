@@ -190,6 +190,14 @@ export default function Inspector({ node, type, group, groupExtra, nodeKeys, ope
         <button className="mobile-only insp-close" onClick={onClose} title="Close">✕</button>
       </div>
 
+      {node.data.result?.distribution?.value_ma != null && (
+        <div className="insp-result" title={node.data.result.cached ? 'cache reuse' : 'recomputed'}>
+          <span className="insp-result-lbl">result age</span>
+          <span className="insp-result-val">{node.data.result.distribution.value_ma} Ma</span>
+          {node.data.result.cached && <span className="insp-result-cached">•</span>}
+        </div>
+      )}
+
       {node.data.result?.distribution?.kind === 'order' && (
         <div className={`insp-verdict ${node.data.result.distribution.ok ? 'good'
           : node.data.result.distribution.ok === false ? 'bad' : 'none'}`}>
