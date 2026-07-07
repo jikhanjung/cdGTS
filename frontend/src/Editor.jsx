@@ -20,6 +20,7 @@ import {
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
   cdgtsGroupIo: GroupIoNode, cdgtsBound: BoundNode, cdgtsOrder: OrderNode }
 const DEFAULT_NODE_WIDTH = 172   // Default width (px). User can adjust via the right handle.
+const GROUP_NODE_WIDTH = 200     // Collapsed group node width (px). Fixed so long I/O labels ellipsis instead of stretching the node.
 
 // Is the primary pointer touch (phone/tablet)? — pan/selection interactions differ (touch = drag pan · pinch zoom).
 const IS_TOUCH = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -120,7 +121,7 @@ function buildView(nodes, edges, groups, activeGroup) {
   const groupById = {}
   groups.forEach((g) => {
     if (parentOf[g.key] !== level) return
-    const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y },
+    const gn = { id: `group:${g.key}`, type: 'cdgtsGroup', position: { x: g.x, y: g.y }, width: GROUP_NODE_WIDTH,
       data: { key: g.key, name: g.name, kind: g.kind || 'container', inputs: [], outputs: [], count: subtreeCount[g.key] || 0 } }
     groupById[g.key] = gn
     groupNodes.push(gn)
