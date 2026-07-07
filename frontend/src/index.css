@@ -48,6 +48,20 @@ body {
   background: #e6e6ef; color: #55556a; }
 .vault-kind.published, .vault-kind.baseline { background: #e8f5ec; color: #2f7d45; }
 .vault-kind.bake { background: #f4efff; color: #6a3fb0; }
+.vault-kind.sandbox { background: #eef3fb; color: #2f5aa8; }
+.vault-sandbox { border: 1px solid #b7c7e6; background: #eef3fb; color: #2f5aa8; border-radius: 6px;
+  padding: 5px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.vault-sandbox:hover { background: #e0eaf8; }
+.overrides { padding: 18px 22px; max-width: 720px; }
+.overrides .hint { font-size: 12px; color: #767688; margin: 0 0 12px; }
+.ov-table { border-collapse: collapse; font-size: 13px; }
+.ov-table th, .ov-table td { border: 1px solid #e2e2ea; padding: 5px 10px; text-align: left; }
+.ov-table td.mono { font-family: ui-monospace, Menlo, monospace; }
+.ov-table tr.ov-changed { background: #fdf7e8; }
+.ov-table select { font-size: 12px; padding: 3px 6px; border: 1px solid #cfcfe0; border-radius: 5px; }
+.ov-reset { margin-left: 6px; border: 1px solid #cfcfe0; background: #fff; border-radius: 5px; cursor: pointer; padding: 1px 6px; }
+.ov-base { color: #767688; }
+.ov-status { font-size: 12px; color: #767688; margin-top: 10px; }
 .vault-src { font-family: ui-monospace, Menlo, monospace; }
 .vault-count { margin-left: auto; }
 .vault-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }

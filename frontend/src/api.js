@@ -83,3 +83,10 @@ export const bakeRelease = (id) =>
   fetch(`/api/releases/${id}/bake/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 export const diffReleases = (a, b) =>
   fetch(`/api/releases/diff/?a=${a}&b=${b}`).then(j)
+
+// --- sandbox overrides (P05.5) ---
+export const createSandbox = (id) =>
+  fetch(`/api/releases/${id}/sandbox/`, { method: 'POST', headers: csrfHeaders() }).then(j)
+export const releaseCandidates = (id) => fetch(`/api/releases/${id}/candidates/`).then(j)
+export const setReleaseOverride = (id, boundary, candidate) =>
+  fetch(`/api/releases/${id}/override/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ boundary, candidate: candidate || null }) }).then(j)

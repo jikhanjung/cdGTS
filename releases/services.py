@@ -33,18 +33,9 @@ def _write_graph_records(graph, release):
     return len(rows)
 
 
-def next_release_version(when=None, user=None):
-    """
-    Suggested immutable bake name: GeologicTimeScale.Release[.<user>].YYYYMMDD.NN
-    (NN = that user·day's zero-padded sequence). The <user> segment appears once a user is known (multiuser).
-    """
-    from django.utils import timezone
-    from django.utils.text import slugify
+def _next_seq(prefix):
+    """`<prefix>NN` where NN is the next zero-padded sequence among existing versions with that prefix."""
     from .models import Release
-
-    day = (when or timezone.now()).strftime("%Y%m%d")
-    seg = f"{slugify(user.get_username())}." if user is not None else ""
-    prefix = f"GeologicTimeScale.Release.{seg}{day}."
     used = Release.objects.filter(version__startswith=prefix).values_list("version", flat=True)
     n = 0
     for v in used:
@@ -53,6 +44,18 @@ def next_release_version(when=None, user=None):
         except (ValueError, IndexError):
             pass
     return f"{prefix}{n + 1:02d}"
+
+
+def _day(when=None):
+    from django.utils import timezone
+    return (when or timezone.now()).strftime("%Y%m%d")
+
+
+def next_release_version(when=None, user=None):
+    """Suggested immutable bake name: GeologicTimeScale.Release[.<user>].YYYYMMDD.NN (per user·day sequence)."""
+    from django.utils.text import slugify
+    seg = f"{slugify(user.get_username())}." if user is not None else ""
+    return _next_seq(f"GeologicTimeScale.Release.{seg}{_day(when)}.")
 
 
 def snapshot_graph(graph, label=None, user=None):
@@ -135,18 +138,7 @@ def affected_boundaries(diff):
 
 def next_published_version(when=None):
     """Auto name for a ratified public release: GeologicTimeScale.Published.YYYYMMDD.NN."""
-    from django.utils import timezone
-    from .models import Release
-    day = (when or timezone.now()).strftime("%Y%m%d")
-    prefix = f"GeologicTimeScale.Published.{day}."
-    used = Release.objects.filter(version__startswith=prefix).values_list("version", flat=True)
-    n = 0
-    for v in used:
-        try:
-            n = max(n, int(v[len(prefix):]))
-        except (ValueError, IndexError):
-            pass
-    return f"{prefix}{n + 1:02d}"
+    return _next_seq(f"GeologicTimeScale.Published.{_day(when)}.")
 
 
 def publish_graph(graph):
@@ -225,6 +217,82 @@ def bake_release(release):
         ))
     BoundaryRecord.objects.bulk_create(rows)
     return len(rows)
+
+
+# --- P05.5: sandbox = a baseline + per-boundary candidate overrides (Arc B seam) ---
+
+def next_sandbox_version(user, when=None):
+    from django.utils.text import slugify
+    seg = f"{slugify(user.get_username())}." if user is not None else ""
+    return _next_seq(f"GeologicTimeScale.Sandbox.{seg}{_day(when)}.")
+
+
+def create_sandbox_release(baseline, user):
+    """Fork a published baseline into a private sandbox Release: copy its selections, then bake (identical to start)."""
+    from .models import Release, Selection
+    sandbox = Release.objects.create(
+        version=next_sandbox_version(user), kind=Release.Kind.SANDBOX,
+        owner=user if (user is not None and user.is_authenticated) else None,
+        base=baseline, note=f"Sandbox of {baseline.version}",
+    )
+    Selection.objects.bulk_create([
+        Selection(release=sandbox, boundary=s.boundary, candidate=s.candidate)
+        for s in baseline.selections.select_related("boundary", "candidate")
+    ])
+    bake_release(sandbox)
+    return sandbox
+
+
+def set_override(sandbox, boundary_slug, candidate_slug):
+    """Override (or reset, candidate_slug=None → baseline's pick) one boundary's selected candidate, then re-bake."""
+    from chrono.models import Boundary
+    from .models import ModelCandidate, Selection
+    boundary = Boundary.objects.get(slug=boundary_slug)
+    sel = sandbox.selections.filter(boundary=boundary).first()
+
+    if candidate_slug is None:                                   # reset to baseline
+        base_sel = sandbox.base.selections.filter(boundary=boundary).first() if sandbox.base_id else None
+        if base_sel is None:
+            if sel:
+                sel.delete()
+        elif sel:
+            sel.candidate = base_sel.candidate
+            sel.save(update_fields=["candidate"])
+        else:
+            Selection.objects.create(release=sandbox, boundary=boundary, candidate=base_sel.candidate)
+    else:
+        candidate = ModelCandidate.objects.get(slug=candidate_slug)
+        if not candidate.outputs.filter(boundary=boundary).exists():
+            raise ValueError(f"{candidate_slug} has no output for {boundary_slug}.")
+        if sel:
+            sel.candidate = candidate
+            sel.save(update_fields=["candidate"])
+        else:
+            Selection.objects.create(release=sandbox, boundary=boundary, candidate=candidate)
+
+    bake_release(sandbox)
+    return sandbox
+
+
+def overridable_candidates(release):
+    """Boundaries with >1 competing candidate → override options + the release's current pick + baseline's pick."""
+    from django.db.models import Count
+    from .models import CandidateOutput
+    slugs = [m["boundary__slug"] for m in
+             CandidateOutput.objects.values("boundary__slug").annotate(n=Count("candidate")).filter(n__gt=1)]
+    cur = {s.boundary.slug: s.candidate.slug
+           for s in release.selections.select_related("boundary", "candidate")}
+    base = {}
+    if release.base_id:
+        base = {s.boundary.slug: s.candidate.slug
+                for s in release.base.selections.select_related("boundary", "candidate")}
+    rows = []
+    for slug in sorted(slugs):
+        options = sorted(set(CandidateOutput.objects.filter(boundary__slug=slug)
+                             .values_list("candidate__slug", flat=True)))
+        rows.append({"boundary": slug, "options": options,
+                     "selected": cur.get(slug), "baseline": base.get(slug)})
+    return rows
 
 
 def _narrate_record(rec, unit):

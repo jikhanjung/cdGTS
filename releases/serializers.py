@@ -18,11 +18,12 @@ class ReleaseListSerializer(serializers.ModelSerializer):
     authority = serializers.SlugRelatedField(slug_field="slug", read_only=True)
     owner = serializers.SlugRelatedField(slug_field="username", read_only=True)
     source_graph = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+    base = serializers.SlugRelatedField(slug_field="version", read_only=True)
     record_count = serializers.IntegerField(source="records.count", read_only=True)
 
     class Meta:
         model = Release
-        fields = ["id", "version", "kind", "is_baseline", "owner", "source_graph",
+        fields = ["id", "version", "kind", "is_baseline", "owner", "source_graph", "base",
                   "authority", "note", "created_at", "record_count"]
 
 
@@ -30,12 +31,13 @@ class ReleaseSerializer(serializers.ModelSerializer):
     authority = serializers.SlugRelatedField(slug_field="slug", read_only=True)
     owner = serializers.SlugRelatedField(slug_field="username", read_only=True)
     source_graph = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+    base = serializers.SlugRelatedField(slug_field="version", read_only=True)
     records = BoundaryRecordSerializer(many=True, read_only=True)
     clamps = serializers.SlugRelatedField(slug_field="slug", many=True, read_only=True)
 
     class Meta:
         model = Release
-        fields = ["id", "version", "kind", "is_baseline", "owner", "source_graph",
+        fields = ["id", "version", "kind", "is_baseline", "owner", "source_graph", "base",
                   "authority", "note", "created_at", "clamps", "records"]
 
 

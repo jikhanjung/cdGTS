@@ -127,6 +127,7 @@ class Release(models.Model):
     class Kind(models.TextChoices):
         PUBLISHED = "published", "published"
         BAKE = "bake", "bake"
+        SANDBOX = "sandbox", "sandbox"        # a baseline + per-boundary candidate overrides (P05.5)
         TRANSIENT = "transient", "transient"
 
     version = models.CharField(max_length=100, unique=True, help_text="e.g. ICC-2024/12 · GeologicTimeScale.Release.<user>.YYYYMMDD.NN")
@@ -138,6 +139,10 @@ class Release(models.Model):
     source_graph = models.ForeignKey(
         "graph.Graph", null=True, blank=True, on_delete=models.SET_NULL, related_name="bakes",
         help_text="Provenance: the graph this artifact was baked from (bake/transient kinds).",
+    )
+    base = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.SET_NULL, related_name="sandboxes",
+        help_text="The baseline this sandbox derives from (sandbox kind = base + per-boundary overrides).",
     )
     authority = models.ForeignKey(
         "chrono.Authority", null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",

@@ -70,6 +70,59 @@ def test_vault_list_excludes_transient(chrono, nodes):
     assert "transient" not in kinds and "bake" in kinds
 
 
+# --- P05.5: sandbox overrides (baseline + per-boundary candidate swap) ---
+
+@pytest.fixture
+def sandbox_setup(chrono):
+    """A baseline with two competing candidates on base-cambrian (A=538.8 selected, B=540.0)."""
+    from django.contrib.auth import get_user_model
+    camb = Boundary.objects.get(slug="base-cambrian")
+    a = _candidate("cand-a", camb, 538.8)
+    b = _candidate("cand-b", camb, 540.0)
+    baseline = _release("ICS-2024/12", camb, a)          # baseline picks A
+    baseline.is_baseline = True; baseline.kind = Release.Kind.PUBLISHED; baseline.save()
+    bake_release(baseline)
+    user = get_user_model().objects.create_user("ann", password="pw12345")
+    return {"baseline": baseline, "camb": camb, "a": a, "b": b, "user": user}
+
+
+def test_sandbox_copies_baseline_then_overrides(sandbox_setup):
+    from releases.services import create_sandbox_release, set_override
+    s = sandbox_setup
+    sb = create_sandbox_release(s["baseline"], s["user"])
+    assert sb.kind == Release.Kind.SANDBOX and sb.base_id == s["baseline"].id and sb.owner == s["user"]
+    assert sb.records.get(boundary=s["camb"]).value_ma == 538.8       # starts identical to baseline
+    set_override(sb, "base-cambrian", "cand-b")
+    assert sb.records.get(boundary=s["camb"]).value_ma == 540.0       # overridden
+    from releases.services import diff_releases
+    assert diff_releases(s["baseline"], sb)["value_diff"][0]["delta"] == round(540.0 - 538.8, 6)
+    set_override(sb, "base-cambrian", None)                            # reset to baseline
+    assert sb.records.get(boundary=s["camb"]).value_ma == 538.8
+
+
+def test_sandbox_endpoints_and_visibility(sandbox_setup):
+    s = sandbox_setup
+    owner = APIClient(); owner.force_authenticate(user=s["user"])
+    sb = owner.post(f"/api/releases/{s['baseline'].pk}/sandbox/")
+    assert sb.status_code == 201 and sb.data["kind"] == "sandbox"
+    sid = sb.data["id"]
+    # overridable candidates listed
+    cands = owner.get(f"/api/releases/{sid}/candidates/").data["boundaries"]
+    row = next(r for r in cands if r["boundary"] == "base-cambrian")
+    assert set(row["options"]) == {"cand-a", "cand-b"} and row["selected"] == "cand-a"
+    # override via endpoint
+    ov = owner.post(f"/api/releases/{sid}/override/", {"boundary": "base-cambrian", "candidate": "cand-b"}, format="json")
+    assert ov.status_code == 200
+    assert next(r for r in ov.data["records"] if r["boundary"] == "base-cambrian")["value_ma"] == 540.0
+    # other users can't see or override this private sandbox
+    from django.contrib.auth import get_user_model
+    other = APIClient(); other.force_authenticate(user=get_user_model().objects.create_user("bob", password="pw12345"))
+    assert sid not in {r["id"] for r in other.get("/api/releases/").data}
+    assert other.post(f"/api/releases/{sid}/override/", {"boundary": "base-cambrian", "candidate": "cand-a"}, format="json").status_code in (403, 404)
+    # anonymous cannot create a sandbox
+    assert APIClient().post(f"/api/releases/{s['baseline'].pk}/sandbox/").status_code in (401, 403)
+
+
 # --- P05.4: propose / review / ratify (= CI) ---
 
 @pytest.fixture

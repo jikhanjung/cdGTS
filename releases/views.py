@@ -13,8 +13,9 @@ from accounts.permissions import can_ratify
 from .models import Proposal, Release
 from .serializers import ProposalSerializer, ReleaseListSerializer, ReleaseSerializer
 from .services import (
-    bake_release, diff_graph_vs_release, diff_releases, narrate_release,
-    propose_graph, ratify_proposal, reject_proposal, snapshot_graph, verify_graph,
+    bake_release, create_sandbox_release, diff_graph_vs_release, diff_releases, narrate_release,
+    overridable_candidates, propose_graph, ratify_proposal, reject_proposal, set_override,
+    snapshot_graph, verify_graph,
 )
 
 
@@ -31,8 +32,14 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        # Vault = kept artifacts only; the scratch verify release (kind=transient) is hidden.
+        # Vault = kept artifacts; hide the scratch verify release (transient) and others' private sandboxes.
+        from django.db.models import Q
         qs = super().get_queryset().exclude(kind=Release.Kind.TRANSIENT)
+        user = self.request.user
+        if user.is_authenticated:
+            qs = qs.exclude(Q(kind=Release.Kind.SANDBOX) & ~Q(owner=user))
+        else:
+            qs = qs.exclude(kind=Release.Kind.SANDBOX)
         kind = self.request.query_params.get("kind")
         if kind:
             qs = qs.filter(kind=kind)
@@ -53,6 +60,40 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
         a = get_object_or_404(Release, pk=request.query_params.get("a"))
         b = get_object_or_404(Release, pk=request.query_params.get("b"))
         return Response(diff_releases(a, b))
+
+    # --- P05.5 sandbox overrides ---
+    @action(detail=True, methods=["post"])
+    def sandbox(self, request, pk=None):
+        """Fork this published release into a private sandbox the caller owns (baseline + overrides)."""
+        if not request.user.is_authenticated:
+            return Response({"detail": "Sign in to sandbox a release."}, status=401)
+        baseline = self.get_object()
+        if baseline.kind == Release.Kind.SANDBOX:
+            return Response({"detail": "Sandbox a published/baseline release, not another sandbox."}, status=400)
+        sandbox = create_sandbox_release(baseline, request.user)
+        return Response(ReleaseSerializer(self.get_queryset().get(pk=sandbox.pk)).data, status=201)
+
+    @action(detail=True, methods=["get"])
+    def candidates(self, request, pk=None):
+        """Overridable boundaries (>1 competing candidate) + options + current/baseline pick."""
+        return Response({"boundaries": overridable_candidates(self.get_object())})
+
+    @action(detail=True, methods=["post"])
+    def override(self, request, pk=None):
+        """Set/reset one boundary's candidate on your sandbox, then re-bake. body {boundary, candidate|null}."""
+        release = self.get_object()
+        if release.kind != Release.Kind.SANDBOX:
+            return Response({"detail": "Overrides apply to sandbox releases only."}, status=400)
+        if not (request.user.is_authenticated and (request.user.is_staff or release.owner_id == request.user.id)):
+            return Response({"detail": "Only the sandbox owner can override it."}, status=403)
+        boundary = request.data.get("boundary")
+        if not boundary:
+            return Response({"detail": "boundary is required."}, status=400)
+        try:
+            set_override(release, boundary, request.data.get("candidate"))
+        except ValueError as e:
+            return Response({"detail": str(e)}, status=400)
+        return Response(ReleaseSerializer(self.get_queryset().get(pk=release.pk)).data)
 
 
 class GraphBakeView(APIView):

@@ -30,7 +30,7 @@ export default function App() {
         {view === 'editor'
           ? <ReactFlowProvider><Editor onBaked={goVault} onProposed={() => setView('proposals')} user={user} /></ReactFlowProvider>
           : view === 'vault'
-            ? <Vault initialReleaseId={vaultReleaseId} />
+            ? <Vault initialReleaseId={vaultReleaseId} user={user} />
             : <Proposals user={user} />}
       </div>
     </div>
