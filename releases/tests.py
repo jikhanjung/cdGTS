@@ -70,6 +70,83 @@ def test_vault_list_excludes_transient(chrono, nodes):
     assert "transient" not in kinds and "bake" in kinds
 
 
+# --- P05.4: propose / review / ratify (= CI) ---
+
+@pytest.fixture
+def ci(chrono, nodes):
+    from django.contrib.auth import get_user_model
+    from chrono.models import Authority, Boundary
+    from accounts.models import Membership
+    from releases.models import BoundaryRecord
+    User = get_user_model()
+
+    author = User.objects.create_user("author", password="pw12345")
+    g = _graph_with_gateway()                                   # base-cambrian gateway → 538.8
+    Graph.objects.filter(pk=g.pk).update(owner=author)
+    g.refresh_from_db()
+
+    camb = Boundary.objects.get(slug="base-cambrian")
+    baseline = Release.objects.create(version="ICS-baseline", kind=Release.Kind.PUBLISHED, is_baseline=True)
+    BoundaryRecord.objects.create(release=baseline, boundary=camb, value_ma=540.0,
+                                  definition_type=camb.definition_type or "")
+
+    ratifier = User.objects.create_user("chair", password="pw12345")
+    ics = Authority.objects.create(slug="ics-gov", name="ICS Gov", kind=Authority.Kind.ICS)
+    Membership.objects.create(user=ratifier, authority=ics, role=Membership.Role.CHAIR)
+    return {"g": g, "author": author, "ratifier": ratifier, "baseline": baseline}
+
+
+def _propose(ci):
+    api = APIClient(); api.force_authenticate(user=ci["author"])
+    return api.post(f"/api/graphs/{ci['g'].pk}/propose/", {"comment": "shift"}, format="json")
+
+
+def test_propose_sets_proposed_and_affected(ci):
+    resp = _propose(ci)
+    assert resp.status_code == 201, resp.data
+    p = resp.data["proposal"]
+    assert p["state"] == "open" and p["affected"] == ["base-cambrian"] and p["author"] == "author"
+    assert resp.data["diff"]["value_diff"][0]["delta"] == -1.2      # 538.8 − 540
+    assert Graph.objects.get(pk=ci["g"].pk).status == "proposed"
+
+
+def test_only_owner_proposes(ci):
+    other = APIClient(); other.force_authenticate(user=ci["ratifier"])
+    assert other.post(f"/api/graphs/{ci['g'].pk}/propose/").status_code == 403
+
+
+def test_ratify_publishes_new_baseline(ci):
+    pid = _propose(ci).data["proposal"]["id"]
+    # author (personal fork only) cannot ratify
+    aapi = APIClient(); aapi.force_authenticate(user=ci["author"])
+    assert aapi.post(f"/api/proposals/{pid}/ratify/").status_code == 403
+    # ICS member can
+    rapi = APIClient(); rapi.force_authenticate(user=ci["ratifier"])
+    ok = rapi.post(f"/api/proposals/{pid}/ratify/", {"comment": "ok"}, format="json")
+    assert ok.status_code == 200 and ok.data["proposal"]["state"] == "merged"
+    assert Graph.objects.get(pk=ci["g"].pk).status == "ratified"
+    baselines = Release.objects.filter(is_baseline=True)
+    assert baselines.count() == 1                                   # old demoted, new sole baseline
+    assert baselines.get().version.startswith("GeologicTimeScale.Published.")
+    assert baselines.get().records.get(boundary__slug="base-cambrian").value_ma == 538.8
+
+
+def test_reject_returns_to_sandbox(ci):
+    pid = _propose(ci).data["proposal"]["id"]
+    rapi = APIClient(); rapi.force_authenticate(user=ci["ratifier"])
+    resp = rapi.post(f"/api/proposals/{pid}/reject/", {"comment": "no"}, format="json")
+    assert resp.status_code == 200 and resp.data["proposal"]["state"] == "rejected"
+    assert Graph.objects.get(pk=ci["g"].pk).status == "sandbox"
+    assert Release.objects.get(is_baseline=True).version == "ICS-baseline"   # unchanged
+
+
+def test_proposal_detail_carries_diff(ci):
+    pid = _propose(ci).data["proposal"]["id"]
+    d = APIClient().get(f"/api/proposals/{pid}/").data                # anonymous public review
+    assert d["diff"]["value_diff"][0]["boundary"] == "base-cambrian"
+    assert d["can_ratify"] is False
+
+
 def test_next_release_version_sequence(chrono):
     day = timezone.now().strftime("%Y%m%d")
     assert next_release_version() == f"GeologicTimeScale.Release.{day}.01"

@@ -8,11 +8,13 @@ from django.views.decorators.http import require_POST
 
 
 def user_payload(user):
+    from .permissions import can_ratify
     return {
         "authenticated": True,
         "id": user.id,
         "username": user.get_username(),
         "is_staff": user.is_staff,
+        "can_ratify": can_ratify(user),
         "memberships": [
             {
                 "authority": m.authority.slug,

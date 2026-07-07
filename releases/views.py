@@ -8,9 +8,14 @@ from rest_framework.views import APIView
 
 from graph.models import Graph
 
-from .models import Release
-from .serializers import ReleaseListSerializer, ReleaseSerializer
-from .services import bake_graph, bake_release, diff_releases, narrate_release, snapshot_graph
+from accounts.permissions import can_ratify
+
+from .models import Proposal, Release
+from .serializers import ProposalSerializer, ReleaseListSerializer, ReleaseSerializer
+from .services import (
+    bake_release, diff_graph_vs_release, diff_releases, narrate_release,
+    propose_graph, ratify_proposal, reject_proposal, snapshot_graph, verify_graph,
+)
 
 
 class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -84,22 +89,73 @@ class GraphVerifyView(APIView):
 
     def post(self, request, pk):
         graph = get_object_or_404(Graph, pk=pk)
-        baseline = Release.objects.filter(is_baseline=True).order_by("version").first()
+        baseline, d = verify_graph(graph)
         if baseline is None:
             return Response({"detail": "공표 기준(is_baseline) 릴리스가 없습니다."}, status=400)
-        release, n = bake_graph(graph)
-        d = diff_releases(baseline, release)          # from=공표 → to=그래프
-        deltas = [x["delta"] for x in d["value_diff"] if x["delta"] is not None]
-        td = d["topology_diff"]
-        d["summary"] = {
-            "baked": n,
-            "moved": len(d["value_diff"]),
-            "max_abs_delta": round(max((abs(x) for x in deltas), default=0.0), 4),
-            "added": sum(1 for t in td if t["op"] == "added"),
-            "removed": sum(1 for t in td if t["op"] == "removed"),
-            "retyped": sum(1 for t in td if t["op"] == "retype"),
-        }
         return Response(d)
+
+
+class GraphProposeView(APIView):
+    """
+    POST /api/graphs/{id}/propose/ — 소유자가 샌드박스 그래프를 공표 기준 대비 제안(sandbox→proposed).
+    body {comment}. 반환: {proposal, diff}. (P05.4)
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, pk):
+        graph = get_object_or_404(Graph, pk=pk)
+        if not (request.user.is_staff or graph.owner_id == request.user.id):
+            return Response({"detail": "Only the graph owner can propose it."}, status=403)
+        try:
+            proposal, diff = propose_graph(graph, request.user, comment=request.data.get("comment", ""))
+        except ValueError as e:
+            return Response({"detail": str(e)}, status=400)
+        return Response({"proposal": ProposalSerializer(proposal).data, "diff": diff}, status=201)
+
+
+class ProposalViewSet(viewsets.ReadOnlyModelViewSet):
+    """
+    제안 목록/상세 + ratify/reject (P05.4 = CI).
+      GET  /api/proposals/            — 목록(?state=open)
+      GET  /api/proposals/{id}/       — 상세 + 리뷰 diff(제안 vs baseline)
+      POST /api/proposals/{id}/ratify — 권한자 승인 → 새 공표 Release + graph ratified
+      POST /api/proposals/{id}/reject — 권한자 거절 → graph sandbox 복귀
+    """
+    queryset = Proposal.objects.select_related("graph", "baseline", "author", "reviewer", "result_release")
+    serializer_class = ProposalSerializer
+    permission_classes = [permissions.AllowAny]           # 리뷰는 공개 열람
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        state = self.request.query_params.get("state")
+        return qs.filter(state=state) if state else qs
+
+    def retrieve(self, request, *args, **kwargs):
+        proposal = self.get_object()
+        data = ProposalSerializer(proposal).data
+        data["diff"] = diff_graph_vs_release(proposal.graph, proposal.baseline)
+        data["can_ratify"] = can_ratify(request.user, proposal)
+        return Response(data)
+
+    @action(detail=True, methods=["post"])
+    def ratify(self, request, pk=None):
+        proposal = self.get_object()
+        if not can_ratify(request.user, proposal):
+            return Response({"detail": "You are not a ratifying authority member."}, status=403)
+        if proposal.state != Proposal.State.OPEN:
+            return Response({"detail": f"Proposal already {proposal.state}."}, status=400)
+        release = ratify_proposal(proposal, request.user, comment=request.data.get("comment", ""))
+        return Response({"proposal": ProposalSerializer(proposal).data, "release": ReleaseSerializer(release).data})
+
+    @action(detail=True, methods=["post"])
+    def reject(self, request, pk=None):
+        proposal = self.get_object()
+        if not can_ratify(request.user, proposal):
+            return Response({"detail": "You are not a ratifying authority member."}, status=403)
+        if proposal.state != Proposal.State.OPEN:
+            return Response({"detail": f"Proposal already {proposal.state}."}, status=400)
+        reject_proposal(proposal, request.user, comment=request.data.get("comment", ""))
+        return Response({"proposal": ProposalSerializer(proposal).data})
 
 
 _GEO = {1: "Eon", 2: "Era", 3: "Period", 4: "Subperiod", 5: "Epoch", 6: "Age"}

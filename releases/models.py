@@ -161,6 +161,38 @@ class Release(models.Model):
         return (self.version,)
 
 
+class Proposal(models.Model):
+    """
+    A proposed change (P05.4 = CI). Binds a sandbox graph to the baseline it targets; review = verify diff.
+    `affected` (boundary slugs the change touches, from the diff) is the seam for interval-scoped ratify (P05 §확장).
+    """
+    class State(models.TextChoices):
+        OPEN = "open", "open"
+        MERGED = "merged", "merged"
+        REJECTED = "rejected", "rejected"
+
+    graph = models.ForeignKey("graph.Graph", on_delete=models.CASCADE, related_name="proposals")
+    baseline = models.ForeignKey(Release, on_delete=models.PROTECT, related_name="proposals_against")
+    author = models.ForeignKey("auth.User", null=True, on_delete=models.SET_NULL, related_name="proposals")
+    state = models.CharField(max_length=8, choices=State.choices, default=State.OPEN)
+    comment = models.TextField(blank=True)
+    affected = models.JSONField(default=list, blank=True, help_text="Boundary slugs the change moves/retypes (from the diff).")
+    reviewer = models.ForeignKey("auth.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="reviews")
+    review_comment = models.TextField(blank=True)
+    result_release = models.ForeignKey(
+        Release, null=True, blank=True, on_delete=models.SET_NULL, related_name="from_proposal",
+        help_text="The published Release baked when this proposal was ratified.",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Proposal #{self.pk}: {self.graph.slug} vs {self.baseline.version} ({self.state})"
+
+
 class Selection(models.Model):
     """A release's per-boundary candidate selection (coherent selection)."""
     release = models.ForeignKey(Release, on_delete=models.CASCADE, related_name="selections")

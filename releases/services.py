@@ -95,6 +95,117 @@ def bake_graph(graph):
     return release, n
 
 
+def _diff_summary(d, baked):
+    deltas = [x["delta"] for x in d["value_diff"] if x["delta"] is not None]
+    td = d["topology_diff"]
+    return {
+        "baked": baked,
+        "moved": len(d["value_diff"]),
+        "max_abs_delta": round(max((abs(x) for x in deltas), default=0.0), 4),
+        "added": sum(1 for t in td if t["op"] == "added"),
+        "removed": sum(1 for t in td if t["op"] == "removed"),
+        "retyped": sum(1 for t in td if t["op"] == "retype"),
+    }
+
+
+def diff_graph_vs_release(graph, baseline):
+    """Scratch-bake `graph` and diff it against `baseline` (from=baseline → to=graph). Returns the diff dict + summary."""
+    release, n = bake_graph(graph)
+    d = diff_releases(baseline, release)
+    d["summary"] = _diff_summary(d, n)
+    d["baseline"] = baseline.version
+    return d
+
+
+def verify_graph(graph):
+    """Science-CI: diff the graph against the current published baseline. Returns (baseline, diff) or (None, None)."""
+    from .models import Release
+    baseline = Release.objects.filter(is_baseline=True).order_by("version").first()
+    if baseline is None:
+        return None, None
+    return baseline, diff_graph_vs_release(graph, baseline)
+
+
+def affected_boundaries(diff):
+    """Boundary slugs a diff touches (moved value or topology change) — the seam for interval-scoped ratify."""
+    return sorted(
+        {x["boundary"] for x in diff["value_diff"]} | {t["boundary"] for t in diff["topology_diff"]}
+    )
+
+
+def next_published_version(when=None):
+    """Auto name for a ratified public release: GeologicTimeScale.Published.YYYYMMDD.NN."""
+    from django.utils import timezone
+    from .models import Release
+    day = (when or timezone.now()).strftime("%Y%m%d")
+    prefix = f"GeologicTimeScale.Published.{day}."
+    used = Release.objects.filter(version__startswith=prefix).values_list("version", flat=True)
+    n = 0
+    for v in used:
+        try:
+            n = max(n, int(v[len(prefix):]))
+        except (ValueError, IndexError):
+            pass
+    return f"{prefix}{n + 1:02d}"
+
+
+def publish_graph(graph):
+    """Ratify: freeze the graph into a new **published** Release that becomes the sole baseline. Returns (release, n)."""
+    from django.db import transaction
+    from .models import Release
+    with transaction.atomic():
+        Release.objects.filter(is_baseline=True).update(is_baseline=False)
+        release = Release.objects.create(
+            version=next_published_version(), kind=Release.Kind.PUBLISHED, is_baseline=True,
+            source_graph=graph, note=f"Ratified from '{graph.name}'",
+        )
+        n = _write_graph_records(graph, release)
+    return release, n
+
+
+def propose_graph(graph, user, comment=""):
+    """Owner proposes a sandbox graph against the baseline (sandbox→proposed). Returns (proposal, diff)."""
+    from graph.models import Graph
+    from .models import Proposal
+    baseline, diff = verify_graph(graph)
+    if baseline is None:
+        raise ValueError("No published baseline (is_baseline) to propose against.")
+    proposal = Proposal.objects.create(
+        graph=graph, baseline=baseline, author=user if user.is_authenticated else None,
+        comment=comment, affected=affected_boundaries(diff),
+    )
+    graph.status = Graph.Status.PROPOSED
+    graph.save(update_fields=["status"])
+    return proposal, diff
+
+
+def ratify_proposal(proposal, reviewer, comment=""):
+    """Accept a proposal → publish a new baseline Release, graph→ratified, proposal→merged. Returns the release."""
+    from graph.models import Graph
+    from .models import Proposal
+    release, _ = publish_graph(proposal.graph)
+    proposal.graph.status = Graph.Status.RATIFIED
+    proposal.graph.save(update_fields=["status"])
+    proposal.state = Proposal.State.MERGED
+    proposal.reviewer = reviewer
+    proposal.review_comment = comment
+    proposal.result_release = release
+    proposal.save(update_fields=["state", "reviewer", "review_comment", "result_release", "updated_at"])
+    return release
+
+
+def reject_proposal(proposal, reviewer, comment=""):
+    """Reject a proposal → graph back to sandbox, proposal→rejected."""
+    from graph.models import Graph
+    from .models import Proposal
+    proposal.graph.status = Graph.Status.SANDBOX
+    proposal.graph.save(update_fields=["status"])
+    proposal.state = Proposal.State.REJECTED
+    proposal.reviewer = reviewer
+    proposal.review_comment = comment
+    proposal.save(update_fields=["state", "reviewer", "review_comment", "updated_at"])
+
+
 def bake_release(release):
     """selection 을 돌며 BoundaryRecord 를 (재)생성. 반환: 레코드 수."""
     release.records.all().delete()

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import BoundaryRecord, ModelCandidate, Release
+from .models import BoundaryRecord, ModelCandidate, Proposal, Release
 
 
 class BoundaryRecordSerializer(serializers.ModelSerializer):
@@ -43,3 +43,19 @@ class ModelCandidateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ModelCandidate
         fields = ["slug", "scope", "kind", "method", "provenance_ref", "note"]
+
+
+class ProposalSerializer(serializers.ModelSerializer):
+    graph = serializers.SlugRelatedField(slug_field="slug", read_only=True)
+    graph_id = serializers.IntegerField(source="graph.id", read_only=True)
+    graph_name = serializers.CharField(source="graph.name", read_only=True)
+    baseline = serializers.SlugRelatedField(slug_field="version", read_only=True)
+    author = serializers.SlugRelatedField(slug_field="username", read_only=True)
+    reviewer = serializers.SlugRelatedField(slug_field="username", read_only=True)
+    result_release = serializers.SlugRelatedField(slug_field="version", read_only=True)
+
+    class Meta:
+        model = Proposal
+        fields = ["id", "graph", "graph_id", "graph_name", "baseline", "author", "state",
+                  "comment", "affected", "reviewer", "review_comment", "result_release",
+                  "created_at", "updated_at"]

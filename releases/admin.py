@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import (
-    BoundaryRecord, CandidateOutput, Clamp, ModelCandidate, Release, Selection,
+    BoundaryRecord, CandidateOutput, Clamp, ModelCandidate, Proposal, Release, Selection,
 )
 
 
@@ -39,6 +39,14 @@ class ReleaseAdmin(admin.ModelAdmin):
     search_fields = ("version",)
     filter_horizontal = ("clamps",)
     inlines = (SelectionInline, BoundaryRecordInline)
+
+
+@admin.register(Proposal)
+class ProposalAdmin(admin.ModelAdmin):
+    list_display = ("id", "graph", "baseline", "author", "state", "reviewer", "created_at")
+    list_filter = ("state",)
+    search_fields = ("graph__slug", "author__username")
+    raw_id_fields = ("graph", "baseline", "author", "reviewer", "result_release")
 
 
 @admin.register(Clamp)
