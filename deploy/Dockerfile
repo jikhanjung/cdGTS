@@ -8,6 +8,8 @@ WORKDIR /fe
 COPY frontend/package.json frontend/package-lock.json ./
 RUN npm ci
 COPY frontend/ ./
+# version single-source: vite.config.js reads ../config/version.py at build → __APP_VERSION__
+COPY config/version.py /config/version.py
 RUN npm run build
 
 # --- stage 2: Django ---

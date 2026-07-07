@@ -1,3 +1,4 @@
+/* global __APP_VERSION__ */
 import { useState } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import Editor from './Editor.jsx'
@@ -12,7 +13,7 @@ export default function App() {
   return (
     <div className="app">
       <nav className="topnav">
-        <span className="brand">cdGTS</span>
+        <span className="brand">cdGTS<span className="brand-ver">v{__APP_VERSION__}</span></span>
         <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
         <button className={view === 'icc' ? 'active' : ''} onClick={() => setView('icc')}>ICC Table</button>
         <button className={view === 'chart' ? 'active' : ''} onClick={() => setView('chart')}>ICC Chart</button>

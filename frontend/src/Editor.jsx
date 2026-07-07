@@ -33,6 +33,11 @@ const isRealNode = (t) => t === 'cdgts' || t === 'cdgtsOrder'
 // use .cdgts-node{width:100%}, so the wrapper needs a width; give them the default width.
 const nodeWidth = (slug, w) => (rfType(slug) === 'cdgtsOrder' ? undefined : (w || DEFAULT_NODE_WIDTH))
 
+// order edge = boundary vertical port connection (ordering constraint) — shown dashed/purple, distinct from data flow.
+const ORDER_EDGE_STYLE = { className: 'order-edge', style: { stroke: '#8b5cf6', strokeDasharray: '4 3' } }
+// order ports are the vertical younger(source,top)/older(target,bottom) handles; a younger→older connection is an order edge.
+const isOrderConn = (srcH, tgtH) => srcH === 'younger' && tgtH === 'older'
+
 // --- API ↔ React Flow conversion (nodes/edges are always the 'full real' set; the view is derived via buildView) ---
 function apiToRF(graph, typeMap) {
   const nodes = graph.nodes.map((n) => {
@@ -51,11 +56,8 @@ function apiToRF(graph, typeMap) {
     id: `${e.source}:${e.source_port}->${e.target}:${e.target_port}`,
     source: e.source, target: e.target,
     sourceHandle: e.source_port, targetHandle: e.target_port,
-    // order edge = boundary vertical port connection (ordering constraint) — shown distinctly from data flow.
     data: { kind: e.kind },
-    ...(e.kind === 'order'
-      ? { className: 'order-edge', style: { stroke: '#8b5cf6', strokeDasharray: '4 3' } }
-      : {}),
+    ...(e.kind === 'order' ? ORDER_EDGE_STYLE : {}),
   }))
   const groups = (graph.groups || []).map((g) => ({ ...g }))
   return { nodes, edges, groups }
@@ -199,6 +201,37 @@ function buildView(nodes, edges, groups, activeGroup) {
     }
     viewEdges.push({ ...e, id: `v-${e.id}`, source: src, sourceHandle: srcH, target: tgt, targetHandle: tgtH })
   })
+
+  // Persist the order interface on collapsed unit groups: the younger(top)/older(bottom) ports are otherwise derived
+  // from the crossing order edge, so deleting that edge would drop the port with no way to reconnect. Anchor them to the
+  // group's boundary-most internal order nodes (youngest = internal-order target with no internal source; oldest = vice
+  // versa) — derived from the *internal* chain, which survives deleting the external boundary edge.
+  groups.forEach((g) => {
+    if (parentOf[g.key] !== level || (g.kind || 'container') !== 'unit') return
+    const gd = groupById[g.key]?.data
+    if (!gd) return
+    const srcs = new Set(), tgts = new Set()
+    edges.forEach((e) => {
+      if (e.data?.kind !== 'order') return
+      const rs = nodeRep[e.source], rt = nodeRep[e.target]
+      if (rs?.kind === 'group' && rt?.kind === 'group' && rs.key === g.key && rt.key === g.key) {
+        srcs.add(e.source); tgts.add(e.target)
+      }
+    })
+    // Always expose both order ports on a unit group (even where there is no bounding boundary yet, e.g. Quaternary's
+    // younger side at the top of the chart) so the interface is stable and reconnectable.
+    const youngest = [...tgts].find((n) => !srcs.has(n))   // younger end of the internal chain → group's upper order out
+    const oldest = [...srcs].find((n) => !tgts.has(n))     // older end → group's lower order in
+    if (youngest) {
+      const hid = `out:${youngest}:younger`
+      if (!gd.outputs.find((h) => h.id === hid)) gd.outputs.push({ id: hid, port: 'younger', label: lab(youngest, 'younger') })
+    }
+    if (oldest) {
+      const hid = `in:${oldest}:older`
+      if (!gd.inputs.find((h) => h.id === hid)) gd.inputs.push({ id: hid, port: 'older', label: lab(oldest, 'older') })
+    }
+  })
+
   const ioNodes = []
   if (ioIn.data.ports.length) ioNodes.push(ioIn)
   if (ioOut.data.ports.length) ioNodes.push(ioOut)
@@ -362,9 +395,12 @@ export default function Editor() {
       const [, m, p] = targetHandle.split(':'); target = m; targetHandle = p
     }
     if (['group:', 'stub-'].some((p) => source?.startsWith(p) || target?.startsWith(p))) return
+    const isOrder = isOrderConn(sourceHandle, targetHandle)
     const id = `${source}:${sourceHandle}->${target}:${targetHandle}`
     setEdges((eds) => eds.concat({
-      id, source, target, sourceHandle, targetHandle, data: { kind: 'data' },
+      id, source, target, sourceHandle, targetHandle,
+      data: { kind: isOrder ? 'order' : 'data' },
+      ...(isOrder ? ORDER_EDGE_STYLE : {}),
     }))
   }, [setEdges])
 
