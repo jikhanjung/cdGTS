@@ -169,13 +169,18 @@ function DistributionField({ name, value, onDist }) {
 }
 
 // --- Inspector panel ---
-export default function Inspector({ node, type, group, groupExtra, nodeKeys, open, onClose, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
+export default function Inspector({ node, type, group, groupExtra, nodeKeys, open, onClose, onHide, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
   const cls = `inspector${open ? ' open' : ''}`
   if (!node && group) {
-    return <GroupInspector cls={cls} group={group} extra={groupExtra} onClose={onClose} onGroupName={onGroupName} />
+    return <GroupInspector cls={cls} group={group} extra={groupExtra} onClose={onClose} onHide={onHide} onGroupName={onGroupName} />
   }
   if (!node) {
-    return <aside className={`${cls} empty`}><p className="hint">Select a node or group to see its properties here.</p></aside>
+    return (
+      <aside className={`${cls} empty`}>
+        <button className="desktop-only insp-close insp-hide" onClick={onHide} title="Hide panel">✕</button>
+        <p className="hint">Select a node or group to see its properties here.</p>
+      </aside>
+    )
   }
 
   const params = node.data.params || {}
@@ -188,6 +193,7 @@ export default function Inspector({ node, type, group, groupExtra, nodeKeys, ope
       <div className="insp-head" style={{ borderTopColor: color }}>
         <div className="insp-type">{node.data.nodeType} <span className="insp-cat">{node.data.category}</span></div>
         <button className="mobile-only insp-close" onClick={onClose} title="Close">✕</button>
+        <button className="desktop-only insp-close" onClick={onHide} title="Hide panel">✕</button>
       </div>
 
       {node.data.result?.distribution?.value_ma != null && (
@@ -245,7 +251,7 @@ export default function Inspector({ node, type, group, groupExtra, nodeKeys, ope
 }
 
 // --- Group inspector (shown when a node group / collapsed group node is selected) ---
-function GroupInspector({ cls, group, extra, onClose, onGroupName }) {
+function GroupInspector({ cls, group, extra, onClose, onHide, onGroupName }) {
   const isUnit = group.kind === 'unit'
   const color = '#a142f4'   // lavender — matches the group node
   return (
@@ -253,6 +259,7 @@ function GroupInspector({ cls, group, extra, onClose, onGroupName }) {
       <div className="insp-head" style={{ borderTopColor: color }}>
         <div className="insp-type">node group <span className="insp-cat">{group.kind || 'container'}</span></div>
         <button className="mobile-only insp-close" onClick={onClose} title="Close">✕</button>
+        <button className="desktop-only insp-close" onClick={onHide} title="Hide panel">✕</button>
       </div>
 
       <div className="insp-field">

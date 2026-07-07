@@ -481,6 +481,9 @@ body {
    responsive — phone/tablet (viewing + light editing)
    ============================================================ */
 .mobile-only { display: none; }
+.desktop-only { display: inline-flex; }
+.inspector.empty { position: relative; }
+.insp-hide { position: absolute; top: 10px; right: 10px; }
 .topnav { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 .topnav button, .topnav .brand { flex-shrink: 0; }
 .insp-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
@@ -489,6 +492,7 @@ body {
 
 @media (max-width: 820px) {
   .mobile-only { display: inline-flex; }
+  .desktop-only { display: none; }
   .topnav { padding: 6px 10px; gap: 4px; }
   .topnav .brand { margin-right: 6px; }
   .topnav button { padding: 5px 9px; font-size: 12px; }

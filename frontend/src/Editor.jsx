@@ -264,6 +264,7 @@ export default function Editor() {
   const [verifyData, setVerifyData] = useState(null)        // Science CI: diff against the published baseline
   const [paletteOpen, setPaletteOpen] = useState(false)     // phone: palette drawer
   const [inspectorOpen, setInspectorOpen] = useState(false) // phone: inspector drawer
+  const [inspectorCollapsed, setInspectorCollapsed] = useState(false) // desktop: hide the right properties panel
   const [pending, setPending] = useState(null)              // tap-to-add: node slug awaiting placement
   const wrapperRef = useRef(null)
   const lpRef = useRef(null)                                // long-press timer
@@ -765,6 +766,10 @@ export default function Editor() {
           </button>
           <button className="mobile-only drawer-toggle" onClick={() => { setInspectorOpen((v) => !v); setPaletteOpen(false) }} title="Properties"
                   disabled={!selectedNode}>Properties</button>
+          <button className="desktop-only" onClick={() => setInspectorCollapsed((v) => !v)}
+                  title={inspectorCollapsed ? 'Show the properties panel' : 'Hide the properties panel'}>
+            {inspectorCollapsed ? 'Properties ▸' : 'Properties ◂'}
+          </button>
           <span className="status">{status}</span>
         </div>
 
@@ -891,10 +896,12 @@ export default function Editor() {
         )}
       </main>
 
+      {!inspectorCollapsed && (
       <Inspector
         key={selectedNode?.id || (selectedGroup && `group:${selectedGroup.key}`) || 'none'}
         open={inspectorOpen}
         onClose={() => setInspectorOpen(false)}
+        onHide={() => setInspectorCollapsed(true)}
         node={selectedNode}
         type={selectedNode ? typeMap[selectedNode.data.nodeType] : null}
         group={selectedGroup}
@@ -907,6 +914,7 @@ export default function Editor() {
         onDist={(k, sk, v) => onDist(selectedNode.id, k, sk, v)}
         onReplaceParams={(p) => onReplaceParams(selectedNode.id, p)}
       />
+      )}
     </div>
   )
 }
