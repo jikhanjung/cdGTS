@@ -422,9 +422,11 @@ export default function Editor() {
     const t = typeMap[slug]
     if (!t) return
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
+    // boundary/published-age → boundary-point (0-cell) by default: renders as the compact ◈ boundary style (like the Base of … nodes).
+    const nature = (slug === 'boundary' || slug === 'published-age') ? 'boundary' : 'generic'
     setNodes((nds) => nds.concat({
       id: key, type: rfType(slug), position, width: nodeWidth(slug),
-      data: { nodeType: slug, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
+      data: { nodeType: slug, nature, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
     setStatus(`${t.name} added`)
   }, [typeMap, setNodes, activeGroup])
@@ -537,6 +539,16 @@ export default function Editor() {
     setEdges((eds) => eds.filter((e) => e.id !== realId))
     setStatus('Edge deleted')
   }, [setEdges])
+
+  // Delete node(s) and any edges incident to them.
+  const onDeleteNodes = useCallback((ids) => {
+    if (!ids?.length) return
+    const set = new Set(ids)
+    setNodes((nds) => nds.filter((n) => !set.has(n.id)))
+    setEdges((eds) => eds.filter((e) => !set.has(e.source) && !set.has(e.target)))
+    setSelectedIds((s) => s.filter((id) => !set.has(id)))
+    setStatus(ids.length > 1 ? `${ids.length} nodes deleted` : 'Node deleted')
+  }, [setNodes, setEdges])
 
   const onUngroup = useCallback((key) => {
     const up = groups.find((g) => g.key === key)?.parent || null      // on ungroup, contents go up to the parent level
@@ -839,6 +851,14 @@ export default function Editor() {
               {menu.kind === 'node' && activeGroup && (
                 <li onClick={() => { removeFromGroup(menu.id); closeMenu() }}>Move out to parent level</li>
               )}
+              {menu.kind === 'node' && (() => {
+                const targets = groupTargets(menu.id)
+                return (
+                  <li className="danger" onClick={() => { onDeleteNodes(targets); closeMenu() }}>
+                    Delete {targets.length > 1 ? `${targets.length} nodes` : 'node'}
+                  </li>
+                )
+              })()}
               {menu.kind === 'group' && (
                 <>
                   <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>Open group</li>
