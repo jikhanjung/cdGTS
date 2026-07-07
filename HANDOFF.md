@@ -115,8 +115,10 @@
     프론트 Fork 버튼.
   - **P05.4 ✅**([109](devlog/20260707_109_p05-4-propose-review-ratify.md)) — Proposal 모델 + propose/ratify/
     reject + `can_ratify`(중앙) + Proposals 리뷰 뷰(verify diff 재사용). **아크 C MVP 완성.**
-  - **P05.5 ⬜(MVP 밖)** — 샌드박스 오버라이드(아크 B seam).
-  - **MVP 흐름**: 로그인 → fork → 편집 → (bake→Vault) / propose → review → **ratify**(새 baseline). pytest **110**.
+  - **P05.5 ✅**([110](devlog/20260707_110_p05-5-sandbox-overrides.md)) — 샌드박스 오버라이드(baseline + 경계별
+    경쟁 후보 교체·재bake·diff, Vault Overrides 모드). 아크 B seam.
+  - **P05 전체 완료**. 흐름: 로그인 → fork → 편집 → (bake→Vault) / propose → review → **ratify**(새 baseline) ·
+    baseline **sandbox → override**. pytest **112**.
     ⚠ **미배포** — 스키마 migration(accounts.0001, releases.0006·0007, graph.0008) 포함. 배포 시 관리자 계정·
     ICS Authority·Membership 세팅 필요(초대제).
 
