@@ -65,7 +65,8 @@ export default function CdgtsNode({ data, selected }) {
           </ul>
         </div>
       )}
-      {!isBoundary && data.result && (
+      {/* unit = time span (no point age) → its result is always empty; skip the '—' footer to avoid noise. */}
+      {!isBoundary && !isUnit && data.result && (
         <div className="cdgts-node__result" title={data.result.cached ? 'cache reuse' : 'recomputed'}>
           {data.result.distribution && data.result.distribution.value_ma != null
             ? `${data.result.distribution.value_ma} Ma`

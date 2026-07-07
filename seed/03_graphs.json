@@ -461,7 +461,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3442,
+   "y": 3580,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -484,7 +484,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3332,
+   "y": 3446,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -507,7 +507,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3222,
+   "y": 3312,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -530,7 +530,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3112,
+   "y": 3178,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -553,7 +553,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3002,
+   "y": 3044,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -576,7 +576,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2892,
+   "y": 2910,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -599,7 +599,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3294,
+   "y": 3462,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -622,7 +622,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3184,
+   "y": 3328,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -645,7 +645,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3074,
+   "y": 3194,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -668,7 +668,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2964,
+   "y": 3060,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -691,7 +691,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2854,
+   "y": 2926,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -714,7 +714,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2744,
+   "y": 2792,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -737,7 +737,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2634,
+   "y": 2658,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -783,7 +783,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3254,
+   "y": 3446,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -806,7 +806,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3144,
+   "y": 3312,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -829,7 +829,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3034,
+   "y": 3178,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -852,7 +852,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2924,
+   "y": 3044,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -875,7 +875,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2814,
+   "y": 2910,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -898,7 +898,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2704,
+   "y": 2776,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -921,7 +921,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2594,
+   "y": 2642,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -944,7 +944,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2484,
+   "y": 2508,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -990,7 +990,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3224,
+   "y": 3488,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1013,7 +1013,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3114,
+   "y": 3354,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1036,7 +1036,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3004,
+   "y": 3220,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1059,7 +1059,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2894,
+   "y": 3086,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1082,7 +1082,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2784,
+   "y": 2952,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1105,7 +1105,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2674,
+   "y": 2818,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1128,7 +1128,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2564,
+   "y": 2684,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1151,7 +1151,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2454,
+   "y": 2550,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1174,7 +1174,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2344,
+   "y": 2416,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1197,7 +1197,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2234,
+   "y": 2282,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1220,7 +1220,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2124,
+   "y": 2148,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1266,7 +1266,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3034,
+   "y": 3274,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1289,7 +1289,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2924,
+   "y": 3140,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1312,7 +1312,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2814,
+   "y": 3006,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1335,7 +1335,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2704,
+   "y": 2872,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1358,7 +1358,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2594,
+   "y": 2738,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1381,7 +1381,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2484,
+   "y": 2604,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1404,7 +1404,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2374,
+   "y": 2470,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1427,7 +1427,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2264,
+   "y": 2336,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1450,7 +1450,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2154,
+   "y": 2202,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1473,7 +1473,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2044,
+   "y": 2068,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1519,7 +1519,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2724,
+   "y": 2868,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1542,7 +1542,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2614,
+   "y": 2734,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1565,7 +1565,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2504,
+   "y": 2600,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1588,7 +1588,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2394,
+   "y": 2466,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1611,7 +1611,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2284,
+   "y": 2332,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1634,7 +1634,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2174,
+   "y": 2198,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1680,7 +1680,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2654,
+   "y": 2846,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1703,7 +1703,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2544,
+   "y": 2712,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1726,7 +1726,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2434,
+   "y": 2578,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1749,7 +1749,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2324,
+   "y": 2444,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1772,7 +1772,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2214,
+   "y": 2310,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1795,7 +1795,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2104,
+   "y": 2176,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1818,7 +1818,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1994,
+   "y": 2042,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1841,7 +1841,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1884,
+   "y": 1908,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2048,7 +2048,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2274,
+   "y": 2418,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2071,7 +2071,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2164,
+   "y": 2284,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2094,7 +2094,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2054,
+   "y": 2150,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2117,7 +2117,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1944,
+   "y": 2016,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2140,7 +2140,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1834,
+   "y": 1882,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2163,7 +2163,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1724,
+   "y": 1748,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2209,7 +2209,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2164,
+   "y": 2332,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2232,7 +2232,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2054,
+   "y": 2198,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2255,7 +2255,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1944,
+   "y": 2064,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2278,7 +2278,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1834,
+   "y": 1930,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2301,7 +2301,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1724,
+   "y": 1796,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2324,7 +2324,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1614,
+   "y": 1662,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2347,7 +2347,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1504,
+   "y": 1528,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2393,7 +2393,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1974,
+   "y": 2118,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2416,7 +2416,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1864,
+   "y": 1984,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2439,7 +2439,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1754,
+   "y": 1850,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2462,7 +2462,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1644,
+   "y": 1716,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2485,7 +2485,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1534,
+   "y": 1582,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2508,7 +2508,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1424,
+   "y": 1448,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2554,7 +2554,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1944,
+   "y": 2160,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2577,7 +2577,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1834,
+   "y": 2026,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2600,7 +2600,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1724,
+   "y": 1892,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2623,7 +2623,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1614,
+   "y": 1758,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2646,7 +2646,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1504,
+   "y": 1624,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2669,7 +2669,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1394,
+   "y": 1490,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2692,7 +2692,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1284,
+   "y": 1356,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2715,7 +2715,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1174,
+   "y": 1222,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2738,7 +2738,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1064,
+   "y": 1088,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2784,7 +2784,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 3146.0,
+   "y": 3215.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2807,7 +2807,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2943.0,
+   "y": 3030.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2830,7 +2830,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2814.0,
+   "y": 2910.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2853,7 +2853,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2619.0,
+   "y": 2751.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2876,7 +2876,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2484.0,
+   "y": 2604.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2899,7 +2899,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2394.0,
+   "y": 2466.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2922,7 +2922,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2214.0,
+   "y": 2310.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2968,7 +2968,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1944.0,
+   "y": 2016.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2991,7 +2991,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1779.0,
+   "y": 1863.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3014,7 +3014,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1644.0,
+   "y": 1716.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3037,7 +3037,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1449.0,
+   "y": 1557.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3176,8 +3176,8 @@
     "boundary"
    ],
    "nature": "boundary",
-   "label": "Base of Triassic · Mesozoic\n(age computed by the age–depth model)",
-   "description": "",
+   "label": "Base of Triassic",
+   "description": "Mesozoic · age computed by the age–depth model",
    "params": {},
    "x": 950,
    "y": 352,
@@ -3220,7 +3220,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 150,
+   "y": 174,
    "width": null,
    "group": null
   }
@@ -3240,7 +3240,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 260,
+   "y": 308,
    "width": null,
    "group": null
   }
@@ -3260,7 +3260,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 370,
+   "y": 442,
    "width": null,
    "group": null
   }
@@ -3280,7 +3280,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 480,
+   "y": 576,
    "width": null,
    "group": null
   }
@@ -3300,7 +3300,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 590,
+   "y": 710,
    "width": null,
    "group": null
   }
@@ -3320,7 +3320,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 700,
+   "y": 844,
    "width": null,
    "group": null
   }
@@ -3340,7 +3340,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 810,
+   "y": 978,
    "width": null,
    "group": null
   }
@@ -3360,7 +3360,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 920,
+   "y": 1112,
    "width": null,
    "group": null
   }
@@ -3380,7 +3380,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 1030,
+   "y": 1246,
    "width": null,
    "group": null
   }
@@ -3420,7 +3420,7 @@
    "description": "",
    "params": {},
    "x": 3050,
-   "y": 150,
+   "y": 174,
    "width": null,
    "group": null
   }
@@ -3440,7 +3440,7 @@
    "description": "",
    "params": {},
    "x": 3050,
-   "y": 260,
+   "y": 308,
    "width": null,
    "group": null
   }
@@ -3460,7 +3460,7 @@
    "description": "",
    "params": {},
    "x": 3050,
-   "y": 370,
+   "y": 442,
    "width": null,
    "group": null
   }
@@ -3480,7 +3480,7 @@
    "description": "",
    "params": {},
    "x": 3050,
-   "y": 480,
+   "y": 576,
    "width": null,
    "group": null
   }
@@ -3496,8 +3496,8 @@
     "boundary"
    ],
    "nature": "boundary",
-   "label": "Base of Cambrian · Paleozoic · Phanerozoic\n(age computed by the global δ13C age model)",
-   "description": "",
+   "label": "Base of Cambrian",
+   "description": "Paleozoic · Phanerozoic · age computed by the global δ13C age model",
    "params": {},
    "x": 1650,
    "y": 706,
@@ -3520,7 +3520,7 @@
    "description": "",
    "params": {},
    "x": 2350,
-   "y": 1098,
+   "y": 1320,
    "width": null,
    "group": null
   }
@@ -4300,7 +4300,7 @@
     }
    },
    "x": 3050,
-   "y": 548,
+   "y": 650,
    "group": null,
    "description": "Eon · GSSA · ICS 2024-12",
    "width": 172,
@@ -4326,7 +4326,7 @@
     }
    },
    "x": 3050,
-   "y": 438,
+   "y": 516,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172,
@@ -4352,7 +4352,7 @@
     }
    },
    "x": 3050,
-   "y": 328,
+   "y": 382,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172,
@@ -4378,7 +4378,7 @@
     }
    },
    "x": 3050,
-   "y": 218,
+   "y": 248,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172,
@@ -4404,7 +4404,7 @@
     }
    },
    "x": 3050,
-   "y": 108,
+   "y": 114,
    "group": null,
    "description": "Era · GSSA · ICS 2024-12",
    "width": 172,
@@ -4430,7 +4430,7 @@
     }
    },
    "x": 2350,
-   "y": 988,
+   "y": 1186,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4456,7 +4456,7 @@
     }
    },
    "x": 2350,
-   "y": 878,
+   "y": 1052,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4482,7 +4482,7 @@
     }
    },
    "x": 2350,
-   "y": 768,
+   "y": 918,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4508,7 +4508,7 @@
     }
    },
    "x": 2350,
-   "y": 658,
+   "y": 784,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4534,7 +4534,7 @@
     }
    },
    "x": 2350,
-   "y": 548,
+   "y": 650,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4560,7 +4560,7 @@
     }
    },
    "x": 2350,
-   "y": 438,
+   "y": 516,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4586,7 +4586,7 @@
     }
    },
    "x": 2350,
-   "y": 328,
+   "y": 382,
    "group": null,
    "description": "Period · GSSA · ICS 2024-12",
    "width": 172,
@@ -4612,7 +4612,7 @@
     }
    },
    "x": 2350,
-   "y": 218,
+   "y": 248,
    "group": null,
    "description": "Period · published value · ICS 2024-12",
    "width": 172,
@@ -4638,7 +4638,7 @@
     }
    },
    "x": 2350,
-   "y": 108,
+   "y": 114,
    "group": null,
    "description": "Period · GSSP · ICS 2024-12",
    "width": 172,
@@ -4655,7 +4655,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Ordovician",
+   "label": "Base of Ordovician",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4685,7 +4685,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Silurian",
+   "label": "Base of Silurian",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4715,7 +4715,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Devonian",
+   "label": "Base of Devonian",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4745,7 +4745,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Carboniferous",
+   "label": "Base of Carboniferous",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4775,7 +4775,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Permian",
+   "label": "Base of Permian",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4805,7 +4805,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Jurassic",
+   "label": "Base of Jurassic",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4835,7 +4835,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Cretaceous",
+   "label": "Base of Cretaceous",
    "params": {
     "distribution": {
      "fidelity": "sym",
@@ -4865,7 +4865,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Paleogene",
+   "label": "Base of Paleogene",
    "params": {
     "distribution": {
      "fidelity": "exact",
@@ -4891,7 +4891,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Neogene",
+   "label": "Base of Neogene",
    "params": {
     "distribution": {
      "fidelity": "exact",
@@ -4917,7 +4917,7 @@
    "node_type": [
     "published-age"
    ],
-   "label": "Quaternary",
+   "label": "Base of Quaternary",
    "params": {
     "distribution": {
      "fidelity": "exact",
@@ -5546,7 +5546,7 @@
     }
    },
    "x": 2570,
-   "y": 3400,
+   "y": 3520,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5593,7 +5593,7 @@
     }
    },
    "x": 2570,
-   "y": 3290,
+   "y": 3386,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5640,7 +5640,7 @@
     }
    },
    "x": 2570,
-   "y": 3180,
+   "y": 3252,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5687,7 +5687,7 @@
     }
    },
    "x": 2570,
-   "y": 3070,
+   "y": 3118,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5734,7 +5734,7 @@
     }
    },
    "x": 2570,
-   "y": 2960,
+   "y": 2984,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5828,7 +5828,7 @@
     }
    },
    "x": 2570,
-   "y": 3362,
+   "y": 3536,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5875,7 +5875,7 @@
     }
    },
    "x": 2570,
-   "y": 3252,
+   "y": 3402,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5922,7 +5922,7 @@
     }
    },
    "x": 2570,
-   "y": 3142,
+   "y": 3268,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5969,7 +5969,7 @@
     }
    },
    "x": 2570,
-   "y": 3032,
+   "y": 3134,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6016,7 +6016,7 @@
     }
    },
    "x": 2570,
-   "y": 2922,
+   "y": 3000,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6063,7 +6063,7 @@
     }
    },
    "x": 2570,
-   "y": 2812,
+   "y": 2866,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6110,7 +6110,7 @@
     }
    },
    "x": 2570,
-   "y": 2702,
+   "y": 2732,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6157,7 +6157,7 @@
     }
    },
    "x": 2570,
-   "y": 2592,
+   "y": 2598,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6204,7 +6204,7 @@
     }
    },
    "x": 2570,
-   "y": 3212,
+   "y": 3386,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6251,7 +6251,7 @@
     }
    },
    "x": 2570,
-   "y": 3102,
+   "y": 3252,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6298,7 +6298,7 @@
     }
    },
    "x": 2570,
-   "y": 2992,
+   "y": 3118,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6345,7 +6345,7 @@
     }
    },
    "x": 2570,
-   "y": 2882,
+   "y": 2984,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6392,7 +6392,7 @@
     }
    },
    "x": 2570,
-   "y": 2772,
+   "y": 2850,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6439,7 +6439,7 @@
     }
    },
    "x": 2570,
-   "y": 2662,
+   "y": 2716,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6486,7 +6486,7 @@
     }
    },
    "x": 2570,
-   "y": 2552,
+   "y": 2582,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6533,7 +6533,7 @@
     }
    },
    "x": 2570,
-   "y": 2442,
+   "y": 2448,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6580,7 +6580,7 @@
     }
    },
    "x": 2570,
-   "y": 3182,
+   "y": 3428,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6627,7 +6627,7 @@
     }
    },
    "x": 2570,
-   "y": 3072,
+   "y": 3294,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6674,7 +6674,7 @@
     }
    },
    "x": 2570,
-   "y": 2962,
+   "y": 3160,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6721,7 +6721,7 @@
     }
    },
    "x": 2570,
-   "y": 2852,
+   "y": 3026,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6768,7 +6768,7 @@
     }
    },
    "x": 2570,
-   "y": 2742,
+   "y": 2892,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6815,7 +6815,7 @@
     }
    },
    "x": 2570,
-   "y": 2632,
+   "y": 2758,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6862,7 +6862,7 @@
     }
    },
    "x": 2570,
-   "y": 2522,
+   "y": 2624,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6909,7 +6909,7 @@
     }
    },
    "x": 2570,
-   "y": 2412,
+   "y": 2490,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6956,7 +6956,7 @@
     }
    },
    "x": 2570,
-   "y": 2302,
+   "y": 2356,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7003,7 +7003,7 @@
     }
    },
    "x": 2570,
-   "y": 2192,
+   "y": 2222,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7050,7 +7050,7 @@
     }
    },
    "x": 2570,
-   "y": 2082,
+   "y": 2088,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7097,7 +7097,7 @@
     }
    },
    "x": 2570,
-   "y": 2992,
+   "y": 3214,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7144,7 +7144,7 @@
     }
    },
    "x": 2570,
-   "y": 2882,
+   "y": 3080,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7191,7 +7191,7 @@
     }
    },
    "x": 2570,
-   "y": 2772,
+   "y": 2946,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7238,7 +7238,7 @@
     }
    },
    "x": 2570,
-   "y": 2662,
+   "y": 2812,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7285,7 +7285,7 @@
     }
    },
    "x": 2570,
-   "y": 2552,
+   "y": 2678,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7332,7 +7332,7 @@
     }
    },
    "x": 2570,
-   "y": 2442,
+   "y": 2544,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7379,7 +7379,7 @@
     }
    },
    "x": 2570,
-   "y": 2332,
+   "y": 2410,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7426,7 +7426,7 @@
     }
    },
    "x": 2570,
-   "y": 2222,
+   "y": 2276,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7473,7 +7473,7 @@
     }
    },
    "x": 2570,
-   "y": 2112,
+   "y": 2142,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7520,7 +7520,7 @@
     }
    },
    "x": 2570,
-   "y": 2002,
+   "y": 2008,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7567,7 +7567,7 @@
     }
    },
    "x": 2570,
-   "y": 2682,
+   "y": 2808,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7614,7 +7614,7 @@
     }
    },
    "x": 2570,
-   "y": 2572,
+   "y": 2674,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7661,7 +7661,7 @@
     }
    },
    "x": 2570,
-   "y": 2462,
+   "y": 2540,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7708,7 +7708,7 @@
     }
    },
    "x": 2570,
-   "y": 2352,
+   "y": 2406,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7755,7 +7755,7 @@
     }
    },
    "x": 2570,
-   "y": 2242,
+   "y": 2272,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7802,7 +7802,7 @@
     }
    },
    "x": 2570,
-   "y": 2132,
+   "y": 2138,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7849,7 +7849,7 @@
     }
    },
    "x": 2570,
-   "y": 2612,
+   "y": 2786,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7896,7 +7896,7 @@
     }
    },
    "x": 2570,
-   "y": 2502,
+   "y": 2652,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7943,7 +7943,7 @@
     }
    },
    "x": 2570,
-   "y": 2392,
+   "y": 2518,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7990,7 +7990,7 @@
     }
    },
    "x": 2570,
-   "y": 2282,
+   "y": 2384,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8037,7 +8037,7 @@
     }
    },
    "x": 2570,
-   "y": 2172,
+   "y": 2250,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8084,7 +8084,7 @@
     }
    },
    "x": 2570,
-   "y": 2062,
+   "y": 2116,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8131,7 +8131,7 @@
     }
    },
    "x": 2570,
-   "y": 1952,
+   "y": 1982,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8178,7 +8178,7 @@
     }
    },
    "x": 2570,
-   "y": 1842,
+   "y": 1848,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8507,7 +8507,7 @@
     }
    },
    "x": 2570,
-   "y": 2232,
+   "y": 2358,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8554,7 +8554,7 @@
     }
    },
    "x": 2570,
-   "y": 2122,
+   "y": 2224,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8601,7 +8601,7 @@
     }
    },
    "x": 2570,
-   "y": 2012,
+   "y": 2090,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8648,7 +8648,7 @@
     }
    },
    "x": 2570,
-   "y": 1902,
+   "y": 1956,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8695,7 +8695,7 @@
     }
    },
    "x": 2570,
-   "y": 1792,
+   "y": 1822,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8742,7 +8742,7 @@
     }
    },
    "x": 2570,
-   "y": 1682,
+   "y": 1688,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8789,7 +8789,7 @@
     }
    },
    "x": 2570,
-   "y": 2122,
+   "y": 2272,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8836,7 +8836,7 @@
     }
    },
    "x": 2570,
-   "y": 2012,
+   "y": 2138,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8883,7 +8883,7 @@
     }
    },
    "x": 2570,
-   "y": 1902,
+   "y": 2004,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8930,7 +8930,7 @@
     }
    },
    "x": 2570,
-   "y": 1792,
+   "y": 1870,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8977,7 +8977,7 @@
     }
    },
    "x": 2570,
-   "y": 1682,
+   "y": 1736,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9024,7 +9024,7 @@
     }
    },
    "x": 2570,
-   "y": 1572,
+   "y": 1602,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9071,7 +9071,7 @@
     }
    },
    "x": 2570,
-   "y": 1462,
+   "y": 1468,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9118,7 +9118,7 @@
     }
    },
    "x": 2570,
-   "y": 1932,
+   "y": 2058,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9165,7 +9165,7 @@
     }
    },
    "x": 2570,
-   "y": 1822,
+   "y": 1924,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9212,7 +9212,7 @@
     }
    },
    "x": 2570,
-   "y": 1712,
+   "y": 1790,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9259,7 +9259,7 @@
     }
    },
    "x": 2570,
-   "y": 1602,
+   "y": 1656,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9306,7 +9306,7 @@
     }
    },
    "x": 2570,
-   "y": 1492,
+   "y": 1522,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9353,7 +9353,7 @@
     }
    },
    "x": 2570,
-   "y": 1382,
+   "y": 1388,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9400,7 +9400,7 @@
     }
    },
    "x": 2570,
-   "y": 1902,
+   "y": 2100,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9447,7 +9447,7 @@
     }
    },
    "x": 2570,
-   "y": 1792,
+   "y": 1966,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9494,7 +9494,7 @@
     }
    },
    "x": 2570,
-   "y": 1682,
+   "y": 1832,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9541,7 +9541,7 @@
     }
    },
    "x": 2570,
-   "y": 1572,
+   "y": 1698,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9588,7 +9588,7 @@
     }
    },
    "x": 2570,
-   "y": 1462,
+   "y": 1564,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9635,7 +9635,7 @@
     }
    },
    "x": 2570,
-   "y": 1352,
+   "y": 1430,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9682,7 +9682,7 @@
     }
    },
    "x": 2570,
-   "y": 1242,
+   "y": 1296,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9729,7 +9729,7 @@
     }
    },
    "x": 2570,
-   "y": 1132,
+   "y": 1162,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9776,7 +9776,7 @@
     }
    },
    "x": 2570,
-   "y": 1022,
+   "y": 1028,
    "group": [
     "example-icc-partial",
     "ages-cambrian"

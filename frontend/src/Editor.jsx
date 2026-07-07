@@ -259,6 +259,7 @@ export default function Editor() {
   const [gateways, setGateways] = useState([])
   const [outputs, setOutputs] = useState([])
   const [runMeta, setRunMeta] = useState(null)
+  const [savedSig, setSavedSig] = useState('')   // signature of the last saved/loaded graph → drives the unsaved (dirty) indicator
   const [showResults, setShowResults] = useState(false)
   const [verifyData, setVerifyData] = useState(null)        // Science CI: diff against the published baseline
   const [paletteOpen, setPaletteOpen] = useState(false)     // phone: palette drawer
@@ -270,6 +271,17 @@ export default function Editor() {
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
+
+  // Structural signature (nodes·edges·groups, excluding viewport and evaluation results) → compare against the last
+  // saved/loaded snapshot to know if there are unsaved edits.
+  const graphSig = useCallback((ns, es, gs) => {
+    const a = rfToApi(ns, es, gs, null)
+    return JSON.stringify({ nodes: a.nodes, edges: a.edges, groups: a.groups })
+  }, [])
+  const dirty = useMemo(
+    () => graphId != null && graphSig(nodes, edges, groups) !== savedSig,
+    [graphId, nodes, edges, groups, savedSig, graphSig],
+  )
 
   // topology signature — captures only the structure (node existence·group membership·label / edge wiring), excluding selection·position.
   // buildView (group/stub/edge routing) reruns only when this changes → during rubber-band selection or node drag,
@@ -314,6 +326,7 @@ export default function Editor() {
     setNodes(rn)
     setEdges(re)
     setGroups(rg)
+    setSavedSig(graphSig(rn, re, rg))   // freshly loaded = clean baseline
     setActiveGroup(null)
     setSelectedIds([])
     setGateways(full.gateways || [])
@@ -321,7 +334,7 @@ export default function Editor() {
     setRunMeta(null)
     if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
     setStatus(`Loaded: ${full.name} (nodes ${rn.length}${rg.length ? ` · groups ${rg.length}` : ''})`)
-  }, [setNodes, setEdges, setViewport])
+  }, [setNodes, setEdges, setViewport, graphSig])
 
   useEffect(() => {
     (async () => {
@@ -552,16 +565,11 @@ export default function Editor() {
     setSelectedIds(sel.filter((n) => isRealNode(n.type)).map((n) => n.id))
   }, [])
 
-  const onSave = useCallback(async () => {
-    setError(null)
-    try {
-      await saveGraph(graphId, rfToApi(nodes, edges, groups, getViewport()))
-      setStatus(`Saved · ${new Date().toLocaleTimeString()}`)
-    } catch (e) { setError(e.data || String(e)); setStatus('Save failed (validation error?)') }
-  }, [graphId, nodes, edges, groups, getViewport])
-
-  const onEvaluate = useCallback(async () => {
-    setError(null)
+  // Evaluate the graph (server-side, on the *saved* state) and attach per-node result distributions. `silent` = auto-run
+  // (after load / save): fill node·Inspector values without opening the Results panel or surfacing errors.
+  const runEvaluation = useCallback(async ({ silent = false } = {}) => {
+    if (!graphId) return
+    if (!silent) setError(null)
     try {
       const run = await evaluateGraph(graphId)
       const byKey = Object.fromEntries(run.results.map((r) => [r.node_key, r]))
@@ -580,12 +588,30 @@ export default function Editor() {
         return { ...r, dist: res?.distribution || null, provenance: res?.provenance || [], missing: !res }
       }))
       setRunMeta({ id: run.id, stats: run.stats, certificate: run.certificate })
-      setShowResults(true)
+      if (!silent) setShowResults(true)
       const cert = run.certificate
-      setStatus(`Evaluation run#${run.id} · computed ${run.stats.computed} / cached ${run.stats.cached}`
+      setStatus(`${silent ? 'Auto-evaluated' : `Evaluation run#${run.id}`} · computed ${run.stats.computed} / cached ${run.stats.cached}`
         + (cert ? ` · consistency ${cert.passed ? 'pass' : 'warn'}` : ''))
-    } catch (e) { setError(e.data || String(e)) }
+    } catch (e) { if (!silent) setError(e.data || String(e)); else setStatus('Auto-evaluate failed — press Evaluate') }
   }, [graphId, setNodes, gateways, nodes, edges])
+
+  const onEvaluate = useCallback(() => runEvaluation(), [runEvaluation])
+
+  const onSave = useCallback(async () => {
+    setError(null)
+    try {
+      await saveGraph(graphId, rfToApi(nodes, edges, groups, getViewport()))
+      setSavedSig(graphSig(nodes, edges, groups))   // saved = new clean baseline
+      setStatus(`Saved · ${new Date().toLocaleTimeString()}`)
+      runEvaluation({ silent: true })               // refresh results against the just-saved state
+    } catch (e) { setError(e.data || String(e)); setStatus('Save failed (validation error?)') }
+  }, [graphId, nodes, edges, groups, getViewport, graphSig, runEvaluation])
+
+  // Auto-evaluate on load / graph switch (local == DB → results are correct). Keyed on graphId so edits don't retrigger.
+  useEffect(() => {
+    if (graphId) runEvaluation({ silent: true })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graphId])
 
   // Science CI — re-bake, then diff against the published baseline. (Safer to save first before editing.)
   const onVerify = useCallback(async () => {
@@ -701,7 +727,14 @@ export default function Editor() {
           <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="Select graph">
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
-          <button onClick={onSave}>Save (PUT)</button>
+          <button onClick={onSave} className={dirty ? 'save-btn dirty' : 'save-btn'}
+                  title={dirty ? 'Unsaved changes — click to save' : 'No changes since last save'}>
+            Save (PUT)
+          </button>
+          <span className={`save-state ${dirty ? 'dirty' : 'clean'}`}
+                title={dirty ? 'This graph has edits not yet saved to the server' : 'All edits saved'}>
+            {dirty ? '● Unsaved' : '✓ Saved'}
+          </span>
           <button onClick={onEvaluate}>Evaluate</button>
           <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
           <button onClick={onCreateGroup}
