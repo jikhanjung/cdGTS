@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import Editor from './Editor.jsx'
 import Vault from './Vault.jsx'
+import Proposals from './Proposals.jsx'
 import LoginBar from './LoginBar.jsx'
 import { whoami } from './api.js'
 
-// Two surfaces: Editor (build/bake a graph) and Vault (the artifact hub — view/compare baked Releases).
-// Baking in the Editor drops you into the Vault on the fresh Release.
+// Surfaces: Editor (build/bake/propose a graph) · Vault (baked Release hub) · Proposals (CI review).
+// Baking drops you into the Vault; proposing drops you into Proposals.
 export default function App() {
   const [view, setView] = useState('editor')
   const [vaultReleaseId, setVaultReleaseId] = useState(null)
@@ -22,12 +23,15 @@ export default function App() {
         <span className="brand">cdGTS<span className="brand-ver">v{__APP_VERSION__}</span></span>
         <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
         <button className={view === 'vault' ? 'active' : ''} onClick={() => setView('vault')}>Vault</button>
+        <button className={view === 'proposals' ? 'active' : ''} onClick={() => setView('proposals')}>Proposals</button>
         <LoginBar user={user} onChange={setUser} />
       </nav>
       <div className="view">
         {view === 'editor'
-          ? <ReactFlowProvider><Editor onBaked={goVault} user={user} /></ReactFlowProvider>
-          : <Vault initialReleaseId={vaultReleaseId} />}
+          ? <ReactFlowProvider><Editor onBaked={goVault} onProposed={() => setView('proposals')} user={user} /></ReactFlowProvider>
+          : view === 'vault'
+            ? <Vault initialReleaseId={vaultReleaseId} />
+            : <Proposals user={user} />}
       </div>
     </div>
   )

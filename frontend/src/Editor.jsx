@@ -15,7 +15,7 @@ import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
-  bakeGraph, suggestBakeName, forkGraph,
+  bakeGraph, suggestBakeName, forkGraph, proposeGraph,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
@@ -244,7 +244,7 @@ function buildView(nodes, edges, groups, activeGroup) {
   return { nodeRep, groupNodes, ioNodes, boundNodes, viewEdges }
 }
 
-export default function Editor({ onBaked, user } = {}) {
+export default function Editor({ onBaked, onProposed, user } = {}) {
   const [types, setTypes] = useState([])
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
@@ -703,6 +703,20 @@ export default function Editor({ onBaked, user } = {}) {
     } catch (e) { setError(e.data || String(e)); setBakeDialog((d) => d && ({ ...d, busy: false })) }
   }, [bakeDialog, graphId, onBaked])
 
+  // Propose (P05.4) — save, then submit this sandbox graph for review against the published baseline.
+  const onPropose = useCallback(async () => {
+    setError(null)
+    try {
+      if (dirty) {
+        await saveGraph(graphId, rfToApi(nodes, edges, groups, getViewport()))
+        setSavedSig(graphSig(nodes, edges, groups))
+      }
+      const { proposal } = await proposeGraph(graphId)
+      setStatus(`Proposed → #${proposal.id} (${(proposal.affected || []).length} boundaries) · review in Proposals`)
+      if (onProposed) onProposed(proposal)
+    } catch (e) { setError(e.data?.detail || e.data || String(e)); setStatus('Propose failed') }
+  }, [dirty, graphId, nodes, edges, groups, getViewport, graphSig, onProposed])
+
   // --- Inspector (selected real node) ---
   const patchNodeData = useCallback((id, fn) => {
     setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
@@ -787,6 +801,7 @@ export default function Editor({ onBaked, user } = {}) {
   const authed = !!user?.authenticated
   const canEdit = authed && (currentGraph?.owner === user.username || user.is_staff)
   const canBake = authed
+  const canPropose = canEdit && currentGraph?.status === 'sandbox'
 
   // Reload the visible graph list when auth identity changes (login reveals your graphs; logout hides them).
   useEffect(() => {
@@ -868,6 +883,13 @@ export default function Editor({ onBaked, user } = {}) {
           <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
           <button onClick={onOpenBake} className="bake-btn" disabled={!graphId || !canBake}
                   title={canBake ? 'Bake — freeze this graph\'s outputs into a new immutable Release kept in the Vault' : 'Sign in to bake a Release'}>Bake…</button>
+          {canEdit && (
+            <button onClick={onPropose} className="propose-btn" disabled={!canPropose}
+                    title={canPropose ? 'Propose this graph for review against the published baseline (CI)'
+                                      : (currentGraph?.status !== 'sandbox' ? `Already ${currentGraph?.status}` : 'Propose')}>
+              {currentGraph?.status === 'proposed' ? 'Proposed' : 'Propose'}
+            </button>
+          )}
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
                   title={activeGroup ? 'Nest the selection as a subgroup inside this group' : 'Combine the selected nodes·groups into one group (merges if groups are mixed in)'}>

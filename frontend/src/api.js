@@ -65,6 +65,17 @@ export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).t
 export const narrateRelease = (id) =>
   fetch(`/api/releases/${id}/narrate/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 
+// --- proposals (P05.4 = CI) ---
+export const proposeGraph = (id, comment) =>
+  fetch(`/api/graphs/${id}/propose/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ comment: comment || '' }) }).then(j)
+export const listProposals = (state) =>
+  fetch(`/api/proposals/${state ? `?state=${state}` : ''}`).then(j)
+export const getProposal = (id) => fetch(`/api/proposals/${id}/`).then(j)
+export const ratifyProposal = (id, comment) =>
+  fetch(`/api/proposals/${id}/ratify/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ comment: comment || '' }) }).then(j)
+export const rejectProposal = (id, comment) =>
+  fetch(`/api/proposals/${id}/reject/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ comment: comment || '' }) }).then(j)
+
 // --- releases / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)

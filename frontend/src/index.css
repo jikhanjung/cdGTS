@@ -389,6 +389,36 @@ body {
 .toolbar button.fork-btn:hover { background: #e0eaf8; }
 .toolbar button.fork-btn.primary { background: #2f5aa8; border-color: #2f5aa8; color: #fff; }
 .toolbar button.fork-btn.primary:hover { background: #26497f; }
+.toolbar button.propose-btn { border-color: #b9d8bf; background: #eef7f0; color: #2f7d45; font-weight: 600; }
+.toolbar button.propose-btn:hover { background: #e3f1e7; }
+/* --- proposals (CI review) --- */
+.prop-filter { display: flex; gap: 4px; padding: 0 12px 10px; }
+.prop-filter button { border: 1px solid #cfcfe0; background: #fff; border-radius: 5px; padding: 3px 8px;
+  font-size: 11px; cursor: pointer; text-transform: capitalize; }
+.prop-filter button.active { background: #eae4f7; border-color: #c9b6ec; font-weight: 600; }
+.prop-state { text-transform: uppercase; letter-spacing: 0.3px; font-weight: 700; font-size: 10px;
+  padding: 1px 5px; border-radius: 4px; background: #e6e6ef; color: #55556a; }
+.prop-state.open { background: #fdf1d8; color: #8a5a00; }
+.prop-state.merged { background: #e8f5ec; color: #2f7d45; }
+.prop-state.rejected { background: #fbe6e6; color: #b03030; }
+.prop-detail { padding: 18px 22px; max-width: 760px; }
+.prop-detail h3 { display: flex; align-items: center; gap: 8px; margin: 0 0 4px; }
+.prop-meta { font-size: 12px; color: #55556a; margin: 0 0 8px; }
+.prop-comment { font-style: italic; color: #444; margin: 0 0 10px; }
+.prop-summary { font-size: 13px; background: #f5f5fa; border-radius: 6px; padding: 8px 12px; display: inline-block; }
+.prop-diff { border-collapse: collapse; margin: 12px 0; font-size: 13px; }
+.prop-diff th, .prop-diff td { border: 1px solid #e2e2ea; padding: 4px 10px; text-align: left; }
+.prop-diff td.num, .prop-diff th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.prop-diff td.mono { font-family: ui-monospace, Menlo, monospace; }
+.prop-diff td.num.pos { color: #b03030; } .prop-diff td.num.neg { color: #2f6bb0; }
+.prop-topo { font-size: 13px; color: #55556a; padding-left: 18px; }
+.prop-review { display: flex; gap: 8px; align-items: center; margin-top: 16px; flex-wrap: wrap; }
+.prop-review input { flex: 1; min-width: 180px; padding: 6px 9px; border: 1px solid #cfcfe0; border-radius: 6px; font-size: 13px; }
+.prop-ratify { border: 1px solid #2f7d45; background: #2f7d45; color: #fff; border-radius: 6px; padding: 6px 14px; font-weight: 600; cursor: pointer; }
+.prop-ratify:hover { background: #276437; }
+.prop-reject { border: 1px solid #cfcfe0; background: #fff; color: #b03030; border-radius: 6px; padding: 6px 14px; cursor: pointer; }
+.prop-reject:hover { background: #fbe6e6; }
+.prop-note { font-size: 12px; color: #767688; margin-top: 14px; }
 /* --- modal (bake / login dialog) --- */
 .modal-backdrop { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center;
   justify-content: center; background: rgba(20, 14, 40, 0.32); }
