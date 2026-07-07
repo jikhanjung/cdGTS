@@ -664,6 +664,11 @@ export default function Editor() {
 
   const selectedId = selectedIds[0] ?? null
   const selectedNode = useMemo(() => nodes.find((n) => n.id === selectedId) || null, [nodes, selectedId])
+  // Auto-show the properties panel (desktop) when the selection changes to a node/group. Keyed on the selection ids
+  // (not the node objects) so hiding the panel while a node stays selected isn't undone by unrelated edits/evals.
+  useEffect(() => {
+    if (selectedId || selectedGroupKeys[0]) setInspectorCollapsed(false)
+  }, [selectedId, selectedGroupKeys])
   const nodeKeys = useMemo(
     () => nodes.filter((n) => n.id !== selectedId).map((n) => ({ id: n.id, label: n.data.label || n.data.nodeType })),
     [nodes, selectedId],
