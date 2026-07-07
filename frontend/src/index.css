@@ -229,6 +229,11 @@ body {
 .ctx-menu li:hover { background: #f3e8fd; color: #7a2fbf; }
 .ctx-menu li.disabled { color: #a9a9b8; cursor: default; }
 .ctx-menu li.disabled:hover { background: none; color: #a9a9b8; }
+.ctx-menu li.danger { color: #b3261e; }
+.ctx-menu li.danger:hover { background: #fdecea; color: #b3261e; }
+
+/* selected edge — thicker for feedback (order edges set stroke inline, so use width). right-click → Delete edge */
+.react-flow__edge.selected .react-flow__edge-path { stroke-width: 3; }
 
 /* --- ICC table --- */
 .icc { height: 100%; overflow-y: auto; padding: 18px 24px; }

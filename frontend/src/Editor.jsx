@@ -478,6 +478,16 @@ export default function Editor() {
     e.preventDefault()
     setMenu({ x: e.clientX, y: e.clientY, kind: 'pane' })
   }, [])
+  const onEdgeContextMenu = useCallback((e, edge) => {
+    e.preventDefault()
+    setMenu({ x: e.clientX, y: e.clientY, kind: 'edge', id: edge.id, edgeKind: edge.data?.kind })
+  }, [])
+  // view edge id is `v-<realid>`; strip it to remove the underlying real edge (works for order & rewired boundary/group edges too).
+  const onDeleteEdge = useCallback((viewId) => {
+    const realId = viewId?.startsWith('v-') ? viewId.slice(2) : viewId
+    setEdges((eds) => eds.filter((e) => e.id !== realId))
+    setStatus('Edge deleted')
+  }, [setEdges])
 
   const onUngroup = useCallback((key) => {
     const up = groups.find((g) => g.key === key)?.parent || null      // on ungroup, contents go up to the parent level
@@ -719,6 +729,7 @@ export default function Editor() {
             onSelectionChange={onSelectionChange}
             onNodeDoubleClick={onNodeDoubleClick}
             onNodeContextMenu={onNodeContextMenu}
+            onEdgeContextMenu={onEdgeContextMenu}
             onPaneContextMenu={onPaneContextMenu}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
@@ -780,6 +791,11 @@ export default function Editor() {
               )}
               {menu.kind === 'pane' && activeGroup && (
                 <li onClick={() => { setActiveGroup(activeGroupObj?.parent || null); closeMenu() }}>Exit to parent</li>
+              )}
+              {menu.kind === 'edge' && (
+                <li className="danger" onClick={() => { onDeleteEdge(menu.id); closeMenu() }}>
+                  Delete {menu.edgeKind === 'order' ? 'order (younger/older) edge' : 'edge'}
+                </li>
               )}
             </ul>
           </>

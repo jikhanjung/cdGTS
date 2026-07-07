@@ -201,15 +201,19 @@ export default function IccChart() {
               ))}
               {data.levels.map((lv, ci) => lv.bands.map((b) => {
                 const yt = y(b.top), h = Math.max(y(b.bottom) - yt, 0)
+                // Label visibility·size follow the band's ON-SCREEN height (h·zoom), so zooming in reveals thin
+                // bands (e.g. Cambrian stages). Font counter-scaled by 1/zoom → ~constant readable size on screen.
+                const screenH = h * zoom
+                const labelFs = Math.min(13, Math.max(8, screenH * 0.5)) / zoom
                 return (
                   <g key={lv.rank + b.slug}>
                     <rect x={AXIS + ci * COLW + 1} y={yt} width={COLW - 2} height={h}
                           fill={bandColor(b, lv.rank_n)} stroke="#fff" strokeWidth="0.6">
                       <title>{`${b.name} · ${b.top}–${b.bottom} Ma${b.pm > 0 ? ` · lower boundary ± ${b.pm} Ma` : b.pm === 0 ? ' · agreed value' : ''}`}</title>
                     </rect>
-                    {h > 13 && (
-                      <text x={AXIS + ci * COLW + COLW / 2} y={yt + h / 2 + 3} textAnchor="middle"
-                            className="icc-band" fill={textOn(b.color)}>
+                    {screenH > 12 && (
+                      <text x={AXIS + ci * COLW + COLW / 2} y={yt + h / 2} textAnchor="middle" dominantBaseline="central"
+                            className="icc-band" fill={textOn(b.color)} style={{ fontSize: `${labelFs}px` }}>
                         {b.name}
                       </text>
                     )}
