@@ -6,7 +6,7 @@
 
 cdGTS = **Continuously Deployed Geologic Time Scale**, 부제 *"A graph-based geologic time scale engine"*. 지질시대표를 연대층서 단위·경계의 실행 가능한 의존성 그래프로 구현하는 엔진입니다. **브레인스토밍으로 시작해 실행 가능한 코드베이스로 전환**되었습니다 — 개념 코퍼스(`docs/`)와 구현(Django 앱 + React 프론트)이 함께 있습니다. (표기 규칙은 `docs/naming.md`: "Geologic"·"Time Scale"·괄호 앞 공백.)
 
-- **현재 상태**: 스키마 v0 를 Django 5.2 + DRF + React Flow 로 구현, 운영서버(cdgts.paleobytes.info)에 **v0.1.25** 배포. 상세는 **[HANDOFF.md](HANDOFF.md)** (현재 상태) · **[TODOs.md](TODOs.md)** (백로그) · `devlog/` (라운드별 기록).
+- **현재 상태**: 스키마 v0 를 Django 5.2 + DRF + React Flow 로 구현, 운영서버(cdgts.paleobytes.info)에 **v0.1.25** 배포. 이후 리포엔 **Editor→Bake→Vault 재구성**(P04, 테스트 0.1.26)과 **멀티유저 CI**(P05: 인증·소유·fork·propose/ratify) 구현 — 배포 대기. 상세는 **[HANDOFF.md](HANDOFF.md)** (현재 상태) · **[TODOs.md](TODOs.md)** (백로그) · `devlog/` (라운드별 기록).
 - 개념 코퍼스는 여전히 살아있는 브레인스토밍 대상입니다 — 아이디어를 던지고 굴려볼 수 있습니다.
 - **새 작업 시작 전 `HANDOFF.md` 를 먼저 읽으세요.** 무엇이 이미 구현/배포됐는지 여기에 요약돼 있습니다.
 
@@ -36,6 +36,6 @@ cdGTS = **Continuously Deployed Geologic Time Scale**, 부제 *"A graph-based ge
 
 - `docs/idea.md` — 전체 개념 정리 (배경, 문제의식, 데이터 모델 Layer 0~6, 열린 질문)
 - `docs/node-graph-paradigm.md` — 노드 그래프 패러다임
-- `docs/app-architecture.md` — 앱 아키텍처(구현 스택·5개 앱 설계)
+- `docs/app-architecture.md` — 앱 아키텍처(구현 스택·앱 설계; 현재 6개 앱 + accounts)
 - 그 외 사례 3종·스키마·정합성 게이트·경쟁 모델·순환/clamp·토폴로지 diff·분포 표현 문서. 목록은 `README.md` 참조.
 - `HANDOFF.md`(현재 상태) · `TODOs.md`(백로그) · `devlog/`(라운드별 기록).

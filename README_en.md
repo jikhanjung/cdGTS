@@ -6,7 +6,7 @@
 
 *English · [한국어](README.md)*
 
-> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is now built as 5 Django apps + a React node editor, and **v0.1.25** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart with 3 scale modes / narrate + boundary–span duality model, node groups, nested groups, order/L2 coherence gates, merge geometry, and Science CI). The concept corpus stays in `docs/`.
+> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is built as Django apps + a React node editor, and **v0.1.25** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart with 3 scale modes / narrate + boundary–span duality model, node groups, nested groups, order/L2 coherence gates, merge geometry, and Science CI). Since then the repo adds an **Editor→Bake→Vault restructure** (immutable Release artifacts, on test 0.1.26) and **multiuser CI** (session auth, ownership/visibility, fork, propose→review→ratify) — pending deployment. The concept corpus stays in `docs/`.
 
 ## What is it
 
@@ -74,9 +74,10 @@ Different threads repeatedly converged to the same structure (details in [concep
 
 Concept (brainstorming) → **implemented & deployed**. Schema v0 (all five §4 open questions resolved) has been brought down into a runnable app.
 
-- **Stack**: Django 5.2 + SQLite + DRF + React Flow (Vite). 5 apps (chrono·nodes·graph·engine·releases) + a front-end node editor, ICC-table view, ICC chart, and release-diff view. Backend `pytest` 91 passed.
+- **Stack**: Django 5.2 + SQLite + DRF + React Flow (Vite). 6 apps (chrono·nodes·graph·engine·releases·accounts) + a front-end node editor, a **Vault** hub (ICC table·chart·narrate·diff), and **Proposals** (CI review). Backend `pytest` 110 passed.
 - **Engine**: value + provenance propagation (pass-through) · coherence gate (L1 authored order edges · L2 duration) · value/topology diff skeleton · merge-node geometry tiling (age→period→era→chart). A compute kernel (numpy/scipy) runs the real age-depth model.
 - **Editor/chart**: node groups (nesting, merge, drill-in) + boundary–span duality (boundary/unit) + order edges · auto-evaluate/saved indicator · selection rings & multi-select · ICC chart with 3 scale modes (Log·Linear·Table) + zoom/pan + uncertainty bands · one-click Science-CI diff · mobile support.
-- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.25**. Deploys via `deploy-prod.sh` (pre-deploy DB snapshot) + an nginx maintenance page. Dev/test pulls the production DB daily (NAS offsite backup, 04:00 cron).
+- **Artifacts/CI** (P04·P05, pending deploy): **Bake** (graph → immutable Release) → **Vault** (view/compare Releases) · session login · ownership/visibility · **Fork** · **Propose→Review→Ratify** (an authority member ratifies into a new published baseline).
+- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.25**, test `:8011` @ **0.1.26** (P04). Deploys via `deploy-prod.sh` (pre-deploy DB snapshot) + an nginx maintenance page. Dev/test pulls the production DB daily (NAS offsite backup, 04:00 cron).
 
 The current-state headline is in [HANDOFF.md](HANDOFF.md), per-round changes in [`devlog/`](devlog/), and the remaining open questions in [TODOs.md](TODOs.md).

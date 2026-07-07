@@ -12,7 +12,7 @@
 - **성격**: 브레인스토밍 저장소 → **실행 가능한 코드베이스 + 실배포**(개념 코퍼스는 `docs/` 에 그대로 유지).
 - **스택**: Django **5.2.12**, DB **SQLite**(공간 기능 착수 시 PostGIS), **DRF 3.17.1**, 프론트 **React 18 +
   @xyflow/react 12 + Vite**(`frontend/`, dev 는 `/api` 프록시). venv `/home/jikhanjung/venv/cdGTS`.
-- **앱 5개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases):
+- **앱 6개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases · accounts):
   - `chrono` — 정본 registry(Unit 이중명명·Boundary·Lineage·Authority·Ratification·Locality).
     ICS chart.ttl 기반, **Subperiod(아계) rank 포함**(Carboniferous Mississippian/Pennsylvanian).
   - `nodes` — 타입 시스템(NodeType + Port) + `Distribution` 값객체(충실도 L0–L5). `published-age`(공표값 leaf) 포함.
@@ -24,9 +24,13 @@
     age-depth 선형보간+spline MC). **정합성 게이트: L1 = authored order edge 체인(sparse) · L2 = 게이트웨이가
     덮는 전 유닛 duration>0 자동검사**(영-길이 유닛 검출, rank 별 타일링). **merge 노드 = geometry/composition
     타일링**(구간 조립: age→period→era→chart).
-  - `releases` — ModelCandidate·Release·BoundaryRecord·Clamp + bake/diff/`bake_graph` API.
+  - `releases` — ModelCandidate·Release·BoundaryRecord·Clamp + bake/diff API.
     **공표 ICC 릴리스 `ICS-2024/12`**(Epoch/Age 까지 값 정식화) + `GET /api/releases/{id}/icc-chart/`.
     **narrate**: `BoundaryRecord.narrative` 를 구조화 필드에서 결정적 템플릿 렌더(LLM 창작 없음).
+    **P04/P05**: `Release.kind`(published/bake/transient)·`owner`·`source_graph`(불변 Bake 아티팩트) ·
+    `snapshot_graph` · **`Proposal`**(propose/ratify/reject = CI) · `verify_graph`/`publish_graph`.
+  - `accounts` — **`Membership`**(User↔Authority·role) + 개인 fork Authority 시그널 + 세션 인증
+    `/api/auth/{whoami,login,logout}` + 중앙 **`can_ratify`**(P05.1·.4).
 - **프론트 — 노드 에디터(`Editor.jsx`)**: 팔레트/캔버스/인스펙터. 주요 UX:
   - 헤더에 **버전 배지**(`v0.1.x`), **auto-evaluate**(로드/저장 시 자동) + **saved/unsaved 표시**(● Unsaved / ✓ Saved).
   - **boundary 노드**: 컴팩트(반높이 ◈), 입력 age(또는 공표값)를 노드 얼굴·인스펙터에 표시, Phanerozoic 경계는
@@ -38,7 +42,8 @@
   - **컨텍스트 메뉴**: 노드/엣지 **삭제**, 그룹 생성·병합·해제, parent 로 돌아가기. **엣지 선택·삭제**(order edge 포함).
   - **order edge**: younger→older 연결로 생성(점선 보라), 그룹 접힘 시 order 포트 항상 노출(삭제해도 재연결 가능).
   - **그룹/합성 노드 고정 폭**(collapsed group 200px · Group I/O 200px, 긴 라벨 ellipsis).
-- **프론트 — ICC 뷰**: ICC 테이블 + **ICC 차트** + 릴리스 Diff 뷰.
+- **프론트 — Vault 허브 + Proposals**(P04·P05; nav = Editor·**Vault**·**Proposals** + LoginBar): ICC 테이블·**차트**·서술·
+  릴리스 Diff 를 **Vault**(Release 선택 → 표현 토글)로 통합. **Proposals** = CI 리뷰(제안 목록 + verify diff + ratify/reject).
   - **ICC 차트**: Eon~Age **5 컬럼 중첩**(**Subperiod 는 Epoch 컬럼에 병합** — Carboniferous 전용 컬럼 제거),
     경계 불확실성 ± 밴드·툴팁. **스케일 3종**: Log(최근 확대) · Linear(비례) · **Table(equal Age — 시간척도 무시,
     leaf 셀 균등 높이의 표 형식)**. **줌(viewBox scale) + 팬**(Ctrl/⌘+휠 커서 기준), 줌에 따라 라벨 폰트 조정

@@ -6,7 +6,7 @@
 
 *[English](README_en.md) · 한국어*
 
-> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 5개 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.25** 배포(ICC 테이블·차트(3 스케일 모드)·서술 + 경계·구간 이중성 모델 + 노드그룹·중첩그룹·order/L2 정합성 게이트 + merge geometry + Science CI). 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
+> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.25** 배포(ICC 테이블·차트(3 스케일 모드)·서술 + 경계·구간 이중성 모델 + 노드그룹·중첩그룹·order/L2 정합성 게이트 + merge geometry + Science CI). 이후 리포엔 **Editor→Bake→Vault 재구성**(불변 Release 아티팩트, 테스트 0.1.26)과 **멀티유저 CI**(세션 인증·소유/가시성·fork·propose→review→ratify)가 구현됨 — 배포 대기. 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
 
 ## 무엇인가
 
@@ -74,9 +74,10 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 
 개념(브레인스토밍) → **구현·배포** 단계입니다. 스키마 v0(§4 열린 질문 5개 모두 정리)를 실행 가능한 앱으로 내렸습니다.
 
-- **스택**: Django 5.2 + SQLite + DRF + React Flow(Vite). 5개 앱(chrono·nodes·graph·engine·releases) + 프론트 노드 에디터·ICC 테이블·ICC 차트·릴리스 diff 뷰. 백엔드 `pytest` 91 passed.
+- **스택**: Django 5.2 + SQLite + DRF + React Flow(Vite). 6개 앱(chrono·nodes·graph·engine·releases·accounts) + 프론트: 노드 에디터 · **Vault**(ICC 테이블·차트·서술·diff 허브) · **Proposals**(CI 리뷰). 백엔드 `pytest` 110 passed.
 - **엔진**: 값+provenance 전파(pass-through) · 정합성 게이트(L1 authored order edge · L2 duration) · 값/토폴로지 diff 골격 · merge 노드 geometry 타일링(age→period→era→chart). 계산 커널(numpy/scipy)로 age-depth model 실계산.
 - **에디터/차트**: 노드그룹(중첩·병합·드릴인) + 경계·구간 이중성(boundary/unit) + order edge · auto-evaluate/saved 표시 · 선택 링/다중선택 · ICC 차트 3 스케일 모드(Log·Linear·Table) + 줌/팬 + 불확실성 밴드 · Science CI 원클릭 diff · 모바일 대응.
-- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.25**. 배포는 `deploy-prod.sh`(배포 전 DB 스냅샷) + nginx 점검 페이지. 개발/테스트가 운영 DB 를 일일 pull(NAS 오프사이트 백업, 04:00 cron).
+- **아티팩트/CI**(P04·P05, 배포 대기): **Bake**(그래프 → 불변 Release) → **Vault**(Release 열람·비교 허브) · 세션 로그인 · 소유/가시성 · **Fork** · **Propose→Review→Ratify**(권한자 승인 시 새 공표 baseline).
+- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.25**, 테스트 `:8011` @ **0.1.26**(P04). 배포는 `deploy-prod.sh`(배포 전 DB 스냅샷) + nginx 점검 페이지. 개발/테스트가 운영 DB 를 일일 pull(NAS 오프사이트 백업, 04:00 cron).
 
 현재 상태 헤드라인은 [HANDOFF.md](HANDOFF.md), 라운드별 변경은 [`devlog/`](devlog/), 미해결 열린 질문은 [TODOs.md](TODOs.md) 참조.

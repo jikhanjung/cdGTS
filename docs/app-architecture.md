@@ -25,8 +25,11 @@
 | **`nodes`** | 노드 *타입 시스템* — 데이터/프로세스/clamp 종류, 포트, 분포 페이로드 | node-graph 노드 종류, 충실도 사다리 |
 | **`graph`** | 실제 DAG — 노드 인스턴스·엣지·노드그룹·게이트웨이·캔버스 레이아웃 | 네트워크, 게이트웨이 2계층 |
 | **`engine`** | 평가(확률 전파)·증분 재계산·정합성 게이트·bake/narrate | Layer 5, coherence-gate |
-| **`releases`** | Release 매니페스트(selection+clamps)·ICC/GTS·값/토폴로지 diff | versioning, competing-models, topology-diff |
-| **(프론트엔드)** | React Flow drag&drop 캔버스 ↔ `graph` REST API | Figma/Blender-nodes 느낌 |
+| **`releases`** | Release 매니페스트(selection+clamps)·ICC/GTS·값/토폴로지 diff · **Bake 아티팩트·Proposal(CI)** | versioning, competing-models, topology-diff |
+| **`accounts`** | User↔Authority Membership · 세션 인증 · 중앙 `can_ratify` | 멀티유저 CI(P05) |
+| **(프론트엔드)** | React Flow drag&drop 캔버스 ↔ `graph` REST API · Vault · Proposals | Figma/Blender-nodes 느낌 |
+
+> **구현 현황**: 위 설계는 6개 앱으로 구현됨(+`accounts`, P05). 아티팩트=불변 Release(Vault)·멀티유저 CI(fork·propose·ratify)는 devlog 102~109 참조. 배포/현재 상태는 [HANDOFF.md](../HANDOFF.md).
 
 의존 방향 (하위는 상위를 모름):
 

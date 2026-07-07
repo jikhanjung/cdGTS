@@ -27,8 +27,11 @@ Two axes from the concept docs become the app boundaries:
 | **`nodes`** | Node *type system* — data/process/clamp kinds, ports, distribution payload | node-graph node kinds, fidelity ladder |
 | **`graph`** | The actual DAG — node instances·edges·node groups·gateways·canvas layout | network, gateway two-layer |
 | **`engine`** | Evaluation (probabilistic propagation)·incremental re-eval·coherence gate·bake/narrate | Layer 5, coherence-gate |
-| **`releases`** | Release manifest (selection+clamps)·ICC/GTS·value/topology diff | versioning, competing-models, topology-diff |
-| **(frontend)** | React Flow drag&drop canvas ↔ `graph` REST API | Figma/Blender-nodes feel |
+| **`releases`** | Release manifest (selection+clamps)·ICC/GTS·value/topology diff · **Bake artifacts·Proposal (CI)** | versioning, competing-models, topology-diff |
+| **`accounts`** | User↔Authority Membership · session auth · central `can_ratify` | multiuser CI (P05) |
+| **(frontend)** | React Flow drag&drop canvas ↔ `graph` REST API · Vault · Proposals | Figma/Blender-nodes feel |
+
+> **Implementation status**: the design above is built as 6 apps (+`accounts`, P05). Immutable Release artifacts (Vault) and multiuser CI (fork·propose·ratify) — see devlog 102–109. Deploy/current state: [HANDOFF.md](../HANDOFF.md).
 
 Dependency direction (lower does not know upper):
 
