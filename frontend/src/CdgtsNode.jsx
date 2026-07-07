@@ -32,7 +32,7 @@ export default function CdgtsNode({ data, selected }) {
   const rows = Math.max(inputs.length, outputs.length, 1)
 
   return (
-    <div className={`cdgts-node${isBoundary ? ' boundary' : ''}${isUnit ? ' unit' : ''}`} style={{ borderColor: color }}>
+    <div className={`cdgts-node${isBoundary ? ' boundary' : ''}${isUnit ? ' unit' : ''}${selected ? ' selected' : ''}`} style={{ borderColor: color }}>
       {selected && (
         <NodeResizeControl
           className="cdgts-resize" position="right" minWidth={140} maxWidth={440}

@@ -830,6 +830,7 @@ export default function Editor() {
             zoomOnPinch                          // touch: pinch zoom
             selectionMode={SelectionMode.Full}  // select only fully enclosed nodes — prevents the box growing when a wide node is barely grazed and released
             multiSelectionKeyCode="Shift"        // Shift+click = add to selection
+            selectionKeyCode={null}              // box-select is already on plain drag (selectionOnDrag); free Shift for multi-add only (avoid the Shift/Shift conflict)
             fitView
           >
             {activeGroup && (
