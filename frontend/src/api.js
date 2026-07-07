@@ -30,12 +30,19 @@ export const getGraph = (id) => fetch(`/api/graphs/${id}/`).then(j)
 export const createGraph = (body) =>
   fetch('/api/graphs/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
 
-// Fork a readable graph into a new sandbox you own (P05.3). Returns the new graph.
-export const forkGraph = (id) =>
-  fetch(`/api/graphs/${id}/fork/`, { method: 'POST', headers: csrfHeaders() }).then(j)
+// Fork a readable graph into a new sandbox you own (P05.3). Optional name; else "<source> (fork)". Returns the new graph.
+export const forkGraph = (id, name) =>
+  fetch(`/api/graphs/${id}/fork/`, {
+    method: 'POST', headers: csrfHeaders(),
+    body: JSON.stringify(name ? { name } : {}),
+  }).then(j)
 
 export const saveGraph = (id, body) =>
   fetch(`/api/graphs/${id}/`, { method: 'PUT', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
+
+// Edit graph metadata (name/description) without touching topology — partial PATCH.
+export const updateGraphInfo = (id, patch) =>
+  fetch(`/api/graphs/${id}/`, { method: 'PATCH', headers: csrfHeaders(), body: JSON.stringify(patch) }).then(j)
 
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: csrfHeaders() }).then(j)

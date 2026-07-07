@@ -15,14 +15,16 @@ def _unique_slug(base):
 
 
 @transaction.atomic
-def fork_graph(source, user):
+def fork_graph(source, user, name=None):
     """
     Clone source's topology (groups · nodes · edges · gateways) into a new sandbox graph owned by `user`.
     Node/group keys are preserved (unique per graph), so edges/gateways re-link by key. Returns the new Graph.
+    `name` overrides the default "<source> (fork)".
     """
     fork = Graph.objects.create(
         slug=_unique_slug(f"{source.slug}-fork"),
-        name=f"{source.name} (fork)",
+        name=(name or "").strip() or f"{source.name} (fork)",
+        description=source.description,
         owner=user,
         status=Graph.Status.SANDBOX,
         forked_from=source,

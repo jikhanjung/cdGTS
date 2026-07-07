@@ -51,6 +51,7 @@ class Graph(models.Model):
 
     slug = models.SlugField(unique=True)
     name = models.CharField(max_length=200)
+    description = models.TextField(blank=True, default="", help_text="Free-text notes about this graph/branch.")
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, blank=True,
         on_delete=models.SET_NULL, related_name="graphs",

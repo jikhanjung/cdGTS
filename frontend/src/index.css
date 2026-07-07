@@ -479,6 +479,23 @@ body {
 .bake-actions button.primary { border-color: #a142f4; background: #a142f4; color: #fff; font-weight: 600; }
 .bake-actions button.primary:hover { background: #8f33e0; }
 .bake-actions button:disabled { opacity: 0.5; cursor: default; }
+.bake-actions button.fork-btn.primary { border-color: #2f5aa8; background: #2f5aa8; }
+.bake-actions button.fork-btn.primary:hover { background: #26497f; }
+/* textarea in dialogs mirrors the text input */
+.bake-name textarea { font-size: 13px; padding: 7px 9px; border: 1px solid #cfcfe0; border-radius: 6px;
+  font-family: inherit; resize: vertical; margin-bottom: 12px; }
+.bake-name textarea:focus { outline: none; border-color: #a142f4; }
+.bake-name input:disabled, .bake-name textarea:disabled { background: #f6f6fa; color: #55556a; }
+/* Graph info dialog */
+.info-dialog { width: min(480px, 92vw); }
+.info-dialog .bake-name { margin-bottom: 12px; }
+.info-meta { margin: 4px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; }
+.info-meta div { display: flex; flex-direction: column; gap: 1px; }
+.info-meta dt { font-size: 11px; color: #8a8a9c; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em; }
+.info-meta dd { margin: 0; font-size: 13px; color: #2a2a33; }
+/* ⓘ info button next to the graph selector */
+.toolbar .info-btn { padding: 4px 8px; font-size: 15px; line-height: 1; color: #55556a; }
+.toolbar .info-btn:hover { color: #2a2a33; }
 .error {
   margin: 0; padding: 8px 14px; background: #fdecea; color: #a3271b;
   font-size: 12px; white-space: pre-wrap; border-bottom: 1px solid #f5c6c0;

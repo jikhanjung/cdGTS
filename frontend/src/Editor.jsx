@@ -15,7 +15,7 @@ import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
-  bakeGraph, suggestBakeName, forkGraph, proposeGraph,
+  bakeGraph, suggestBakeName, forkGraph, updateGraphInfo, proposeGraph,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
@@ -272,6 +272,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const [inspectorCollapsed, setInspectorCollapsed] = useState(false) // desktop: hide the right properties panel
   const [pending, setPending] = useState(null)              // tap-to-add: node slug awaiting placement
   const wrapperRef = useRef(null)
+  const shouldFitRef = useRef(false)                        // set on load when the graph has no saved viewport → fit once
   const lpRef = useRef(null)                                // long-press timer
   const lpFiredRef = useRef(false)                          // swallow the one click right after a long press
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
@@ -352,7 +353,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     setGateways(full.gateways || [])
     setOutputs([])
     setRunMeta(null)
-    if (full.viewport && full.viewport.zoom) setViewport(full.viewport)
+    // Restore the saved pan/zoom if there is one; otherwise fit-to-graph on load (see the graphId effect below).
+    if (full.viewport && full.viewport.zoom) { setViewport(full.viewport); shouldFitRef.current = false }
+    else { shouldFitRef.current = true }
     setStatus(`Loaded: ${full.name} (nodes ${rn.length}${rg.length ? ` · groups ${rg.length}` : ''})`)
   }, [setNodes, setEdges, setViewport, graphSig])
 
@@ -378,15 +381,22 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   }, [typeMap, hydrate])
 
   // Fork the current graph into a sandbox you own (P05.3), then switch to editing it.
-  const onFork = useCallback(async () => {
+  const [forkDialog, setForkDialog] = useState(null)   // { name, busy } | null
+  const onOpenFork = useCallback(() => {
     setError(null)
+    setForkDialog({ name: `${graphName || 'graph'} (fork)`, busy: false })
+  }, [graphName])
+  const onConfirmFork = useCallback(async () => {
+    const name = (forkDialog?.name || '').trim()
+    setForkDialog((d) => d && ({ ...d, busy: true }))
     try {
-      const g = await forkGraph(graphId)
+      const g = await forkGraph(graphId, name)
       setGraphs((gs) => [g, ...gs.filter((x) => x.id !== g.id)])
       hydrate(await getGraph(g.id), typeMap)
+      setForkDialog(null)
       setStatus(`Forked → ${g.name} · yours to edit`)
-    } catch (e) { setError(e.data || String(e)); setStatus('Fork failed') }
-  }, [graphId, typeMap, hydrate])
+    } catch (e) { setError(e.data || String(e)); setForkDialog((d) => d && ({ ...d, busy: false })); setStatus('Fork failed') }
+  }, [forkDialog, graphId, typeMap, hydrate])
 
   // view → real state mapping. Apply only real node changes; group nodes position only; interface nodes remember position per drill-in.
   const onNodesChange = useCallback((changes) => {
@@ -611,6 +621,14 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   // fit on context switch
   useEffect(() => { const id = setTimeout(() => fitView({ duration: 200 }), 0); return () => clearTimeout(id) }, [activeGroup, fitView])
 
+  // fit-to-graph once when a graph is loaded *without* a saved viewport (nodes need a beat to mount + measure first)
+  useEffect(() => {
+    if (!graphId || !shouldFitRef.current) return
+    shouldFitRef.current = false
+    const id = setTimeout(() => fitView({ duration: 300, padding: 0.15 }), 80)
+    return () => clearTimeout(id)
+  }, [graphId, fitView])
+
   // Real-node selection tracked here; group-node selection is driven by onNodesChange 'select' changes
   // (groups are derived nodes — routing their selection through onSelectionChange too caused a stale-empty
   //  report to clobber the just-made selection, so it took two clicks). See onNodesChange gsel.
@@ -804,6 +822,23 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const canPropose = canEdit && currentGraph?.status === 'sandbox'
   const [actionsOpen, setActionsOpen] = useState(false)
 
+  const [infoDialog, setInfoDialog] = useState(null)   // { name, description, busy } | null
+  const onOpenInfo = useCallback(() => {
+    setError(null)
+    setInfoDialog({ name: currentGraph?.name || graphName || '', description: currentGraph?.description || '', busy: false })
+  }, [currentGraph, graphName])
+  const onSaveInfo = useCallback(async () => {
+    if (!infoDialog || !infoDialog.name.trim()) return
+    setInfoDialog((d) => d && ({ ...d, busy: true }))
+    try {
+      const g = await updateGraphInfo(graphId, { name: infoDialog.name.trim(), description: infoDialog.description })
+      setGraphs((gs) => gs.map((x) => (x.id === g.id ? { ...x, name: g.name, description: g.description } : x)))
+      setGraphName(g.name)
+      setInfoDialog(null)
+      setStatus(`Graph info saved · ${g.name}`)
+    } catch (e) { setError(e.data || String(e)); setInfoDialog((d) => d && ({ ...d, busy: false })) }
+  }, [infoDialog, graphId])
+
   // Reload the visible graph list when auth identity changes (login reveals your graphs; logout hides them).
   useEffect(() => {
     if (user === null) return               // whoami not resolved yet
@@ -814,6 +849,60 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     <div className="editor">
       {(paletteOpen || inspectorOpen) && (
         <div className="drawer-backdrop" onClick={() => { setPaletteOpen(false); setInspectorOpen(false) }} />
+      )}
+      {forkDialog && (
+        <div className="modal-backdrop" onClick={() => !forkDialog.busy && setForkDialog(null)}>
+          <div className="bake-dialog" onClick={(e) => e.stopPropagation()}>
+            <h3>Fork this graph</h3>
+            <p className="hint">Creates an independent copy in your own sandbox — edit it without touching the original.</p>
+            <label className="bake-name">
+              Name
+              <input type="text" value={forkDialog.name} autoFocus disabled={forkDialog.busy}
+                     onChange={(e) => setForkDialog((d) => ({ ...d, name: e.target.value }))}
+                     onKeyDown={(e) => { if (e.key === 'Enter' && forkDialog.name.trim()) onConfirmFork() }} />
+            </label>
+            <div className="bake-actions">
+              <button onClick={() => setForkDialog(null)} disabled={forkDialog.busy}>Cancel</button>
+              <button className="fork-btn primary" onClick={onConfirmFork}
+                      disabled={forkDialog.busy || !forkDialog.name.trim()}>
+                {forkDialog.busy ? 'Forking…' : 'Fork'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {infoDialog && (
+        <div className="modal-backdrop" onClick={() => !infoDialog.busy && setInfoDialog(null)}>
+          <div className="bake-dialog info-dialog" onClick={(e) => e.stopPropagation()}>
+            <h3>Graph info</h3>
+            <label className="bake-name">
+              Name
+              <input type="text" value={infoDialog.name} autoFocus disabled={infoDialog.busy || !canEdit}
+                     onChange={(e) => setInfoDialog((d) => ({ ...d, name: e.target.value }))} />
+            </label>
+            <label className="bake-name">
+              Description
+              <textarea rows={4} value={infoDialog.description} disabled={infoDialog.busy || !canEdit}
+                        placeholder={canEdit ? 'What is this graph / branch for?' : ''}
+                        onChange={(e) => setInfoDialog((d) => ({ ...d, description: e.target.value }))} />
+            </label>
+            <dl className="info-meta">
+              <div><dt>Status</dt><dd>{currentGraph?.status || '—'}</dd></div>
+              <div><dt>Owner</dt><dd>{currentGraph?.owner || 'System / demo'}</dd></div>
+              <div><dt>Forked from</dt><dd>{currentGraph?.forked_from || '—'}</dd></div>
+              <div><dt>Slug</dt><dd>{currentGraph?.slug || '—'}</dd></div>
+            </dl>
+            <div className="bake-actions">
+              <button onClick={() => setInfoDialog(null)} disabled={infoDialog.busy}>{canEdit ? 'Cancel' : 'Close'}</button>
+              {canEdit && (
+                <button className="bake-btn primary" onClick={onSaveInfo}
+                        disabled={infoDialog.busy || !infoDialog.name.trim()}>
+                  {infoDialog.busy ? 'Saving…' : 'Save'}
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
       )}
       {bakeDialog && (
         <div className="modal-backdrop" onClick={() => !bakeDialog.busy && setBakeDialog(null)}>
@@ -860,6 +949,8 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
           <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="Select graph">
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
+          <button className="info-btn" onClick={onOpenInfo} disabled={!graphId}
+                  title="Graph info — name, description, lineage">ⓘ</button>
           <button onClick={onSave} className={dirty ? 'save-btn dirty' : 'save-btn'} disabled={!canEdit}
                   title={!canEdit
                     ? (authed ? 'Read-only — not your graph (fork to edit)' : 'Sign in to edit your own graphs')
@@ -900,8 +991,8 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
                   {authed && (
                     <>
                       <div className="tb-menu-sep" />
-                      <button role="menuitem" disabled={!graphId} onClick={() => { setActionsOpen(false); onFork() }}
-                              title="Copy this graph into a new sandbox you own">Fork</button>
+                      <button role="menuitem" disabled={!graphId} onClick={() => { setActionsOpen(false); onOpenFork() }}
+                              title="Copy this graph into a new sandbox you own">Fork…</button>
                     </>
                   )}
                 </div>

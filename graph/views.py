@@ -31,5 +31,5 @@ class GraphViewSet(viewsets.ModelViewSet):
         if not request.user.is_authenticated:
             return Response({"detail": "Sign in to fork."}, status=401)
         source = self.get_object()          # get_queryset enforces "can only fork what you can see"
-        fork = fork_graph(source, request.user)
+        fork = fork_graph(source, request.user, name=request.data.get("name"))
         return Response(self.get_serializer(fork).data, status=201)

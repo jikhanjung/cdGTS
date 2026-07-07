@@ -91,10 +91,12 @@ class GraphSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Graph
-        fields = ["id", "slug", "name", "status", "owner", "forked_from", "viewport",
+        fields = ["id", "slug", "name", "description", "status", "owner", "forked_from", "viewport",
                   "nodes", "edges", "groups", "gateways"]
-        # 토폴로지 PUT 은 nodes/edges/groups/viewport 만 바꾼다 — slug/name 은 생성 시 고정.
-        extra_kwargs = {"slug": {"required": False}, "name": {"required": False}}
+        # 토폴로지 PUT 은 nodes/edges/groups/viewport 만 바꾼다 — slug 는 생성 시 고정.
+        # name/description 은 PATCH(부분 갱신)로 편집 — required=False 라 토폴로지 PUT 에도 안전.
+        extra_kwargs = {"slug": {"required": False}, "name": {"required": False},
+                        "description": {"required": False}}
 
     # --- 검증: 위상 정합을 저장 전에 (nodes/edges 를 함께 봐야 하므로 여기서) ---
     def validate(self, attrs):
