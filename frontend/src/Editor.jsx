@@ -244,7 +244,7 @@ function buildView(nodes, edges, groups, activeGroup) {
   return { nodeRep, groupNodes, ioNodes, boundNodes, viewEdges }
 }
 
-export default function Editor({ onBaked } = {}) {
+export default function Editor({ onBaked, user } = {}) {
   const [types, setTypes] = useState([])
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
@@ -771,6 +771,18 @@ export default function Editor({ onBaked } = {}) {
     return path
   }, [groups, activeGroup])
 
+  // P05.2 ownership: only the owner (or staff) may save; any signed-in user may bake a readable graph.
+  const currentGraph = graphs.find((g) => g.id === graphId)
+  const authed = !!user?.authenticated
+  const canEdit = authed && (currentGraph?.owner === user.username || user.is_staff)
+  const canBake = authed
+
+  // Reload the visible graph list when auth identity changes (login reveals your graphs; logout hides them).
+  useEffect(() => {
+    if (user === null) return               // whoami not resolved yet
+    listGraphs().then(setGraphs).catch(() => {})
+  }, [user?.authenticated, user?.username])
+
   return (
     <div className="editor">
       {(paletteOpen || inspectorOpen) && (
@@ -821,18 +833,26 @@ export default function Editor({ onBaked } = {}) {
           <select className="graph-select" value={graphId || ''} onChange={(e) => loadGraph(Number(e.target.value))} title="Select graph">
             {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
           </select>
-          <button onClick={onSave} className={dirty ? 'save-btn dirty' : 'save-btn'}
-                  title={dirty ? 'Unsaved changes — click to save' : 'No changes since last save'}>
+          <button onClick={onSave} className={dirty ? 'save-btn dirty' : 'save-btn'} disabled={!canEdit}
+                  title={!canEdit
+                    ? (authed ? 'Read-only — not your graph (fork to edit)' : 'Sign in to edit your own graphs')
+                    : (dirty ? 'Unsaved changes — click to save' : 'No changes since last save')}>
             Save (PUT)
           </button>
-          <span className={`save-state ${dirty ? 'dirty' : 'clean'}`}
-                title={dirty ? 'This graph has edits not yet saved to the server' : 'All edits saved'}>
-            {dirty ? '● Unsaved' : '✓ Saved'}
-          </span>
+          {canEdit ? (
+            <span className={`save-state ${dirty ? 'dirty' : 'clean'}`}
+                  title={dirty ? 'This graph has edits not yet saved to the server' : 'All edits saved'}>
+              {dirty ? '● Unsaved' : '✓ Saved'}
+            </span>
+          ) : (
+            <span className="save-state readonly" title={currentGraph?.owner ? `Owned by ${currentGraph.owner}` : 'System / demo graph'}>
+              🔒 Read-only
+            </span>
+          )}
           <button onClick={onEvaluate}>Evaluate</button>
           <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>
-          <button onClick={onOpenBake} className="bake-btn" disabled={!graphId}
-                  title="Bake — freeze this graph's outputs into a new immutable Release kept in the Vault">Bake…</button>
+          <button onClick={onOpenBake} className="bake-btn" disabled={!graphId || !canBake}
+                  title={canBake ? 'Bake — freeze this graph\'s outputs into a new immutable Release kept in the Vault' : 'Sign in to bake a Release'}>Bake…</button>
           <button onClick={onCreateGroup}
                   disabled={!(selectedIds.length || selectedGroupKeys.length >= 2)}
                   title={activeGroup ? 'Nest the selection as a subgroup inside this group' : 'Combine the selected nodes·groups into one group (merges if groups are mixed in)'}>

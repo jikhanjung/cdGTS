@@ -33,13 +33,18 @@ def _write_graph_records(graph, release):
     return len(rows)
 
 
-def next_release_version(when=None):
-    """Suggested immutable bake name: GeologicTimeScale.Release.YYYYMMDD.NN (NN = that day's zero-padded sequence)."""
+def next_release_version(when=None, user=None):
+    """
+    Suggested immutable bake name: GeologicTimeScale.Release[.<user>].YYYYMMDD.NN
+    (NN = that user·day's zero-padded sequence). The <user> segment appears once a user is known (multiuser).
+    """
     from django.utils import timezone
+    from django.utils.text import slugify
     from .models import Release
 
     day = (when or timezone.now()).strftime("%Y%m%d")
-    prefix = f"GeologicTimeScale.Release.{day}."
+    seg = f"{slugify(user.get_username())}." if user is not None else ""
+    prefix = f"GeologicTimeScale.Release.{seg}{day}."
     used = Release.objects.filter(version__startswith=prefix).values_list("version", flat=True)
     n = 0
     for v in used:
@@ -50,19 +55,20 @@ def next_release_version(when=None):
     return f"{prefix}{n + 1:02d}"
 
 
-def snapshot_graph(graph, label=None):
+def snapshot_graph(graph, label=None, user=None):
     """
     Bake action: freeze the graph's current gateway outputs into a **new immutable Release** (kind=bake) kept in the Vault.
     Unlike the scratch bake_graph, this never overwrites — each call is a distinct, named, provenance-tagged artifact.
-    Returns (release, record count).
+    `user` (when set) owns the release and adds a `<user>` segment to the auto name. Returns (release, record count).
     """
     from .models import Release
 
-    version = (label or "").strip() or next_release_version()
+    version = (label or "").strip() or next_release_version(user=user)
     release = Release.objects.create(
         version=version,
         kind=Release.Kind.BAKE,
         source_graph=graph,
+        owner=user if (user is not None and user.is_authenticated) else None,
         note=f"Bake of graph '{graph.name}'",
     )
     n = _write_graph_records(graph, release)

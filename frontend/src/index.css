@@ -381,6 +381,7 @@ body {
 .toolbar .save-state { font-size: 11px; font-weight: 600; padding: 2px 6px; border-radius: 5px; }
 .toolbar .save-state.dirty { color: #8a5a00; background: #fdf1d8; }
 .toolbar .save-state.clean { color: #2f7d45; background: #e8f5ec; }
+.toolbar .save-state.readonly { color: #55556a; background: #ececf2; }
 /* bake = distinct artifact-producing action (accent) */
 .toolbar button.bake-btn { border-color: #c9b6ec; background: #f4efff; color: #6a3fb0; font-weight: 600; }
 .toolbar button.bake-btn:hover { background: #eae0ff; }

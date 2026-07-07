@@ -129,8 +129,12 @@ class Release(models.Model):
         BAKE = "bake", "bake"
         TRANSIENT = "transient", "transient"
 
-    version = models.CharField(max_length=80, unique=True, help_text="e.g. ICC-2024/12 · GeologicTimeScale.Release.YYYYMMDD.NN")
+    version = models.CharField(max_length=100, unique=True, help_text="e.g. ICC-2024/12 · GeologicTimeScale.Release.<user>.YYYYMMDD.NN")
     kind = models.CharField(max_length=12, choices=Kind.choices, default=Kind.PUBLISHED)
+    owner = models.ForeignKey(
+        "auth.User", null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",
+        help_text="The user who baked this artifact (null = system/published).",
+    )
     source_graph = models.ForeignKey(
         "graph.Graph", null=True, blank=True, on_delete=models.SET_NULL, related_name="bakes",
         help_text="Provenance: the graph this artifact was baked from (bake/transient kinds).",

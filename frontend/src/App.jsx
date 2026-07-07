@@ -26,7 +26,7 @@ export default function App() {
       </nav>
       <div className="view">
         {view === 'editor'
-          ? <ReactFlowProvider><Editor onBaked={goVault} /></ReactFlowProvider>
+          ? <ReactFlowProvider><Editor onBaked={goVault} user={user} /></ReactFlowProvider>
           : <Vault initialReleaseId={vaultReleaseId} />}
       </div>
     </div>

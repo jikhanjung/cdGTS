@@ -56,17 +56,18 @@ class GraphBakeView(APIView):
     로 얼려 Vault 에 보관(덮어쓰지 않음). body `label` 있으면 그 이름, 없으면
     `GeologicTimeScale.Release.YYYYMMDD.NN` 자동 제안. 반환: {baked, release(records 포함)}.
     """
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get(self, request, pk):
-        # Editable default name for the Bake dialog.
+        # Editable default name for the Bake dialog (includes the <user> segment once signed in).
         from .services import next_release_version
         get_object_or_404(Graph, pk=pk)
-        return Response({"suggested": next_release_version()})
+        user = request.user if request.user.is_authenticated else None
+        return Response({"suggested": next_release_version(user=user)})
 
     def post(self, request, pk):
         graph = get_object_or_404(Graph, pk=pk)
-        release, n = snapshot_graph(graph, label=request.data.get("label"))
+        release, n = snapshot_graph(graph, label=request.data.get("label"), user=request.user)
         release = (Release.objects
                    .prefetch_related("records__boundary", "records__candidate")
                    .get(pk=release.pk))

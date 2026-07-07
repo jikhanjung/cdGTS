@@ -12,13 +12,21 @@ def node_types(db):
 
 
 @pytest.fixture
-def api():
-    return APIClient()
+def user(db):
+    from django.contrib.auth import get_user_model
+    return get_user_model().objects.create_user("editor", password="pw12345")
 
 
 @pytest.fixture
-def graph(node_types):
-    return Graph.objects.create(slug="sandbox-1", name="Sandbox 1")
+def api(user):
+    c = APIClient()
+    c.force_authenticate(user=user)          # P05.2: graph writes require the authenticated owner
+    return c
+
+
+@pytest.fixture
+def graph(node_types, user):
+    return Graph.objects.create(slug="sandbox-1", name="Sandbox 1", owner=user)
 
 
 # --- DAG 불변식 (순수 함수) ---
@@ -277,3 +285,36 @@ def test_certify_l1_reads_order_edges(api, graph):
     evaluate_graph(g)
     cert = CoherenceCertificate.objects.filter(eval_run__graph=g).latest("id")
     assert cert.checks["L1"] == "fail" and cert.passed is False
+
+
+# --- P05.2 ownership & visibility ---
+
+def test_anonymous_cannot_write(graph):
+    """익명 = 읽기 전용. 그래프 편집/생성은 인증 필요."""
+    anon = APIClient()
+    assert anon.put(f"/api/graphs/{graph.pk}/", _payload(), format="json").status_code in (401, 403)
+    assert anon.post("/api/graphs/", {"slug": "x", "name": "X", "nodes": [], "edges": []}, format="json").status_code in (401, 403)
+
+
+def test_non_owner_cannot_write_public_but_owner_can(api, graph, node_types):
+    """공개(보이는) 그래프도 owner만 쓰기(403); owner는 가능(200). (숨은 샌드박스는 404 — 가시성 테스트 참고.)"""
+    from django.contrib.auth import get_user_model
+    pub = Graph.objects.create(slug="pub-edit", name="Pub", owner=graph.owner, status=Graph.Status.RATIFIED)
+    other = APIClient()
+    other.force_authenticate(user=get_user_model().objects.create_user("mallory", password="pw12345"))
+    assert other.put(f"/api/graphs/{pub.pk}/", _payload(), format="json").status_code == 403
+    assert api.put(f"/api/graphs/{graph.pk}/", _payload(), format="json").status_code == 200
+
+
+def test_sandbox_visibility(api, graph, node_types):
+    """샌드박스는 owner 전용; 공개(proposed/ratified)·시스템(owner=null)은 모두 열람."""
+    from django.contrib.auth import get_user_model
+    Graph.objects.create(slug="sys-demo", name="Demo", owner=None)           # 시스템 = 공개
+    Graph.objects.create(slug="pub", name="Pub", owner=graph.owner, status=Graph.Status.RATIFIED)
+    stranger = APIClient()
+    stranger.force_authenticate(user=get_user_model().objects.create_user("na", password="pw12345"))
+    slugs = {g["slug"] for g in stranger.get("/api/graphs/").data}
+    assert "sys-demo" in slugs and "pub" in slugs        # 공개·시스템 보임
+    assert "sandbox-1" not in slugs                        # 남의 샌드박스 숨김
+    assert stranger.get(f"/api/graphs/{graph.pk}/").status_code == 404
+    assert "sandbox-1" in {g["slug"] for g in api.get("/api/graphs/").data}   # owner 에겐 보임
