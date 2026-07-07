@@ -236,7 +236,7 @@
    "label": "T. pedum FAD · Fortune Head (Canada)\n= boundary position · not directly datable",
    "params": {},
    "x": 80.0,
-   "y": 470.0,
+   "y": -60.0,
    "group": null
   }
  },
@@ -4083,7 +4083,7 @@
    "label": "T. pedum FAD · Fortune Head (Canada)\n= boundary position · not directly datable",
    "params": {},
    "x": 1270,
-   "y": 841,
+   "y": 481,
    "group": null,
    "description": "",
    "width": null
