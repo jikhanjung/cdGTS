@@ -99,9 +99,17 @@
   4개 뷰를 Vault 허브로(Chart/Table/Narrative/Diff 토글, `embedReleaseId`). pytest 96·build OK.
   스키마 migration(releases 0004·0005)은 entrypoint `migrate`로 자동 적용(seed 무변경 → 재시드 불필요).
   테스트 서버 검증 완료(bake→Vault Chart/Table/Narrative). **운영 배포는 사용자 승인 후.**
-- **[P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md)** — 아크 C: 인증(세션)→소유/가시성→fork→
-  propose/review(기존 verify diff 재사용)→ratify. 결정 5개 확정, 인터벌 스코프 권한 retrofit-ready.
-  MVP = 로그인·fork·bake·diff 리뷰. **P04 위에 얹음(다음 착수 후보).**
+- **[P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md)** — 아크 C: 멀티유저 CI. 결정 5개 확정, 인터벌
+  스코프 권한 retrofit-ready. **진행 중(미배포)**:
+  - **P05.1 ✅**([106](devlog/20260707_106_p05-1-auth-foundation.md)) — `accounts` 앱(Membership + 개인 fork
+    Authority 시그널), 세션 인증, `/api/auth/{whoami,login,logout}`, DRF 기본 `IsAuthenticatedOrReadOnly`,
+    프론트 LoginBar + CSRF.
+  - **P05.2 ✅**([107](devlog/20260707_107_p05-2-ownership-visibility.md)) — Graph 소유/가시성(공개+시스템+내
+    것; 남 샌드박스 404), 쓰기=owner, Release.owner + `<user>` 이름 세그먼트. 프론트 Save/Bake 게이팅·🔒배지.
+  - **P05.3 ✅**([108](devlog/20260707_108_p05-3-fork.md)) — Fork 깊은 복제(`forked_from`), `POST fork/`,
+    프론트 Fork 버튼. **여기까지 = 로그인→fork→편집→bake→Vault 흐름 작동.**
+  - **P05.4 ⬜(다음, MVP 마지막)** — Propose/Review = CI: proposed 전이 + 얇은 Proposal + verify diff 리뷰 + ratify.
+  - **P05.5 ⬜(MVP 밖)** — 샌드박스 오버라이드(아크 B seam). pytest **105**.
 
 ### 후속 (선택, 우선순위 대략순)
 
