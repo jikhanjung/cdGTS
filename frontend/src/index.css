@@ -148,7 +148,8 @@ body {
 
 /* Blender-style group I/O interface node (aggregates external connections on drill-in, selectable/movable) */
 .group-io-node {
-  min-width: 128px; border: 1px solid #b9a0d0; border-radius: 7px; background: #fbfaff;
+  width: 100%; box-sizing: border-box; min-width: 128px;
+  border: 1px solid #b9a0d0; border-radius: 7px; background: #fbfaff;
   font-size: 10px; font-family: ui-monospace, Menlo, monospace; padding-bottom: 6px;
 }
 .group-io-node.in { border-left: 3px solid #4a9d5b; }
@@ -161,7 +162,7 @@ body {
 .group-io-node.in .group-io__bar { background: #4a9d5b; }
 .group-io-node.out .group-io__bar { background: #b0662c; text-align: right; }
 .group-io__ports { list-style: none; margin: 4px 0 0; padding: 0; }
-.group-io__ports li { padding: 2px 9px; white-space: nowrap; color: #3a2450; height: 18px; }
+.group-io__ports li { padding: 2px 9px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #3a2450; height: 18px; }
 .group-io-node.out .group-io__ports li { text-align: right; }
 .group-io__ports .a { color: #a142f4; }
 

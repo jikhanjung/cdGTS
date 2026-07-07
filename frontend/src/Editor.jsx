@@ -21,6 +21,7 @@ const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode
   cdgtsGroupIo: GroupIoNode, cdgtsBound: BoundNode, cdgtsOrder: OrderNode }
 const DEFAULT_NODE_WIDTH = 172   // Default width (px). User can adjust via the right handle.
 const GROUP_NODE_WIDTH = 200     // Collapsed group node width (px). Fixed so long I/O labels ellipsis instead of stretching the node.
+const GROUP_IO_WIDTH = 200       // Group Input/Output interface node width (px). Fixed so long port labels ellipsis instead of stretching the node.
 
 // Is the primary pointer touch (phone/tablet)? — pan/selection interactions differ (touch = drag pan · pinch zoom).
 const IS_TOUCH = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -153,9 +154,9 @@ function buildView(nodes, edges, groups, activeGroup) {
 
   // Blender-style interface nodes — aggregate the drilled-in group's external **data** connections into **one node** each for input/output.
   // Placed left/right relative to the inner-node bounding box (vertically centered). Position is overridden by the caller's ioPos overlay.
-  const ioIn = { id: 'gio:in', type: 'cdgtsGroupIo', position: { x: minX - 340, y: cy },
+  const ioIn = { id: 'gio:in', type: 'cdgtsGroupIo', position: { x: minX - 340, y: cy }, width: GROUP_IO_WIDTH,
     data: { dir: 'in', ports: [] } }
-  const ioOut = { id: 'gio:out', type: 'cdgtsGroupIo', position: { x: maxX + 240, y: cy },
+  const ioOut = { id: 'gio:out', type: 'cdgtsGroupIo', position: { x: maxX + 240, y: cy }, width: GROUP_IO_WIDTH,
     data: { dir: 'out', ports: [] } }
   const portSeen = new Set()
   const viewEdges = []
@@ -252,6 +253,7 @@ export default function Editor() {
   const [groups, setGroups] = useState([])          // group meta [{key,name,collapsed,x,y}]
   const [activeGroup, setActiveGroup] = useState(null)   // null=top level / group key=drilled in
   const [ioPos, setIoPos] = useState({})   // per-drill-in interface node positions { [group]: { 'gio:in':{x,y}, 'gio:out':{x,y} } }
+  const [ioSel, setIoSel] = useState(() => new Set())   // selected synthetic nodes (gio:in/out, bound:upper/lower) — derived per view, so selection is held here for the ring
   const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])          // selected real nodes
@@ -302,17 +304,20 @@ export default function Editor() {
     [topoSig, edgeSig, groups, activeGroup], // eslint-disable-line react-hooks/exhaustive-deps
   )
   // selection overlay (lightweight) — direct real nodes stay as-is (selection reflected); only selected is layered onto groups·edges.
+  // synthetic nodes only exist within a given drill-in → clear their selection when the level changes.
+  useEffect(() => { setIoSel(new Set()) }, [activeGroup])
+
   const viewNodes = useMemo(() => {
     const selG = new Set(selectedGroupKeys)
     const out = nodes.filter((n) => struct.nodeRep[n.id]?.kind === 'node')
     struct.groupNodes.forEach((gn) => out.push(selG.has(gn.data.key) ? { ...gn, selected: true } : gn))
     // interface nodes (gio:in/out) — overlay the per-drill-in remembered position (fall back to buildView default).
     const pos = ioPos[activeGroup || ''] || {}
-    struct.ioNodes.forEach((io) => out.push(pos[io.id] ? { ...io, position: pos[io.id] } : io))
+    struct.ioNodes.forEach((io) => out.push({ ...(pos[io.id] ? { ...io, position: pos[io.id] } : io), selected: ioSel.has(io.id) }))
     // bound frames (upper/lower boundary) — selectable·draggable, position remembered per drill-in (same as gio).
-    struct.boundNodes.forEach((bn) => out.push(pos[bn.id] ? { ...bn, position: pos[bn.id] } : bn))
+    struct.boundNodes.forEach((bn) => out.push({ ...(pos[bn.id] ? { ...bn, position: pos[bn.id] } : bn), selected: ioSel.has(bn.id) }))
     return out
-  }, [nodes, struct, selectedGroupKeys, ioPos, activeGroup])
+  }, [nodes, struct, selectedGroupKeys, ioPos, ioSel, activeGroup])
   const viewEdges = useMemo(() => {
     const selById = new Map(edges.map((e) => [e.id, !!e.selected]))
     return struct.viewEdges.map((ve) => {
@@ -365,6 +370,7 @@ export default function Editor() {
     const gpos = []
     const gsel = []
     const iopos = []
+    const iosel = []
     changes.forEach((c) => {
       const id = c.id
       if (id && id.startsWith('group:')) {
@@ -372,7 +378,11 @@ export default function Editor() {
         if (c.type === 'position' && c.position) gpos.push({ key: id.slice(6), pos: c.position })
         else if (c.type === 'select') gsel.push({ key: id.slice(6), selected: c.selected })
       }
-      else if (id && (id === 'gio:in' || id === 'gio:out' || id === 'bound:upper' || id === 'bound:lower')) { if (c.type === 'position' && c.position) iopos.push({ id, pos: c.position }) }
+      else if (id && (id === 'gio:in' || id === 'gio:out' || id === 'bound:upper' || id === 'bound:lower')) {
+        // synthetic nodes are derived per view — hold position AND selection (for the ring) outside the derived state.
+        if (c.type === 'position' && c.position) iopos.push({ id, pos: c.position })
+        else if (c.type === 'select') iosel.push({ id, selected: c.selected })
+      }
       else if (id && id.startsWith('stub-')) { /* stub — ignore */ }
       else real.push(c)
     })
@@ -391,6 +401,11 @@ export default function Editor() {
       const cur = { ...(prev[k] || {}) }
       iopos.forEach(({ id, pos }) => { cur[id] = { x: Math.round(pos.x), y: Math.round(pos.y) } })
       return { ...prev, [k]: cur }
+    })
+    if (iosel.length) setIoSel((prev) => {
+      const set = new Set(prev)
+      iosel.forEach(({ id, selected }) => { if (selected) set.add(id); else set.delete(id) })
+      return set
     })
   }, [setNodes, activeGroup])
 
