@@ -77,23 +77,46 @@ export default function IccChart() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const max = data?.max_ma || 1
+  // Drop the Subperiod column (rank_n 4 = Mississippian/Pennsylvanian, present only for the Carboniferous): a whole
+  // near-empty column isn't worth it. Its subdivision is already carried by the Epoch column, whose bands are named
+  // "Lower/Middle/Upper Mississippian·Pennsylvanian" — so it reads as merged into the Epoch side (per the ICS chart).
+  const levels = useMemo(() => (data ? data.levels.filter((lv) => lv.rank_n !== 4) : []), [data])
+  // Table mode breakpoints: the union of every band boundary partitions [0, max] into minimal cells (= the finest
+  // subdivision present in each region — Age/Stage in the Phanerozoic, Period/Era where no Ages exist). Each cell gets
+  // equal height, so the time scale is ignored and the chart reads like a table.
+  const breakpoints = useMemo(() => {
+    if (!data) return [0, max]
+    const s = new Set([0, max])
+    levels.forEach((lv) => lv.bands.forEach((b) => { s.add(b.top); s.add(b.bottom) }))
+    return [...s].sort((a, b) => a - b)
+  }, [data, max, levels])
   const y = useMemo(() => {
     if (scale === 'log') { const lm = Math.log10(max + 1); return (age) => (Math.log10(age + 1) / lm) * H }
-    return (age) => (age / max) * H
-  }, [scale, max])
+    if (scale === 'linear') return (age) => (age / max) * H
+    // table: each minimal cell (Age/Stage) equal height → piecewise-linear over the breakpoints.
+    const bp = breakpoints, N = bp.length - 1
+    return (age) => {
+      if (age <= bp[0]) return 0
+      if (age >= bp[N]) return H
+      let lo = 0, hi = N
+      while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (bp[mid] <= age) lo = mid; else hi = mid }
+      const frac = (age - bp[lo]) / (bp[lo + 1] - bp[lo] || 1)
+      return ((lo + frac) / N) * H
+    }
+  }, [scale, max, breakpoints])
 
   const ticks = scale === 'log' ? [0, 50, 200, 540, 1000, 2500, max] : [0, 1000, 2000, 3000, 4000, max]
-  const nCol = data?.levels.length || 0
+  const nCol = levels.length
 
   // Symmetric error (±pm) per boundary. A boundary is shared by multiple ranks → dedup by base.
   const uncBoundaries = useMemo(() => {
     if (!data) return []
     const m = new Map()
-    data.levels.forEach((lv) => lv.bands.forEach((b) => {
+    levels.forEach((lv) => lv.bands.forEach((b) => {
       if (b.pm > 0 && !m.has(b.bottom)) m.set(b.bottom, { age: b.bottom, pm: b.pm, name: b.name })
     }))
     return [...m.values()]
-  }, [data])
+  }, [data, levels])
 
   // --- zoom (viewBox scale) + pan (scroll) ---
   const W = AXIS + nCol * COLW + 8
@@ -170,6 +193,7 @@ export default function IccChart() {
         <div className="scale-toggle">
           <button className={scale === 'log' ? 'active' : ''} onClick={() => setScale('log')}>Log (zoom recent)</button>
           <button className={scale === 'linear' ? 'active' : ''} onClick={() => setScale('linear')}>Linear (proportional)</button>
+          <button className={scale === 'table' ? 'active' : ''} onClick={() => setScale('table')} title="Ignore the time scale — every Age/Stage cell equal height (table)">Table (equal Age)</button>
         </div>
         <button className={`unc-toggle${showUnc ? ' active' : ''}`} onClick={() => setShowUnc((v) => !v)}
                 title="Symmetric error (±) band on boundary ages. GSSA agreed values have no error.">± Uncertainty</button>
@@ -194,12 +218,12 @@ export default function IccChart() {
                   <text x={AXIS - 6} y={y(t) + 3} textAnchor="end" className="icc-axis">{t}</text>
                 </g>
               ))}
-              {data.levels.map((lv, ci) => (
+              {levels.map((lv, ci) => (
                 <text key={lv.rank} x={AXIS + ci * COLW + COLW / 2} y={-7} textAnchor="middle" className="icc-colhdr">
                   {lv.rank}
                 </text>
               ))}
-              {data.levels.map((lv, ci) => lv.bands.map((b) => {
+              {levels.map((lv, ci) => lv.bands.map((b) => {
                 const yt = y(b.top), h = Math.max(y(b.bottom) - yt, 0)
                 // Label visibility·size follow the band's ON-SCREEN height (h·zoom), so zooming in reveals thin
                 // bands (e.g. Cambrian stages). Font counter-scaled by 1/zoom → ~constant readable size on screen.
