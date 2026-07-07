@@ -2,7 +2,7 @@
 
 **Last updated**: 2026-07-07. 운영 **cdgts.paleobytes.info @ 0.1.25** — 0.1.22~0.1.25 UI/UX 다듬기 일괄
 릴리스(이미지 빌드·푸시 완료, 운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011`.
-백엔드 **pytest 91 passed**. devlog 001~101 push.
+백엔드 **pytest 91 passed**. devlog 001~101 + 리뷰/계획(R01·P04·P05) push.
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -88,6 +88,17 @@
 - **인터페이스(Group I/O) 노드 위치 영속** — 현재 드릴인별 프론트 세션 메모리(리로드/저장 시 초기화).
   영속 필요 시 NodeGroup 에 io 좌표 필드 추가(후속).
 
+### 다음 방향 — 계획 문서화 완료 (R01 → P04 → P05)
+
+- **[R01](devlog/20260707_R01_vision-implementation-review.md)** — 초기 비전 대비 구현 현황 리뷰. 뼈대·배관은
+  놓임; 미착수 두 아크 = A(과학 엔진 심화)·C(멀티유저 CI). **사용자 선택 = C.**
+- **[P04](devlog/20260707_P04_editor-bake-vault-restructure.md)** — (선행) Editor→Bake→**Vault** 재구성:
+  아티팩트=불변 Release 를 1급으로, nav 를 Editor·Vault 2개로. bake 이름 `GeologicTimeScale.Release.YYYYMMDD.NN`.
+- **[P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md)** — 아크 C: 인증(세션)→소유/가시성→fork→
+  propose/review(기존 verify diff 재사용)→ratify. 결정 5개 확정, 인터벌 스코프 권한 retrofit-ready.
+  MVP = 로그인·fork·bake·diff 리뷰.
+- **실행 순서: P04 먼저** — 아티팩트를 세워야 C 의 소유·비교가 그 위에 얹힘.
+
 ### 후속 (선택, 우선순위 대략순)
 
 - [x] **`engine._certify` 층서순 정합** — order 제약 체인(040·041) + L2 duration 게이트(047)로 해소.
@@ -95,9 +106,9 @@
 - [x] **narrate(GTS)** — BoundaryRecord.narrative 결정적 템플릿 렌더(045).
 - [ ] **L2/L3 확장** — L2 warn 임계(과소/과대 duration 의심) · L3 joint reconcile · 프론트 cert 뷰 L2 상세(047 이월).
 - [ ] **계산 커널 확장** — age-depth 외 joint/베이지안 등 노드타입별 실제 커널(별도 워커·PyMC).
-- [ ] **인증·소유권** — 현재 API AllowAny(dev). 로그인·그래프 소유·샌드박스 권한.
+- [~] **인증·소유권** — 현재 API AllowAny(dev). 로그인·그래프 소유·샌드박스 권한. → **아크 C, [P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md) 계획**(P04 선행).
 - [ ] **clamp 통합** — order edge 로 활성화됨; 나머지 graph clamp ↔ releases.Clamp(authored 거버넌스) 관계 정리.
 - [ ] **PostGIS** — chrono.Locality lat/lon → PointField(공간 차원 착수 시).
 - [ ] **retype diff 실데모** — Ediacaran/Cryogenian 경계 추가로 GSSA→GSSP retype 시나리오(030 메모).
 - [ ] **미해결 열린 질문** — 각 설계 문서 말미. → `TODOs.md` §2.
-- [ ] **리뷰(R01)** — 구현 코드 리뷰 회차(devlog R 시리즈).
+- [x] **리뷰(R01)** — 비전 대비 구현 현황 리뷰 작성([devlog R01](devlog/20260707_R01_vision-implementation-review.md)). 코드 리뷰 회차는 후속(R02).
