@@ -9,8 +9,8 @@ from rest_framework.views import APIView
 from graph.models import Graph
 
 from .models import Release
-from .serializers import ReleaseSerializer
-from .services import bake_graph, bake_release, diff_releases, narrate_release
+from .serializers import ReleaseListSerializer, ReleaseSerializer
+from .services import bake_graph, bake_release, diff_releases, narrate_release, snapshot_graph
 
 
 class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
@@ -24,6 +24,17 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Release.objects.prefetch_related("records__boundary", "records__candidate", "clamps")
     serializer_class = ReleaseSerializer
     permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        # Vault = kept artifacts only; the scratch verify release (kind=transient) is hidden.
+        qs = super().get_queryset().exclude(kind=Release.Kind.TRANSIENT)
+        kind = self.request.query_params.get("kind")
+        if kind:
+            qs = qs.filter(kind=kind)
+        return qs
+
+    def get_serializer_class(self):
+        return ReleaseListSerializer if self.action == "list" else ReleaseSerializer
 
     @action(detail=True, methods=["post"])
     def bake(self, request, pk=None):
@@ -41,14 +52,21 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GraphBakeView(APIView):
     """
-    POST /api/graphs/{id}/bake/ — 그래프를 평가해 게이트웨이 출력을 ICC 테이블(BoundaryRecord)로 얼린다.
-    그래프당 릴리스 `graph:<slug>` 하나에 스냅샷. 반환: {baked, release(records 포함)}.
+    POST /api/graphs/{id}/bake/ — Bake 액션: 그래프를 평가해 게이트웨이 출력을 **새 불변 Release(kind=bake)**
+    로 얼려 Vault 에 보관(덮어쓰지 않음). body `label` 있으면 그 이름, 없으면
+    `GeologicTimeScale.Release.YYYYMMDD.NN` 자동 제안. 반환: {baked, release(records 포함)}.
     """
     permission_classes = [permissions.AllowAny]
 
+    def get(self, request, pk):
+        # Editable default name for the Bake dialog.
+        from .services import next_release_version
+        get_object_or_404(Graph, pk=pk)
+        return Response({"suggested": next_release_version()})
+
     def post(self, request, pk):
         graph = get_object_or_404(Graph, pk=pk)
-        release, n = bake_graph(graph)
+        release, n = snapshot_graph(graph, label=request.data.get("label"))
         release = (Release.objects
                    .prefetch_related("records__boundary", "records__candidate")
                    .get(pk=release.pk))

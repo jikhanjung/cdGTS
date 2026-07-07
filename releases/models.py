@@ -117,8 +117,24 @@ class Clamp(models.Model):
 
 
 class Release(models.Model):
-    """Global release manifest. Owns the selection and clamps."""
-    version = models.CharField(max_length=50, unique=True, help_text="e.g. ICC-2024/12")
+    """Global release manifest. Owns the selection and clamps.
+
+    kind distinguishes the artifact:
+      - published : official release (ICS-2024/12 …); is_baseline marks the CI diff target.
+      - bake      : an immutable snapshot a user baked from a graph (the Vault artifact).
+      - transient : the scratch re-bake used by Science-CI verify (graph:<slug>, overwritten, hidden from Vault).
+    """
+    class Kind(models.TextChoices):
+        PUBLISHED = "published", "published"
+        BAKE = "bake", "bake"
+        TRANSIENT = "transient", "transient"
+
+    version = models.CharField(max_length=80, unique=True, help_text="e.g. ICC-2024/12 · GeologicTimeScale.Release.YYYYMMDD.NN")
+    kind = models.CharField(max_length=12, choices=Kind.choices, default=Kind.PUBLISHED)
+    source_graph = models.ForeignKey(
+        "graph.Graph", null=True, blank=True, on_delete=models.SET_NULL, related_name="bakes",
+        help_text="Provenance: the graph this artifact was baked from (bake/transient kinds).",
+    )
     authority = models.ForeignKey(
         "chrono.Authority", null=True, blank=True, on_delete=models.SET_NULL, related_name="releases",
     )
@@ -132,7 +148,7 @@ class Release(models.Model):
     objects = ReleaseManager()
 
     class Meta:
-        ordering = ["version"]
+        ordering = ["-created_at", "version"]
 
     def __str__(self):
         return self.version

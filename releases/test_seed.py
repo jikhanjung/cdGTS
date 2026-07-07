@@ -72,11 +72,13 @@ def test_bake_graph_produces_icc_table(seeded):
     rel2, n2 = bake_graph(g)
     assert n2 == 177 and rel2.pk == rel.pk
 
-    # HTTP 엔드포인트도 확인
+    # HTTP 엔드포인트 = Bake 액션 → 새 불변 스냅샷(kind=bake, GeologicTimeScale.Release.*)
     from rest_framework.test import APIClient
     resp = APIClient().post(f"/api/graphs/{g.pk}/bake/")
     assert resp.status_code == 200 and resp.data["baked"] == 177
-    assert resp.data["release"]["version"] == "graph:example-icc-partial"
+    assert resp.data["release"]["kind"] == "bake"
+    assert resp.data["release"]["version"].startswith("GeologicTimeScale.Release.")
+    assert resp.data["release"]["source_graph"] == "example-icc-partial"
     assert len(resp.data["release"]["records"]) == 177
 
 

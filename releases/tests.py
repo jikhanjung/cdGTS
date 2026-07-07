@@ -1,17 +1,80 @@
 import pytest
 from django.core.management import call_command
+from django.utils import timezone
 from rest_framework.test import APIClient
 
 from chrono.models import Boundary
+from graph.models import Gateway, Graph, NodeInstance
+from nodes.models import NodeType
 from releases.models import (
     CandidateOutput, ModelCandidate, Release, Selection,
 )
-from releases.services import bake_release, diff_releases
+from releases.services import bake_graph, bake_release, diff_releases, next_release_version, snapshot_graph
 
 
 @pytest.fixture
 def chrono(db):
     call_command("loaddata", "01_chrono", verbosity=0)
+
+
+@pytest.fixture
+def nodes(db):
+    call_command("loaddata", "02_nodes", verbosity=0)
+
+
+def _graph_with_gateway(slug="g1"):
+    camb = Boundary.objects.get(slug="base-cambrian")
+    g = Graph.objects.create(slug=slug, name="G1")
+    pub = NodeInstance.objects.create(
+        graph=g, key="pub", node_type=NodeType.objects.get(slug="published-age"),
+        params={"distribution": {"fidelity": "exact", "value_ma": 538.8}},
+    )
+    Gateway.objects.create(graph=g, slug="gw", name="Base Cambrian", node=pub, boundary=camb)
+    return g
+
+
+# --- P04.1: bake = immutable named Vault artifact ---
+
+def test_snapshot_graph_is_immutable_and_named(chrono, nodes):
+    g = _graph_with_gateway()
+    r1, n1 = snapshot_graph(g)
+    r2, n2 = snapshot_graph(g)
+    assert r1.pk != r2.pk                              # each bake = a distinct artifact (never overwrites)
+    assert n1 == 1 and n2 == 1
+    assert r1.kind == Release.Kind.BAKE and r1.source_graph == g
+    day = timezone.now().strftime("%Y%m%d")
+    assert r1.version == f"GeologicTimeScale.Release.{day}.01"
+    assert r2.version == f"GeologicTimeScale.Release.{day}.02"   # daily sequence increments
+    assert r1.records.get().value_ma == 538.8
+
+
+def test_snapshot_graph_custom_label(chrono, nodes):
+    g = _graph_with_gateway()
+    r, _ = snapshot_graph(g, label="MyChart.v1")
+    assert r.version == "MyChart.v1" and r.kind == Release.Kind.BAKE
+
+
+def test_scratch_bake_is_transient_and_reused(chrono, nodes):
+    g = _graph_with_gateway()
+    r1, _ = bake_graph(g)
+    r2, _ = bake_graph(g)
+    assert r1.pk == r2.pk                              # graph:<slug> reused (overwritten), for verify
+    assert r1.kind == Release.Kind.TRANSIENT
+
+
+def test_vault_list_excludes_transient(chrono, nodes):
+    g = _graph_with_gateway()
+    snapshot_graph(g)                                  # kept bake
+    bake_graph(g)                                      # transient scratch
+    kinds = [r["kind"] for r in APIClient().get("/api/releases/").data]
+    assert "transient" not in kinds and "bake" in kinds
+
+
+def test_next_release_version_sequence(chrono):
+    day = timezone.now().strftime("%Y%m%d")
+    assert next_release_version() == f"GeologicTimeScale.Release.{day}.01"
+    Release.objects.create(version=f"GeologicTimeScale.Release.{day}.01", kind=Release.Kind.BAKE)
+    assert next_release_version() == f"GeologicTimeScale.Release.{day}.02"
 
 
 def _candidate(slug, boundary, value, method="cross-section-correlation"):

@@ -8,23 +8,12 @@ diff — 두 릴리스 간 **값 diff** 와 **토폴로지 diff**(직교 축)를
 from .models import BoundaryRecord
 
 
-def bake_graph(graph):
-    """
-    그래프를 평가해 **게이트웨이 출력을 ICC 테이블로 얼린다** (graph → ICC bake).
-    각 게이트웨이(경계 지정)의 노드 결과 분포 → BoundaryRecord. 릴리스는 그래프당 하나
-    (version=`graph:<slug>`)로 재사용 → 재-bake 는 레코드 갱신. 릴리스 diff 도 그대로 적용됨.
-    반환: (release, 레코드 수).
-    """
+def _write_graph_records(graph, release):
+    """Evaluate `graph` and (re)write its gateway outputs as this release's BoundaryRecords. Returns count."""
     from engine.evaluate import evaluate_graph
-    from .models import Release
 
     run = evaluate_graph(graph)
     results = {r.node_key: r for r in run.results.all()}
-
-    release, _ = Release.objects.get_or_create(
-        version=f"graph:{graph.slug}",
-        defaults={"note": f"Bake of graph '{graph.name}' (auto-generated ICC snapshot)"},
-    )
     release.records.all().delete()
     rows = []
     for gw in graph.gateways.select_related("boundary", "node"):
@@ -41,7 +30,63 @@ def bake_graph(graph):
             provenance_ref=f"{graph.slug}::{gw.node.key}",
         ))
     BoundaryRecord.objects.bulk_create(rows)
-    return release, len(rows)
+    return len(rows)
+
+
+def next_release_version(when=None):
+    """Suggested immutable bake name: GeologicTimeScale.Release.YYYYMMDD.NN (NN = that day's zero-padded sequence)."""
+    from django.utils import timezone
+    from .models import Release
+
+    day = (when or timezone.now()).strftime("%Y%m%d")
+    prefix = f"GeologicTimeScale.Release.{day}."
+    used = Release.objects.filter(version__startswith=prefix).values_list("version", flat=True)
+    n = 0
+    for v in used:
+        try:
+            n = max(n, int(v[len(prefix):]))
+        except (ValueError, IndexError):
+            pass
+    return f"{prefix}{n + 1:02d}"
+
+
+def snapshot_graph(graph, label=None):
+    """
+    Bake action: freeze the graph's current gateway outputs into a **new immutable Release** (kind=bake) kept in the Vault.
+    Unlike the scratch bake_graph, this never overwrites — each call is a distinct, named, provenance-tagged artifact.
+    Returns (release, record count).
+    """
+    from .models import Release
+
+    version = (label or "").strip() or next_release_version()
+    release = Release.objects.create(
+        version=version,
+        kind=Release.Kind.BAKE,
+        source_graph=graph,
+        note=f"Bake of graph '{graph.name}'",
+    )
+    n = _write_graph_records(graph, release)
+    return release, n
+
+
+def bake_graph(graph):
+    """
+    Scratch re-bake for Science-CI verify: a single reusable `graph:<slug>` release (kind=transient, hidden from Vault),
+    overwritten each call. For a kept artifact use snapshot_graph. Returns (release, record count).
+    """
+    from .models import Release
+
+    release, _ = Release.objects.get_or_create(
+        version=f"graph:{graph.slug}",
+        defaults={"kind": Release.Kind.TRANSIENT, "source_graph": graph,
+                  "note": f"Scratch bake of graph '{graph.name}' (Science-CI verify)"},
+    )
+    if release.kind != Release.Kind.TRANSIENT or release.source_graph_id != graph.id:
+        release.kind = Release.Kind.TRANSIENT
+        release.source_graph = graph
+        release.save(update_fields=["kind", "source_graph"])
+    n = _write_graph_records(graph, release)
+    return release, n
 
 
 def bake_release(release):
