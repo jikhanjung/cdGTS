@@ -56,6 +56,10 @@ class Graph(models.Model):
         on_delete=models.SET_NULL, related_name="graphs",
     )
     status = models.CharField(max_length=12, choices=Status.choices, default=Status.SANDBOX)
+    forked_from = models.ForeignKey(
+        "self", null=True, blank=True, on_delete=models.SET_NULL, related_name="forks",
+        help_text="The graph this was forked from (lineage).",
+    )
     viewport = models.JSONField(default=dict, blank=True, help_text="React Flow {x, y, zoom}")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

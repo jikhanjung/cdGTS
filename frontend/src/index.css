@@ -385,6 +385,10 @@ body {
 /* bake = distinct artifact-producing action (accent) */
 .toolbar button.bake-btn { border-color: #c9b6ec; background: #f4efff; color: #6a3fb0; font-weight: 600; }
 .toolbar button.bake-btn:hover { background: #eae0ff; }
+.toolbar button.fork-btn { border-color: #b7c7e6; background: #eef3fb; color: #2f5aa8; font-weight: 600; }
+.toolbar button.fork-btn:hover { background: #e0eaf8; }
+.toolbar button.fork-btn.primary { background: #2f5aa8; border-color: #2f5aa8; color: #fff; }
+.toolbar button.fork-btn.primary:hover { background: #26497f; }
 /* --- modal (bake / login dialog) --- */
 .modal-backdrop { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center;
   justify-content: center; background: rgba(20, 14, 40, 0.32); }

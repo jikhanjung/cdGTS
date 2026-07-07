@@ -87,10 +87,12 @@ class GraphSerializer(serializers.ModelSerializer):
     groups = NodeGroupSerializer(many=True, required=False)
     gateways = GatewaySerializer(many=True, read_only=True)
     owner = serializers.SlugRelatedField(slug_field="username", read_only=True)
+    forked_from = serializers.SlugRelatedField(slug_field="slug", read_only=True)
 
     class Meta:
         model = Graph
-        fields = ["id", "slug", "name", "status", "owner", "viewport", "nodes", "edges", "groups", "gateways"]
+        fields = ["id", "slug", "name", "status", "owner", "forked_from", "viewport",
+                  "nodes", "edges", "groups", "gateways"]
         # 토폴로지 PUT 은 nodes/edges/groups/viewport 만 바꾼다 — slug/name 은 생성 시 고정.
         extra_kwargs = {"slug": {"required": False}, "name": {"required": False}}
 

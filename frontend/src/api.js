@@ -30,6 +30,10 @@ export const getGraph = (id) => fetch(`/api/graphs/${id}/`).then(j)
 export const createGraph = (body) =>
   fetch('/api/graphs/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
 
+// Fork a readable graph into a new sandbox you own (P05.3). Returns the new graph.
+export const forkGraph = (id) =>
+  fetch(`/api/graphs/${id}/fork/`, { method: 'POST', headers: csrfHeaders() }).then(j)
+
 export const saveGraph = (id, body) =>
   fetch(`/api/graphs/${id}/`, { method: 'PUT', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
 

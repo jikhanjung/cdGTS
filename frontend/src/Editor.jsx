@@ -15,7 +15,7 @@ import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
-  bakeGraph, suggestBakeName,
+  bakeGraph, suggestBakeName, forkGraph,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
@@ -376,6 +376,17 @@ export default function Editor({ onBaked, user } = {}) {
     try { hydrate(await getGraph(id), typeMap) }
     catch (e) { setError(e.data || String(e)); setStatus('Load failed') }
   }, [typeMap, hydrate])
+
+  // Fork the current graph into a sandbox you own (P05.3), then switch to editing it.
+  const onFork = useCallback(async () => {
+    setError(null)
+    try {
+      const g = await forkGraph(graphId)
+      setGraphs((gs) => [g, ...gs.filter((x) => x.id !== g.id)])
+      hydrate(await getGraph(g.id), typeMap)
+      setStatus(`Forked → ${g.name} · yours to edit`)
+    } catch (e) { setError(e.data || String(e)); setStatus('Fork failed') }
+  }, [graphId, typeMap, hydrate])
 
   // view → real state mapping. Apply only real node changes; group nodes position only; interface nodes remember position per drill-in.
   const onNodesChange = useCallback((changes) => {
@@ -848,6 +859,10 @@ export default function Editor({ onBaked, user } = {}) {
             <span className="save-state readonly" title={currentGraph?.owner ? `Owned by ${currentGraph.owner}` : 'System / demo graph'}>
               🔒 Read-only
             </span>
+          )}
+          {authed && (
+            <button onClick={onFork} className={canEdit ? 'fork-btn' : 'fork-btn primary'} disabled={!graphId}
+                    title="Fork — copy this graph into a new sandbox you own">Fork</button>
           )}
           <button onClick={onEvaluate}>Evaluate</button>
           <button onClick={onVerify} title="Science CI — re-bake, then diff against the published baseline (save before editing recommended)">Verify vs published</button>

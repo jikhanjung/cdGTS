@@ -306,6 +306,35 @@ def test_non_owner_cannot_write_public_but_owner_can(api, graph, node_types):
     assert api.put(f"/api/graphs/{graph.pk}/", _payload(), format="json").status_code == 200
 
 
+def test_fork_deep_clones_and_reowns(api, graph, node_types):
+    """Fork = 위상 깊은 복제(nodes/edges/groups) + 새 owner·sandbox·forked_from. 원본 불변."""
+    payload = _payload()
+    payload["groups"] = [{"key": "g1", "name": "Grp", "collapsed": False, "x": 5, "y": 5}]
+    payload["nodes"][0]["group"] = "g1"
+    api.put(f"/api/graphs/{graph.pk}/", payload, format="json")
+    Graph.objects.filter(pk=graph.pk).update(status=Graph.Status.RATIFIED)   # public → forkable by others
+
+    from django.contrib.auth import get_user_model
+    forker = APIClient()
+    fuser = get_user_model().objects.create_user("forker", password="pw12345")
+    forker.force_authenticate(user=fuser)
+    resp = forker.post(f"/api/graphs/{graph.pk}/fork/")
+    assert resp.status_code == 201, resp.data
+    fork = resp.data
+    assert fork["owner"] == "forker" and fork["status"] == "sandbox"
+    assert fork["forked_from"] == graph.slug and fork["id"] != graph.id
+    assert {n["key"] for n in fork["nodes"]} == {"obs1", "adm"}
+    assert len(fork["edges"]) == 1 and fork["groups"][0]["key"] == "g1"
+    assert next(n for n in fork["nodes"] if n["key"] == "obs1")["group"] == "g1"
+    # 원본은 그대로, 새 그래프는 forker 것
+    assert Graph.objects.get(pk=graph.pk).owner_id == graph.owner_id
+    assert Graph.objects.get(pk=fork["id"]).owner_id == fuser.id
+
+
+def test_fork_requires_auth(graph):
+    assert APIClient().post(f"/api/graphs/{graph.pk}/fork/").status_code in (401, 403)
+
+
 def test_sandbox_visibility(api, graph, node_types):
     """샌드박스는 owner 전용; 공개(proposed/ratified)·시스템(owner=null)은 모두 열람."""
     from django.contrib.auth import get_user_model

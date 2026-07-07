@@ -23,6 +23,9 @@ class GraphAccessPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if request.method in permissions.SAFE_METHODS:
             return graph_is_public(obj) or obj.owner_id == request.user.id
+        # fork clones a *readable* graph into your own sandbox — it doesn't mutate the source.
+        if getattr(view, "action", None) == "fork":
+            return bool(request.user and request.user.is_authenticated)
         if request.user.is_staff:
             return True
         return obj.owner_id is not None and obj.owner_id == request.user.id

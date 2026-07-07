@@ -1,9 +1,12 @@
 from django.db.models import Q
 from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 
 from .models import Graph
 from .permissions import GraphAccessPermission
 from .serializers import GraphSerializer
+from .services import fork_graph
 
 
 class GraphViewSet(viewsets.ModelViewSet):
@@ -28,3 +31,12 @@ class GraphViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         user = self.request.user
         serializer.save(owner=user if user.is_authenticated else None)
+
+    @action(detail=True, methods=["post"])
+    def fork(self, request, pk=None):
+        """Deep-clone a readable graph into a new sandbox the caller owns (P05.3)."""
+        if not request.user.is_authenticated:
+            return Response({"detail": "Sign in to fork."}, status=401)
+        source = self.get_object()          # get_queryset enforces "can only fork what you can see"
+        fork = fork_graph(source, request.user)
+        return Response(self.get_serializer(fork).data, status=201)
