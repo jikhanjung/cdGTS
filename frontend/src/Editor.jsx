@@ -254,6 +254,7 @@ export default function Editor() {
   const [activeGroup, setActiveGroup] = useState(null)   // null=top level / group key=drilled in
   const [ioPos, setIoPos] = useState({})   // per-drill-in interface node positions { [group]: { 'gio:in':{x,y}, 'gio:out':{x,y} } }
   const [ioSel, setIoSel] = useState(() => new Set())   // selected synthetic nodes (gio:in/out, bound:upper/lower) — derived per view, so selection is held here for the ring
+  const synthRef = useRef(new Map())   // id → { sig, node }: stable object refs for derived nodes (group/gio/bound) so React Flow keeps them measured across rebuilds
   const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
   const [selectedIds, setSelectedIds] = useState([])          // selected real nodes
@@ -308,14 +309,25 @@ export default function Editor() {
   useEffect(() => { setIoSel(new Set()) }, [activeGroup])
 
   const viewNodes = useMemo(() => {
+    // Derived nodes (group/gio/bound) are rebuilt fresh by buildView on every `nodes` change (e.g. selecting a real node
+    // during a rubber-band). Handing React Flow a brand-new object each time makes it treat the node as unmeasured
+    // (handleBounds null / measured.height 0 → area 0), and getNodesInside then force-selects it even when it's outside
+    // the selection box. Keep a stable object reference while the node's content is unchanged so it stays measured.
+    const stable = (node) => {
+      const sig = JSON.stringify({ p: node.position, s: !!node.selected, w: node.width, d: node.data })
+      const hit = synthRef.current.get(node.id)
+      if (hit && hit.sig === sig) return hit.node
+      synthRef.current.set(node.id, { sig, node })
+      return node
+    }
     const selG = new Set(selectedGroupKeys)
     const out = nodes.filter((n) => struct.nodeRep[n.id]?.kind === 'node')
-    struct.groupNodes.forEach((gn) => out.push(selG.has(gn.data.key) ? { ...gn, selected: true } : gn))
+    struct.groupNodes.forEach((gn) => out.push(stable(selG.has(gn.data.key) ? { ...gn, selected: true } : gn)))
     // interface nodes (gio:in/out) — overlay the per-drill-in remembered position (fall back to buildView default).
     const pos = ioPos[activeGroup || ''] || {}
-    struct.ioNodes.forEach((io) => out.push({ ...(pos[io.id] ? { ...io, position: pos[io.id] } : io), selected: ioSel.has(io.id) }))
+    struct.ioNodes.forEach((io) => out.push(stable({ ...(pos[io.id] ? { ...io, position: pos[io.id] } : io), selected: ioSel.has(io.id) })))
     // bound frames (upper/lower boundary) — selectable·draggable, position remembered per drill-in (same as gio).
-    struct.boundNodes.forEach((bn) => out.push({ ...(pos[bn.id] ? { ...bn, position: pos[bn.id] } : bn), selected: ioSel.has(bn.id) }))
+    struct.boundNodes.forEach((bn) => out.push(stable({ ...(pos[bn.id] ? { ...bn, position: pos[bn.id] } : bn), selected: ioSel.has(bn.id) })))
     return out
   }, [nodes, struct, selectedGroupKeys, ioPos, ioSel, activeGroup])
   const viewEdges = useMemo(() => {
