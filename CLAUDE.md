@@ -6,7 +6,7 @@
 
 cdGTS = **Continuously Deployed Geologic Time Scale**, 부제 *"A graph-based geologic time scale engine"*. 지질시대표를 연대층서 단위·경계의 실행 가능한 의존성 그래프로 구현하는 엔진입니다. **브레인스토밍으로 시작해 실행 가능한 코드베이스로 전환**되었습니다 — 개념 코퍼스(`docs/`)와 구현(Django 앱 + React 프론트)이 함께 있습니다. (표기 규칙은 `docs/naming.md`: "Geologic"·"Time Scale"·괄호 앞 공백.)
 
-- **현재 상태**: 스키마 v0 를 Django 5.2 + DRF + React Flow 로 구현, 운영서버(cdgts.paleobytes.info)에 **v0.1.21** 배포 중(테스트 서버 v0.1.25-WIP). 상세는 **[HANDOFF.md](HANDOFF.md)** (현재 상태) · **[TODOs.md](TODOs.md)** (백로그) · `devlog/` (라운드별 기록).
+- **현재 상태**: 스키마 v0 를 Django 5.2 + DRF + React Flow 로 구현, 운영서버(cdgts.paleobytes.info)에 **v0.1.25** 배포. 상세는 **[HANDOFF.md](HANDOFF.md)** (현재 상태) · **[TODOs.md](TODOs.md)** (백로그) · `devlog/` (라운드별 기록).
 - 개념 코퍼스는 여전히 살아있는 브레인스토밍 대상입니다 — 아이디어를 던지고 굴려볼 수 있습니다.
 - **새 작업 시작 전 `HANDOFF.md` 를 먼저 읽으세요.** 무엇이 이미 구현/배포됐는지 여기에 요약돼 있습니다.
 

@@ -1,7 +1,7 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-07. 운영 **cdgts.paleobytes.info @ 0.1.21**. 테스트 서버 `127.0.0.1:8011` @
-**0.1.25-WIP** — 0.1.25 UI/UX 마무리 작업 중이며 **완료 후 일괄로 운영 배포 예정**(0.1.22~0.1.25 변경분).
+**Last updated**: 2026-07-07. 운영 **cdgts.paleobytes.info @ 0.1.25** — 0.1.22~0.1.25 UI/UX 다듬기 일괄
+릴리스(이미지 빌드·푸시 완료, 운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011`.
 백엔드 **pytest 91 passed**. devlog 001~101 push.
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
@@ -50,7 +50,7 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영**:
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.21**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.25-WIP**.
+  - **운영서버** `cdgts.paleobytes.info` @ **0.1.25**(nginx + certbot). 개발/테스트 `127.0.0.1:8011`.
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 분리 + prod→test sync.
     이 호스트(m710q)는 **빌드 호스트이자 테스트 서버** — deploy-dev.sh 로 스냅샷 없이 즉시 스왑.
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 cron.
@@ -80,14 +80,11 @@
   접기/자동표시, merge 배지, 그룹·Group I/O 고정 폭.
 - **선택 버그픽스**(097·099) — 다중선택 오버레이 우클릭 통과, 파생 노드 참조 안정화로 박스 밖 강제선택 해소.
 - **seed**(100) — 예제 T. pedum FAD 노드를 Oman Ara Group 위로 재배치(양 그래프).
-- **릴리스** — 0.1.19~0.1.21 순차 운영 배포. 0.1.22~0.1.25(UI/UX 다듬기) 는 테스트 서버에서 마무리 중,
-  **완료 후 일괄 운영 배포 예정**.
+- **릴리스** — 0.1.19~0.1.21 순차 운영 배포 후, 0.1.22~0.1.25(UI/UX 다듬기)를 테스트 서버에서 마무리하고
+  **0.1.25 로 일괄 릴리스**(이미지 빌드·푸시 완료). frontend 중심 변경이며 seed 변경(100)은 재시드로 반영.
 
 ## 진행 중 (WIP)
 
-- **0.1.25 UI/UX 마무리 배치** — 위 "최근 작업" 의 에디터/차트 다듬기 변경분(0.1.22~0.1.25-WIP)을 테스트
-  서버(`:8011`)에서 검증 중. 완료되면 운영(0.1.21)에 **일괄 배포**. frontend 중심 변경이며 seed 변경(100)은
-  재시드로 반영됨.
 - **인터페이스(Group I/O) 노드 위치 영속** — 현재 드릴인별 프론트 세션 메모리(리로드/저장 시 초기화).
   영속 필요 시 NodeGroup 에 io 좌표 필드 추가(후속).
 
