@@ -815,7 +815,7 @@ export default function Editor() {
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
             selectionOnDrag={!IS_TOUCH}          // desktop: left-drag = selection box
-            autoPanOnSelection={false}           // no auto-pan during selection — panning moves screenStart so the box x jumps
+            autoPanOnSelection                   // auto-pan when the selection box reaches the viewport edge (reach off-screen nodes). Box start is anchored in flow coords upstream, so it no longer jumps.
             panOnDrag={IS_TOUCH ? true : [1]}    // touch: drag pan / desktop: middle button
             zoomOnPinch                          // touch: pinch zoom
             selectionMode={SelectionMode.Full}  // select only fully enclosed nodes — prevents the box growing when a wide node is barely grazed and released
