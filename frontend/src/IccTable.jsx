@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { listGraphs, bakeGraph } from './api.js'
+import { listGraphs, bakeGraph, getRelease } from './api.js'
 import { summarizeDist } from './ResultsPanel.jsx'
 
 const fmt = (x) => (x == null ? '—' : `${Number(x.toPrecision(7))}`)
@@ -14,8 +14,10 @@ function uncertaintyText(dist) {
   return '—'
 }
 
-// Bake the graph and show gateway outputs as an ICC table (boundary snapshot).
-export default function IccTable() {
+// Show a release's boundary records as an ICC table. Embedded in the Vault (embedReleaseId), or standalone
+// where it bakes a chosen graph into a scratch release first.
+export default function IccTable({ embedReleaseId } = {}) {
+  const embedded = embedReleaseId != null
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [release, setRelease] = useState(null)
@@ -36,6 +38,7 @@ export default function IccTable() {
   }
 
   useEffect(() => {
+    if (embedded) return
     (async () => {
       try {
         const gs = await listGraphs()
@@ -46,6 +49,15 @@ export default function IccTable() {
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Embedded: render the selected release's baked records directly.
+  useEffect(() => {
+    if (embedReleaseId == null) return
+    setError(null); setStatus('Loading…')
+    getRelease(embedReleaseId)
+      .then((r) => { setRelease(r); setStatus(`${r.version} · ${r.records.length} boundaries`) })
+      .catch((e) => { setError(e.data || String(e)); setStatus('Failed') })
+  }, [embedReleaseId])
+
   const rows = (release?.records || []).slice()
     .sort((a, b) => (b.value_ma ?? -Infinity) - (a.value_ma ?? -Infinity))   // oldest (large Ma) → youngest
   const curSlug = graphs.find((g) => g.id === graphId)?.slug
@@ -53,15 +65,19 @@ export default function IccTable() {
   return (
     <div className="icc">
       <div className="icc-controls">
-        <label>Graph
-          <select
-            value={graphId || ''}
-            onChange={(e) => { const id = Number(e.target.value); setGraphId(id); bake(id) }}
-          >
-            {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
-          </select>
-        </label>
-        <button onClick={() => graphId && bake(graphId)}>Re-bake</button>
+        {!embedded && (
+          <>
+            <label>Graph
+              <select
+                value={graphId || ''}
+                onChange={(e) => { const id = Number(e.target.value); setGraphId(id); bake(id) }}
+              >
+                {graphs.map((g) => <option key={g.id} value={g.id}>{g.name}</option>)}
+              </select>
+            </label>
+            <button onClick={() => graphId && bake(graphId)}>Re-bake</button>
+          </>
+        )}
         <span className="icc-status">{status}</span>
       </div>
 
@@ -92,10 +108,12 @@ export default function IccTable() {
               ))}
             </tbody>
           </table>
-          <p className="icc-note">
-            <b>bake</b> = an ICC snapshot freezing the graph's gateway outputs. Saved as release <code>graph:{curSlug}</code>,
-            so you can compare it against other versions in <b>Release Diff</b>.
-          </p>
+          {!embedded && (
+            <p className="icc-note">
+              <b>bake</b> = an ICC snapshot freezing the graph's gateway outputs. Saved as release <code>graph:{curSlug}</code>,
+              so you can compare it against other versions in <b>Release Diff</b>.
+            </p>
+          )}
         </>
       )}
     </div>

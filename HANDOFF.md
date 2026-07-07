@@ -2,7 +2,7 @@
 
 **Last updated**: 2026-07-07. 운영 **cdgts.paleobytes.info @ 0.1.25** — 0.1.22~0.1.25 UI/UX 다듬기 일괄
 릴리스(이미지 빌드·푸시 완료, 운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011`.
-백엔드 **pytest 91 passed**. devlog 001~101 + 리뷰/계획(R01·P04·P05) push.
+백엔드 **pytest 96 passed**. devlog 001~104 + 리뷰/계획(R01·P04·P05) push. P04(불변 Bake·Vault 허브) **구현 완료(미배포)**.
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -57,7 +57,7 @@
   - ⚠️ **시드 데이터(레이아웃 포함) 변경 릴리스는 `seed --mode=replace` 재시드 필요**(add 는 그래프 원자 skip).
 - **초기 데이터(seed)**: 통합 `seed/`(manifest `2026.07.0`, 자연키) — `01_chrono`~`04_releases` + **`05_icc_release`**.
   `manage.py seed --mode=replace|add`. 순환 자연키 FK(그룹↔노드)는 forward-ref 2패스로 로드. `FIXTURE_DIRS=seed/`.
-- **테스트**: 백엔드 `pytest` **91 passed**(L2 게이트·seed 회귀 포함). 테스트 fixture 는 seed 파일 loaddata.
+- **테스트**: 백엔드 `pytest` **96 passed**(L2 게이트·seed 회귀 + P04.1 불변 bake 포함). 테스트 fixture 는 seed 파일 loaddata.
 - **문서 코퍼스**: `docs/` 14주제 × 한/영 + README + app-architecture + naming(태그라인·표기 규칙) +
   evaluation-order(의존 vs 연대순, order=사후 검사) + boundary-span-duality. 진입점 `docs/concept-map.md`.
 - **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push.
@@ -88,16 +88,19 @@
 - **인터페이스(Group I/O) 노드 위치 영속** — 현재 드릴인별 프론트 세션 메모리(리로드/저장 시 초기화).
   영속 필요 시 NodeGroup 에 io 좌표 필드 추가(후속).
 
-### 다음 방향 — 계획 문서화 완료 (R01 → P04 → P05)
+### 다음 방향 — 계획 (R01 → P04 → P05)
 
 - **[R01](devlog/20260707_R01_vision-implementation-review.md)** — 초기 비전 대비 구현 현황 리뷰. 뼈대·배관은
   놓임; 미착수 두 아크 = A(과학 엔진 심화)·C(멀티유저 CI). **사용자 선택 = C.**
-- **[P04](devlog/20260707_P04_editor-bake-vault-restructure.md)** — (선행) Editor→Bake→**Vault** 재구성:
-  아티팩트=불변 Release 를 1급으로, nav 를 Editor·Vault 2개로. bake 이름 `GeologicTimeScale.Release.YYYYMMDD.NN`.
+- **[P04](devlog/20260707_P04_editor-bake-vault-restructure.md) ✅ 구현 완료(미배포)** — Editor→Bake→**Vault**
+  재구성. **P04.1**([102](devlog/20260707_102_p04-1-immutable-bake-artifact.md)) 불변 Release 아티팩트
+  (`kind`·`source_graph`, `snapshot_graph`, `GeologicTimeScale.Release.YYYYMMDD.NN`). **P04.2**([103](devlog/20260707_103_p04-2-editor-bake-action.md))
+  Editor `Bake…` 버튼·다이얼로그. **P04.3**([104](devlog/20260707_104_p04-3-vault-hub.md)) nav=Editor·Vault,
+  4개 뷰를 Vault 허브로(Chart/Table/Narrative/Diff 토글, `embedReleaseId`). pytest 96·build OK.
+  **⚠ 스키마 migration(releases 0004·0005) 포함 → 배포 시 마이그레이트/재시드 필요.**
 - **[P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md)** — 아크 C: 인증(세션)→소유/가시성→fork→
   propose/review(기존 verify diff 재사용)→ratify. 결정 5개 확정, 인터벌 스코프 권한 retrofit-ready.
-  MVP = 로그인·fork·bake·diff 리뷰.
-- **실행 순서: P04 먼저** — 아티팩트를 세워야 C 의 소유·비교가 그 위에 얹힘.
+  MVP = 로그인·fork·bake·diff 리뷰. **P04 위에 얹음(다음 착수 후보).**
 
 ### 후속 (선택, 우선순위 대략순)
 

@@ -7,7 +7,7 @@ import { listReleases, bakeRelease, diffReleases } from './api.js'
 const fmtMa = (v) => (v == null ? '—' : `${Number(v).toFixed(3)} Ma`)
 const deltaClass = (d) => (d == null ? '' : d > 0 ? 'up' : d < 0 ? 'down' : '')
 
-export default function ReleasesDiff() {
+export default function ReleasesDiff({ initialA } = {}) {
   const [releases, setReleases] = useState([])
   const [a, setA] = useState('')
   const [b, setB] = useState('')
@@ -25,8 +25,9 @@ export default function ReleasesDiff() {
     (async () => {
       try {
         const rs = await refresh()
-        if (rs.length >= 2) { setA(String(rs[0].id)); setB(String(rs[rs.length - 1].id)) }
-        else if (rs.length === 1) { setA(String(rs[0].id)); setB(String(rs[0].id)) }
+        const first = initialA != null ? String(initialA) : (rs[0] ? String(rs[0].id) : '')
+        if (rs.length >= 2) { setA(first); setB(String(rs[rs.length - 1].id)) }
+        else if (rs.length === 1) { setA(first); setB(String(rs[0].id)) }
       } catch (e) { setError(e.data || String(e)) }
       finally { setLoading(false) }
     })()
@@ -83,13 +84,13 @@ export default function ReleasesDiff() {
           </select>
         </label>
         <span className="diff-meta">
-          {relA && `${relA.records?.length ?? 0} boundaries`} → {relB && `${relB.records?.length ?? 0} boundaries`}
+          {relA && `${relA.record_count ?? 0} boundaries`} → {relB && `${relB.record_count ?? 0} boundaries`}
         </span>
       </div>
 
       {error && <pre className="error">{JSON.stringify(error, null, 2)}</pre>}
 
-      {relA && (relA.records?.length ?? 0) === 0 && (
+      {relA && (relA.record_count ?? 0) === 0 && (
         <p className="none">
           A (<code>{relA.version}</code>) has no baked records.
           <button className="link" onClick={() => onBake(relA.id)}>bake</button>

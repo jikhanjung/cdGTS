@@ -2,36 +2,25 @@
 import { useState } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import Editor from './Editor.jsx'
-import ReleasesDiff from './ReleasesDiff.jsx'
-import IccTable from './IccTable.jsx'
-import IccChart from './IccChart.jsx'
-import Narrate from './Narrate.jsx'
+import Vault from './Vault.jsx'
 
-// Top nav switches between Editor / Releases Diff. The useReactFlow hook must be inside a Provider, so only Editor is wrapped.
+// Two surfaces: Editor (build/bake a graph) and Vault (the artifact hub — view/compare baked Releases).
+// Baking in the Editor drops you into the Vault on the fresh Release.
 export default function App() {
   const [view, setView] = useState('editor')
+  const [vaultReleaseId, setVaultReleaseId] = useState(null)
+  const goVault = (release) => { setVaultReleaseId(release?.id ?? null); setView('vault') }
   return (
     <div className="app">
       <nav className="topnav">
         <span className="brand">cdGTS<span className="brand-ver">v{__APP_VERSION__}</span></span>
         <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
-        <button className={view === 'icc' ? 'active' : ''} onClick={() => setView('icc')}>ICC Table</button>
-        <button className={view === 'chart' ? 'active' : ''} onClick={() => setView('chart')}>ICC Chart</button>
-        <button className={view === 'narrate' ? 'active' : ''} onClick={() => setView('narrate')}>ICC Narrative</button>
-        <button className={view === 'diff' ? 'active' : ''} onClick={() => setView('diff')}>Releases Diff</button>
+        <button className={view === 'vault' ? 'active' : ''} onClick={() => setView('vault')}>Vault</button>
       </nav>
       <div className="view">
         {view === 'editor'
-          ? <ReactFlowProvider><Editor /></ReactFlowProvider>
-          : view === 'icc'
-            ? <IccTable />
-            : view === 'chart'
-              ? <IccChart />
-              : view === 'narrate'
-                ? <Narrate />
-                : view === 'diff'
-                  ? <ReleasesDiff />
-                  : null}
+          ? <ReactFlowProvider><Editor onBaked={goVault} /></ReactFlowProvider>
+          : <Vault initialReleaseId={vaultReleaseId} />}
       </div>
     </div>
   )

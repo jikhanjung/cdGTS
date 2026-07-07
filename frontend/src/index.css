@@ -22,6 +22,41 @@ body {
 .view { flex: 1; min-height: 0; overflow: hidden; }   /* each view manages its own scroll — prevents horizontal body scroll */
 
 .editor { display: flex; height: 100%; }
+
+/* --- vault (artifact hub) --- */
+.vault { display: flex; height: 100%; }
+.vault-rail { width: 280px; flex-shrink: 0; border-right: 1px solid #e2e2ea; background: #fafafc;
+  display: flex; flex-direction: column; padding: 14px 0 0; overflow-y: auto; }
+.vault-rail h2 { margin: 0 14px 2px; font-size: 15px; }
+.vault-hint { margin: 0 14px 12px; font-size: 11px; color: #767688; }
+.vault-list { list-style: none; margin: 0; padding: 0; }
+.vault-item { padding: 8px 14px; cursor: pointer; border-left: 3px solid transparent;
+  display: flex; flex-direction: column; gap: 3px; }
+.vault-item:hover { background: #f0f0f6; }
+.vault-item.selected { background: #eae4f7; border-left-color: #a142f4; }
+.vault-ver { font-size: 12px; font-weight: 600; word-break: break-all; }
+.vault-metaline { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 10px; color: #767688; }
+.vault-kind { text-transform: uppercase; letter-spacing: 0.3px; font-weight: 700; padding: 1px 5px; border-radius: 4px;
+  background: #e6e6ef; color: #55556a; }
+.vault-kind.published, .vault-kind.baseline { background: #e8f5ec; color: #2f7d45; }
+.vault-kind.bake { background: #f4efff; color: #6a3fb0; }
+.vault-src { font-family: ui-monospace, Menlo, monospace; }
+.vault-count { margin-left: auto; }
+.vault-main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.vault-modes { display: flex; align-items: center; gap: 8px; padding: 8px 14px;
+  border-bottom: 1px solid #e2e2ea; background: #fff; flex-shrink: 0; }
+.vault-modes button { border: 1px solid #cfcfe0; background: #fff; border-radius: 6px;
+  padding: 5px 14px; font-size: 13px; cursor: pointer; }
+.vault-modes button:hover { background: #f0f0f6; }
+.vault-modes button.active { background: #eae4f7; border-color: #c9b6ec; font-weight: 600; }
+.vault-status { font-size: 12px; color: #767688; margin-left: auto; }
+.vault-view { flex: 1; min-height: 0; overflow: auto; }
+.vault-empty { padding: 30px; color: #767688; }
+@media (max-width: 720px) {
+  .vault { flex-direction: column; }
+  .vault-rail { width: auto; max-height: 34vh; border-right: none; border-bottom: 1px solid #e2e2ea; }
+}
+
 .toolbar .graph-select {
   border: 1px solid #cfcfe0; border-radius: 6px; padding: 5px 8px;
   font-size: 13px; background: #fff; max-width: 340px;

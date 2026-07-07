@@ -19,7 +19,8 @@ const textOn = (hex) => {
 }
 
 // Render outputs as nested Eon/Era/Period(/Epoch/Age) columns (ICC style). oldest=bottom, most recent=top.
-export default function IccChart() {
+export default function IccChart({ embedReleaseId } = {}) {
+  const embedded = embedReleaseId != null
   const [source, setSource] = useState('release')     // 'release' (published bake) | 'graph' (live merge output)
   const [graphs, setGraphs] = useState([])
   const [releases, setReleases] = useState([])
@@ -64,6 +65,7 @@ export default function IccChart() {
   }
 
   useEffect(() => {
+    if (embedded) return
     (async () => {
       try {
         const [gs, rs] = await Promise.all([listGraphs(), listReleases()])
@@ -75,6 +77,12 @@ export default function IccChart() {
       } catch (e) { setError(e.data || String(e)); setStatus('Failed') }
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Embedded (Vault): chart the selected release.
+  useEffect(() => {
+    if (embedReleaseId == null) return
+    setSource('release'); setReleaseId(embedReleaseId); loadRelease(embedReleaseId)
+  }, [embedReleaseId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const max = data?.max_ma || 1
   // Drop the Subperiod column (rank_n 4 = Mississippian/Pennsylvanian, present only for the Carboniferous): a whole
@@ -162,13 +170,15 @@ export default function IccChart() {
   return (
     <div className="iccchart">
       <div className="iccchart-controls">
-        <div className="scale-toggle">
-          <button className={source === 'release' ? 'active' : ''}
-                  onClick={() => { setSource('release'); if (releaseId) loadRelease(releaseId) }}>Published ICC</button>
-          <button className={source === 'graph' ? 'active' : ''}
-                  onClick={() => { if (graphId) selectGraphSource(graphId) }}>Graph (merge)</button>
-        </div>
-        {source === 'release' ? (
+        {!embedded && (
+          <div className="scale-toggle">
+            <button className={source === 'release' ? 'active' : ''}
+                    onClick={() => { setSource('release'); if (releaseId) loadRelease(releaseId) }}>Published ICC</button>
+            <button className={source === 'graph' ? 'active' : ''}
+                    onClick={() => { if (graphId) selectGraphSource(graphId) }}>Graph (merge)</button>
+          </div>
+        )}
+        {!embedded && (source === 'release' ? (
           <label>Release
             <select value={releaseId || ''} onChange={(e) => { const id = Number(e.target.value); setReleaseId(id); loadRelease(id) }}>
               {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
@@ -189,7 +199,7 @@ export default function IccChart() {
               </label>
             )}
           </>
-        )}
+        ))}
         <div className="scale-toggle">
           <button className={scale === 'log' ? 'active' : ''} onClick={() => setScale('log')}>Log (zoom recent)</button>
           <button className={scale === 'linear' ? 'active' : ''} onClick={() => setScale('linear')}>Linear (proportional)</button>

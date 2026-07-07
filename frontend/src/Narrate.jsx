@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { listReleases, narrateRelease } from './api.js'
 
 // The counterpart to bake (frozen table) — renders a release as a "narrated book" by rank. Oldest to youngest.
-export default function Narrate() {
+export default function Narrate({ embedReleaseId } = {}) {
+  const embedded = embedReleaseId != null
   const [releases, setReleases] = useState([])
   const [releaseId, setReleaseId] = useState(null)
   const [doc, setDoc] = useState(null)
@@ -19,6 +20,7 @@ export default function Narrate() {
   }
 
   useEffect(() => {
+    if (embedded) return
     (async () => {
       try {
         const rs = await listReleases(); setReleases(rs)
@@ -28,14 +30,22 @@ export default function Narrate() {
     })()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Embedded (Vault): narrate the selected release.
+  useEffect(() => {
+    if (embedReleaseId == null) return
+    setReleaseId(embedReleaseId); load(embedReleaseId)
+  }, [embedReleaseId]) // eslint-disable-line react-hooks/exhaustive-deps
+
   return (
     <div className="narrate">
       <div className="narrate-controls">
-        <label>Release
-          <select value={releaseId || ''} onChange={(e) => { const id = Number(e.target.value); setReleaseId(id); load(id) }}>
-            {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
-          </select>
-        </label>
+        {!embedded && (
+          <label>Release
+            <select value={releaseId || ''} onChange={(e) => { const id = Number(e.target.value); setReleaseId(id); load(id) }}>
+              {releases.map((r) => <option key={r.id} value={r.id}>{r.version}</option>)}
+            </select>
+          </label>
+        )}
         <span className="narrate-status">{status}</span>
       </div>
 
