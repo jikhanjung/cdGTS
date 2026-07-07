@@ -63,7 +63,7 @@ class Graph(models.Model):
     objects = GraphManager()
 
     class Meta:
-        ordering = ["slug"]
+        ordering = ["name"]
 
     def __str__(self):
         return self.slug

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
-  ReactFlow, Background, Controls, MiniMap, SelectionMode,
+  ReactFlow, Background, Controls, MiniMap, Panel, SelectionMode,
   applyNodeChanges, applyEdgeChanges, useNodesState, useEdgesState, useReactFlow,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -730,6 +730,14 @@ export default function Editor() {
             multiSelectionKeyCode="Shift"        // Shift+click = add to selection
             fitView
           >
+            {activeGroup && (
+              <Panel position="top-left">
+                <button className="exit-parent" onClick={() => setActiveGroup(activeGroupObj?.parent || null)}
+                        title="Exit to parent (same as right-click → Exit to parent)">
+                  ↰ {activeGroupObj?.parent ? 'Parent' : 'Top level'}
+                </button>
+              </Panel>
+            )}
             <Background />
             <Controls />
             <MiniMap pannable zoomable />

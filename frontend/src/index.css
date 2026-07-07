@@ -190,6 +190,15 @@ body {
 }
 .breadcrumb .ungroup:hover { background: #f0e6fa; }
 
+/* exit-to-parent button overlaid on the canvas (top-left) when drilled into a group */
+.exit-parent {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1px solid #d9c4ef; background: #fff; color: #7a2fbf;
+  border-radius: 6px; padding: 5px 11px; font-size: 12px; font-weight: 600;
+  cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.exit-parent:hover { background: #f0e6fa; }
+
 /* --- order constraint node (vertical handles · precedence check) --- */
 .order-node {
   width: 40px; height: 36px; box-sizing: border-box; border: 1.5px solid #a24bd8; border-radius: 9px;

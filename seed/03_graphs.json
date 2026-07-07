@@ -461,7 +461,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3236,
+   "y": 3442,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -484,7 +484,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3165,
+   "y": 3332,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -507,7 +507,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3095,
+   "y": 3222,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -530,7 +530,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3025,
+   "y": 3112,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -553,7 +553,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2955,
+   "y": 3002,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -576,7 +576,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2885,
+   "y": 2892,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -599,7 +599,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 3015,
+   "y": 3294,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -622,7 +622,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2945,
+   "y": 3184,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -645,7 +645,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2875,
+   "y": 3074,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -668,7 +668,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2805,
+   "y": 2964,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -691,7 +691,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2735,
+   "y": 2854,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -714,7 +714,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2665,
+   "y": 2744,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -737,7 +737,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2595,
+   "y": 2634,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -783,7 +783,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2936,
+   "y": 3254,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -806,7 +806,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2865,
+   "y": 3144,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -829,7 +829,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2795,
+   "y": 3034,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -852,7 +852,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2725,
+   "y": 2924,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -875,7 +875,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2655,
+   "y": 2814,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -898,7 +898,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2585,
+   "y": 2704,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -921,7 +921,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2515,
+   "y": 2594,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -944,7 +944,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2445,
+   "y": 2484,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -990,7 +990,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2786,
+   "y": 3224,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1013,7 +1013,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2715,
+   "y": 3114,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1036,7 +1036,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2645,
+   "y": 3004,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1059,7 +1059,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2575,
+   "y": 2894,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1082,7 +1082,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2505,
+   "y": 2784,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1105,7 +1105,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2435,
+   "y": 2674,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1128,7 +1128,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2365,
+   "y": 2564,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1151,7 +1151,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2295,
+   "y": 2454,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1174,7 +1174,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2225,
+   "y": 2344,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1197,7 +1197,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2155,
+   "y": 2234,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1220,7 +1220,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2085,
+   "y": 2124,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1266,7 +1266,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2636,
+   "y": 3034,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1289,7 +1289,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2565,
+   "y": 2924,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1312,7 +1312,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2495,
+   "y": 2814,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1335,7 +1335,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2425,
+   "y": 2704,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1358,7 +1358,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2355,
+   "y": 2594,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1381,7 +1381,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2285,
+   "y": 2484,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1404,7 +1404,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2215,
+   "y": 2374,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1427,7 +1427,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2145,
+   "y": 2264,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1450,7 +1450,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2075,
+   "y": 2154,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1473,7 +1473,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2005,
+   "y": 2044,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1519,7 +1519,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2486,
+   "y": 2724,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1542,7 +1542,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2415,
+   "y": 2614,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1565,7 +1565,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2345,
+   "y": 2504,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1588,7 +1588,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2275,
+   "y": 2394,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1611,7 +1611,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2205,
+   "y": 2284,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1634,7 +1634,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2135,
+   "y": 2174,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1680,7 +1680,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2336,
+   "y": 2654,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1703,7 +1703,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2265,
+   "y": 2544,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1726,7 +1726,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2195,
+   "y": 2434,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1749,7 +1749,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2125,
+   "y": 2324,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1772,7 +1772,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2055,
+   "y": 2214,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1795,7 +1795,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1985,
+   "y": 2104,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1818,7 +1818,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1915,
+   "y": 1994,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -1841,7 +1841,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1845,
+   "y": 1884,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2048,7 +2048,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 2036,
+   "y": 2274,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2071,7 +2071,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1965,
+   "y": 2164,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2094,7 +2094,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1895,
+   "y": 2054,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2117,7 +2117,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1825,
+   "y": 1944,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2140,7 +2140,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1755,
+   "y": 1834,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2163,7 +2163,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1685,
+   "y": 1724,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2209,7 +2209,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1886,
+   "y": 2164,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2232,7 +2232,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1815,
+   "y": 2054,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2255,7 +2255,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1745,
+   "y": 1944,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2278,7 +2278,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1675,
+   "y": 1834,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2301,7 +2301,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1605,
+   "y": 1724,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2324,7 +2324,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1535,
+   "y": 1614,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2347,7 +2347,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1465,
+   "y": 1504,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2393,7 +2393,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1736,
+   "y": 1974,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2416,7 +2416,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1665,
+   "y": 1864,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2439,7 +2439,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1595,
+   "y": 1754,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2462,7 +2462,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1525,
+   "y": 1644,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2485,7 +2485,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1455,
+   "y": 1534,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2508,7 +2508,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1385,
+   "y": 1424,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2554,7 +2554,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1586,
+   "y": 1944,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2577,7 +2577,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1515,
+   "y": 1834,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2600,7 +2600,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1445,
+   "y": 1724,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2623,7 +2623,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1375,
+   "y": 1614,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2646,7 +2646,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1305,
+   "y": 1504,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2669,7 +2669,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1235,
+   "y": 1394,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2692,7 +2692,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1165,
+   "y": 1284,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2715,7 +2715,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1095,
+   "y": 1174,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2738,7 +2738,7 @@
    "description": "",
    "params": {},
    "x": 2570,
-   "y": 1025,
+   "y": 1064,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2784,7 +2784,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 3025.0,
+   "y": 3146.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2807,7 +2807,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2805.0,
+   "y": 2943.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2830,7 +2830,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2655.0,
+   "y": 2814.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2853,7 +2853,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2400.0,
+   "y": 2619.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2876,7 +2876,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2285.0,
+   "y": 2484.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2899,7 +2899,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2275.0,
+   "y": 2394.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2922,7 +2922,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 2055.0,
+   "y": 2214.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2968,7 +2968,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1825.0,
+   "y": 1944.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -2991,7 +2991,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1640.0,
+   "y": 1779.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3014,7 +3014,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1525.0,
+   "y": 1644.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -3037,7 +3037,7 @@
    "description": "",
    "params": {},
    "x": 2830,
-   "y": 1270.0,
+   "y": 1449.0,
    "width": null,
    "group": [
     "example-icc-partial",
@@ -5545,8 +5545,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 3200,
+   "x": 2570,
+   "y": 3400,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5592,8 +5592,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 3130,
+   "x": 2570,
+   "y": 3290,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5639,8 +5639,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 3060,
+   "x": 2570,
+   "y": 3180,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5686,8 +5686,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2990,
+   "x": 2570,
+   "y": 3070,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5733,8 +5733,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2920,
+   "x": 2570,
+   "y": 2960,
    "group": [
     "example-icc-partial",
     "ages-quaternary"
@@ -5780,7 +5780,7 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
+   "x": 2570,
    "y": 2850,
    "group": [
     "example-icc-partial",
@@ -5827,8 +5827,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 3050,
+   "x": 2570,
+   "y": 3362,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5874,8 +5874,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2980,
+   "x": 2570,
+   "y": 3252,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5921,8 +5921,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2910,
+   "x": 2570,
+   "y": 3142,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -5968,8 +5968,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2840,
+   "x": 2570,
+   "y": 3032,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6015,8 +6015,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2770,
+   "x": 2570,
+   "y": 2922,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6062,8 +6062,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2700,
+   "x": 2570,
+   "y": 2812,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6109,8 +6109,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2630,
+   "x": 2570,
+   "y": 2702,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6156,8 +6156,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2560,
+   "x": 2570,
+   "y": 2592,
    "group": [
     "example-icc-partial",
     "ages-neogene"
@@ -6203,8 +6203,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2900,
+   "x": 2570,
+   "y": 3212,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6250,8 +6250,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2830,
+   "x": 2570,
+   "y": 3102,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6297,8 +6297,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2760,
+   "x": 2570,
+   "y": 2992,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6344,8 +6344,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2690,
+   "x": 2570,
+   "y": 2882,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6391,8 +6391,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2620,
+   "x": 2570,
+   "y": 2772,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6438,8 +6438,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2550,
+   "x": 2570,
+   "y": 2662,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6485,8 +6485,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2480,
+   "x": 2570,
+   "y": 2552,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6532,8 +6532,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2410,
+   "x": 2570,
+   "y": 2442,
    "group": [
     "example-icc-partial",
     "ages-paleogene"
@@ -6579,8 +6579,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2750,
+   "x": 2570,
+   "y": 3182,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6626,8 +6626,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2680,
+   "x": 2570,
+   "y": 3072,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6673,8 +6673,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2610,
+   "x": 2570,
+   "y": 2962,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6720,8 +6720,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2540,
+   "x": 2570,
+   "y": 2852,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6767,8 +6767,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2470,
+   "x": 2570,
+   "y": 2742,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6814,8 +6814,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2400,
+   "x": 2570,
+   "y": 2632,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6861,8 +6861,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2330,
+   "x": 2570,
+   "y": 2522,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6908,8 +6908,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2260,
+   "x": 2570,
+   "y": 2412,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -6955,8 +6955,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2190,
+   "x": 2570,
+   "y": 2302,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7002,8 +7002,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2120,
+   "x": 2570,
+   "y": 2192,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7049,8 +7049,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2050,
+   "x": 2570,
+   "y": 2082,
    "group": [
     "example-icc-partial",
     "ages-cretaceous"
@@ -7096,8 +7096,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2600,
+   "x": 2570,
+   "y": 2992,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7143,8 +7143,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2530,
+   "x": 2570,
+   "y": 2882,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7190,8 +7190,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2460,
+   "x": 2570,
+   "y": 2772,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7237,8 +7237,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2390,
+   "x": 2570,
+   "y": 2662,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7284,8 +7284,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2320,
+   "x": 2570,
+   "y": 2552,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7331,8 +7331,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2250,
+   "x": 2570,
+   "y": 2442,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7378,8 +7378,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2180,
+   "x": 2570,
+   "y": 2332,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7425,8 +7425,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2110,
+   "x": 2570,
+   "y": 2222,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7472,8 +7472,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2040,
+   "x": 2570,
+   "y": 2112,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7519,8 +7519,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1970,
+   "x": 2570,
+   "y": 2002,
    "group": [
     "example-icc-partial",
     "ages-jurassic"
@@ -7566,8 +7566,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2450,
+   "x": 2570,
+   "y": 2682,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7613,8 +7613,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2380,
+   "x": 2570,
+   "y": 2572,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7660,8 +7660,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2310,
+   "x": 2570,
+   "y": 2462,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7707,8 +7707,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2240,
+   "x": 2570,
+   "y": 2352,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7754,8 +7754,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2170,
+   "x": 2570,
+   "y": 2242,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7801,8 +7801,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2100,
+   "x": 2570,
+   "y": 2132,
    "group": [
     "example-icc-partial",
     "ages-triassic"
@@ -7848,8 +7848,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2300,
+   "x": 2570,
+   "y": 2612,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7895,8 +7895,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2230,
+   "x": 2570,
+   "y": 2502,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7942,8 +7942,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2160,
+   "x": 2570,
+   "y": 2392,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -7989,8 +7989,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2090,
+   "x": 2570,
+   "y": 2282,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8036,8 +8036,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2020,
+   "x": 2570,
+   "y": 2172,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8083,8 +8083,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1950,
+   "x": 2570,
+   "y": 2062,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8130,8 +8130,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1880,
+   "x": 2570,
+   "y": 1952,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8177,8 +8177,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1810,
+   "x": 2570,
+   "y": 1842,
    "group": [
     "example-icc-partial",
     "ages-permian"
@@ -8506,8 +8506,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 2000,
+   "x": 2570,
+   "y": 2232,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8553,8 +8553,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1930,
+   "x": 2570,
+   "y": 2122,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8600,8 +8600,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1860,
+   "x": 2570,
+   "y": 2012,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8647,8 +8647,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1790,
+   "x": 2570,
+   "y": 1902,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8694,8 +8694,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1720,
+   "x": 2570,
+   "y": 1792,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8741,8 +8741,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1650,
+   "x": 2570,
+   "y": 1682,
    "group": [
     "example-icc-partial",
     "ages-devonian"
@@ -8788,8 +8788,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1850,
+   "x": 2570,
+   "y": 2122,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8835,8 +8835,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1780,
+   "x": 2570,
+   "y": 2012,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8882,8 +8882,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1710,
+   "x": 2570,
+   "y": 1902,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8929,8 +8929,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1640,
+   "x": 2570,
+   "y": 1792,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -8976,8 +8976,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1570,
+   "x": 2570,
+   "y": 1682,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9023,8 +9023,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1500,
+   "x": 2570,
+   "y": 1572,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9070,8 +9070,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1430,
+   "x": 2570,
+   "y": 1462,
    "group": [
     "example-icc-partial",
     "ages-silurian"
@@ -9117,8 +9117,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1700,
+   "x": 2570,
+   "y": 1932,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9164,8 +9164,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1630,
+   "x": 2570,
+   "y": 1822,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9211,8 +9211,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1560,
+   "x": 2570,
+   "y": 1712,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9258,8 +9258,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1490,
+   "x": 2570,
+   "y": 1602,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9305,8 +9305,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1420,
+   "x": 2570,
+   "y": 1492,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9352,8 +9352,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1350,
+   "x": 2570,
+   "y": 1382,
    "group": [
     "example-icc-partial",
     "ages-ordovician"
@@ -9399,8 +9399,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1550,
+   "x": 2570,
+   "y": 1902,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9446,8 +9446,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1480,
+   "x": 2570,
+   "y": 1792,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9493,8 +9493,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1410,
+   "x": 2570,
+   "y": 1682,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9540,8 +9540,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1340,
+   "x": 2570,
+   "y": 1572,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9587,8 +9587,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1270,
+   "x": 2570,
+   "y": 1462,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9634,8 +9634,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1200,
+   "x": 2570,
+   "y": 1352,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9681,8 +9681,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1130,
+   "x": 2570,
+   "y": 1242,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9728,8 +9728,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 1060,
+   "x": 2570,
+   "y": 1132,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
@@ -9775,8 +9775,8 @@
      "note": "ICS 2024-12"
     }
    },
-   "x": 2380,
-   "y": 990,
+   "x": 2570,
+   "y": 1022,
    "group": [
     "example-icc-partial",
     "ages-cambrian"
