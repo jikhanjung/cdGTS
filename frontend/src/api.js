@@ -9,23 +9,37 @@ async function j(resp) {
 
 const jsonHeaders = { 'Content-Type': 'application/json' }
 
+// Django session auth enforces CSRF on writes: send the csrftoken cookie back as a header.
+function getCookie(name) {
+  const m = document.cookie.match(new RegExp('(^|; )' + name + '=([^;]*)'))
+  return m ? decodeURIComponent(m[2]) : null
+}
+const csrfHeaders = () => ({ ...jsonHeaders, 'X-CSRFToken': getCookie('csrftoken') || '' })
+
+// --- auth (P05.1) ---
+export const whoami = () => fetch('/api/auth/whoami/').then(j)
+export const login = (username, password) =>
+  fetch('/api/auth/login/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ username, password }) }).then(j)
+export const logout = () =>
+  fetch('/api/auth/logout/', { method: 'POST', headers: csrfHeaders() }).then(j)
+
 export const listNodeTypes = () => fetch('/api/node-types/').then(j)
 export const listGraphs = () => fetch('/api/graphs/').then(j)
 export const getGraph = (id) => fetch(`/api/graphs/${id}/`).then(j)
 
 export const createGraph = (body) =>
-  fetch('/api/graphs/', { method: 'POST', headers: jsonHeaders, body: JSON.stringify(body) }).then(j)
+  fetch('/api/graphs/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
 
 export const saveGraph = (id, body) =>
-  fetch(`/api/graphs/${id}/`, { method: 'PUT', headers: jsonHeaders, body: JSON.stringify(body) }).then(j)
+  fetch(`/api/graphs/${id}/`, { method: 'PUT', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
 
 export const evaluateGraph = (id) =>
-  fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: jsonHeaders }).then(j)
+  fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 
 // Bake graph → a new immutable Release (kind=bake) kept in the Vault. Optional label; else server auto-names it.
 export const bakeGraph = (id, label) =>
   fetch(`/api/graphs/${id}/bake/`, {
-    method: 'POST', headers: jsonHeaders,
+    method: 'POST', headers: csrfHeaders(),
     body: JSON.stringify(label ? { label } : {}),
   }).then(j)
 
@@ -34,7 +48,7 @@ export const suggestBakeName = (id) => fetch(`/api/graphs/${id}/bake/`).then(j)
 
 // Science CI — re-bake, then diff against the published baseline. {from,to,value_diff,topology_diff,summary}.
 export const verifyGraph = (id) =>
-  fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: jsonHeaders }).then(j)
+  fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 
 // Graph output → ICC-style nested column chart data (Eon/Era/Period bands).
 export const iccChart = (id, node) =>
@@ -45,12 +59,12 @@ export const releaseIccChart = (id) => fetch(`/api/releases/${id}/icc-chart/`).t
 
 // Release narrate — counterpart to bake. Per-rank narrative documents + saved narrative.
 export const narrateRelease = (id) =>
-  fetch(`/api/releases/${id}/narrate/`, { method: 'POST', headers: jsonHeaders }).then(j)
+  fetch(`/api/releases/${id}/narrate/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 
 // --- releases / diff ---
 export const listReleases = () => fetch('/api/releases/').then(j)
 export const getRelease = (id) => fetch(`/api/releases/${id}/`).then(j)
 export const bakeRelease = (id) =>
-  fetch(`/api/releases/${id}/bake/`, { method: 'POST', headers: jsonHeaders }).then(j)
+  fetch(`/api/releases/${id}/bake/`, { method: 'POST', headers: csrfHeaders() }).then(j)
 export const diffReleases = (a, b) =>
   fetch(`/api/releases/diff/?a=${a}&b=${b}`).then(j)

@@ -25,6 +25,7 @@ urlpatterns = [
     path('api/', include('nodes.urls')),
     path('api/', include('engine.urls')),
     path('api/', include('releases.urls')),
+    path('api/', include('accounts.urls')),
 ]
 
 # 프론트 SPA(빌드 산출물)가 있으면 루트에서 서빙. dev 는 vite(:5173) 사용.

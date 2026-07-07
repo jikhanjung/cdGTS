@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'graph.apps.GraphConfig',
     'engine.apps.EngineConfig',
     'releases.apps.ReleasesConfig',
+    'accounts.apps.AccountsConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -88,6 +89,17 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'config.wsgi.application'
+
+# DRF (P05.1): session auth for the same-origin SPA; read public / write authenticated by default.
+# NOTE: viewsets that still set permission_classes=[AllowAny] keep open writes until P05.2 tightens ownership.
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+}
 
 
 # Database
