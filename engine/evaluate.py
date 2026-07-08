@@ -116,35 +116,36 @@ def evaluate_graph(graph):
     return run
 
 
-def duration_gate(unit_dist, rank_of):
+def duration_gate(pairs):
     """
-    L2/L1b 지속시간 판정(순수 — DB 불요). unit_dist = {unit_slug: 분포dict}, rank_of = {slug: rank}.
-    rank 별로 base 오름차순 타일링:
-      L2 = 인접 base 점추정 duration ≤ 0(퇴화/영-길이) 있으면 fail.
-      L1b = 인접 두 경계의 공분산 인지 지속시간이 2σ 안에서 ≤0 가능(gap < 2σ_gap)이면 warn.
+    L2/L1b 지속시간 판정(순수) — **사용자가 assert 한 선후 쌍**(order edge)만 대상. 값 정렬 타일링 아님.
+    떨어져 있는(관계 안 맺은) 두 경계는 판정하지 않는다 — "주장 없으면 판정 없음."
+    pairs = [(older_dist, younger_dist, older_label, younger_label), ...]  (older = 큰 Ma).
+      L2  = assert 된 쌍의 점추정 duration = older − younger ≤ 0(퇴화/영-길이/역전) 있으면 fail.
+      L1b = 공분산 인지 지속시간이 2σ 안에서 ≤0 가능(gap < 2σ_gap)이면 warn.
+    assert 된(양쪽 값이 풀린) 쌍이 하나도 없으면 둘 다 skip.
     반환 (l2, l1b, unresolved_notes[]).
     """
     from .kernels import duration_stats
 
-    base = {s: (d or {}).get("value_ma") for s, d in unit_dist.items()}
-    degenerate, unresolved, pairs = 0, [], 0
-    for rank_n in set(rank_of.values()):
-        units = sorted((base[s], s) for s in unit_dist
-                       if rank_of.get(s) == rank_n and base[s] is not None)
-        prev_b, prev_s = 0.0, None
-        for b, s in units:
-            if b - prev_b <= 0:                          # 인접 base 동일/역전 = 영-길이 유닛
-                degenerate += 1
-            elif prev_s is not None:                     # 두 실경계 사이 — 공분산 인지 2σ 검사
-                ds = duration_stats(unit_dist[s], unit_dist[prev_s])   # older=s(큰 base)
-                if ds is not None:
-                    pairs += 1
-                    gap, sig = ds
-                    if sig > 0 and gap < 2 * sig:
-                        unresolved.append(f"{s}↔{prev_s} (Δ{round(gap, 3)} < 2σ {round(2 * sig, 3)})")
-            prev_b, prev_s = b, s
+    degenerate, unresolved, checked = 0, [], 0
+    for older, younger, ol, yl in pairs:
+        bo, by = (older or {}).get("value_ma"), (younger or {}).get("value_ma")
+        if bo is None or by is None:
+            continue
+        checked += 1
+        if bo - by <= 0:                                 # older 가 younger 보다 안 늙음 = 영-길이/역전
+            degenerate += 1
+        else:                                            # 공분산 인지 2σ 검사
+            ds = duration_stats(older, younger)          # older = 큰 base
+            if ds is not None:
+                gap, sig = ds
+                if sig > 0 and gap < 2 * sig:
+                    unresolved.append(f"{ol}↔{yl} (Δ{round(gap, 3)} < 2σ {round(2 * sig, 3)})")
+    if checked == 0:
+        return "skip", "skip", []
     l2 = "pass" if degenerate == 0 else "fail"
-    l1b = "warn" if unresolved else ("pass" if pairs else "skip")
+    l1b = "warn" if unresolved else "pass"
     return l2, l1b, unresolved
 
 
@@ -223,19 +224,33 @@ def _certify(run, graph, results):
             checks["L1"] = "pass" if vals == sorted(vals) or vals == sorted(vals, reverse=True) else "warn"
             passed = checks["L1"] != "warn"
 
-    # L2/L1b 지속시간 — 게이트웨이 산출 분포 → 유닛별 분포. duration_gate 가 rank 타일링·공분산 판정.
-    from chrono.models import Unit
-    unit_dist = {}
-    for gw in graph.gateways.select_related("boundary", "node"):
-        if gw.boundary is None or not gw.boundary.slug.startswith("base-"):
-            continue
-        r = results.get(gw.node.key)
-        d = r["distribution"] if r and r["distribution"] else None
-        if d and d.get("value_ma") is not None:
-            unit_dist[gw.boundary.slug[len("base-"):]] = d
-    if unit_dist:
-        rank_of = {u.slug: u.rank for u in Unit.objects.filter(slug__in=unit_dist.keys())}
-        l2, l1b, unresolved = duration_gate(unit_dist, rank_of)
+    # L2/L1b 지속시간 — **assert 된 time unit** 의 duration(base−top)만 검사(공분산 인지).
+    # 관계를 안 맺은 경계끼리는 판정하지 않는다(skip). order edge 인터리브로 유닛의 양 끝 경계를 찾는다:
+    #   base(older).younger → unit.older ,  unit.younger → top(younger).older.
+    # 유닛 없이 두 경계를 직접 order edge 로 이은 경우도 한 쌍으로 본다.
+    unit_keys = {n.key for n in insts if n.node_type.slug == "unit"}
+    bnd_keys = {n.key for n in insts if n.nature == "boundary"}
+    gw_label = {gw.node.key: gw.boundary.slug[len("base-"):]
+                for gw in graph.gateways.select_related("boundary", "node")
+                if gw.boundary and gw.boundary.slug.startswith("base-")}
+    lbl = lambda k: gw_label.get(k, k)                                    # noqa: E731
+    dist_of = lambda k: (results.get(k) or {}).get("distribution")       # noqa: E731
+    older_of, younger_of = {}, {}
+    for e in order_edges:
+        if e.target.key in unit_keys and e.target_port == "older":
+            older_of[e.target.key] = e.source.key
+        elif e.source.key in unit_keys and e.source_port == "younger":
+            younger_of[e.source.key] = e.target.key
+    pairs = []
+    for u in unit_keys:                                                  # 유닛 span = base(older) − top(younger)
+        ob, yb = older_of.get(u), younger_of.get(u)
+        if ob is not None and yb is not None:
+            pairs.append((dist_of(ob), dist_of(yb), lbl(ob), lbl(yb)))
+    for e in order_edges:                                                # 유닛 없이 직접 이은 경계쌍
+        if e.source.key in bnd_keys and e.target.key in bnd_keys:
+            pairs.append((dist_of(e.source.key), dist_of(e.target.key), lbl(e.source.key), lbl(e.target.key)))
+    if pairs:
+        l2, l1b, unresolved = duration_gate(pairs)
         checks["L2"], checks["L1b"] = l2, l1b
         if l2 == "fail":
             passed = False

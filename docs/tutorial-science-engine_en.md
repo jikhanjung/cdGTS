@@ -81,8 +81,9 @@ systematic tag.
    - consistency **green (pass)**, **L1b** green.
 
 ### What happened (the numbers)
-Both graphs have two adjacent Age boundaries: **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (gap **2.0 Myr**),
-each with **1σ = 1.5 Myr**.
+In both graphs the two Age boundaries sit on either side of an **Olenekian time-unit** node, joined by order edges — that
+**asserts** the sequence, and the gate only judges the duration of an **asserted unit** (two floating boundaries are
+skipped). The boundaries are **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (gap **2.0 Myr**), each **1σ = 1.5 Myr**.
 
 - **independent (warn)**: no sharing → `2σ_gap = 2·√(1.5² + 1.5²) ≈ 4.24`. Gap 2.0 < 4.24 → **order unresolved (warn)**.
   ("The boundaries are 2 Myr apart, but the error is 4 Myr — you can't be statistically sure which is older.")

@@ -49,6 +49,13 @@ coherence_gate(
 | **L2 지속시간** | stage/epoch 길이 = 두 경계 차. 음(-)의 지속시간, 분포가 0 아래로 새는지. | 값 + ± + **공분산** | FAIL/WARN |
 | **L3 상관인지** | 경계들을 독립으로 보지 않고 공유 상류 노드로 결합 처리. | 각 경계의 **provenance 그래프** | 아래 두 갈래 |
 
+**"인접"은 값이 아니라 assert된 구조다 (중요).**
+L1a·L1b·L2의 "인접 경계쌍"은 **값을 정렬해 이웃을 자동 추론하는 게 아니다.** 사용자가 명시적으로 assert한 관계
+— 두 경계를 잇는 **time unit(span) 노드**, 또는 경계 간 **order edge** — 에서만 나온다. 아무 관계 없이 떨어져
+있는 두 경계는 값이 가까워도 **판정하지 않는다(skip): "주장 없으면 판정 없음."** 유닛은 order edge 인터리브
+(`base(older).younger → unit.older`, `unit.younger → top(younger).older`)로 양 끝 경계를 물고, 그 span 의
+`duration = base − top` 을 검사한다. (기계가 관계를 발명하지 않는다 — 이 프로젝트의 "사람이 놓고 기계가 검사" 원칙.)
+
 **L2가 왜 공분산을 요구하나 (핵심).**
 지속시간 = age_old − age_young, 그 분산은 `Var(old) + Var(young) − 2·Cov(old, young)`. 두 경계가 상류 노드
 (붕괴상수·tracer)를 공유하면 `Cov > 0`이라, 순진하게 `Var(old)+Var(young)`로 계산하면 **지속시간 불확실성을

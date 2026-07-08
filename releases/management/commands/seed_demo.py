@@ -2,8 +2,9 @@
 P06.3b capstone demo (idempotent, add-only) — makes the P06 science engine features *visible*:
 
   1. Two tiny graphs that differ only by a shared systematic tag, so the coherence gate flips:
-     - demo-cov-independent : two adjacent Age boundaries, wide ±, treated independent → L1b WARN (2σ overlap).
+     - demo-cov-independent : two Age boundaries joined by an order edge, wide ±, independent → L1b WARN (2σ overlap).
      - demo-cov-shared      : same values/±, but both share a decay-constant → covariance shrinks σ_gap → L1b PASS.
+     The order edge is what *asserts* the sequence — L1b/L2 only judge boundaries the user connected.
      Open each in the Editor, press Evaluate, read the consistency chips (Results panel).
 
   2. Authored governance clamps on the published ICS-2024/12 release (Vault → Clamps tab):
@@ -25,10 +26,11 @@ class Command(BaseCommand):
     # --- 1. covariance gate: two graphs identical but for a shared systematic tag ---
     def _covariance_graphs(self):
         from chrono.models import Boundary
-        from graph.models import Gateway, Graph, NodeInstance
+        from graph.models import Edge, Gateway, Graph, NodeInstance
         from nodes.models import NodeType
 
         pub = NodeType.objects.get(slug="published-age")
+        unt = NodeType.objects.get(slug="unit")
         ole = Boundary.objects.filter(slug="base-olenekian").first()
         ani = Boundary.objects.filter(slug="base-anisian").first()
         if not (ole and ani):
@@ -46,6 +48,7 @@ class Command(BaseCommand):
             g, _ = Graph.objects.get_or_create(slug=slug, defaults={"name": name})
             g.name = name
             g.save(update_fields=["name"])
+            g.edges.all().delete()
             g.nodes.all().delete()
             g.gateways.all().delete()
             n1 = NodeInstance.objects.create(graph=g, key="pub-olenekian", node_type=pub, nature="boundary",
@@ -54,6 +57,12 @@ class Command(BaseCommand):
                                              label="Base Anisian", params={"distribution": dist(247.0, shared)}, x=60, y=240)
             Gateway.objects.create(graph=g, slug=f"{slug}-ole", name="base-olenekian", node=n1, boundary=ole)
             Gateway.objects.create(graph=g, slug=f"{slug}-ani", name="base-anisian", node=n2, boundary=ani)
+            # Olenekian time unit spanning the two boundaries — this is the *asserted* span the gate judges.
+            # order edge 인터리브: base(older).younger → unit.older , unit.younger → top(younger).older.
+            u = NodeInstance.objects.create(graph=g, key="unit-olenekian", node_type=unt, nature="generic",
+                                            label="Olenekian", params={}, x=280, y=150)
+            Edge.objects.create(graph=g, source=n1, source_port="younger", target=u, target_port="older", kind="order")
+            Edge.objects.create(graph=g, source=u, source_port="younger", target=n2, target_port="older", kind="order")
             self.stdout.write(f"  graph {slug} ({'shared' if shared else 'independent'})")
 
         # gap 2.0 Ma, each 1σ 1.5 → 2σ_gap(indep) ≈ 4.24 > 2 → warn; shared Cov 1.96 → σ_gap 0.76, 2σ 1.52 < 2 → pass

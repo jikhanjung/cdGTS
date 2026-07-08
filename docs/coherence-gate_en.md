@@ -51,6 +51,14 @@ coherence_gate(
 | **L2 durations** | Stage/epoch length = difference of two boundaries. Negative durations; distribution mass leaking below zero. | values + ± + **covariance** | FAIL/WARN |
 | **L3 correlation-aware** | Treat boundaries not as independent but jointly through shared upstream nodes. | each boundary's **provenance graph** | two branches below |
 
+**"Adjacent" means asserted structure, not sorted values (important).**
+The "adjacent boundary pair" in L1a/L1b/L2 is **not** inferred by sorting values. It comes only from a relationship the
+user explicitly asserted — a **time-unit (span) node** joining two boundaries, or an **order edge** between them. Two
+boundaries left floating with no connecting structure are **not judged (skip): "no assertion, no verdict."** A unit grips
+its two bounding boundaries through the order-edge interleave (`base(older).younger → unit.older`,
+`unit.younger → top(younger).older`) and its `duration = base − top` is what gets checked. (The machine never invents a
+relationship — the project's "humans place, the machine checks" principle.)
+
 **Why L2 requires covariance (the crux).**
 Duration = age_old − age_young, and its variance is `Var(old) + Var(young) − 2·Cov(old, young)`. When two
 boundaries share an upstream node (decay constant / tracer), `Cov > 0`, so naively computing

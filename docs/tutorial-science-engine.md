@@ -76,8 +76,9 @@ Var(지속시간) = Var(아래) + Var(위) − 2·Cov(아래, 위)
    - consistency **초록(pass)**, **L1b** 초록.
 
 ### 무슨 일이 벌어진 건가 (숫자)
-두 그래프 모두 인접한 두 Age 경계: **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (간격 **2.0 Myr**),
-각 경계 **1σ = 1.5 Myr**.
+두 그래프 모두 두 Age 경계 사이에 **Olenekian time unit** 노드가 있고, order edge로 이어져 **선후가 assert**돼
+있습니다 — 게이트는 이렇게 **assert된 유닛의 지속시간만** 판정합니다(그냥 떨어져 있는 경계는 판정 안 함, skip).
+경계는 **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (간격 **2.0 Myr**), 각 경계 **1σ = 1.5 Myr**.
 
 - **independent(warn)**: 공유 없음 → `2σ_gap = 2·√(1.5² + 1.5²) ≈ 4.24`. 간격 2.0 < 4.24 → **순서 미해결(warn)**.
   ("두 경계가 2 Myr 떨어졌다지만, 오차가 4 Myr나 돼서 어느 게 먼저인지 통계적으로 확신 못 함.")
