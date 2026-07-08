@@ -64,6 +64,9 @@ ladder, kept as a document index:
 
 ## 2. Document map
 
+**Tutorial (hands-on)**
+- [tutorial-science-engine_en.md](tutorial-science-engine_en.md) — click through the Science Engine (covariance · coherence gate · clamps) on the deploy (Arc A / P06)
+
 **Concept**
 - [idea_en.md](idea_en.md) — background · problem · layers 0–6 · gateways · open questions
 - [node-graph-paradigm_en.md](node-graph-paradigm_en.md) — DAG · gateway/network · cycles · edge = distribution

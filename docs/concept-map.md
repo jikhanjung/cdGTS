@@ -61,6 +61,9 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 
 ## 2. 문서 지도
 
+**튜토리얼 (손으로)**
+- [tutorial-science-engine.md](tutorial-science-engine.md) — Science Engine(공분산·정합성 게이트·clamp)을 배포판에서 눌러보며 이해 (Arc A / P06)
+
 **개념**
 - [naming.md](naming.md) — 이름·표기 결정과 근거 (Continuously Deployed · geologic · Time Scale)
 - [idea.md](idea.md) — 배경·문제의식·레이어 0–6·게이트웨이·열린 질문
