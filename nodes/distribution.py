@@ -10,8 +10,12 @@ DB 테이블이 아니라 *값 객체* — JSONField 에 임베드되어 NodeRes
   L1 sym         대칭 ± (단일 σ).
   L2 decomposed  분해 예산(analytical/systematic/model) — 계통 공유 = 공분산 열쇠.
   L3 shape       비대칭/왜곡 (median + hpd95).
-  L4 joint       공유 성분 태그 (다경계 공분산 재구성).
+  L4 joint       공유 계통 성분 태그(성분별 1σ) — 다경계 공분산 재구성.
   L5 full        사후 샘플/재실행 모델 참조.
+
+`shared_components` = [{"ref": <계통원 노드/키>, "sigma": <그 원이 이 경계에 기여하는 1σ, Ma>}].
+두 경계가 같은 ref 를 공유하면 그 오차는 상관됨 → Cov = Σ_{공유 ref} σ_a·σ_b (covariance()).
+(distribution-representation.md 의 "공유성분 태그만으로 충분한가" 열린 질문을 P06.1 이 성분별 σ 로 해소.)
 """
 from __future__ import annotations
 
@@ -32,7 +36,7 @@ class Distribution:
     sigma: int | None = None               # budget 신뢰수준 (1|2)
     budget: dict[str, float] = field(default_factory=dict)   # {analytical, systematic, model}
     shape: dict[str, Any] | None = None    # {median, hpd95: [lo, hi]}
-    shared_components: list[str] = field(default_factory=list)  # 공유 계통 노드 참조
+    shared_components: list[dict] = field(default_factory=list)  # [{ref, sigma}] 공유 계통원별 1σ 기여
     posterior_ref: str | None = None       # L5 샘플/모델 참조
     note: str = ""
 
@@ -94,3 +98,25 @@ class Distribution:
     def symmetric(cls, value_ma: float, pm: float, sigma: int = 2) -> "Distribution":
         """대칭 ± (레거시 ±2σ)."""
         return cls(fidelity="sym", value_ma=value_ma, sigma=sigma, budget={"analytical": pm})
+
+
+# --- L4 공유 계통 성분: 공분산 재구성 (P06.1) -------------------------------------------------
+# 분포 dict 에 실린 shared_components([{ref, sigma}]) 를 다뤄, 두 경계가 공유하는 계통원이 만드는
+# 오차 상관을 희소하게 복원한다. duration/order 정합성(coherence-gate L2)이 요구하는 공분산 정보.
+
+def component_sigmas(d: dict | None) -> dict[str, float]:
+    """분포 dict → {계통원 ref: 1σ 기여}. 없으면 빈 dict."""
+    if not d:
+        return {}
+    out: dict[str, float] = {}
+    for c in d.get("shared_components", []) or []:
+        ref, sig = c.get("ref"), c.get("sigma")
+        if ref is not None and sig:
+            out[ref] = out.get(ref, 0.0) + float(sig)   # 같은 ref 중복 시 합
+    return out
+
+
+def covariance(a: dict | None, b: dict | None) -> float:
+    """두 분포의 오차 공분산(Ma²) = Σ_{공유 계통원 ref} σ_a[ref]·σ_b[ref] (공유원은 완전상관 가정)."""
+    ca, cb = component_sigmas(a), component_sigmas(b)
+    return sum(ca[r] * cb[r] for r in ca.keys() & cb.keys())

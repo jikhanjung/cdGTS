@@ -155,3 +155,67 @@ def test_age_depth_spline_runs():
     hs = [_horizon(0, 250, 0.5), _horizon(10, 256, 0.5), _horizon(20, 260, 0.5)]
     out = age_depth_model(hs, {"method": "spline", "target_depth": 10})
     assert out is not None and moments(out)[0] is not None
+
+
+# --- P06.1: 공유 계통 성분 · 공분산 · 지속시간 ---
+
+from engine.kernels import duration_stats                       # noqa: E402
+from nodes.distribution import Distribution, component_sigmas, covariance   # noqa: E402
+
+
+def test_dist_from_shared_is_joint():
+    d = dist_from(100.0, 1.0, shared={"decay-U": 0.5})
+    assert d["fidelity"] == "joint" and d["shared_components"] == [{"ref": "decay-U", "sigma": 0.5}]
+    d0 = dist_from(100.0, 1.0)
+    assert d0["fidelity"] == "decomposed" and "shared_components" not in d0
+
+
+def test_covariance_only_over_shared_refs():
+    a = dist_from(700.0, 2.0, shared={"decay-U": 1.0, "tracer": 0.5})
+    b = dist_from(600.0, 2.0, shared={"decay-U": 0.8})
+    assert abs(covariance(a, b) - 1.0 * 0.8) < 1e-9          # only decay-U shared
+    assert covariance(a, dist_from(600.0, 2.0, shared={"other": 1.0})) == 0.0
+    assert covariance(a, dist_from(600.0, 2.0)) == 0.0       # no components
+
+
+def test_duration_shrinks_with_shared_systematic():
+    # 두 경계가 같은 붕괴상수(1.5 Ma 1σ)를 공유 → duration 오차가 독립 가정보다 작다.
+    a = dist_from(700.0, 2.0, shared={"decay-U": 1.5})
+    b = dist_from(600.0, 2.0, shared={"decay-U": 1.5})
+    dur, s = duration_stats(a, b)
+    assert abs(dur - 100.0) < 1e-9
+    assert abs(s - math.sqrt(2**2 + 2**2 - 2 * 1.5 * 1.5)) < 1e-6   # Vo+Vy−2Cov
+    _, s_indep = duration_stats(dist_from(700.0, 2.0), dist_from(600.0, 2.0))
+    assert s < s_indep                                       # 공유 성분이 오차를 상쇄
+
+
+def test_duration_variance_floored_at_zero():
+    # 공유 성분이 과대여도 Var(dur) 는 음수로 안 감(√ 안전).
+    a = dist_from(700.0, 1.0, shared={"c": 5.0})
+    b = dist_from(600.0, 1.0, shared={"c": 5.0})
+    assert duration_stats(a, b)[1] == 0.0
+
+
+def test_combine_propagates_shared_components():
+    a = dist_from(100.0, 1.0, shared={"cal": 0.6})
+    b = dist_from(102.0, 1.0, shared={"cal": 0.4})
+    out = inverse_variance_combine([a, b], "joint")
+    assert out["fidelity"] == "joint"
+    assert abs(component_sigmas(out)["cal"] - 0.5) < 1e-6    # 동일가중 0.5·0.6+0.5·0.4
+
+
+def test_age_depth_linear_propagates_shared():
+    h1 = {"dist": dist_from(250.0, 1.0, shared={"cal": 1.0}), "params": {"depth": 0}, "port": "h"}
+    h2 = {"dist": dist_from(260.0, 1.0, shared={"cal": 1.0}), "params": {"depth": 10}, "port": "h"}
+    out = age_depth_model([h1, h2], {"method": "linear", "target_depth": 5})
+    assert abs(component_sigmas(out)["cal"] - 1.0) < 1e-6    # 0.5·1 + 0.5·1
+
+
+def test_shared_components_roundtrip():
+    d = dist_from(100.0, 1.0, shared={"x": 0.5})
+    assert Distribution.from_dict(d).to_dict() == d
+
+
+def test_passthrough_preserves_shared_components():
+    d = dist_from(251.9, 0.3, shared={"decay-U": 0.2})
+    assert compute("process", "calibration-transfer", [{"dist": d, "params": {}}], {}) == d

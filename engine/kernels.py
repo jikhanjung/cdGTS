@@ -16,7 +16,7 @@ import numpy as np
 from scipy.interpolate import CubicSpline
 from scipy.stats import truncnorm
 
-from nodes.distribution import Distribution
+from nodes.distribution import Distribution, component_sigmas, covariance
 
 _Z95 = 1.959963984540054   # 95% 양측 z
 
@@ -40,29 +40,39 @@ def moments(d):
     return (mean, 0.0)   # 값만 있고 분산 정보 없음 → 점질량 취급
 
 
-def dist_from(mean, sigma1, note=""):
-    """(mean, 1σ) → 분포 dict. σ=0 이면 exact, 아니면 decomposed(2σ, model 성분)."""
+def dist_from(mean, sigma1, note="", shared=None):
+    """
+    (mean, 1σ) → 분포 dict. σ=0 이면 exact, 아니면 decomposed(2σ, model 성분).
+    shared = {ref: 1σ 기여} 있으면 공유 계통 성분을 실어 L4 `joint` 로 승격(공분산 재구성용).
+    """
     if sigma1 <= 0:
         return Distribution.exact(round(mean, 6), note=note).to_dict()
+    comps = [{"ref": r, "sigma": round(s, 6)} for r, s in (shared or {}).items() if s > 0]
     return Distribution(
-        fidelity="decomposed", value_ma=round(mean, 6), sigma=2,
-        budget={"model": round(2 * sigma1, 6)}, note=note,
+        fidelity="joint" if comps else "decomposed", value_ma=round(mean, 6), sigma=2,
+        budget={"model": round(2 * sigma1, 6)}, shared_components=comps, note=note,
     ).to_dict()
 
 
 def inverse_variance_combine(inputs, note):
-    """독립 추정들의 역분산 가중 결합. exact 입력이 있으면 그것이 지배(pin)."""
-    ms = [m for m in (moments(d) for d in inputs) if m is not None]
-    if not ms:
+    """
+    독립 추정들의 역분산 가중 결합. exact 입력이 있으면 그것이 지배(pin).
+    공유 계통 성분은 가중치로 전파(out σ[ref] = Σ_i w_i·σ_i[ref]) — 하류 duration 공분산 보존.
+    (marginal σ 자체는 독립 가정이라 공유원이 있으면 약간 과소 — 완전 상관 결합은 P06.4.)
+    """
+    valid = [(m[0], m[1], component_sigmas(d)) for d, m in ((d, moments(d)) for d in inputs) if m is not None]
+    if not valid:
         return None
-    exacts = [mu for (mu, s) in ms if s == 0]
+    exacts = [mu for (mu, s, _) in valid if s == 0]
     if exacts:
         return Distribution.exact(round(sum(exacts) / len(exacts), 6), note=note + " (pinned)").to_dict()
-    weights = [1.0 / (s * s) for (_, s) in ms]
+    weights = [1.0 / (s * s) for (_, s, _) in valid]
     wsum = sum(weights)
-    mean = sum(w * mu for w, (mu, _) in zip(weights, ms)) / wsum
+    mean = sum(w * mu for w, (mu, _, _) in zip(weights, valid)) / wsum
     sigma1 = math.sqrt(1.0 / wsum)
-    return dist_from(mean, sigma1, note=f"{note} (n={len(ms)})")
+    refs = set().union(*[c.keys() for (_, _, c) in valid]) if valid else set()
+    shared = {r: sum((w / wsum) * c.get(r, 0.0) for w, (_, _, c) in zip(weights, valid)) for r in refs}
+    return dist_from(mean, sigma1, note=f"{note} (n={len(valid)})", shared=shared)
 
 
 def range_clamp(dist, lo, hi):
@@ -75,7 +85,10 @@ def range_clamp(dist, lo, hi):
         return Distribution.exact(round(min(max(mean, lo), hi), 6), note=f"clamp[{lo},{hi}]").to_dict()
     a, b = (lo - mean) / sigma1, (hi - mean) / sigma1
     tn = truncnorm(a, b, loc=mean, scale=sigma1)
-    return dist_from(float(tn.mean()), float(tn.std()), note=f"range[{lo},{hi}]")
+    new_sigma1 = float(tn.std())
+    scale = new_sigma1 / sigma1 if sigma1 > 0 else 1.0     # 절단으로 준 σ 비율만큼 공유성분도 축소
+    shared = {r: s * scale for r, s in component_sigmas(dist).items()}
+    return dist_from(float(tn.mean()), new_sigma1, note=f"range[{lo},{hi}]", shared=shared)
 
 
 def _summarize_samples(samples, note):
@@ -93,23 +106,30 @@ def _summarize_samples(samples, note):
     return dist_from(med, std, note=note)
 
 
+def _blend_components(c1, s1, c2, s2, w1, w2):
+    """두 horizon 의 공유 계통 성분을 보간 가중치로 선형 결합: out[ref] = w1·σ1[ref] + w2·σ2[ref]."""
+    return {r: w1 * c1.get(r, 0.0) + w2 * c2.get(r, 0.0) for r in set(c1) | set(c2)}
+
+
 def _linear_age_depth(horizons, target):
-    """정렬된 (depth, mean, sigma1) 에서 target 깊이의 연대를 선형 보간(구간 밖은 최근접 구간으로 외삽)."""
+    """정렬된 (depth, mean, sigma1, comps) 에서 target 깊이의 연대를 선형 보간(구간 밖은 최근접 구간으로 외삽)."""
     depths = [h[0] for h in horizons]
     if target <= depths[0]:
-        (d1, m1, s1), (d2, m2, s2) = horizons[0], horizons[1]
+        (d1, m1, s1, c1), (d2, m2, s2, c2) = horizons[0], horizons[1]
     elif target >= depths[-1]:
-        (d1, m1, s1), (d2, m2, s2) = horizons[-2], horizons[-1]
+        (d1, m1, s1, c1), (d2, m2, s2, c2) = horizons[-2], horizons[-1]
     else:
         k = next(i for i in range(len(horizons) - 1) if depths[i] <= target <= depths[i + 1])
-        (d1, m1, s1), (d2, m2, s2) = horizons[k], horizons[k + 1]
+        (d1, m1, s1, c1), (d2, m2, s2, c2) = horizons[k], horizons[k + 1]
     if d2 == d1:   # 같은 깊이 두 점 → 결합
-        return dist_from((m1 + m2) / 2, math.sqrt((s1 * s1 + s2 * s2)) / 2, note="age-depth (coincident)")
+        return dist_from((m1 + m2) / 2, math.sqrt((s1 * s1 + s2 * s2)) / 2,
+                         note="age-depth (coincident)", shared=_blend_components(c1, s1, c2, s2, 0.5, 0.5))
     t = (target - d1) / (d2 - d1)
     mean = m1 + (m2 - m1) * t
     var = (1 - t) ** 2 * s1 * s1 + t * t * s2 * s2   # 독립 두 점의 선형결합 분산(외삽 시 증가)
     where = "interp" if depths[0] <= target <= depths[-1] else "extrap"
-    return dist_from(mean, math.sqrt(var), note=f"age-depth linear @ {target} ({where})")
+    return dist_from(mean, math.sqrt(var), note=f"age-depth linear @ {target} ({where})",
+                     shared=_blend_components(c1, s1, c2, s2, 1 - t, t))
 
 
 def _spline_age_depth(horizons, target):
@@ -143,21 +163,36 @@ def age_depth_model(inputs, params):
         depth = (i.get("params") or {}).get("depth")
         m = moments(i.get("dist"))
         if depth is not None and m is not None:
-            horizons.append((float(depth), m[0], m[1]))
+            horizons.append((float(depth), m[0], m[1], component_sigmas(i.get("dist"))))
 
     dists = [i.get("dist") for i in inputs]
     if not horizons:
         return _first_non_null(dists)                       # 깊이 정보 없음 → pass-through
     if target is None:
         return inverse_variance_combine(dists, "age-depth (no target)")
-    horizons.sort()
+    horizons.sort(key=lambda h: h[0])
     target = float(target)
     if len(horizons) == 1:
-        _, m0, s0 = horizons[0]
-        return dist_from(m0, s0, note=f"age-depth @ {target} (single horizon)")
+        _, m0, s0, c0 = horizons[0]
+        return dist_from(m0, s0, note=f"age-depth @ {target} (single horizon)", shared=c0)
     if method == "spline" and len(horizons) >= 3:
         return _spline_age_depth(horizons, target)
     return _linear_age_depth(horizons, target)
+
+
+def duration_stats(older, younger):
+    """
+    지속시간(= older − younger) 의 (값, 1σ). 공유 계통 성분이 있으면 Var = Var(o)+Var(y)−2·Cov 로
+    정직하게 축소(상관 오차가 차이에서 상쇄). coherence-gate L2 가 요구하는 공분산 인지 duration.
+    입력 부족이면 None.
+    """
+    mo, my = moments(older), moments(younger)
+    if mo is None or my is None:
+        return None
+    dur = mo[0] - my[0]
+    cov = covariance(older, younger)
+    var = mo[1] ** 2 + my[1] ** 2 - 2 * cov
+    return (dur, math.sqrt(max(var, 0.0)))
 
 
 def order_check(inputs, params):
