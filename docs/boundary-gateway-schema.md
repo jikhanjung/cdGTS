@@ -2,6 +2,11 @@
 
 *[English](boundary-gateway-schema_en.md) · 한국어*
 
+> **[대체됨 / 역사 보관]** 이 단일 게이트웨이 YAML 스키마는 구현의 **조상**일 뿐 현행이 아니다. 실제 구현은 경계를
+> 하나의 게이트웨이 레코드가 아니라 그래프의 **`boundary` 노드 + `published-age` leaf + `order` edge**로 표현하고,
+> 릴리스/clamp/provenance 는 `releases`·`graph` 앱 모델에 있다. 현행: [app-architecture.md](app-architecture.md) ·
+> [boundary-span-duality.md](boundary-span-duality.md) · `releases/models.py`. (아래는 역사적 브레인스토밍.)
+
 > 상태: **초안 v0.** 브레인스토밍을 처음으로 구체 구조로 굳혀보는 시도. 확정 아님.
 > 세 케이스([P–T](case-permian-triassic.md), [선캄브리아 GSSA](case-precambrian-gssa.md),
 > [캄브리아 base](case-cambrian-base-correlation.md))에서 뽑은 요구사항을 하나의 스키마로 모은 것.

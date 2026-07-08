@@ -6,6 +6,8 @@
 > [case-precambrian-gssa.md](case-precambrian-gssa_en.md) (a decided constant), this case examines the
 > **middle-tier (b) type, where cross-section correlation produces the number.** Facts checked against the literature (§8).
 
+> **[framing update]** The "Layer 0–6" numbering here is now only a **reading order (narrative)**. The implemented spine is **tier (registry/graph/release) × category (data/process/clamp) + 16 node types** — see [tier-category-model.md](tier-category-model_en.md) · [concept-map.md](concept-map_en.md).
+
 ## 1. Why This Case — A Specimen of Tier (b)
 
 In the P–T case, the boundary number came from interpolating between ash beds above and below within the *same section* (tier a).

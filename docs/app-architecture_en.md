@@ -63,10 +63,10 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 *Which node kinds can exist* = vocabulary. Not instances.
 
-- `NodeType` — `category: data | process | clamp`, port spec (in/out types), parameter schema (JSON).
-  - data: `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic` (immutable·cited·leaf)
-  - process: `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`
-  - clamp: `pin | range | order | freeze-version` (GSSA = special case of `pin`)
+- `NodeType` — `category: data | process | clamp`, port spec (in/out types), parameter schema (JSON). **16 implemented:**
+  - data (5): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (immutable·cited·leaf)
+  - process (7): `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`, `boundary` (0-cell point), `unit` (time span 1-cell), `merge` (terminal geometry merge → ICC chart)
+  - clamp (4): `pin | range | order | freeze-version` (GSSA = special case of `pin`)
 - `Distribution` (value object) — the schema's `uncertainty` fidelity ladder **L0–L5**:
   `fidelity: exact|sym|decomposed|shape|joint|full`, `budget{analytical,systematic,model}`,
   `shared_components`, `posterior_ref`. What edges carry = this distribution (not a scalar).
@@ -80,8 +80,10 @@ One network a scholar built on the canvas. Backend state of the drag&drop editor
 
 - `Graph` — container (branch/sandbox unit), owner, status.
 - `NodeInstance` — `graph`, `type→NodeType`, params, **canvas coords (x,y)**, group.
-- `Edge` — `from_port→to_port`, **edge type (`co-location | calibration-transfer`)** — the gate
-  detects cycles via this.
+- `Edge` — `from_port→to_port`, **edge type (`data | co-location | calibration-transfer | order`)**. `data` is the
+  default data flow; `co-location`/`calibration-transfer` are provenance (the gate detects cycles via these); **`order`
+  is not data flow but a boundary vertical-port connection = an ordering constraint** (replaces a separate order node;
+  excluded from the evaluation topology, read only by the gate).
 - `NodeGroup` — locality/boundary subgraph. Collapses into a gateway-like box.
 - `Gateway` — **unit of ratification·citation·version (contract)**. Exposes a node group's output
   as a fixed type. The target that the schema's `BoundaryGateway` references.
@@ -90,10 +92,10 @@ One network a scholar built on the canvas. Backend state of the drag&drop editor
 
 ### 2.4 `engine` — evaluation ("making it run")
 
-**Starting scope: pass-through first.** Node output = input distribution propagated verbatim
-(no computation) — the "reported value + provenance" tier of idea §7. Stand up the graph, citation,
-diff, and gate skeleton first; introduce MC/Bayesian compute kernels per node type incrementally.
-Coheres with the redefined mission ("humans clamp, the machine propagates·reconciles·diffs").
+**Implemented (P06).** Past the initial pass-through skeleton, the engine has real kernels: `age-depth-model`
+(linear·spline MC), inverse-variance combine, **covariance-aware durations** (shared systematics → Cov), and
+topological-order propagation. The `published-age` leaf also supports the "reported value + provenance" path.
+Coheres with the mission ("humans clamp, the machine propagates·reconciles·diffs").
 
 - `EvalRun` — an evaluation job over a `Graph` (subgraph). Status·trigger·input hash.
 - `NodeResult` — per-node output distribution + **content hash** (reuse cache if inputs unchanged =

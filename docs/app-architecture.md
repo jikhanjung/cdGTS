@@ -61,10 +61,10 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 *무슨 종류의 노드가 존재할 수 있는가* = 어휘. 인스턴스 아님.
 
-- `NodeType` — `category: data | process | clamp`, 포트 스펙(입출력 타입), 파라미터 스키마(JSON).
-  - 데이터: `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic` (불변·인용·leaf)
-  - 프로세스: `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`
-  - clamp: `pin | range | order | freeze-version` (GSSA = `pin`의 특수사례)
+- `NodeType` — `category: data | process | clamp`, 포트 스펙(입출력 타입), 파라미터 스키마(JSON). **구현 16종:**
+  - 데이터(5): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (불변·인용·leaf)
+  - 프로세스(7): `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`, `boundary`(경계점 0-cell), `unit`(시간 span 1-cell), `merge`(말단 기하 병합→ICC 차트)
+  - clamp(4): `pin | range | order | freeze-version` (GSSA = `pin`의 특수사례)
 - `Distribution`(값 객체) — 스키마 `uncertainty` 충실도 사다리 **L0–L5**:
   `fidelity: exact|sym|decomposed|shape|joint|full`, `budget{analytical,systematic,model}`,
   `shared_components`, `posterior_ref`. 엣지가 흘리는 것 = 이 분포(스칼라 아님).
@@ -78,8 +78,9 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 - `Graph` — 컨테이너(브랜치/샌드박스 단위), 소유자, 상태.
 - `NodeInstance` — `graph`, `type→NodeType`, 파라미터, **캔버스 좌표(x,y)**, 그룹.
-- `Edge` — `from_port→to_port`, **엣지 타입(`co-location | calibration-transfer`)** —
-  게이트가 이걸로 사이클 탐지.
+- `Edge` — `from_port→to_port`, **엣지 타입(`data | co-location | calibration-transfer | order`)**. `data` 가 기본
+  데이터 흐름, `co-location`/`calibration-transfer` 는 provenance(게이트가 사이클 탐지), **`order` 는 데이터 흐름이
+  아니라 경계 세로 포트 연결 = 순서 제약**(별도 order 노드를 대체; 평가 위상에서 제외, 게이트만 읽음).
 - `NodeGroup` — 지역/경계별 서브그래프. 접으면 게이트웨이처럼.
 - `Gateway` — **비준·인용·버전의 단위(계약)**. 노드그룹 출력을 고정 타입으로 노출.
   스키마 `BoundaryGateway`가 참조하는 대상.
@@ -88,9 +89,9 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 ### 2.4 `engine` — 평가 ("작동하게 만들기")
 
-**착수 스코프: pass-through 먼저.** 노드 출력 = 입력 분포 그대로 전파(계산 없음) — idea §7의
-"발표값+출처" 층. 그래프·인용·diff·게이트 골격을 먼저 세우고, MC/베이지안 계산 커널은
-노드 타입별로 점진 투입. 문서 미션 재정의("사람이 clamp, 기계가 전파·정합·diff")와 정합.
+**구현됨(P06).** 초기 pass-through 골격을 지나, 엔진은 실제 커널을 갖는다: `age-depth-model`(선형·스플라인 MC),
+역분산 결합, **공분산 인지 지속시간**(공유 계통 → Cov), 그리고 위상순 전파. `published-age` leaf 로 "발표값+출처"
+경로도 병행. 문서 미션("사람이 clamp, 기계가 전파·정합·diff")과 정합.
 
 - `EvalRun` — 한 `Graph`(서브그래프)의 평가 작업. 상태·트리거·입력 해시.
 - `NodeResult` — 노드별 산출 분포 + **콘텐츠 해시**(입력 불변 시 캐시 재사용 = 증분 재평가).

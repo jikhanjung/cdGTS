@@ -5,6 +5,8 @@
 > Status: A **verification note from the first attempt to map cdGTS's layer/gateway model** ([idea_en.md](idea_en.md) §5·§8, [node-graph-paradigm_en.md](node-graph-paradigm_en.md))
 > onto a real case. The facts below are confirmed against the literature (sources in §5).
 
+> **[framing update]** The "Layer 0–6" numbering here is now only a **reading order (narrative)**. The implemented spine is **tier (registry/graph/release) × category (data/process/clamp) + 16 node types** — see [tier-category-model.md](tier-category-model_en.md) · [concept-map.md](concept-map_en.md).
+
 ## Why This Case
 
 The P–T boundary is the cleanest illustration of cdGTS's core claim that **"the boundary number is not a measurement but the output of a computation."**

@@ -4,6 +4,8 @@
 
 > cdGTS's core conceptual metaphor. It starts from Blender's Geometry Nodes.
 
+> **[framing update]** The "Layer 0–6" numbering here is now only a **reading order (narrative)**. The implemented spine is **tier (registry/graph/release) × category (data/process/clamp) + 16 node types** — see [tier-category-model.md](tier-category-model_en.md) · [concept-map.md](concept-map_en.md).
+
 ## The metaphor
 
 Like Blender's Geometry Nodes, cdGTS is built as a **network of nodes**:

@@ -5,6 +5,8 @@
 > Status: The **control case** for [case-permian-triassic_en.md](case-permian-triassic_en.md). If GSSP is "boundary → number (computed),"
 > GSSA flips the arrow to "number → boundary (defined)." The facts are confirmed against the literature (§5).
 
+> **[framing update]** The "Layer 0–6" numbering here is now only a **reading order (narrative)**. The implemented spine is **tier (registry/graph/release) × category (data/process/clamp) + 16 node types** — see [tier-category-model.md](tier-category-model_en.md) · [concept-map.md](concept-map_en.md).
+
 ## 1. What Is a GSSA?
 
 - **GSSA (Global Standard Stratigraphic Age)** = an **abstract numerical age** that points to no particular outcrop.

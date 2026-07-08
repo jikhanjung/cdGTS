@@ -3,7 +3,7 @@
 *[English](competing-models_en.md) · 한국어*
 
 > 상태: **검토 노트 → 스키마에 일부 반영.** [boundary-gateway-schema.md](boundary-gateway-schema.md) §4의
-> "경쟁 모델 공존 방식"을 펼친 것. node-graph 문서의 **"노드 스왑 = what-if"** 의 정면.
+> "경쟁 모델 공존 방식"을 펼친 것. node-graph 문서의 **"노드 스왑 = what-if"** 의 정면. → ModelCandidate·선택·override **구현됨** (P05.5); envelope/BMA 는 미착수 (P06.5).
 
 ## 1. "경쟁 모델"을 먼저 쪼갠다
 

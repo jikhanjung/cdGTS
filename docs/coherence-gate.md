@@ -2,9 +2,11 @@
 
 *[English](coherence-gate_en.md) · 한국어*
 
-> 상태: **구체화 초안. 결정 아님.** 핀된 경계 집합을 유효한 전 지구 차트로 바꾸는 메커니즘.
+> 상태: 핀된 경계 집합을 유효한 전 지구 차트로 바꾸는 메커니즘. → **구현됨** (engine `_certify` · releases clamp reconcile · devlog 117·118·120). 튜토리얼: [tutorial-science-engine.md](tutorial-science-engine.md).
 > [versioning-global-vs-per-boundary.md](versioning-global-vs-per-boundary.md)에서 "진짜 알맹이"로 지목한 부분이자,
 > [idea.md](idea.md) §5의 **Layer 5(전역 종합)** 의 작동 핵심.
+
+> **[표기 갱신]** 이 문서의 'Layer 0–6' 번호는 이제 **읽기 순서(서사)**로만 유효합니다. 구현의 실제 척추는 **티어(registry/graph/release) × 카테고리(data/process/clamp) + 16개 노드 타입**입니다 — [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md).
 
 ## 0. 위치 — 이것은 곧 Layer 5
 

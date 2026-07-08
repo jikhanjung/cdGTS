@@ -6,6 +6,8 @@
 > chrono 가 이미 Unit(구간)/Boundary(점)을 분리해 둔 이중성을, 노드 그래프에도 1급으로 끌어올린다.
 > 두 결정을 담는다: (1) 경계는 담기지 않고 참조된다, (2) order 노드를 없애고 경계 세로 포트를 직접 잇는다.
 
+> **[구현 완료]** 이 설계는 전부 구현됨 — `nature` · `NodeGroup.kind/unit/lower/upper` · `Edge.kind=order` (graph/models.py), seed 반영.
+
 ## 0. 한 줄 논지
 
 시대표의 골격은 **분할(partition)이 아니라 셀 복합체(cell complex)** 다. 구간(Period·Age…)은 1-셀,

@@ -5,6 +5,8 @@
 > 상태: cdGTS의 레이어/게이트웨이 모델([idea.md](idea.md) §5·§8, [node-graph-paradigm.md](node-graph-paradigm.md))을
 > **실제 사례에 처음 매핑해본 검증 노트.** 아래 사실은 문헌으로 확인함(§5 출처).
 
+> **[표기 갱신]** 이 문서의 'Layer 0–6' 번호는 이제 **읽기 순서(서사)**로만 유효합니다. 구현의 실제 척추는 **티어(registry/graph/release) × 카테고리(data/process/clamp) + 16개 노드 타입**입니다 — [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md).
+
 ## 왜 이 사례인가
 
 P–T 경계는 **"경계 숫자는 측정값이 아니라 계산의 산출물"** 이라는 cdGTS의 핵심 주장을

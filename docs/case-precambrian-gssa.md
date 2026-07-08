@@ -5,6 +5,8 @@
 > 상태: [case-permian-triassic.md](case-permian-triassic.md)의 **대조군.** GSSP가 "경계 → 숫자(계산)"라면
 > GSSA는 "숫자 → 경계(정의)"로 화살표가 뒤집힌다. 사실은 문헌으로 확인함(§5).
 
+> **[표기 갱신]** 이 문서의 'Layer 0–6' 번호는 이제 **읽기 순서(서사)**로만 유효합니다. 구현의 실제 척추는 **티어(registry/graph/release) × 카테고리(data/process/clamp) + 16개 노드 타입**입니다 — [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md).
+
 ## 1. GSSA란 무엇인가
 
 - **GSSA (Global Standard Stratigraphic Age)** = 특정 노두를 가리키지 않는 **추상적 숫자 연대**.

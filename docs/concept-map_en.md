@@ -32,7 +32,7 @@ book)**.
 | Category | What | Old layer | Examples |
 |---|---|---|---|
 | **data** | immutable·cited observation leaf (emits its distribution as-is) | L2 | radiometric-uPb · astronomical · published-age |
-| **process** | input distributions → output distribution (compute) | L3·L4·L5 | age-depth-model · cross-section-correlation · joint-inference |
+| **process** | input distributions → output distribution (compute) + geometry assembly | L3·L4·L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference · boundary · unit · merge |
 | **clamp** | pin a value or constrain (cuts across layers: GSSA=pin, ordering=order) | outside the layers | pin · range · order · freeze-version |
 
 ```mermaid
@@ -88,6 +88,9 @@ ladder, kept as a document index:
 - [topology-diff_en.md](topology-diff_en.md) — the structural diff orthogonal to the value diff
 - [distribution-representation_en.md](distribution-representation_en.md) — the uncertainty fidelity ladder L0–L5
 
+**Archive (history)**
+- [archive/](archive/) — brainstorming superseded by the implementation (e.g. the original Layer 0–6 data model). Not current.
+
 ## 3. Convergence points (where documents meet) ★
 
 The heart of the map. Different threads repeatedly converged to the same structure.
@@ -131,4 +134,4 @@ data format/stack (entirely undecided).
 
 ## 6. Links
 
-This document is the top-level map over the twelve documents above. Details are in each.
+This document is the top-level map over the documents above (concepts · cases · schema · tutorial). Details are in each.

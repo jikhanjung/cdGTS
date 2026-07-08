@@ -4,7 +4,7 @@
 
 > Status: **Analysis note → partly reflected in the schema.** An expansion of the "how competing models coexist"
 > item in [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) §4. The head-on case of the node-graph
-> document's **"node swap = what-if."**
+> document's **"node swap = what-if."** → ModelCandidate·selection·override **implemented** (P05.5); envelope/BMA not yet started (P06.5).
 
 ## 1. First, decompose "competing model"
 

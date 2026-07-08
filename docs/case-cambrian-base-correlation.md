@@ -6,6 +6,8 @@
 > [case-precambrian-gssa.md](case-precambrian-gssa.md)(결정된 상수)에 이어,
 > **중간 티어 (b) 섹션 간 상관(correlation)이 숫자를 만드는** 유형을 검증한다. 사실은 문헌 확인(§8).
 
+> **[표기 갱신]** 이 문서의 'Layer 0–6' 번호는 이제 **읽기 순서(서사)**로만 유효합니다. 구현의 실제 척추는 **티어(registry/graph/release) × 카테고리(data/process/clamp) + 16개 노드 타입**입니다 — [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md).
+
 ## 1. 왜 이 사례인가 — tier (b)의 표본
 
 P–T에선 경계 숫자가 *같은 섹션*의 위·아래 재층 보간에서 나왔다(tier a).

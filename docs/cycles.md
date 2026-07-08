@@ -3,7 +3,7 @@
 *[English](cycles_en.md) · 한국어*
 
 > 상태: **검토 → 스키마/게이트에 일부 반영.** [node-graph-paradigm.md](node-graph-paradigm.md)이 처음부터
->짚은 순환 문제(생층서 ↔ 방사연대)를 펼치고, subcommission의 **hand-crafted clamp**를 해법으로 도입.
+>짚은 순환 문제(생층서 ↔ 방사연대)를 펼치고, subcommission의 **hand-crafted clamp**를 해법으로 도입. → clamp 프리미티브 **구현됨** (releases.Clamp · pin/range/order/freeze-version · devlog 118).
 
 ## 1. "순환"은 하나가 아니다
 

@@ -30,7 +30,7 @@
 | 카테고리 | 무엇 | 옛 레이어 | 예 |
 |---|---|---|---|
 | **data** | 불변·인용 관측 leaf (분포를 그대로 출력) | L2 | radiometric-uPb · astronomical · published-age |
-| **process** | 입력 분포 → 산출 분포 (계산) | L3·L4·L5 | age-depth-model · cross-section-correlation · joint-inference |
+| **process** | 입력 분포 → 산출 분포 (계산) + 기하 조립 | L3·L4·L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference · boundary · unit · merge |
 | **clamp** | 값 못박기·제약 (레이어를 가로지름: GSSA=pin, 순서=order) | 레이어 밖 | pin · range · order · freeze-version |
 
 ```mermaid
@@ -86,6 +86,9 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 - [topology-diff.md](topology-diff.md) — 값 diff와 직교하는 구조 diff
 - [distribution-representation.md](distribution-representation.md) — 불확실성 충실도 사다리 L0–L5
 
+**보관 (역사)**
+- [archive/](archive/) — 구현으로 대체된 브레인스토밍(원래 Layer 0–6 데이터 모델 등). 현행 아님.
+
 ## 3. 수렴점 (여러 문서가 만나는 곳) ★
 
 지도의 알맹이. 서로 다른 스레드가 반복해서 같은 구조로 수렴했다.
@@ -124,4 +127,4 @@ clamp 도입 · 세 수렴 봉합.
 
 ## 6. 링크
 
-이 문서는 위 12개 문서의 상위 지도다. 세부는 각 문서로.
+이 문서는 위 문서들(개념·사례·스키마·튜토리얼)의 상위 지도다. 세부는 각 문서로.

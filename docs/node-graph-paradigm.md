@@ -4,6 +4,8 @@
 
 > cdGTS의 핵심 개념적 은유. 블렌더의 지오메트리 노드(Geometry Nodes)에서 출발.
 
+> **[표기 갱신]** 이 문서의 'Layer 0–6' 번호는 이제 **읽기 순서(서사)**로만 유효합니다. 구현의 실제 척추는 **티어(registry/graph/release) × 카테고리(data/process/clamp) + 16개 노드 타입**입니다 — [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md).
+
 ## 은유
 
 블렌더 지오메트리 노드처럼, cdGTS는 **노드들의 네트워크**로 구성된다:

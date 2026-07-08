@@ -2,10 +2,12 @@
 
 *English · [한국어](coherence-gate.md)*
 
-> Status: **Concretization draft. No decision.** The mechanism that turns a pinned set of boundaries into a valid
+> Status: The mechanism that turns a pinned set of boundaries into a valid
 > global chart. It is the part flagged as "the real crux" in
 > [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md), and the operational core of
-> **Layer 5 (global synthesis)** in [idea_en.md](idea_en.md) §5.
+> **Layer 5 (global synthesis)** in [idea_en.md](idea_en.md) §5. → **implemented** (engine `_certify` · releases clamp reconcile · devlog 117·118·120). Tutorial: [tutorial-science-engine.md](tutorial-science-engine_en.md).
+
+> **[framing update]** The "Layer 0–6" numbering here is now only a **reading order (narrative)**. The implemented spine is **tier (registry/graph/release) × category (data/process/clamp) + 16 node types** — see [tier-category-model.md](tier-category-model_en.md) · [concept-map.md](concept-map_en.md).
 
 ## 0. Where it sits — this IS Layer 5
 

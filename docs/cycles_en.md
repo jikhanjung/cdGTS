@@ -4,7 +4,7 @@
 
 > Status: **Analysis → partly reflected in the schema/gate.** Expands the cycle problem (biostratigraphy ↔
 > radiometric dating) that [node-graph-paradigm_en.md](node-graph-paradigm_en.md) flagged from the start, and
-> introduces the subcommissions' **hand-crafted clamp** as the solution.
+> introduces the subcommissions' **hand-crafted clamp** as the solution. → clamp primitives **implemented** (releases.Clamp · pin/range/order/freeze-version · devlog 118).
 
 ## 1. The "cycle" is not one thing
 

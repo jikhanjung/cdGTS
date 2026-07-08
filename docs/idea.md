@@ -26,51 +26,57 @@
 
 - 데이터 저장소 / 스키마 **그리고** 조회·시각화 도구까지 **모두 포함**.
 
-## 5. 데이터 모델 — 계층 구조 (초안)
+## 5. 데이터 모델 — 노드 종류 (구현)
 
-데이터를 다음 계층으로 나눈다. 상위 계층은 하위 계층으로부터 파생된다.
+데이터 모델은 **티어(registry / graph / release) × 카테고리(data / process / clamp)** 로 구성되고, 그래프 티어는
+아래 **16개 노드 타입**으로 채워진다.
 
-> 참고: 이 계층 구조는 [node-graph-paradigm.md](node-graph-paradigm.md)에서 **노드 그래프(DAG)** 로 재해석된다. Layer 2 = 데이터 노드, Layer 3~5 = 프로세스/모델 노드, Layer 6 = 그래프 평가 결과.
->
-> **[이후 재구성]** 구현에서 이 선형 레이어는 **티어(registry/graph/release) × 카테고리(data/process/clamp)** 로 접혔고, 레이어 번호는 이제 읽기 순서(서사)로만 유효하다. 아래 §5는 그 원래 브레인스토밍으로 보존한다. 현재 척추: [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md) §1.
+> 원래 이 자리에 있던 선형 **Layer 0–6** 브레인스토밍은 이제 서사적 읽기 순서로만 유효하며
+> [archive/idea-layer-model-0-6.md](archive/idea-layer-model-0-6.md) 에 보관했다. 현재 척추:
+> [tier-category-model.md](tier-category-model.md) · [concept-map.md](concept-map.md) §1.
 
-### Layer 0 — 명명 / 계층 (Nomenclature)
-- 이중 체계: 연대층서 (Eonothem/Erathem/System/Series/**Stage**) ↔ 지질연대 (Eon/Era/Period/Epoch/**Age**). 같은 경계를 다른 이름으로 부르는 관계이므로 명시적으로 연결.
-- 명명 체계 자체도 개정 대상 (스테이지 신설/분할 등). → 버전 관리 대상.
+### data — 관측·참조 leaf (불변·인용 가능)
+학자가 새로 넣는 "사실"이 여기 붙는다.
+- **`radiometric-uPb`** — U–Pb 방사연대 관측.
+- **`astronomical`** — 천문 튜닝(astrochronology) 연대.
+- **`biostratigraphic`** — 생층서 datum(FAD/LAD) 신호.
+- **`magnetostratigraphic`** — 자기역전 패턴 신호(상관용).
+- **`published-age`** — 발표 경계연대 참조 leaf(ICS/GTS chart).
 
-### Layer 1 — 경계 정의 (Boundary definition)
-- **GSSP** (Phanerozoic): 물리적 노두, 마커(생물/화학/자기), 위치, ICS **비준 연도**. 경계는 "지점"으로 정의되고 연대는 파생값.
-- **GSSA** (Precambrian): 물리적 노두 없이 **약속된 숫자 연대**로 정의.
-- → 이 둘은 데이터 모델에서 근본적으로 다른 타입.
+### process — 변환·모델·합성
+지저분한 과학(보간·상관·동시추정)과 차트 조립이 여기서 일어난다.
+- **`age-depth-model`** — 한 노두 내 age–depth 보간(국소, 선형/스플라인).
+- **`cross-section-correlation`** — 노두 간 상관 종합(**load-bearing**). 사례: [case-cambrian-base-correlation.md](case-cambrian-base-correlation.md).
+- **`calibration-transfer`** — 참조 연대를 타겟 신호로 전이.
+- **`joint-inference`** — 국소 동시추정(순환을 접는 노드).
+- **`boundary`** — 경계점(0-cell). 상류 계산에서 연대를 받는다.
+- **`unit`** — 시간 단위(1-cell, span). 미분할 구간을 한 노드로.
+- **`merge`** — 말단 기하 병합. boundary/unit 조각을 union → ICC 차트.
 
-### Layer 2 — 원시 관측 (Primary observations) ← *continuous integration의 대상*
-- 방사성 연대측정 (U-Pb, Ar-Ar …): 시료, **방법, 사용한 붕괴상수, 실험실, 오차(2σ)**, 층서적 위치.
-- 천문연대 (astrochronology / cyclostratigraphy), 자기층서, 생층서 존(zone) 등.
-- 각 관측은 **불변(immutable) · 인용 가능(cited)** 한 "사실". 학자가 추가하는 것은 여기.
+### clamp — 거버넌스 게이트
+합의·비준이 값에 개입하는 지점.
+- **`pin`** — 값 고정(GSSA = pin의 특수 case).
+- **`range`** — 구간 [min, max] 절단.
+- **`order`** — 두 경계 순서 검사(older ≥ younger).
+- **`freeze-version`** — 버전 나선 차단, 특정 릴리스 값으로 고정.
 
-### Layer 3 — 연대 모델 (Age model / method)
-- Layer 2의 앵커들을 스플라인 / 베이지안 age-depth 모델 등으로 종합해 경계 연대 + 불확실성을 **산출**.
-- 붕괴상수 재보정 같은 방법 변경이 반영되는 곳.
-
-### Layer 4 — 상관 (Correlation)
-- 서로 다른 노두(section)의 층서를 bio/chemo/magneto-strat로 **상관(correlate)** 해 엮는다. GSSP 지점이 датable하지 않을 때 숫자는 다른 지역에서 이 상관을 타고 온다 → 곁다리가 아니라 **load-bearing**. 사례: [case-cambrian-base-correlation.md](case-cambrian-base-correlation.md).
-
-### Layer 5 — 전역 종합 / 정합성 게이트 (Global synthesis / coherence gate)
-- 상관된 근거를 종합해 (a) 각 경계의 숫자+불확실성을 내고, (b) 경계들이 **전 지구적으로 정합**(단조 순서·지속시간·상관오차)하도록 만든다. 이 정합성 검사의 핵심 메커니즘이 **정합성 게이트**. 상세: [coherence-gate.md](coherence-gate.md).
-
-### Layer 6 — 배포된 시대표 (Published timescale)
-- Layer 1 + 5의 산출물. Fixed version으로 릴리스 (ICC vXXXX / GTSXXXX에 대응). ICC = bake, GTS = narrate.
+이중 명명(연대층서 Stage ↔ 지질연대 Age)은 registry 티어(`chrono` 앱)가, 발표 릴리스(ICC=bake / GTS=narrate)는
+release 티어(`releases` 앱)가 맡는다. 순서는 별도 노드가 아니라 **`order` edge**(경계 세로 포트 연결)로 표현하고,
+평가는 그래프를 위상순으로 돌려 분포를 전파([node-graph-paradigm.md](node-graph-paradigm.md))한 뒤 정합성 게이트가
+순서·지속시간·공분산을 검사한다([coherence-gate.md](coherence-gate.md)).
 
 ## 6. 워크플로우 상상 (CI for science)
 
-1. 학자가 Layer 2에 새 관측을 PR처럼 제안.
-2. 파이프라인이 Layer 3~6를 재계산.
+1. 학자가 **data 노드**(관측)를 PR처럼 제안.
+2. 파이프라인이 하류 **process·clamp** 를 재평가.
 3. **diff**를 보여준다 — 예: "이 U-Pb 하나 추가하면 Permian–Triassic 경계가 251.902 → 251.88 Ma, 2σ 축소".
 4. Fixed release는 검증된 스냅샷, sandbox는 실험 브랜치. 개인 fork 시대표 허용 여부는 미정.
 
 ## 7. 열린 질문 (Open questions)
 
-- **Layer 3(모델)의 위상**: cdGTS가 실제로 age model을 *계산*까지 하는가, 아니면 당분간 "발표된 값 + 출처 기록" 수준이고 재계산 엔진은 후속 목표인가? (프로젝트 난이도를 크게 가름.)
+- ~~**연대 모델의 위상**: cdGTS가 실제로 age model을 *계산*까지 하는가, 아니면 "발표된 값 + 출처 기록" 수준인가?~~
+  **→ [해소됨]** 엔진이 실제로 계산한다 — `age-depth-model`(선형/스플라인 MC), 공분산 인지 지속시간, 정합성 인증서
+  (P06). `published-age` leaf 는 "발표값+출처" 경로도 함께 지원(둘 다 있음).
 - **권위 vs 실험의 경계**: sandbox 결과와 공식 ICC를 어떻게 명확히 구분? 학자 개인의 "내 브랜치 시대표"를 어디까지 허용?
 - 기존 포맷과의 정합: Macrostrat, GeoSciML / CGI Geologic Timescale, ICS 공식 배포 형식 등과 맞출 것인가?
 - 버전 전략 구체화: git 태그 · 시맨틱 버저닝 · 자동 검증(CI)을 어떻게 매핑할 것인가?
@@ -78,6 +84,10 @@
 ## 8. 정련 중인 생각 — 중간 티어와 게이트웨이
 
 > 상태: **hunch(직감) 수준. 확정 아님.** 실제 사례를 하나 붙잡고 작업해봐야 맞는 접근인지 알 수 있다. 아래는 방향 감각을 기록해두는 것.
+>
+> **[대부분 실현됨]** 여기 §8.1(correlation/synthesis 중간 티어)·§8.2(게이트웨이 계약)의 직감은 구현으로 굳어졌다 —
+> correlation/synthesis = `cross-section-correlation`·`joint-inference` 노드, 게이트웨이 = `Gateway`/`merge` + 정합성
+> 게이트. Layer 참조는 서사적 읽기 순서로 읽을 것. 현행: [tier-category-model.md](tier-category-model.md).
 
 ### 8.1 중간 티어 — correlation / synthesis (§5의 Layer 4·5로 승격)
 

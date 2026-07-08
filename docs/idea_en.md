@@ -26,58 +26,56 @@ The geologic time scale is published only as a "book / major release" on a rough
 
 - Includes **both** the data store / schema **and** the query and visualization tools — **everything**.
 
-## 5. Data model — layered structure (draft)
+## 5. Data model — node types (implemented)
 
-Data is divided into the following layers. Higher layers are derived from lower ones.
+The data model is **tier (registry / graph / release) × category (data / process / clamp)**, and the graph tier is
+filled with the **16 node types** below.
 
-> Note: this layered structure is reinterpreted as a **node graph (DAG)** in [node-graph-paradigm_en.md](node-graph-paradigm_en.md). Layer 2 = data nodes, Layers 3–5 = process/model nodes, Layer 6 = the result of evaluating the graph.
->
-> **[Later reframing]** In implementation this linear layering folded into **tier (registry/graph/release) × category (data/process/clamp)**, and the layer numbers now hold only as a reading order (narrative). §5 below is preserved as the original brainstorming. Current spine: [tier-category-model_en.md](tier-category-model_en.md) · [concept-map_en.md](concept-map_en.md) §1.
+> The original linear **Layer 0–6** brainstorm that used to sit here now holds only as a narrative reading order and is
+> archived in [archive/idea-layer-model-0-6.md](archive/idea-layer-model-0-6.md). Current spine:
+> [tier-category-model_en.md](tier-category-model_en.md) · [concept-map_en.md](concept-map_en.md) §1.
 
-### Layer 0 — Nomenclature / hierarchy
+### data — observation / reference leaves (immutable, citable)
+Where a scholar's new "facts" attach.
+- **`radiometric-uPb`** — U–Pb radiometric age observation.
+- **`astronomical`** — astronomically tuned (astrochronology) age.
+- **`biostratigraphic`** — biostratigraphic datum (FAD/LAD) signal.
+- **`magnetostratigraphic`** — magnetic-reversal pattern signal (for correlation).
+- **`published-age`** — reference leaf for published boundary ages (ICS/GTS chart).
 
-- A dual system: chronostratigraphy (Eonothem/Erathem/System/Series/**Stage**) ↔ geochronology (Eon/Era/Period/Epoch/**Age**). Since these name the same boundary differently, the relationship is linked explicitly.
-- The nomenclature itself is also subject to revision (creating/splitting stages, etc.). → Subject to version control.
+### process — transforms / models / synthesis
+Where the messy science (interpolation, correlation, joint estimation) and chart assembly happen.
+- **`age-depth-model`** — age–depth interpolation within one section (local; linear/spline).
+- **`cross-section-correlation`** — synthesis of cross-section correlations (**load-bearing**). Case: [case-cambrian-base-correlation_en.md](case-cambrian-base-correlation_en.md).
+- **`calibration-transfer`** — transfers a reference age onto a target signal.
+- **`joint-inference`** — locally co-constrained joint estimation (the node that folds cycles).
+- **`boundary`** — boundary point (0-cell); receives its age from an upstream computation.
+- **`unit`** — time unit (1-cell, span); an unsubdivided interval as a single node.
+- **`merge`** — terminal geometry merge; unions boundary/unit pieces → ICC chart.
 
-### Layer 1 — Boundary definition
+### clamp — governance gates
+Where consensus / ratification touches the numbers.
+- **`pin`** — fixes a value (GSSA = a special case of pin).
+- **`range`** — interval clamp [min, max].
+- **`order`** — checks temporal order of two boundaries (older ≥ younger).
+- **`freeze-version`** — cuts the version spiral; freezes to a specific release value.
 
-- **GSSP** (Phanerozoic): a physical outcrop, markers (biological/chemical/magnetic), location, ICS **ratification year**. The boundary is defined as a "point," and the age is a derived value.
-- **GSSA** (Precambrian): defined by a **decreed numerical age** without a physical outcrop.
-- → These two are fundamentally different types in the data model.
-
-### Layer 2 — Primary observations ← *the target of continuous integration*
-
-- Radiometric dating (U–Pb, Ar–Ar …): sample, **method, decay constant used, laboratory, error (2σ)**, stratigraphic position.
-- Astrochronology / cyclostratigraphy, magnetostratigraphy, biostratigraphic zones, etc.
-- Each observation is an **immutable, cited** "fact." This is where scholars add data.
-
-### Layer 3 — Age model / method
-
-- Synthesizes the Layer 2 anchors via splines / Bayesian age-depth models, etc., to **produce** boundary ages + uncertainties.
-- Where method changes such as decay-constant recalibration are reflected.
-
-### Layer 4 — Correlation
-
-- Ties the stratigraphy of different outcrops (sections) together via bio/chemo/magneto-strat **correlation**. When a GSSP point is not datable, the number arrives from another region along this correlation → not a side feature but **load-bearing**. Case: [case-cambrian-base-correlation_en.md](case-cambrian-base-correlation_en.md).
-
-### Layer 5 — Global synthesis / coherence gate
-
-- Synthesizes the correlated evidence to (a) produce each boundary's number + uncertainty, and (b) make the boundaries **globally coherent** (monotonic ordering, durations, correlated error). The core mechanism of that coherence check is the **coherence gate**. Detail: [coherence-gate_en.md](coherence-gate_en.md).
-
-### Layer 6 — Published time scale
-
-- The output of Layers 1 + 5. Released as a fixed version (corresponding to ICC vXXXX / GTSXXXX). ICC = bake, GTS = narrate.
+Dual naming (chronostratigraphy Stage ↔ geochronology Age) lives in the registry tier (`chrono` app); the published
+releases (ICC = bake / GTS = narrate) in the release tier (`releases` app). Ordering is expressed not as a separate node
+but as an **`order` edge** (a boundary vertical-port connection); evaluation runs the graph in topological order to
+propagate distributions ([node-graph-paradigm_en.md](node-graph-paradigm_en.md)), then the coherence gate checks
+ordering / duration / covariance ([coherence-gate_en.md](coherence-gate_en.md)).
 
 ## 6. Imagined workflow (CI for science)
 
-1. A scholar proposes a new observation to Layer 2, PR-style.
-2. The pipeline recomputes Layers 3–6.
+1. A scholar proposes a new **data node** (observation), PR-style.
+2. The pipeline re-evaluates the downstream **process · clamp** nodes.
 3. It shows a **diff** — e.g., "adding this one U–Pb shifts the Permian–Triassic boundary from 251.902 → 251.88 Ma, with reduced 2σ."
 4. Fixed releases are verified snapshots; the sandbox is an experimental branch. Whether to allow personal fork time scales is undecided.
 
 ## 7. Open questions
 
-- **The status of Layer 3 (models)**: does cdGTS actually *compute* the age model, or is it — for now — at the level of "published values + provenance records," with the recomputation engine as a follow-on goal? (This largely determines the project's difficulty.)
+- ~~**The status of the age model**: does cdGTS actually *compute* the age model, or is it just "published values + provenance records"?~~ **→ [resolved]** the engine really computes — `age-depth-model` (linear/spline MC), covariance-aware durations, coherence certificate (P06). The `published-age` leaf also supports the "published value + source" path (both exist).
 - **The line between authority and experiment**: how to clearly distinguish sandbox results from the official ICC? How far to allow an individual scholar's "my branch time scale"?
 - Consistency with existing formats: should it align with Macrostrat, GeoSciML / CGI Geologic Timescale, the official ICS distribution format, etc.?
 - Concretizing the versioning strategy: how to map git tags, semantic versioning, and automated verification (CI)?
@@ -85,6 +83,11 @@ Data is divided into the following layers. Higher layers are derived from lower 
 ## 8. Ideas being refined — an intermediate tier and gateways
 
 > Status: **At the level of a hunch. Not settled.** Whether this is the right approach can only be known by grabbing a real case and working through it. What follows is a record of a sense of direction.
+>
+> **[mostly realized]** The hunches here in §8.1 (a correlation/synthesis intermediate tier) and §8.2 (gateway contracts)
+> hardened into implementation — correlation/synthesis = the `cross-section-correlation`·`joint-inference` nodes,
+> gateways = `Gateway`/`merge` + the coherence gate. Read the Layer references as narrative reading order. Current:
+> [tier-category-model_en.md](tier-category-model_en.md).
 
 ### 8.1 The intermediate tier — correlation / synthesis (promoted to Layers 4·5 in §5)
 

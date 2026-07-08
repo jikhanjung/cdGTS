@@ -7,6 +7,8 @@
 > into the node graph as a first-class concern. Two decisions: (1) boundaries are referenced, not
 > contained; (2) drop order nodes and connect boundary vertical ports directly.
 
+> **[implemented]** This whole design is built — `nature` · `NodeGroup.kind/unit/lower/upper` · `Edge.kind=order` (graph/models.py), reflected in seed.
+
 ## 0. Thesis in one line
 
 The skeleton of the time scale is **not a partition but a cell complex**. Units (Period, Age…) are

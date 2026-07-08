@@ -2,6 +2,12 @@
 
 *English · [한국어](boundary-gateway-schema.md)*
 
+> **[superseded / kept as history]** This monolithic gateway YAML schema is only the **ancestor** of the
+> implementation, not current. The app represents a boundary not as one gateway record but as a graph **`boundary`
+> node + `published-age` leaf + `order` edge**, with release/clamp/provenance in the `releases`·`graph` app models.
+> Current: [app-architecture_en.md](app-architecture_en.md) · [boundary-span-duality_en.md](boundary-span-duality_en.md) ·
+> `releases/models.py`. (Below is the historical brainstorming.)
+
 > Status: **Draft v0.** A first attempt to harden the brainstorming into concrete structure. Not settled.
 > It gathers the requirements pulled from the three cases
 > ([P–T](case-permian-triassic_en.md), [Precambrian GSSA](case-precambrian-gssa_en.md),
