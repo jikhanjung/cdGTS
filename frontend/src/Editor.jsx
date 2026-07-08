@@ -273,6 +273,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const [pending, setPending] = useState(null)              // tap-to-add: node slug awaiting placement
   const wrapperRef = useRef(null)
   const shouldFitRef = useRef(false)                        // set on load when the graph has no saved viewport → fit once
+  const dlgDownRef = useRef(false)                          // modal dismiss: only close when the press started on the backdrop (not a drag-select out of an input)
   const lpRef = useRef(null)                                // long-press timer
   const lpFiredRef = useRef(false)                          // swallow the one click right after a long press
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
@@ -851,7 +852,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         <div className="drawer-backdrop" onClick={() => { setPaletteOpen(false); setInspectorOpen(false) }} />
       )}
       {forkDialog && (
-        <div className="modal-backdrop" onClick={() => !forkDialog.busy && setForkDialog(null)}>
+        <div className="modal-backdrop"
+             onMouseDown={(e) => { dlgDownRef.current = e.target === e.currentTarget }}
+             onClick={(e) => { if (!forkDialog.busy && dlgDownRef.current && e.target === e.currentTarget) setForkDialog(null) }}>
           <div className="bake-dialog" onClick={(e) => e.stopPropagation()}>
             <h3>Fork this graph</h3>
             <p className="hint">Creates an independent copy in your own sandbox — edit it without touching the original.</p>
@@ -872,7 +875,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         </div>
       )}
       {infoDialog && (
-        <div className="modal-backdrop" onClick={() => !infoDialog.busy && setInfoDialog(null)}>
+        <div className="modal-backdrop"
+             onMouseDown={(e) => { dlgDownRef.current = e.target === e.currentTarget }}
+             onClick={(e) => { if (!infoDialog.busy && dlgDownRef.current && e.target === e.currentTarget) setInfoDialog(null) }}>
           <div className="bake-dialog info-dialog" onClick={(e) => e.stopPropagation()}>
             <h3>Graph info</h3>
             <label className="bake-name">
@@ -905,7 +910,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         </div>
       )}
       {bakeDialog && (
-        <div className="modal-backdrop" onClick={() => !bakeDialog.busy && setBakeDialog(null)}>
+        <div className="modal-backdrop"
+             onMouseDown={(e) => { dlgDownRef.current = e.target === e.currentTarget }}
+             onClick={(e) => { if (!bakeDialog.busy && dlgDownRef.current && e.target === e.currentTarget) setBakeDialog(null) }}>
           <div className="bake-dialog" onClick={(e) => e.stopPropagation()}>
             <h3>Bake a Release</h3>
             <p className="hint">Freezes this graph's current boundary outputs into an immutable artifact kept in the Vault.</p>

@@ -50,3 +50,49 @@ def test_login_logout_flow(user):
 
 def test_read_is_public(db):
     assert APIClient().get("/api/node-types/").status_code == 200
+
+
+# --- staff user management ---
+
+@pytest.fixture
+def staff(db):
+    return User.objects.create_user("root", password="pw12345", is_staff=True)
+
+
+def test_user_admin_requires_staff(user, staff):
+    assert APIClient().get("/api/users/").status_code in (401, 403)          # anonymous
+    non = APIClient(); non.force_authenticate(user=user)
+    assert non.get("/api/users/").status_code == 403                          # non-staff
+    adm = APIClient(); adm.force_authenticate(user=staff)
+    assert adm.get("/api/users/").status_code == 200                          # staff
+
+
+def test_user_admin_create_edit_password_membership(staff):
+    api = APIClient(); api.force_authenticate(user=staff)
+    # create
+    r = api.post("/api/users/", {"username": "bob", "password": "pw12345",
+                                 "email": "bob@x.io", "is_staff": False}, format="json")
+    assert r.status_code == 201
+    uid = r.json()["id"]
+    # edit profile fields
+    r = api.patch(f"/api/users/{uid}/", {"first_name": "Bob", "is_staff": True}, format="json")
+    assert r.status_code == 200 and r.json()["first_name"] == "Bob" and r.json()["is_staff"] is True
+    # reset password → new one works
+    assert api.post(f"/api/users/{uid}/set_password/", {"password": "newpw123"}, format="json").status_code == 200
+    fresh = APIClient()
+    assert fresh.post("/api/auth/login/", {"username": "bob", "password": "newpw123"}, format="json").status_code == 200
+    # membership → grants ratify
+    ics = Authority.objects.create(slug="ics-gov", name="ICS", kind=Authority.Kind.ICS)
+    r = api.post(f"/api/users/{uid}/add_membership/", {"authority": "ics-gov", "role": "chair"}, format="json")
+    assert r.status_code == 200 and r.json()["can_ratify"] is True
+    mid = next(m["id"] for m in r.json()["memberships"] if m["authority"] == "ics-gov")
+    r = api.post(f"/api/users/{uid}/remove_membership/", {"membership_id": mid}, format="json")
+    assert r.json()["can_ratify"] is False
+
+
+def test_update_own_profile(user):
+    api = APIClient(); api.force_authenticate(user=user)
+    r = api.patch("/api/auth/me/", {"first_name": "Ann", "email": "ann@x.io"}, format="json")
+    assert r.status_code == 200
+    user.refresh_from_db()
+    assert user.first_name == "Ann" and user.email == "ann@x.io"

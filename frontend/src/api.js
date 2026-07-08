@@ -23,6 +23,24 @@ export const login = (username, password) =>
 export const logout = () =>
   fetch('/api/auth/logout/', { method: 'POST', headers: csrfHeaders() }).then(j)
 
+// Edit your own profile (first/last name, email). Returns the refreshed whoami payload.
+export const updateProfile = (patch) =>
+  fetch('/api/auth/me/', { method: 'PATCH', headers: csrfHeaders(), body: JSON.stringify(patch) }).then(j)
+
+// --- staff user management ---
+export const listUsers = () => fetch('/api/users/').then(j)
+export const listGovAuthorities = () => fetch('/api/users/authorities/').then(j)
+export const createUser = (body) =>
+  fetch('/api/users/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
+export const updateUser = (id, patch) =>
+  fetch(`/api/users/${id}/`, { method: 'PATCH', headers: csrfHeaders(), body: JSON.stringify(patch) }).then(j)
+export const setUserPassword = (id, password) =>
+  fetch(`/api/users/${id}/set_password/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ password }) }).then(j)
+export const addMembership = (id, authority, role) =>
+  fetch(`/api/users/${id}/add_membership/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ authority, role }) }).then(j)
+export const removeMembership = (id, membership_id) =>
+  fetch(`/api/users/${id}/remove_membership/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ membership_id }) }).then(j)
+
 export const listNodeTypes = () => fetch('/api/node-types/').then(j)
 export const listGraphs = () => fetch('/api/graphs/').then(j)
 export const getGraph = (id) => fetch(`/api/graphs/${id}/`).then(j)
