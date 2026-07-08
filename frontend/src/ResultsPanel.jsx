@@ -66,8 +66,19 @@ function ResultCard({ out }) {
   )
 }
 
+const CERT_ORDER = ['L0', 'L1', 'L1b', 'L2', 'L3']
+const CERT_LABEL = { L0: 'structure', L1: 'order', L1b: 'order 2σ', L2: 'duration', L3: 'reconcile' }
+
+function certStatus(cert) {
+  const c = cert.checks || {}
+  if (!cert.passed) return 'fail'
+  return CERT_ORDER.some((k) => c[k] === 'warn') ? 'warn' : 'pass'
+}
+
 export default function ResultsPanel({ outputs, meta, onClose }) {
   const cert = meta?.certificate
+  const checks = cert?.checks || {}
+  const notes = checks.notes || []
   return (
     <section className="results">
       <header className="results-head">
@@ -78,12 +89,18 @@ export default function ResultsPanel({ outputs, meta, onClose }) {
           </span>
         )}
         {cert && (
-          <span className={`results-cert ${cert.passed ? 'pass' : 'warn'}`}>
-            consistency {cert.passed ? 'pass' : 'warn'}
+          <span className={`results-cert ${certStatus(cert)}`}>
+            consistency {certStatus(cert)}
+            {CERT_ORDER.filter((k) => checks[k] && checks[k] !== 'skip').map((k) => (
+              <span key={k} className={`cert-chip ${checks[k]}`} title={`${CERT_LABEL[k]} — ${checks[k]}`}>{k}</span>
+            ))}
           </span>
         )}
         <button className="results-close" onClick={onClose} title="Close">✕</button>
       </header>
+      {notes.length > 0 && (
+        <div className="results-notes">{notes.map((n, i) => <div key={i}>⚠ {n}</div>)}</div>
+      )}
       {outputs.length === 0 ? (
         <div className="results-empty">No output nodes. Designate a gateway or connect a terminal node.</div>
       ) : (

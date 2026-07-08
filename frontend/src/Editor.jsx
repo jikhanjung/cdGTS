@@ -662,8 +662,11 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       setRunMeta({ id: run.id, stats: run.stats, certificate: run.certificate })
       if (!silent) setShowResults(true)
       const cert = run.certificate
+      const certWord = cert
+        ? (!cert.passed ? 'fail' : (Object.entries(cert.checks || {}).some(([k, v]) => k !== 'notes' && v === 'warn') ? 'warn' : 'pass'))
+        : null
       setStatus(`${silent ? 'Auto-evaluated' : `Evaluation run#${run.id}`} · computed ${run.stats.computed} / cached ${run.stats.cached}`
-        + (cert ? ` · consistency ${cert.passed ? 'pass' : 'warn'}` : ''))
+        + (certWord ? ` · consistency ${certWord}` : ''))
     } catch (e) { if (!silent) setError(e.data || String(e)); else setStatus('Auto-evaluate failed — press Evaluate') }
   }, [graphId, setNodes, gateways, nodes, edges])
 

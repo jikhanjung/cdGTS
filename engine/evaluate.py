@@ -116,18 +116,64 @@ def evaluate_graph(graph):
     return run
 
 
+def duration_gate(unit_dist, rank_of):
+    """
+    L2/L1b 지속시간 판정(순수 — DB 불요). unit_dist = {unit_slug: 분포dict}, rank_of = {slug: rank}.
+    rank 별로 base 오름차순 타일링:
+      L2 = 인접 base 점추정 duration ≤ 0(퇴화/영-길이) 있으면 fail.
+      L1b = 인접 두 경계의 공분산 인지 지속시간이 2σ 안에서 ≤0 가능(gap < 2σ_gap)이면 warn.
+    반환 (l2, l1b, unresolved_notes[]).
+    """
+    from .kernels import duration_stats
+
+    base = {s: (d or {}).get("value_ma") for s, d in unit_dist.items()}
+    degenerate, unresolved, pairs = 0, [], 0
+    for rank_n in set(rank_of.values()):
+        units = sorted((base[s], s) for s in unit_dist
+                       if rank_of.get(s) == rank_n and base[s] is not None)
+        prev_b, prev_s = 0.0, None
+        for b, s in units:
+            if b - prev_b <= 0:                          # 인접 base 동일/역전 = 영-길이 유닛
+                degenerate += 1
+            elif prev_s is not None:                     # 두 실경계 사이 — 공분산 인지 2σ 검사
+                ds = duration_stats(unit_dist[s], unit_dist[prev_s])   # older=s(큰 base)
+                if ds is not None:
+                    pairs += 1
+                    gap, sig = ds
+                    if sig > 0 and gap < 2 * sig:
+                        unresolved.append(f"{s}↔{prev_s} (Δ{round(gap, 3)} < 2σ {round(2 * sig, 3)})")
+            prev_b, prev_s = b, s
+    l2 = "pass" if degenerate == 0 else "fail"
+    l1b = "warn" if unresolved else ("pass" if pairs else "skip")
+    return l2, l1b, unresolved
+
+
 def _certify(run, graph, results):
     """
-    정합성 게이트.
-      L1 순서 — authored `order` 제약(노드)이 있으면 그걸로, 없으면 게이트웨이 단조 휴리스틱 폴백.
-      L2 지속시간 — 게이트웨이가 덮는 **모든 유닛의 [base, top] 길이**를 rank 별 타일링으로 자동(파생) 검사.
-        authored·sparse 한 order(L1) 를 보완하는 안전망. duration ≤ 0(퇴화/영-길이) → fail.
-      L3 은 skip(후속: joint reconcile).
+    정합성 게이트 (coherence-gate.md).
+      L0 구조 — cycle-breaker(clamp/joint-inference) 를 지나지 않는 순환이 남으면 fail.
+      L1 순서 — authored `order` 제약(노드/엣지)이 있으면 그걸로, 없으면 게이트웨이 단조 휴리스틱 폴백(L1a).
+      L1b 통계적 순서 — 인접 경계 지속시간이 2σ 안에서 ≤0 이 될 수 있으면(공분산 인지) "미해결" warn.
+      L2 지속시간 — rank 별 타일링. 점추정 duration ≤ 0(퇴화/영-길이) → fail.
+      L3 은 skip(후속: joint reconcile / clamp).
     """
     from .models import CoherenceCertificate
+    from graph.dag import find_unbroken_cycles
 
-    checks = {"L0": "pass", "L1": "skip", "L2": "skip", "L3": "skip"}
+    checks = {"L0": "pass", "L1": "skip", "L1b": "skip", "L2": "skip", "L3": "skip", "notes": []}
     passed = True
+
+    # L0 구조 — breaker 를 잘라낸 데이터 그래프가 acyclic 이어야. (저장 검증의 런타임 재확인.)
+    insts = list(graph.nodes.select_related("node_type"))
+    breaker_keys = {n.key for n in insts
+                    if n.node_type.category == "clamp" or n.node_type.slug == "joint-inference"}
+    data_edges = [(e.source.key, e.target.key)
+                  for e in graph.edges.select_related("source", "target") if e.kind != "order"]
+    stuck = find_unbroken_cycles([n.key for n in insts], breaker_keys, data_edges)
+    if stuck:
+        checks["L0"] = "fail"
+        checks["notes"].append(f"L0: 끊기지 않은 순환 {sorted(stuck)}")
+        passed = False
 
     # L1 우선순위: order edge(경계 세로 포트 연결) > order 노드 > 게이트웨이 단조 휴리스틱.
     order_edges = list(graph.edges.filter(kind="order").select_related("source", "target"))
@@ -177,29 +223,23 @@ def _certify(run, graph, results):
             checks["L1"] = "pass" if vals == sorted(vals) or vals == sorted(vals, reverse=True) else "warn"
             passed = checks["L1"] != "warn"
 
-    # L2 지속시간 — 게이트웨이 산출값 → 유닛 base. rank 별로 base 오름차순 타일링해
-    # 각 유닛 duration = base − top(이전 젊은 base, 가장 젊은 것은 0). ≤0 이면 퇴화 유닛 → fail.
+    # L2/L1b 지속시간 — 게이트웨이 산출 분포 → 유닛별 분포. duration_gate 가 rank 타일링·공분산 판정.
     from chrono.models import Unit
-    unit_base = {}
+    unit_dist = {}
     for gw in graph.gateways.select_related("boundary", "node"):
         if gw.boundary is None or not gw.boundary.slug.startswith("base-"):
             continue
         r = results.get(gw.node.key)
-        v = (r["distribution"] or {}).get("value_ma") if r and r["distribution"] else None
-        if v is not None:
-            unit_base[gw.boundary.slug[len("base-"):]] = float(v)
-    if unit_base:
-        rank_of = {u.slug: u.rank for u in Unit.objects.filter(slug__in=unit_base.keys())}
-        degenerate = 0
-        for rank_n in set(rank_of.values()):
-            bases = sorted(b for s, b in unit_base.items() if rank_of.get(s) == rank_n)
-            prev = 0.0
-            for b in bases:
-                if b - prev <= 0:            # 같은 rank 인접 base 동일/역전 = 영-길이 유닛
-                    degenerate += 1
-                prev = b
-        checks["L2"] = "pass" if degenerate == 0 else "fail"
-        if degenerate:
+        d = r["distribution"] if r and r["distribution"] else None
+        if d and d.get("value_ma") is not None:
+            unit_dist[gw.boundary.slug[len("base-"):]] = d
+    if unit_dist:
+        rank_of = {u.slug: u.rank for u in Unit.objects.filter(slug__in=unit_dist.keys())}
+        l2, l1b, unresolved = duration_gate(unit_dist, rank_of)
+        checks["L2"], checks["L1b"] = l2, l1b
+        if l2 == "fail":
             passed = False
+        if unresolved:
+            checks["notes"].append("L1b 순서 통계적 미해결: " + ", ".join(unresolved))
 
     CoherenceCertificate.objects.create(eval_run=run, passed=passed, checks=checks)

@@ -219,3 +219,44 @@ def test_shared_components_roundtrip():
 def test_passthrough_preserves_shared_components():
     d = dist_from(251.9, 0.3, shared={"decay-U": 0.2})
     assert compute("process", "calibration-transfer", [{"dist": d, "params": {}}], {}) == d
+
+
+# --- P06.2: duration_gate (L2 fail / L1b covariance-aware warn) ---
+
+from engine.evaluate import duration_gate                       # noqa: E402
+
+
+def test_duration_gate_pass_when_well_separated():
+    # 같은 rank 세 경계, 큰 간격 + 작은 ± → L2 pass, L1b pass.
+    ud = {"a": dist_from(300, 0.5), "b": dist_from(250, 0.5), "c": dist_from(200, 0.5)}
+    l2, l1b, notes = duration_gate(ud, {"a": 6, "b": 6, "c": 6})
+    assert l2 == "pass" and l1b == "pass" and notes == []
+
+
+def test_duration_gate_l2_fail_on_degenerate():
+    # 인접 base 동일 → 영-길이 유닛 → L2 fail.
+    ud = {"a": dist_from(250, 0.5), "b": dist_from(250, 0.5)}
+    l2, _, _ = duration_gate(ud, {"a": 6, "b": 6})
+    assert l2 == "fail"
+
+
+def test_duration_gate_l1b_warn_on_2sigma_overlap():
+    # gap 3.8, 각 σ1=1.5 → 2σ_gap≈4.24 > gap → 통계적으로 미해결(warn), L2 는 여전히 pass.
+    ud = {"older": dist_from(250.8, 1.5), "younger": dist_from(247.0, 1.5)}
+    l2, l1b, notes = duration_gate(ud, {"older": 6, "younger": 6})
+    assert l2 == "pass" and l1b == "warn" and notes
+
+
+def test_duration_gate_shared_component_resolves_overlap():
+    # 같은 gap·같은 marginal ± 이지만 공유 계통(σ 1.4)으로 σ_gap 축소 → 해소(pass).
+    shared = {"decay-U": 1.4}
+    ud = {"older": dist_from(250.8, 1.5, shared=shared), "younger": dist_from(247.0, 1.5, shared=shared)}
+    l2, l1b, _ = duration_gate(ud, {"older": 6, "younger": 6})
+    assert l2 == "pass" and l1b == "pass"           # 공분산 인지: 겹침 해소
+
+
+def test_duration_gate_ranks_isolated():
+    # 다른 rank 는 서로 타일링 안 됨(Eon base 가 Age base 사이에 끼어도 무관).
+    ud = {"eon": dist_from(251, 0.1), "age1": dist_from(251, 0.1), "age2": dist_from(200, 0.1)}
+    l2, _, _ = duration_gate(ud, {"eon": 1, "age1": 6, "age2": 6})
+    assert l2 == "pass"                              # eon(251)·age1(251) 은 rank 가 달라 퇴화 아님
