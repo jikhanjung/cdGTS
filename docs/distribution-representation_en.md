@@ -67,6 +67,39 @@ source" boundary reaches L0–L1, a fully-modeled one L5. → **Distribution rep
 cycle resolution are all governed by the same provenance depth.** ICC (bake) freezes a mid rung; GTS (narrate)
 references L5.
 
+### 5.1 decomposed vs joint — implementation and intuition (P06)
+
+The two rungs most often confused. **decomposed (L2) is one boundary's marginal; joint (L4) also carries the
+correlation between boundaries.**
+
+**Storage** (`nodes/distribution.py` · `engine/kernels.py`):
+- **`decomposed`** = `budget: {analytical, systematic, model}` + `sigma` (the σ-level the budget is quoted at).
+  1σ = `√(Σ budget²) / sigma`. The components are **magnitudes only** — no label for *which shared source*.
+- **`joint`** = adds `shared_components: [{ref, sigma}]`. Each tag = *"σ of my error comes from this shared source
+  (e.g. `decay-238U`)."* The marginal (own 1σ) is **identical** to decomposed; only the sharing info is added.
+
+**The difference bites in duration.** `Var(dur) = Var_a + Var_b − 2·Cov`, `Cov = Σ_(shared ref) σ_a·σ_b`.
+- decomposed vs decomposed → no shared ref → `Cov=0` → errors add in quadrature (**independence assumed**).
+- joint vs joint (same ref) → `Cov>0` → that much **cancels in the difference**.
+
+**"Independent measurement ≠ independent error" (the crux).** Two dates measured separately still feed the **same
+value** of the **decay constant / tracer calibration** into both age calculations. If λ is off, both dates shift the
+**same direction together** → full effect on **absolute ages**, almost none on their **difference (duration)**. So the
+shared systematic cancels in a duration, leaving only each date's own **analytical** error. (This is what EARTHTIME's
+`±X/Y/Z` reporting institutionalizes: compare within a system = X analytical only; absolute / cross-system = through
+Z, the decay constant.)
+
+**Demo numbers** (`seed_demo`, two adjacent Age boundaries, each 1σ=1.5):
+- joint → **1.4** of it is the shared `decay-238U`, `√(1.5²−1.4²)=`**0.54** is the boundary's own analytical error.
+- decomposed (independent): `σ_gap=√(1.5²+1.5²)=`**2.12** → 2σ 4.24.
+- joint (shared): `Cov=1.96` → `σ_gap=√(0.54²+0.54²)=`**0.76** → 2σ 1.52. **The same gap flips warn→pass.**
+
+**When to tag joint (a modeling claim).** A `joint` tag is a **scientific claim** that *"these two dates use the same
+systematic source"* — the cancellation is only justified when that's true. Different methods (U-Pb vs Ar-Ar, different
+λ) share nothing → **leave them decomposed** (→ independent, no cancellation). The model also assumes the tagged
+component is **perfectly correlated (r=1)** (`Cov=σ·σ`). So the call is left to the data provider.
+→ [coherence-gate.md](coherence-gate_en.md) L1b/L2, [tutorial-science-engine.md](tutorial-science-engine_en.md).
+
 ## 6. Unification with GSSA/clamp — a decreed value is a degenerate distribution
 
 GSSA = exact = **δ(2500)**, a zero-variance **point mass**. The polymorphic value naturally includes it

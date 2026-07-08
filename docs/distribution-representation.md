@@ -62,6 +62,35 @@ provenance의 기계가독 깊이가 상한**을 정한다 — "발표값+출처
 → **분포 표현·정합성 레벨·순환 해소가 모두 같은 provenance 깊이에 종속.** ICC(bake)는 중간 rung을 얼리고,
 GTS(narrate)는 L5를 참조.
 
+### 5.1 decomposed vs joint — 구현과 직관 (P06)
+
+사다리에서 가장 자주 헷갈리는 두 rung. **decomposed(L2)는 한 경계의 marginal, joint(L4)는 경계들 사이 상관까지.**
+
+**저장 형식** (`nodes/distribution.py` · `engine/kernels.py`):
+- **`decomposed`** = `budget: {analytical, systematic, model}` + `sigma`(budget 값이 몇 σ로 적혔나). 1σ 환산은
+  `√(Σ budget²) / sigma`. 성분은 **크기만** 있고 *어느 공유원*인지 이름표가 없다.
+- **`joint`** = 여기에 `shared_components: [{ref, sigma}]` 를 더한 것. 각 태그 = *"내 오차 중 σ만큼이 이 공유원
+  (예: `decay-238U`)에서 왔다."* marginal(자기 1σ)은 decomposed와 **동일**하고, 공유 정보만 추가된다.
+
+**차이가 지속시간에서 갈린다.** `Var(dur) = Var_a + Var_b − 2·Cov`, `Cov = Σ_(공유 ref) σ_a·σ_b`.
+- decomposed끼리 → 공유 ref 없음 → `Cov=0` → 오차를 그대로 제곱합(**독립 가정**).
+- joint끼리(같은 ref) → `Cov>0` → 그만큼 **차이에서 상쇄**.
+
+**"독립 측정 ≠ 독립 오차" (핵심 직관).** 두 연대를 따로 측정해도 **붕괴상수·tracer 보정**은 두 계산에 **같은
+값**으로 들어간다. λ이 틀리면 두 연대가 **같은 방향으로 함께** 밀린다 → **절대연대**엔 그대로 영향, **차이
+(지속시간)**엔 거의 영향 없음. 그래서 공유 계통분은 duration에서 상쇄되고 남는 건 각자 고유한 **분석오차**뿐.
+(EARTHTIME `±X/Y/Z` 표기의 제도화: 같은 시스템 비교=X 분석만, 절대·타 시스템 비교=Z 붕괴상수까지.)
+
+**데모 숫자** (`seed_demo`, 인접 두 Age 경계, 각 1σ=1.5):
+- joint면 그중 **1.4**가 `decay-238U` 공유, `√(1.5²−1.4²)=`**0.54**가 고유 분석오차.
+- decomposed(독립): `σ_gap=√(1.5²+1.5²)=`**2.12** → 2σ 4.24.
+- joint(공유): `Cov=1.96` → `σ_gap=√(0.54²+0.54²)=`**0.76** → 2σ 1.52. **같은 간격이 warn→pass로 뒤집힌다.**
+
+**언제 joint로 태그하나 (모델링 주장).** `joint` 태그는 *"이 두 연대는 같은 계통원을 쓴다"*는 **과학적 주장**이다 —
+참일 때만 상쇄가 정당. 서로 다른 방법(U-Pb vs Ar-Ar, 다른 λ)이면 공유하지 않으니 **decomposed로 두는 게 맞다**
+(→ 독립, 상쇄 없음). 또 이 모델은 태그된 성분을 **완전상관(r=1)**으로 가정한다(`Cov=σ·σ`). 그래서 그 판단을
+데이터 제공자에게 맡긴다. → [coherence-gate.md](coherence-gate.md) L1b/L2, [tutorial-science-engine.md](tutorial-science-engine.md).
+
 ## 6. GSSA/clamp와의 통일 — 결정값은 퇴화 분포다
 
 GSSA = 정확 = **δ(2500)**, 분산 0의 **점질량(point mass)**. 다형 value가 이를 자연히 포함(`fidelity: exact`).
