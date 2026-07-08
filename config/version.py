@@ -1,1 +1,1 @@
-VERSION = '0.1.33-wip'
+VERSION = '0.1.33'
