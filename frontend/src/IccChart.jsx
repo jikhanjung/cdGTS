@@ -31,6 +31,7 @@ export default function IccChart({ embedReleaseId } = {}) {
   const [data, setData] = useState(null)
   const [scale, setScale] = useState('log')           // 'log' (zoom recent) | 'linear' (proportional)
   const [showUnc, setShowUnc] = useState(false)        // uncertainty (±pm) band overlay
+  const [showAges, setShowAges] = useState(true)       // numeric boundary ages (Ma), ICS-chart style
   const [zoom, setZoom] = useState(1)                  // chart zoom (viewBox scale); scroll = pan
   const [status, setStatus] = useState('Loading…')
   const [error, setError] = useState(null)
@@ -126,6 +127,19 @@ export default function IccChart({ embedReleaseId } = {}) {
     return [...m.values()]
   }, [data, levels])
 
+  // Numeric boundary age per base age (ICS-chart style). A boundary recurs across ranks → keep the
+  // FINEST column (max ci) that owns it, so the number sits at the edge of the narrowest unit it bounds.
+  // Carry the owning band's span (top) so we can hide a label when its band is too short on screen.
+  const boundaryAges = useMemo(() => {
+    if (!data) return []
+    const m = new Map()
+    levels.forEach((lv, ci) => lv.bands.forEach((b) => {
+      const prev = m.get(b.bottom)
+      if (!prev || ci > prev.ci) m.set(b.bottom, { age: b.bottom, pm: b.pm, ci, top: b.top, name: b.name })
+    }))
+    return [...m.values()]
+  }, [data, levels])
+
   // --- zoom (viewBox scale) + pan (scroll) ---
   const W = AXIS + nCol * COLW + 8
   const Hh = H + HEADER + 10
@@ -205,6 +219,8 @@ export default function IccChart({ embedReleaseId } = {}) {
           <button className={scale === 'linear' ? 'active' : ''} onClick={() => setScale('linear')}>Linear (proportional)</button>
           <button className={scale === 'table' ? 'active' : ''} onClick={() => setScale('table')} title="Ignore the time scale — every Age/Stage cell equal height (table)">Table (equal Age)</button>
         </div>
+        <button className={`unc-toggle${showAges ? ' active' : ''}`} onClick={() => setShowAges((v) => !v)}
+                title="Numeric boundary ages (Ma) at each boundary line, like the official ICS chart.">Ages (Ma)</button>
         <button className={`unc-toggle${showUnc ? ' active' : ''}`} onClick={() => setShowUnc((v) => !v)}
                 title="Symmetric error (±) band on boundary ages. GSSA agreed values have no error.">± Uncertainty</button>
         <div className="scale-toggle zoom-ctrl" title="Ctrl/⌘ + wheel to zoom toward the cursor; scroll to pan">
@@ -263,6 +279,18 @@ export default function IccChart({ embedReleaseId } = {}) {
                   </rect>
                 )
               })}
+              {showAges && boundaryAges.map((u) => {
+                // Number sits just above the boundary line, at the right edge of the finest column it bounds.
+                // Counter-scale font by 1/zoom (constant on screen); hide when the owning band is too short to fit.
+                const screenH = (y(u.age) - y(u.top)) * zoom
+                if (screenH < 13) return null
+                return (
+                  <text key={`age-${u.age}`} x={AXIS + (u.ci + 1) * COLW - 3} y={y(u.age) - 1.5}
+                        textAnchor="end" className="icc-agelabel" style={{ fontSize: `${8.5 / zoom}px` }}>
+                    {u.age}{u.pm > 0 ? `±${u.pm}` : ''}
+                  </text>
+                )
+              })}
             </g>
           </svg>
         </div>
@@ -273,6 +301,7 @@ export default function IccChart({ embedReleaseId } = {}) {
         terminal merge node (evaluate → tile); pick a <b>Merge</b> to view a single column merge's partial chart.
         When labels overlap on log scale, hover a band (age-range tooltip).
         <b> Zoom</b>: Ctrl/⌘ + mouse wheel zooms toward the cursor (or use −/+/Fit); scroll to pan.
+        <b> Ages (Ma)</b> prints the numeric age at each boundary (like the official ICS chart); zoom in to reveal ages on thin bands.
         <b> ± Uncertainty</b> toggle shows the symmetric error band of each lower boundary (GSSP derived-age error) — GSSA agreed values have no error.
       </p>
     </div>
