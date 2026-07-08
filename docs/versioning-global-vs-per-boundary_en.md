@@ -5,6 +5,10 @@
 > Status: **Analysis note. No decision.** An expansion of the "global vs per-boundary versioning" item in
 > [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) §4. Here we only decompose the problem and
 > **define it as open questions**.
+>
+> **[partly implemented]** A global release = a pinned record set (bake) + the coherence gate is implemented
+> (`releases` app, bake/narrate). Some open questions below are thereby resolved; an independent per-boundary
+> version manifest is still unbuilt (open question).
 
 ## 1. The problem (one line)
 

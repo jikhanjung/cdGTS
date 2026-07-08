@@ -4,6 +4,9 @@
 
 > 상태: **검토 → 스키마에 일부 반영.** [boundary-gateway-schema.md](boundary-gateway-schema.md) §4의
 > "토폴로지 diff"를 펼친 것. [node-graph-paradigm.md](node-graph-paradigm.md)의 *"토폴로지도 버전 대상"* 의 구체화.
+>
+> **[일부 구현됨]** 값·토폴로지 diff 는 릴리스 diff 로 구현됐고, split/merge 계보(delete+add 오인 방지)는
+> `chrono.BoundaryLineage` 가 담는다. 아래는 그 설계 근거(여전히 유효).
 
 ## 1. 핵심 통찰 — 값 diff와 토폴로지 diff는 직교하는 두 축
 

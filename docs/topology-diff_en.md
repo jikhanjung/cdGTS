@@ -5,6 +5,9 @@
 > Status: **Analysis → partly reflected in the schema.** An expansion of the "topology diff" item in
 > [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) §4. The concretization of
 > [node-graph-paradigm_en.md](node-graph-paradigm_en.md)'s *"topology is also subject to versioning."*
+>
+> **[partly implemented]** Value and topology diff are implemented as a release diff, and the split/merge lineage
+> (so it isn't mistaken for delete+add) is carried by `chrono.BoundaryLineage`. Below is the design rationale (still valid).
 
 ## 1. Core insight — value diff and topology diff are orthogonal axes
 

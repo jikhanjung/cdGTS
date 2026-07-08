@@ -5,6 +5,12 @@
 > Status: **post-implementation reflection + design confirmation.** What order the built engine
 > (`engine/evaluate.py`) actually runs in, and what status the order (younger/older) node has inside it.
 > Prompted by the question "should we sweep the graph in chronological order (Hadean → younger)?"
+>
+> **[implementation update]** Ordering is now expressed mainly as **`Edge.kind=order`** (a boundary vertical-port
+> connection), not a separate `order` **node**. Gate L1 priority = **order edge > order node > gateway monotonicity
+> heuristic**. The order-node description below still holds as a fallback path, and the "checks don't disturb
+> computation order" thesis is unchanged. L1b/L2 (duration) are judged only over an asserted **unit span** (the
+> order-edge interleave), devlog 120. Detail: [coherence-gate_en.md](coherence-gate_en.md).
 
 ## 0. Thesis in one line
 
