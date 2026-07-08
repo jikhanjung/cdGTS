@@ -75,6 +75,11 @@ export const bakeGraph = (id, label) =>
 // Editable default name for the Bake dialog → { suggested }.
 export const suggestBakeName = (id) => fetch(`/api/graphs/${id}/bake/`).then(j)
 
+// P06.3 authored clamps — L3a verify (GET) / L3b reconcile (POST, owner/staff).
+export const releaseClamps = (id) => fetch(`/api/releases/${id}/clamps/`).then(j)
+export const reconcileRelease = (id) =>
+  fetch(`/api/releases/${id}/reconcile/`, { method: 'POST', headers: csrfHeaders() }).then(j)
+
 // Science CI — re-bake, then diff against the published baseline. {from,to,value_diff,topology_diff,summary}.
 export const verifyGraph = (id) =>
   fetch(`/api/graphs/${id}/verify/`, { method: 'POST', headers: csrfHeaders() }).then(j)

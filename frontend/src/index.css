@@ -744,3 +744,13 @@ body {
 .u-addmem button:hover { background: #f0f0f6; }
 .u-note { color: #2f7d45; font-size: 12px; margin: 8px 0 0; }
 .error.small { font-size: 11px; max-height: 120px; overflow: auto; margin: 8px 0 0; }
+/* Vault Clamps view (P06.3) */
+.clamps-view { height: 100%; overflow: auto; padding: 16px 18px; }
+.clamps-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; font-size: 14px; }
+.clamps-head b.ok { color: #2f7d45; }
+.clamps-head b.bad { color: #a3271b; }
+.clamps-head button { border: 1px solid #b7c7e6; background: #eef3fb; color: #2f5aa8; border-radius: 6px;
+  padding: 5px 12px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.clamps-head button:hover:not(:disabled) { background: #e0eaf8; }
+.clamps-head button:disabled { opacity: 0.5; cursor: default; }
+.clamps-note { margin-top: 12px; font-size: 11px; color: #8a8a9c; line-height: 1.5; }

@@ -284,6 +284,87 @@ def test_topology_retype_is_orthogonal(chrono):
                                      "from": "GSSA", "to": "GSSP"}
 
 
+# --- P06.3: authored clamps (L3a verify / L3b reconcile) ---
+
+def _sub(slug):
+    from chrono.models import Authority
+    return Authority.objects.create(slug=slug, name=slug.upper(), kind=Authority.Kind.SUBCOMMISSION)
+
+
+def _clamp(rel, slug, boundary, kind, value, owner):
+    from releases.models import Clamp
+    c = Clamp.objects.create(slug=slug, owner=owner, target_boundary=boundary, kind=kind, value=value)
+    rel.clamps.add(c)
+    return c
+
+
+def _baked(version="v1", value=538.8):
+    camb = Boundary.objects.get(slug="base-cambrian")
+    rel = _release(version, camb, _candidate(f"cand-{version}", camb, value))
+    bake_release(rel)
+    return rel, camb
+
+
+def test_verify_clamps_flags_range_violation(chrono):
+    from releases.services import verify_clamps
+    rel, camb = _baked(value=538.8)
+    _clamp(rel, "cl-range", camb, "range", {"range": [530.0, 535.0]}, _sub("camb-sub"))
+    v = verify_clamps(rel)
+    assert any(x["kind"] == "range" and x["boundary"] == "base-cambrian" for x in v)
+    assert rel.records.get(boundary=camb).value_ma == 538.8    # L3a = 값 불변
+
+
+def test_verify_clamps_passes_when_honored(chrono):
+    from releases.services import verify_clamps
+    rel, camb = _baked(value=538.8)
+    _clamp(rel, "cl-r", camb, "range", {"range": [536.0, 540.0]}, _sub("s"))
+    assert verify_clamps(rel) == []
+
+
+def test_reconcile_applies_pin(chrono):
+    from releases.services import reconcile_release
+    rel, camb = _baked(value=538.8)
+    _clamp(rel, "cl-pin", camb, "pin", {"value": 539.0}, _sub("s"))
+    changed, conflicts = reconcile_release(rel)
+    assert changed == 1 and conflicts == []
+    rec = rel.records.get(boundary=camb)
+    assert rec.value_ma == 539.0 and rec.uncertainty["fidelity"] == "exact"   # pin → 점질량
+
+
+def test_reconcile_pin_beats_range(chrono):
+    from releases.services import reconcile_release
+    rel, camb = _baked(value=538.8)
+    owner = _sub("s")
+    _clamp(rel, "cl-pin", camb, "pin", {"value": 537.0}, owner)
+    _clamp(rel, "cl-range", camb, "range", {"range": [520.0, 525.0]}, owner)   # 무시됨(precedence 낮음)
+    reconcile_release(rel)
+    assert rel.records.get(boundary=camb).value_ma == 537.0
+
+
+def test_reconcile_flags_conflicting_owners(chrono):
+    from releases.services import reconcile_release
+    rel, camb = _baked(value=538.8)
+    _clamp(rel, "p1", camb, "pin", {"value": 539.0}, _sub("o1"))
+    _clamp(rel, "p2", camb, "pin", {"value": 536.0}, _sub("o2"))    # 동급·다owner = 충돌
+    _, conflicts = reconcile_release(rel)
+    assert "base-cambrian" in conflicts
+
+
+def test_clamps_endpoint_and_reconcile_permission(chrono):
+    from django.contrib.auth import get_user_model
+    rel, camb = _baked(value=538.8)
+    _clamp(rel, "cl-range", camb, "range", {"range": [530.0, 535.0]}, _sub("s"))
+    # L3a verify via API (public read)
+    resp = APIClient().get(f"/api/releases/{rel.pk}/clamps/")
+    assert resp.status_code == 200 and len(resp.data["violations"]) == 1
+    # reconcile is owner/staff only
+    assert APIClient().post(f"/api/releases/{rel.pk}/reconcile/").status_code in (401, 403)
+    staff = APIClient(); staff.force_authenticate(user=get_user_model().objects.create_user("ed", password="pw12345", is_staff=True))
+    r = staff.post(f"/api/releases/{rel.pk}/reconcile/")
+    assert r.status_code == 200 and r.data["changed"] == 1    # range 적용 → 값 이동
+    assert APIClient().get(f"/api/releases/{rel.pk}/clamps/").data["violations"] == []   # 이제 지켜짐
+
+
 def test_added_removed_topology(chrono):
     camb = Boundary.objects.get(slug="base-cambrian")
     trias = Boundary.objects.get(slug="base-triassic")

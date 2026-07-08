@@ -5,10 +5,11 @@ import IccTable from './IccTable.jsx'
 import Narrate from './Narrate.jsx'
 import ReleasesDiff from './ReleasesDiff.jsx'
 import Overrides from './Overrides.jsx'
+import Clamps from './Clamps.jsx'
 
 // Vault = the artifact hub. Lists baked Releases (published · user bakes · your sandboxes) and renders a selected
-// one as Chart / Table / Narrative / Overrides, or diffs two. The Editor bakes into here; sandboxes override here.
-const MODES = [['chart', 'Chart'], ['table', 'Table'], ['narrative', 'Narrative'], ['diff', 'Diff']]
+// one as Chart / Table / Narrative / Clamps / Overrides, or diffs two. The Editor bakes into here; sandboxes override here.
+const MODES = [['chart', 'Chart'], ['table', 'Table'], ['narrative', 'Narrative'], ['clamps', 'Clamps'], ['diff', 'Diff']]
 const fmtDate = (s) => (s ? new Date(s).toLocaleDateString() : '')
 
 export default function Vault({ initialReleaseId, user } = {}) {
@@ -83,6 +84,7 @@ export default function Vault({ initialReleaseId, user } = {}) {
           ) : mode === 'chart' ? <IccChart key={`${selId}.${nonce}`} embedReleaseId={selId} />
             : mode === 'table' ? <IccTable key={`${selId}.${nonce}`} embedReleaseId={selId} />
             : mode === 'narrative' ? <Narrate key={`${selId}.${nonce}`} embedReleaseId={selId} />
+            : mode === 'clamps' ? <Clamps key={`${selId}.${nonce}`} embedReleaseId={selId} user={user} />
             : mode === 'overrides' ? <Overrides releaseId={selId} onChanged={afterOverride} />
             : <ReleasesDiff key={`${selId}.${nonce}`} initialA={selId} />}
         </div>

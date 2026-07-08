@@ -16,8 +16,8 @@ from .permissions import can_write_release, visible_releases
 from .serializers import ProposalSerializer, ReleaseListSerializer, ReleaseSerializer
 from .services import (
     bake_release, create_sandbox_release, diff_graph_vs_release, diff_releases, narrate_release,
-    overridable_candidates, propose_graph, ratify_proposal, reject_proposal, set_override,
-    snapshot_graph, verify_graph,
+    overridable_candidates, propose_graph, ratify_proposal, reconcile_release, reject_proposal,
+    set_override, snapshot_graph, verify_clamps, verify_graph,
 )
 
 
@@ -92,6 +92,28 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
         except ValueError as e:
             return Response({"detail": str(e)}, status=400)
         return Response(ReleaseSerializer(self.get_queryset().get(pk=release.pk)).data)
+
+    # --- P06.3 authored clamps (L3a verify / L3b reconcile) ---
+    @action(detail=True, methods=["get"])
+    def clamps(self, request, pk=None):
+        """이 릴리스의 authored clamp 목록 + L3a 검사(값이 clamp 를 지키는지, 값 불변)."""
+        release = self.get_object()
+        return Response({
+            "clamps": [{"slug": c.slug, "kind": c.kind, "boundary": c.target_boundary.slug if c.target_boundary_id else None,
+                        "owner": c.owner.slug, "value": c.value, "rationale": c.rationale}
+                       for c in release.clamps.select_related("target_boundary", "owner")],
+            "violations": verify_clamps(release),
+        })
+
+    @action(detail=True, methods=["post"])
+    def reconcile(self, request, pk=None):
+        """L3b — authored clamp 을 records 에 적용(값 이동 = GTS 계약). 소유자/staff 만."""
+        release = self.get_object()
+        if not can_write_release(request.user, release):
+            return Response({"detail": "Only the owner (or staff) can reconcile this release."}, status=403)
+        changed, conflicts = reconcile_release(release)
+        return Response({"changed": changed, "conflicts": conflicts,
+                         "release": ReleaseSerializer(self.get_queryset().get(pk=release.pk)).data})
 
 
 class GraphBakeView(APIView):

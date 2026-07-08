@@ -219,6 +219,103 @@ def bake_release(release):
     return len(rows)
 
 
+# --- P06.3: authored governance clamps applied at the release layer (L3a verify / L3b reconcile) ---
+# releases.Clamp = the *authored* governance record (subcommission pin/range/order/freeze), distinct from the
+# in-graph clamp node. ICC/bake = verify-only (values unchanged); GTS/reconcile = apply (values may move).
+
+_CLAMP_PRECEDENCE = {"pin": 3, "range": 2, "order": 1, "freeze-version": 0}   # 충돌 시 더 강한 제약 우선
+
+
+def _pin_value(clamp):
+    v = clamp.value
+    return v.get("value") if isinstance(v, dict) else v
+
+
+def _range_value(clamp):
+    v = clamp.value
+    rng = v.get("range") if isinstance(v, dict) else v
+    return rng if isinstance(rng, (list, tuple)) and len(rng) == 2 else None
+
+
+def _clamps_by_boundary(release):
+    from collections import defaultdict
+    by = defaultdict(list)
+    for c in release.clamps.select_related("target_boundary", "owner"):
+        if c.target_boundary_id:
+            by[c.target_boundary.slug].append(c)
+    return by
+
+
+def _arbitrate(clamps):
+    """한 경계에 여러 clamp — precedence 최고를 채택. 동급이 서로 다른 owner 면 conflict."""
+    top = max(_CLAMP_PRECEDENCE.get(c.kind, 0) for c in clamps)
+    winners = [c for c in clamps if _CLAMP_PRECEDENCE.get(c.kind, 0) == top]
+    conflict = len({c.owner_id for c in winners}) > 1
+    return winners[0], conflict
+
+
+def clamp_apply(dist, clamp):
+    """clamp 을 분포 dict 에 적용(L3b). pin→exact, range→절단정규(engine 커널 재사용). order/freeze 는 값 불변."""
+    from engine.kernels import range_clamp
+    from nodes.distribution import Distribution
+    if clamp.kind == "pin":
+        v = _pin_value(clamp)
+        return Distribution.exact(round(float(v), 6), note=f"clamp pin ({clamp.slug})").to_dict() if v is not None else dist
+    if clamp.kind == "range" and dist:
+        rng = _range_value(clamp)
+        if rng:
+            return range_clamp(dist, float(rng[0]), float(rng[1]))
+    return dist
+
+
+def verify_clamps(release):
+    """L3a — 베이크된 records 가 authored clamp 을 지키는지 검사(값 불변). 반환 violations[]."""
+    if not release.records.exists():
+        bake_release(release)
+    recs = {r.boundary.slug: r for r in release.records.select_related("boundary")}
+    out = []
+    for slug, clamps in _clamps_by_boundary(release).items():
+        rec = recs.get(slug)
+        _, conflict = _arbitrate(clamps)
+        if conflict:
+            out.append({"boundary": slug, "kind": "conflict", "detail": "same-precedence clamps, different owners"})
+        if rec is None or rec.value_ma is None:
+            continue
+        v = float(rec.value_ma)
+        for c in clamps:
+            if c.kind == "pin":
+                pv = _pin_value(c)
+                if pv is not None and abs(v - float(pv)) > 1e-6:
+                    out.append({"boundary": slug, "kind": "pin", "detail": f"{v} ≠ pin {pv}"})
+            elif c.kind == "range":
+                rng = _range_value(c)
+                if rng and not (float(rng[0]) <= v <= float(rng[1])):
+                    out.append({"boundary": slug, "kind": "range", "detail": f"{v} ∉ [{rng[0]}, {rng[1]}]"})
+    return out
+
+
+def reconcile_release(release):
+    """L3b — authored clamp 을 records 에 적용(값 이동 = GTS/narrate 계약). 반환 (changed, conflicts[])."""
+    if not release.records.exists():
+        bake_release(release)
+    by = _clamps_by_boundary(release)
+    changed, conflicts = 0, []
+    for rec in release.records.select_related("boundary"):
+        clamps = by.get(rec.boundary.slug)
+        if not clamps:
+            continue
+        winner, conflict = _arbitrate(clamps)
+        if conflict:
+            conflicts.append(rec.boundary.slug)
+        new = clamp_apply(rec.uncertainty, winner)
+        if new and new != rec.uncertainty:
+            rec.uncertainty = new
+            rec.value_ma = new.get("value_ma")
+            rec.save(update_fields=["uncertainty", "value_ma"])
+            changed += 1
+    return changed, conflicts
+
+
 # --- P05.5: sandbox = a baseline + per-boundary candidate overrides (Arc B seam) ---
 
 def next_sandbox_version(user, when=None):
