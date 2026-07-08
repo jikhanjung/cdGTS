@@ -281,3 +281,24 @@ def test_seed_content_canonical(seeded):
     adm = NodeType.objects.get(slug="age-depth-model")
     assert adm.params_schema["method"]["choices"] == ["linear", "spline"]
     assert NodeType.objects.get(slug="radiometric-uPb").params_schema      # 비어있지 않음
+
+
+def test_seed_demo_capstone(seeded):
+    """P06.3b 캡스톤 — seed_demo 가 공분산 게이트 대비(warn/pass)와 clamp 위반/reconcile 을 실제로 낸다."""
+    from engine.evaluate import evaluate_graph
+    from releases.services import reconcile_release, verify_clamps
+    call_command("seed_demo", verbosity=0)
+
+    # 공분산 게이트: 독립=경고, 공유 계통=해소 (값·± 동일, 태그만 다름)
+    ind = evaluate_graph(Graph.objects.get(slug="demo-cov-independent")).certificate
+    shr = evaluate_graph(Graph.objects.get(slug="demo-cov-shared")).certificate
+    assert ind.checks["L1b"] == "warn" and ind.passed         # warn 은 실패 아님
+    assert shr.checks["L1b"] == "pass"
+
+    # authored clamp: base-cambrian pin 위반(L3a) → reconcile(L3b)로 값 이동
+    rel = Release.objects.get(version="ICS-2024/12")
+    assert any(v["boundary"] == "base-cambrian" and v["kind"] == "pin" for v in verify_clamps(rel))
+    changed, _ = reconcile_release(rel)
+    assert changed >= 1
+    assert rel.records.get(boundary__slug="base-cambrian").value_ma == 536.0
+    assert all(v["boundary"] != "base-cambrian" for v in verify_clamps(rel))   # 이제 지켜짐
