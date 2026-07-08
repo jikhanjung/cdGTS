@@ -51,16 +51,17 @@ class Command(BaseCommand):
             g.edges.all().delete()
             g.nodes.all().delete()
             g.gateways.all().delete()
+            # Layout top→bottom = younger→older (ICC convention): Base Anisian(247) · Olenekian unit · Base Olenekian(249).
             n1 = NodeInstance.objects.create(graph=g, key="pub-olenekian", node_type=pub, nature="boundary",
-                                             label="Base Olenekian", params={"distribution": dist(249.0, shared)}, x=60, y=60)
+                                             label="Base Olenekian", params={"distribution": dist(249.0, shared)}, x=120, y=280)
             n2 = NodeInstance.objects.create(graph=g, key="pub-anisian", node_type=pub, nature="boundary",
-                                             label="Base Anisian", params={"distribution": dist(247.0, shared)}, x=60, y=240)
+                                             label="Base Anisian", params={"distribution": dist(247.0, shared)}, x=120, y=40)
             Gateway.objects.create(graph=g, slug=f"{slug}-ole", name="base-olenekian", node=n1, boundary=ole)
             Gateway.objects.create(graph=g, slug=f"{slug}-ani", name="base-anisian", node=n2, boundary=ani)
             # Olenekian time unit spanning the two boundaries — this is the *asserted* span the gate judges.
             # order edge 인터리브: base(older).younger → unit.older , unit.younger → top(younger).older.
             u = NodeInstance.objects.create(graph=g, key="unit-olenekian", node_type=unt, nature="generic",
-                                            label="Olenekian", params={}, x=280, y=150)
+                                            label="Olenekian", params={}, x=120, y=160)
             Edge.objects.create(graph=g, source=n1, source_port="younger", target=u, target_port="older", kind="order")
             Edge.objects.create(graph=g, source=u, source_port="younger", target=n2, target_port="older", kind="order")
             self.stdout.write(f"  graph {slug} ({'shared' if shared else 'independent'})")

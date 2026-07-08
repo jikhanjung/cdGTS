@@ -984,10 +984,10 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               <>
                 <div className="tb-menu-backdrop" onClick={() => setActionsOpen(false)} />
                 <div className="tb-menu-list" role="menu">
-                  <button role="menuitem" onClick={() => { setActionsOpen(false); onEvaluate() }}
-                          title="Re-run the graph and attach per-node results">Evaluate</button>
-                  <button role="menuitem" onClick={() => { setActionsOpen(false); onVerify() }}
-                          title="Science CI — re-bake, then diff against the published baseline">Verify vs published</button>
+                  <button role="menuitem" disabled={dirty} onClick={() => { setActionsOpen(false); onEvaluate() }}
+                          title={dirty ? 'Save first — Evaluate runs on the saved graph, not your unsaved edits' : 'Re-run the graph and attach per-node results'}>Evaluate</button>
+                  <button role="menuitem" disabled={dirty} onClick={() => { setActionsOpen(false); onVerify() }}
+                          title={dirty ? 'Save first — Verify runs on the saved graph, not your unsaved edits' : 'Science CI — re-bake, then diff against the published baseline'}>Verify vs published</button>
                   <div className="tb-menu-sep" />
                   <button role="menuitem" disabled={!graphId || !canBake} onClick={() => { setActionsOpen(false); onOpenBake() }}
                           title={canBake ? 'Freeze outputs into a new immutable Release kept in the Vault' : 'Sign in to bake a Release'}>Bake…</button>
