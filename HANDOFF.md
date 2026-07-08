@@ -1,7 +1,7 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-08. 운영 **cdgts.paleobytes.info @ 0.1.25**(운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011` @ **0.1.33**.
-백엔드 **pytest 137 passed**. devlog 001~119 + 리뷰/계획(R01·P04·P05·P06·P06.4) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5)** + Editor UX + staff 사용자 관리·프로필 + **P06 Science Engine(06.1 공분산 백본·06.2 공분산 인지 게이트·06.3 clamp reconcile·06.3b 캡스톤 데모)** → **0.1.33 정식 릴리스**(`:latest` 푸시). 운영은 0.1.25. **다음: P06.4(베이지안 joint+워커) 계획 완료·미착수.**
+**Last updated**: 2026-07-08. 운영 **cdgts.paleobytes.info @ 0.1.25**(운영 배포는 사용자 진행). 개발/테스트 `127.0.0.1:8011` @ **0.1.34**.
+백엔드 **pytest 137 passed**. devlog 001~122 + 리뷰/계획(R01·P04·P05·P06·P06.4) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5)** + Editor UX + staff 사용자 관리·프로필 + **P06 Science Engine(06.1 공분산 백본·06.2 공분산 인지 게이트·06.2b L1b/L2 assert-기반·06.3 clamp reconcile·06.3b 캡스톤 데모)** + Science Engine 튜토리얼(docs) + ICC 차트 경계 연대(Ma) + dirty시 Evaluate 비활성 → **0.1.34 정식 릴리스**(`:latest` 푸시). 운영은 0.1.25. **다음: P06.4(베이지안 joint+워커) 계획 완료·미착수.**
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
