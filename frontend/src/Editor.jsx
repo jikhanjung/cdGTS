@@ -14,7 +14,7 @@ import Inspector from './Inspector.jsx'
 import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import {
-  listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, verifyGraph,
+  listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, getEvalJob, verifyGraph,
   bakeGraph, suggestBakeName, forkGraph, updateGraphInfo, proposeGraph,
 } from './api.js'
 
@@ -643,7 +643,20 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     if (!graphId) return
     if (!silent) setError(null)
     try {
-      const run = await evaluateGraph(graphId)
+      let run = await evaluateGraph(graphId)
+      // Async path (P06.4a): joint/cyclic graphs return a queued EvalJob — poll the worker until done.
+      if (run && run.status !== undefined && !run.results) {
+        const jobId = run.id
+        run = null
+        for (let i = 0; i < 120 && !run; i++) {           // ~120 × 1s cap
+          const job = await getEvalJob(jobId)
+          if (job.status === 'done') { run = job.run; break }
+          if (job.status === 'failed') throw Object.assign(new Error('평가 실패'), { data: job.error })
+          setStatus(`Evaluating… (job#${jobId} ${job.status})`)
+          await new Promise((r) => setTimeout(r, 1000))
+        }
+        if (!run) throw new Error('평가 시간 초과 — 워커가 실행 중인지 확인하세요')
+      }
       const byKey = Object.fromEntries(run.results.map((r) => [r.node_key, r]))
       setNodes((nds) => nds.map((n) => ({ ...n, data: { ...n.data, result: byKey[n.id] || null } })))
 

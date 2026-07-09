@@ -121,6 +121,21 @@ export default function ReleasesDiff({ initialA } = {}) {
           </section>
 
           <section className="diff-section">
+            <h3>Shape diff <small>shape_diff · the value&apos;s shape (exact ↔ distribution)</small></h3>
+            {(diff.shape_diff || []).length === 0 ? <p className="none">No changes</p> : (
+              <ul className="topolist">
+                {diff.shape_diff.map((s, i) => (
+                  <li key={i} className="topo topo-reshape">
+                    <span className="op">reshape</span>
+                    <span className="mono">{s.boundary}</span>
+                    <span className="retype">{s.from} → {s.to}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+
+          <section className="diff-section">
             <h3>Topology diff <small>topology_diff · wiring (boundary add · remove · retype)</small></h3>
             {diff.topology_diff.length === 0 ? <p className="none">No changes</p> : (
               <ul className="topolist">

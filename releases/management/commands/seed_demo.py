@@ -11,6 +11,14 @@ P06.3b capstone demo (idempotent, add-only) — makes the P06 science engine fea
      - range on base-triassic that the value honors (L3a: honored),
      - pin on base-cambrian that the value violates (L3a: violation) → staff "Reconcile (L3b)" moves it.
 
+  3. A retype pair for the Cryogenian base (Vault → Diff): GSSA → GSSP.
+     - Demo.Cryogenian.GSSA : base-cryogenian as a decreed GSSA (720 Ma, exact, no error).
+     - Demo.Cryogenian.GSSP : same boundary re-typed to a section-based GSSP — value barely moves
+       but its *shape* goes scalar→distribution (exact → ±). Diff A→B shows all three axes:
+       topology (retype GSSA→GSSP), value (small Δ), and shape (exact → ±). The point: the biggest
+       change (the definition + the arrival of uncertainty) is the one a naive value diff can't see.
+       (Illustrative numbers — a real GSSP would be an actual interpolation, not seeded here.)
+
 Run:  python manage.py seed_demo         (safe to re-run — get_or_create + rebuild)
 """
 from django.core.management.base import BaseCommand
@@ -22,6 +30,7 @@ class Command(BaseCommand):
     def handle(self, *args, **opts):
         self._covariance_graphs()
         self._clamps()
+        self._retype_demo()
 
     # --- 1. covariance gate: two graphs identical but for a shared systematic tag ---
     def _covariance_graphs(self):
@@ -100,3 +109,44 @@ class Command(BaseCommand):
               "Demo: range the baked value honors (L3a honored).")
         clamp("demo-clamp-cambrian", "base-cambrian", "pin", {"value": 536.0},
               "Demo: pin the baked value violates → Reconcile (L3b) moves it.")
+
+    # --- 3. retype pair: Cryogenian base GSSA → GSSP (topology + value + shape diff) ---
+    def _retype_demo(self):
+        from chrono.models import Boundary
+        from releases.models import BoundaryRecord, Release
+
+        # Neighbours are identical in both releases → they don't clutter the diff; only the
+        # Cryogenian base changes. Each entry: definition_type, value_ma, uncertainty (Distribution|None), method.
+        exact = lambda v: {"fidelity": "exact", "value_ma": v}                      # noqa: E731
+        dist = lambda v, s2: {"fidelity": "decomposed", "value_ma": v, "sigma": 2,  # 2σ half-width = s2
+                              "budget": {"model": s2}}                               # noqa: E731
+
+        gssa = {
+            "base-tonian":     ("GSSA", 1000.0, exact(1000.0), "decreed"),
+            "base-cryogenian": ("GSSA", 720.0,  exact(720.0),  "decreed"),
+            "base-ediacaran":  ("GSSP", 635.0,  dist(635.0, 0.6), "local-interpolation"),
+        }
+        gssp = dict(gssa)
+        # The retype: same boundary, now a section-based GSSP. Value barely moves; error appears.
+        gssp["base-cryogenian"] = ("GSSP", 719.5, dist(719.5, 0.9), "local-interpolation")
+
+        def build(version, note, records):
+            rel, _ = Release.objects.get_or_create(
+                version=version, defaults={"kind": Release.Kind.PUBLISHED, "is_baseline": False, "note": note})
+            rel.note = note
+            rel.save(update_fields=["note"])
+            rel.records.all().delete()                                              # rebuild → idempotent
+            rows = []
+            for bslug, (dtype, value, unc, method) in records.items():
+                b = Boundary.objects.filter(slug=bslug).first()
+                if b is None:
+                    continue
+                rows.append(BoundaryRecord(release=rel, boundary=b, definition_type=dtype,
+                                           value_ma=value, uncertainty=unc, method=method))
+            BoundaryRecord.objects.bulk_create(rows)
+            self.stdout.write(f"  release {version} ({len(rows)} records)")
+
+        build("Demo.Cryogenian.GSSA", "Illustrative: Cryogenian base as a decreed GSSA (720 Ma, exact).", gssa)
+        build("Demo.Cryogenian.GSSP",
+              "Illustrative: Cryogenian base re-typed to a section-based GSSP — value barely moves, "
+              "uncertainty appears (exact → ±). Diff Demo.Cryogenian.GSSA → this to see all three axes.", gssp)

@@ -3,9 +3,36 @@ bake — 릴리스의 selection 을 BoundaryRecord 스냅샷으로 얼린다 (IC
 diff — 두 릴리스 간 **값 diff** 와 **토폴로지 diff**(직교 축)를 낸다.
 
 토폴로지 diff 는 값 diff 와 별개 축: 경계 추가/삭제 + retype(GSSA↔GSSP) 같은 *배선* 변화.
-값 diff 는 같은 경계의 value_ma 변화. (topology-diff.md)
+값 diff 는 같은 경계의 value_ma 변화. **shape diff** 는 제3의 축 — 값의 *모양* 변화(스칼라
+exact → 분포 ±). retype(GSSA→GSSP)이 흔히 값을 거의 안 바꾸면서 오차를 '없음→있음'으로 바꾸는데,
+순진한 value_ma diff 는 이 ±0→±nonzero 를 표현조차 못 한다(topology-diff.md §6).
 """
+import math
+
 from .models import BoundaryRecord
+
+
+def _uncertainty_summary(rec):
+    """
+    BoundaryRecord 값의 '모양' → (kind, label). kind ∈ {none, exact, dist}.
+      none  = 값 자체가 없음.  exact = 오차 0(GSSA 결정값·pin).  dist = 분포(± 있음).
+    label 은 사람이 읽는 요약("exact" / "±0.4 (2σ)" / "95% HPD ±0.6").
+    """
+    if rec.value_ma is None:
+        return ("none", "—")
+    u = rec.uncertainty or {}
+    if not u or u.get("fidelity") == "exact":
+        return ("exact", "exact")
+    shape = u.get("shape") or {}
+    if shape.get("hpd95"):
+        lo, hi = shape["hpd95"]
+        return ("dist", f"95% HPD ±{round((float(hi) - float(lo)) / 2, 3)}")
+    budget = u.get("budget") or {}
+    if budget:
+        total = math.sqrt(sum(float(v) ** 2 for v in budget.values()))
+        sig = u.get("sigma") or 1
+        return ("dist", f"±{round(total, 3)} ({sig}σ)")
+    return ("dist", "distribution")
 
 
 def _write_graph_records(graph, release):
@@ -108,6 +135,7 @@ def _diff_summary(d, baked):
         "added": sum(1 for t in td if t["op"] == "added"),
         "removed": sum(1 for t in td if t["op"] == "removed"),
         "retyped": sum(1 for t in td if t["op"] == "retype"),
+        "reshaped": len(d.get("shape_diff", [])),
     }
 
 
@@ -132,7 +160,9 @@ def verify_graph(graph):
 def affected_boundaries(diff):
     """Boundary slugs a diff touches (moved value or topology change) — the seam for interval-scoped ratify."""
     return sorted(
-        {x["boundary"] for x in diff["value_diff"]} | {t["boundary"] for t in diff["topology_diff"]}
+        {x["boundary"] for x in diff["value_diff"]}
+        | {t["boundary"] for t in diff["topology_diff"]}
+        | {s["boundary"] for s in diff.get("shape_diff", [])}
     )
 
 
@@ -463,6 +493,7 @@ def diff_releases(rel_a, rel_b):
 
     value_diff = []
     topology_diff = []
+    shape_diff = []
 
     for slug in sorted(shared):
         ra, rb = a[slug], b[slug]
@@ -477,6 +508,11 @@ def diff_releases(rel_a, rel_b):
                 "delta": None if (ra.value_ma is None or rb.value_ma is None)
                          else round(rb.value_ma - ra.value_ma, 6),
             })
+        (ka, la), (kb, lb) = _uncertainty_summary(ra), _uncertainty_summary(rb)
+        if (ka, la) != (kb, lb):                    # 값의 '모양'이 바뀜(예: exact → ±0.4)
+            shape_diff.append({
+                "boundary": slug, "from": la, "to": lb, "from_kind": ka, "to_kind": kb,
+            })
 
     for slug in sorted(b.keys() - a.keys()):
         topology_diff.append({"boundary": slug, "op": "added"})
@@ -488,4 +524,5 @@ def diff_releases(rel_a, rel_b):
         "to": rel_b.version,
         "value_diff": value_diff,
         "topology_diff": topology_diff,
+        "shape_diff": shape_diff,
     }

@@ -62,8 +62,13 @@ export const saveGraph = (id, body) =>
 export const updateGraphInfo = (id, patch) =>
   fetch(`/api/graphs/${id}/`, { method: 'PATCH', headers: csrfHeaders(), body: JSON.stringify(patch) }).then(j)
 
+// Evaluate a graph. Fast (analytic) graphs return a full run synchronously; graphs with a
+// joint/cyclic cluster return a queued EvalJob (has `.status`, no `.results`) processed by a worker.
 export const evaluateGraph = (id) =>
   fetch(`/api/graphs/${id}/evaluate/`, { method: 'POST', headers: csrfHeaders() }).then(j)
+
+// Poll an async EvalJob (P06.4a). When status==='done', `.run` holds the full EvalRun.
+export const getEvalJob = (jobId) => fetch(`/api/eval-jobs/${jobId}/`).then(j)
 
 // Bake graph → a new immutable Release (kind=bake) kept in the Vault. Optional label; else server auto-names it.
 export const bakeGraph = (id, label) =>

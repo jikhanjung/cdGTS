@@ -20,3 +20,22 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  # 비동기 평가 워커 (P06.4a) — web 과 같은 이미지·DB, queued EvalJob 폴링.
+  # web 이 migrate 를 마친 뒤 잡을 처리(스키마 미완이면 크래시→restart 로 재시도).
+  worker:
+    image: honestjung/cdgts:${IMAGE_TAG}
+    container_name: cdgts-worker
+    command: python manage.py run_worker
+    volumes:
+      - /srv/cdGTS/db.sqlite3:/app/db.sqlite3
+    env_file:
+      - /srv/cdGTS/.env
+    restart: unless-stopped
+    depends_on:
+      - cdgts
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CoherenceCertificate, EvalRun, NodeResult
+from .models import CoherenceCertificate, EvalJob, EvalRun, NodeResult
 
 
 class NodeResultInline(admin.TabularInline):
@@ -20,3 +20,10 @@ class EvalRunAdmin(admin.ModelAdmin):
 @admin.register(CoherenceCertificate)
 class CoherenceCertificateAdmin(admin.ModelAdmin):
     list_display = ("eval_run", "passed", "checks")
+
+
+@admin.register(EvalJob)
+class EvalJobAdmin(admin.ModelAdmin):
+    list_display = ("id", "graph", "status", "created_at", "started_at", "finished_at", "run")
+    list_filter = ("status", "graph")
+    readonly_fields = ("created_at", "started_at", "finished_at")

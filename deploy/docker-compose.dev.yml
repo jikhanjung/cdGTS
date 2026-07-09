@@ -14,3 +14,15 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+
+  # 비동기 평가 워커 (P06.4a) — 로컬 빌드 검증용.
+  worker:
+    image: honestjung/cdgts:latest
+    command: python manage.py run_worker
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+    env_file:
+      - .env
+    restart: unless-stopped
+    depends_on:
+      - cdgts

@@ -230,32 +230,33 @@ def test_duration_gate_pass_when_well_separated():
     # 잘 분리된 assert 쌍 → L2 pass, L1b pass.
     pairs = [(dist_from(300, 0.5), dist_from(250, 0.5), "a", "b"),
              (dist_from(250, 0.5), dist_from(200, 0.5), "b", "c")]
-    l2, l1b, notes = duration_gate(pairs)
-    assert l2 == "pass" and l1b == "pass" and notes == []
+    l2, l1b, notes, degen = duration_gate(pairs)
+    assert l2 == "pass" and l1b == "pass" and notes == [] and degen == []
 
 
 def test_duration_gate_l2_fail_on_degenerate():
-    # assert 쌍의 두 base 동일 → 영-길이 유닛 → L2 fail.
-    l2, _, _ = duration_gate([(dist_from(250, 0.5), dist_from(250, 0.5), "a", "b")])
+    # assert 쌍의 두 base 동일 → 영-길이 유닛 → L2 fail. 퇴화 쌍 라벨을 함께 돌려준다.
+    l2, _, _, degen = duration_gate([(dist_from(250, 0.5), dist_from(250, 0.5), "a", "b")])
     assert l2 == "fail"
+    assert len(degen) == 1 and degen[0].startswith("a↔b")
 
 
 def test_duration_gate_l1b_warn_on_2sigma_overlap():
     # gap 3.8, 각 σ1=1.5 → 2σ_gap≈4.24 > gap → 통계적으로 미해결(warn), L2 는 여전히 pass.
     pairs = [(dist_from(250.8, 1.5), dist_from(247.0, 1.5), "older", "younger")]
-    l2, l1b, notes = duration_gate(pairs)
-    assert l2 == "pass" and l1b == "warn" and notes
+    l2, l1b, notes, degen = duration_gate(pairs)
+    assert l2 == "pass" and l1b == "warn" and notes and degen == []
 
 
 def test_duration_gate_shared_component_resolves_overlap():
     # 같은 gap·같은 marginal ± 이지만 공유 계통(σ 1.4)으로 σ_gap 축소 → 해소(pass).
     shared = {"decay-U": 1.4}
     pairs = [(dist_from(250.8, 1.5, shared=shared), dist_from(247.0, 1.5, shared=shared), "older", "younger")]
-    l2, l1b, _ = duration_gate(pairs)
+    l2, l1b, _, _ = duration_gate(pairs)
     assert l2 == "pass" and l1b == "pass"           # 공분산 인지: 겹침 해소
 
 
 def test_duration_gate_no_assertion_skips():
     # 선후를 assert 하지 않으면(order edge 없음) 판정 자체가 없다 — 떨어져 있는 경계엔 경고 안 함.
-    l2, l1b, notes = duration_gate([])
-    assert l2 == "skip" and l1b == "skip" and notes == []
+    l2, l1b, notes, degen = duration_gate([])
+    assert l2 == "skip" and l1b == "skip" and notes == [] and degen == []

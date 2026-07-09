@@ -146,3 +146,90 @@ def test_evaluate_endpoint(node_types):
     assert resp.data["certificate"]["passed"] is True
     keys = {r["node_key"] for r in resp.data["results"]}
     assert keys == {"uPb", "adm"}
+
+
+# --- 비동기 평가 잡 + 워커 (P06.4a) ---
+
+def _joint_graph():
+    """두 pin → joint-inference(constraints). joint 노드가 있으므로 needs_async=True."""
+    g = Graph.objects.create(slug="joint", name="Joint")
+    pin = NodeType.objects.get(slug="pin")
+    a = NodeInstance.objects.create(graph=g, key="a", node_type=pin, params={"value": 500})
+    b = NodeInstance.objects.create(graph=g, key="b", node_type=pin, params={"value": 400})
+    ji = NodeInstance.objects.create(graph=g, key="ji",
+                                     node_type=NodeType.objects.get(slug="joint-inference"), params={})
+    Edge.objects.create(graph=g, source=a, source_port="out", target=ji, target_port="constraints")
+    Edge.objects.create(graph=g, source=b, source_port="out", target=ji, target_port="constraints")
+    return g
+
+
+def test_needs_async_false_for_analytic(node_types):
+    from engine.evaluate import needs_async
+    assert needs_async(_build_chain({"fidelity": "exact", "value_ma": 538.8})) is False
+
+
+def test_needs_async_true_for_joint(node_types):
+    from engine.evaluate import needs_async
+    assert needs_async(_joint_graph()) is True
+
+
+def test_evaluate_endpoint_queues_job_for_joint(node_types):
+    from rest_framework.test import APIClient
+    from engine.models import EvalJob
+    g = _joint_graph()
+    resp = APIClient().post(f"/api/graphs/{g.pk}/evaluate/")
+    assert resp.status_code == 202                       # 동기(200) 아님 — 큐잉됨
+    assert resp.data["status"] == "queued"
+    assert resp.data["run"] is None
+    assert EvalJob.objects.filter(graph=g, status="queued").count() == 1
+
+
+def test_worker_processes_queued_job(node_types):
+    from django.core.management import call_command
+    from engine.models import EvalJob
+    g = _joint_graph()
+    job = EvalJob.objects.create(graph=g)
+    call_command("run_worker", once=True)                # 큐를 한 번 비우고 종료
+    job.refresh_from_db()
+    assert job.status == "done"
+    assert job.run is not None
+    # 워커가 만든 run 이 그래프의 최신 EvalRun 이고 joint 결과를 담는다.
+    assert job.run.results.get(node_key="ji").distribution is not None
+    assert job.started_at is not None and job.finished_at is not None
+
+
+def test_claim_next_job_is_atomic(node_types):
+    from engine.jobs import claim_next_job
+    from engine.models import EvalJob
+    g = _joint_graph()
+    EvalJob.objects.create(graph=g)
+    first = claim_next_job()
+    assert first is not None and first.status == "running"
+    assert claim_next_job() is None                      # 이미 클레임됨 — 두 번째는 없음
+
+
+def test_eval_job_endpoint_embeds_run_when_done(node_types):
+    from rest_framework.test import APIClient
+    from engine.jobs import claim_next_job, process_job
+    from engine.models import EvalJob
+    g = _joint_graph()
+    EvalJob.objects.create(graph=g)
+    process_job(claim_next_job())
+    job = EvalJob.objects.filter(graph=g).first()
+    resp = APIClient().get(f"/api/eval-jobs/{job.pk}/")
+    assert resp.status_code == 200
+    assert resp.data["status"] == "done"
+    assert resp.data["run"]["certificate"] is not None
+    assert {r["node_key"] for r in resp.data["run"]["results"]} == {"a", "b", "ji"}
+
+
+def test_process_job_records_failure(node_types, monkeypatch):
+    from engine import jobs
+    from engine.jobs import claim_next_job, process_job
+    from engine.models import EvalJob
+    g = _joint_graph()
+    EvalJob.objects.create(graph=g)
+    monkeypatch.setattr(jobs, "evaluate_graph", lambda graph: (_ for _ in ()).throw(RuntimeError("boom")))
+    job = process_job(claim_next_job())
+    assert job.status == "failed"
+    assert "boom" in job.error and job.run is None

@@ -58,6 +58,27 @@ def _compute(node, incoming, results, node_meta):
     return dist, prov
 
 
+def needs_async(graph):
+    """
+    비동기(워커) 평가가 필요한 그래프인가 — joint 커널·순환 상호제약 클러스터가 있으면 True.
+    해석적으로 즉답 가능한 그래프는 False(종전 동기 경로 유지). (P06.4a: 라우팅만; 커널이 아직
+    해석적이라 동기·비동기 결과는 동일 — MCMC 는 P06.4b.)
+
+    판별:
+      - `joint-inference` 노드가 있으면 진짜 결합 추정 대상. → async.
+      - 저장 검증을 통과한 그래프에 남은 데이터 순환은 곧 breaker(clamp/joint)를 지나는
+        상호제약 클러스터(cycles.md). → async.
+    """
+    from graph.dag import find_unbroken_cycles
+
+    insts = list(graph.nodes.select_related("node_type"))
+    if any(n.node_type.slug == "joint-inference" for n in insts):
+        return True
+    data_edges = [(e.source.key, e.target.key)
+                  for e in graph.edges.select_related("source", "target") if e.kind != "order"]
+    return bool(find_unbroken_cycles([n.key for n in insts], set(), data_edges))
+
+
 def evaluate_graph(graph):
     """그래프를 평가해 EvalRun 을 만들고 반환. 증분 캐시는 직전 run 과 비교."""
     from .models import EvalRun, NodeResult
@@ -124,18 +145,19 @@ def duration_gate(pairs):
       L2  = assert 된 쌍의 점추정 duration = older − younger ≤ 0(퇴화/영-길이/역전) 있으면 fail.
       L1b = 공분산 인지 지속시간이 2σ 안에서 ≤0 가능(gap < 2σ_gap)이면 warn.
     assert 된(양쪽 값이 풀린) 쌍이 하나도 없으면 둘 다 skip.
-    반환 (l2, l1b, unresolved_notes[]).
+    반환 (l2, l1b, unresolved_notes[], degenerate_notes[]).
+      degenerate_notes = L2 fail 을 유발한 퇴화(≤0) 쌍의 라벨·Δ (프론트 notes 에 표기).
     """
     from .kernels import duration_stats
 
-    degenerate, unresolved, checked = 0, [], 0
+    degenerate, unresolved, checked = [], [], 0
     for older, younger, ol, yl in pairs:
         bo, by = (older or {}).get("value_ma"), (younger or {}).get("value_ma")
         if bo is None or by is None:
             continue
         checked += 1
         if bo - by <= 0:                                 # older 가 younger 보다 안 늙음 = 영-길이/역전
-            degenerate += 1
+            degenerate.append(f"{ol}↔{yl} (Δ{round(bo - by, 3)} ≤ 0)")
         else:                                            # 공분산 인지 2σ 검사
             ds = duration_stats(older, younger)          # older = 큰 base
             if ds is not None:
@@ -143,10 +165,10 @@ def duration_gate(pairs):
                 if sig > 0 and gap < 2 * sig:
                     unresolved.append(f"{ol}↔{yl} (Δ{round(gap, 3)} < 2σ {round(2 * sig, 3)})")
     if checked == 0:
-        return "skip", "skip", []
-    l2 = "pass" if degenerate == 0 else "fail"
+        return "skip", "skip", [], []
+    l2 = "pass" if not degenerate else "fail"
     l1b = "warn" if unresolved else "pass"
-    return l2, l1b, unresolved
+    return l2, l1b, unresolved, degenerate
 
 
 def _certify(run, graph, results):
@@ -250,10 +272,11 @@ def _certify(run, graph, results):
         if e.source.key in bnd_keys and e.target.key in bnd_keys:
             pairs.append((dist_of(e.source.key), dist_of(e.target.key), lbl(e.source.key), lbl(e.target.key)))
     if pairs:
-        l2, l1b, unresolved = duration_gate(pairs)
+        l2, l1b, unresolved, degenerate = duration_gate(pairs)
         checks["L2"], checks["L1b"] = l2, l1b
         if l2 == "fail":
             passed = False
+            checks["notes"].append("L2 지속시간 퇴화(≤0): " + ", ".join(degenerate))
         if unresolved:
             checks["notes"].append("L1b 순서 통계적 미해결: " + ", ".join(unresolved))
 

@@ -302,3 +302,20 @@ def test_seed_demo_capstone(seeded):
     assert changed >= 1
     assert rel.records.get(boundary__slug="base-cambrian").value_ma == 536.0
     assert all(v["boundary"] != "base-cambrian" for v in verify_clamps(rel))   # 이제 지켜짐
+
+
+def test_seed_demo_retype_pair(seeded):
+    """retype 데모 — Cryogenian base GSSA→GSSP 릴리스 쌍의 diff 가 세 축(topology·value·shape)을 모두 낸다."""
+    from releases.services import diff_releases
+    call_command("seed_demo", verbosity=0)
+    call_command("seed_demo", verbosity=0)                 # 멱등 재실행 안전
+
+    a = Release.objects.get(version="Demo.Cryogenian.GSSA")
+    b = Release.objects.get(version="Demo.Cryogenian.GSSP")
+    d = diff_releases(a, b)
+    assert {"boundary": "base-cryogenian", "op": "retype", "from": "GSSA", "to": "GSSP"} in d["topology_diff"]
+    assert any(v["boundary"] == "base-cryogenian" and v["delta"] == -0.5 for v in d["value_diff"])
+    sd = [s for s in d["shape_diff"] if s["boundary"] == "base-cryogenian"]
+    assert sd and sd[0]["from_kind"] == "exact" and sd[0]["to_kind"] == "dist"
+    # 이웃 경계(tonian·ediacaran)는 동일 → diff 에 안 나온다.
+    assert all(t["boundary"] == "base-cryogenian" for t in d["topology_diff"])

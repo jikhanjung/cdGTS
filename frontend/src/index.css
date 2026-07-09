@@ -125,6 +125,7 @@ body {
 .topo-added .op { background: #2d7d46; }
 .topo-removed .op { background: #c0392b; }
 .topo-retype .op { background: #a142f4; }
+.topo-reshape .op { background: #1f7a8c; }
 
 /* --- ICC chart (nested columns) --- */
 .iccchart { height: 100%; display: flex; flex-direction: column; padding: 14px 20px; box-sizing: border-box; }

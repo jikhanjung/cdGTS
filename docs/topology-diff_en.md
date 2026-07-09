@@ -7,7 +7,10 @@
 > [node-graph-paradigm_en.md](node-graph-paradigm_en.md)'s *"topology is also subject to versioning."*
 >
 > **[partly implemented]** Value and topology diff are implemented as a release diff, and the split/merge lineage
-> (so it isn't mistaken for delete+add) is carried by `chrono.BoundaryLineage`. Below is the design rationale (still valid).
+> (so it isn't mistaken for delete+add) is carried by `chrono.BoundaryLineage`. A **shape diff** (§6's
+> scalar→distribution, `±0→±nonzero`) is now surfaced by `diff_releases` as a third axis (Vault → Diff). The
+> Cryogenian base GSSA→GSSP retype worked example ships as the `Demo.Cryogenian.GSSA/GSSP` release pair from
+> `manage.py seed_demo`. Below is the design rationale (still valid).
 
 ## 1. Core insight — value diff and topology diff are orthogonal axes
 
@@ -84,6 +87,12 @@ value diff (effect): 720 (exact)  →  a derived value ± (uncertainty goes 'non
 A subtle point: **a retype changes the *shape* of the value — scalar (0 error) → distribution (with error).** A
 naive value diff comparing two scalars can't even represent this "±0 → ±nonzero" change. Directly tied to the
 schema's polymorphic value (decreed-exact vs computed-distribution).
+
+> **[implemented]** `diff_releases` emits a separate `shape_diff` axis — it summarizes each boundary's
+> `BoundaryRecord.uncertainty` as `exact`/`dist` and records a change of shape (e.g. `exact → ±0.9 (2σ)`),
+> shown in the Vault → Diff "Shape diff" section. Worked example: the `Demo.Cryogenian.GSSA → Demo.Cryogenian.GSSP`
+> diff from `seed_demo` — retype (definition) + a small value move + uncertainty appearing show up **side by side
+> across three axes.**
 
 ## 7. Punchline — a change = a topology delta + its propagated value delta
 

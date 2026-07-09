@@ -284,6 +284,41 @@ def test_topology_retype_is_orthogonal(chrono):
                                      "from": "GSSA", "to": "GSSP"}
 
 
+def test_shape_diff_detects_uncertainty_appearing(chrono):
+    """retype 이 값의 *모양*을 바꾼다: 스칼라 exact → 분포(±). 값은 거의 안 움직여도 shape_diff 로 잡힘."""
+    from releases.models import BoundaryRecord
+    cryo = Boundary.objects.get(slug="base-cryogenian")
+    r1 = Release.objects.create(version="cryo-gssa")
+    r2 = Release.objects.create(version="cryo-gssp")
+    BoundaryRecord.objects.create(release=r1, boundary=cryo, definition_type="GSSA",
+                                  value_ma=720.0, uncertainty={"fidelity": "exact", "value_ma": 720.0})
+    BoundaryRecord.objects.create(
+        release=r2, boundary=cryo, definition_type="GSSP", value_ma=719.5,
+        uncertainty={"fidelity": "decomposed", "value_ma": 719.5, "sigma": 2, "budget": {"model": 0.9}})
+    d = diff_releases(r1, r2)
+    # 세 축이 함께 잡힌다: retype(정의) + 작은 값 이동 + shape(오차 등장).
+    assert d["topology_diff"][0]["op"] == "retype"
+    assert d["value_diff"][0]["delta"] == -0.5
+    sd = d["shape_diff"][0]
+    assert sd["boundary"] == "base-cryogenian"
+    assert sd["from_kind"] == "exact" and sd["to_kind"] == "dist"
+    assert sd["from"] == "exact" and sd["to"].startswith("±")
+
+
+def test_shape_diff_empty_when_shape_unchanged(chrono):
+    """두 exact 값(값만 다름) → shape 변화 없음(shape_diff 비어 있음)."""
+    from releases.models import BoundaryRecord
+    camb = Boundary.objects.get(slug="base-cambrian")
+    r1 = Release.objects.create(version="s1")
+    r2 = Release.objects.create(version="s2")
+    BoundaryRecord.objects.create(release=r1, boundary=camb, value_ma=538.8,
+                                  uncertainty={"fidelity": "exact", "value_ma": 538.8})
+    BoundaryRecord.objects.create(release=r2, boundary=camb, value_ma=536.0,
+                                  uncertainty={"fidelity": "exact", "value_ma": 536.0})
+    d = diff_releases(r1, r2)
+    assert d["shape_diff"] == [] and d["value_diff"][0]["delta"] == -2.8
+
+
 # --- P06.3: authored clamps (L3a verify / L3b reconcile) ---
 
 def _sub(slug):

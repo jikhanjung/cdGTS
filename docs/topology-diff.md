@@ -6,7 +6,10 @@
 > "토폴로지 diff"를 펼친 것. [node-graph-paradigm.md](node-graph-paradigm.md)의 *"토폴로지도 버전 대상"* 의 구체화.
 >
 > **[일부 구현됨]** 값·토폴로지 diff 는 릴리스 diff 로 구현됐고, split/merge 계보(delete+add 오인 방지)는
-> `chrono.BoundaryLineage` 가 담는다. 아래는 그 설계 근거(여전히 유효).
+> `chrono.BoundaryLineage` 가 담는다. **shape diff**(§6 의 스칼라→분포, `±0→±nonzero`)도
+> `diff_releases` 에 추가돼 세 번째 축으로 표면화된다(Vault → Diff). Cryogenian base GSSA→GSSP
+> retype 워크드 예시는 `manage.py seed_demo` 의 `Demo.Cryogenian.GSSA/GSSP` 릴리스 쌍으로 실연.
+> 아래는 그 설계 근거(여전히 유효).
 
 ## 1. 핵심 통찰 — 값 diff와 토폴로지 diff는 직교하는 두 축
 
@@ -72,6 +75,11 @@ clamp 제거:  Clamp{pin, 720 Ma}  삭제
 미묘한 점: **retype이 값의 *모양*을 바꾼다 — 스칼라(오차 0) → 분포(오차 있음).** 두 스칼라를 비교하는 순진한
 값 diff는 이 "±0 → ±nonzero" 변화를 표현조차 못 한다. 스키마의 다형 value(decreed-exact vs
 computed-distribution)와 직결.
+
+> **[구현됨]** `diff_releases` 가 `shape_diff` 를 별도 축으로 낸다 — 각 경계의 `BoundaryRecord.uncertainty`
+> 를 `exact`/`dist` 로 요약해 모양이 바뀌면(예: `exact → ±0.9 (2σ)`) 기록. Vault → Diff 의 "Shape diff"
+> 섹션에 표시. 실연: `seed_demo` 의 `Demo.Cryogenian.GSSA → Demo.Cryogenian.GSSP` diff — retype(정의) +
+> 작은 값 이동 + 오차 등장이 **세 축으로 나란히** 보인다.
 
 ## 7. 펀치라인 — 변화 = 토폴로지 델타 + 전파된 값 델타
 
