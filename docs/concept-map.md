@@ -74,6 +74,8 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 - [case-permian-triassic.md](case-permian-triassic.md) — GSSP · 국소 보간 (숫자는 계산)
 - [case-precambrian-gssa.md](case-precambrian-gssa.md) — GSSA · 결정 (숫자가 정의, 화살표 반대)
 - [case-cambrian-base-correlation.md](case-cambrian-base-correlation.md) — GSSP · 섹션 간 상관 (숫자는 타 대륙에서)
+- [gssp-gssa-key-papers.md](gssp-gssa-key-papers.md) — GSSP·GSSA 핵심 논문 목록 (정의 데이터·age model·ratification notice; 검증된 서지)
+- [gtc-boundaries-report.md](gtc-boundaries-report.md) — **전 경계 종합 보고서** (선캄브리아~현생누대 모든 경계별 정의·discussion·근거 논문; 위 문서의 완전판)
 
 **스키마 & 설계**
 - [boundary-gateway-schema.md](boundary-gateway-schema.md) — 경계 게이트웨이 스키마 v0 (§4 열린 질문 5개 모두 정리됨)

@@ -51,6 +51,8 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 - [docs/case-permian-triassic.md](docs/case-permian-triassic.md) — GSSP · 국소 보간 (숫자는 계산)
 - [docs/case-precambrian-gssa.md](docs/case-precambrian-gssa.md) — GSSA · 결정 (숫자가 정의 — P–T의 거울상)
 - [docs/case-cambrian-base-correlation.md](docs/case-cambrian-base-correlation.md) — GSSP · 섹션 간 상관 (숫자는 타 대륙에서)
+- [docs/gssp-gssa-key-papers.md](docs/gssp-gssa-key-papers.md) — GSSP·GSSA 핵심 논문 목록 (정의 데이터·age model·ratification notice; 검증된 서지)
+- [docs/gtc-boundaries-report.md](docs/gtc-boundaries-report.md) — **전 경계 종합 보고서** (선캄브리아~현생누대 모든 경계별 정의·discussion·근거 논문; 위 문서의 완전판)
 
 **스키마 & 설계**
 - [docs/boundary-gateway-schema.md](docs/boundary-gateway-schema.md) — 경계 게이트웨이 스키마 v0 (§4 열린 질문 5개 모두 정리됨)
