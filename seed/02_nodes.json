@@ -727,5 +727,75 @@
    "multiple": true,
    "order": 0
   }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "section",
+   "name": "Stratigraphic section",
+   "category": "reference",
+   "description": "A measured stratigraphic section / locality (provenance context, not computed). Wire its citation port to the data node observed there with a cite edge; a bake walks cite edges into the bibliography.",
+   "params_schema": {
+    "locality": {
+     "type": "string",
+     "help": "Section name / locality (e.g. Ara Group, Oman)"
+    },
+    "region": {
+     "type": "string",
+     "help": "Country / region"
+    },
+    "note": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "section"
+   ],
+   "name": "citation",
+   "direction": "out",
+   "datatype": "any",
+   "multiple": true,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "horizon",
+   "name": "Horizon / bed / sample",
+   "category": "reference",
+   "description": "A specific horizon / bed / sample where an age or datum was observed (provenance context, not computed). Wire its citation port to the data node with a cite edge. Depth is metadata here; feed age–depth models via the model node's params.",
+   "params_schema": {
+    "position": {
+     "type": "string",
+     "help": "Stratigraphic position (e.g. ash bed within the Ara Group)"
+    },
+    "depth_m": {
+     "type": "number",
+     "help": "Depth / height in metres (metadata · not an age–depth input)"
+    },
+    "note": {
+     "type": "string"
+    }
+   }
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "horizon"
+   ],
+   "name": "citation",
+   "direction": "out",
+   "datatype": "any",
+   "multiple": true,
+   "order": 0
+  }
  }
 ]

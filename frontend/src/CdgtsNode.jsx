@@ -31,7 +31,8 @@ export default function CdgtsNode({ data, selected }) {
   const boundaryMa = data.result?.distribution?.value_ma ?? data.params?.distribution?.value_ma
   const isUnit = data.nodeType === 'unit'
   const isMerge = data.nodeType === 'merge'
-  const isReference = data.category === 'reference'
+  const isReference = data.category === 'reference'   // provenance bucket (reference · section · horizon): cites others, is not cited.
+  const isDoiRef = data.nodeType === 'reference'       // the bibliographic node only — shows the DOI face. section/horizon carry their own params.
   const ref = data.referenceInfo   // resolved Reference (injected by the Editor from the registry), if any
   const refSlug = data.params?.reference
   const color = isBoundary ? BOUNDARY_COLOR : isUnit ? UNIT_COLOR : (CATEGORY_COLOR[data.category] || '#888')
@@ -51,7 +52,7 @@ export default function CdgtsNode({ data, selected }) {
         </span>
         <span className="cdgts-node__cat">{isBoundary ? '◈ boundary' : isUnit ? '▭ time period' : isMerge ? '▽ Merge' : data.category}</span>
       </div>
-      {isReference && (
+      {isDoiRef && (
         <div className="cdgts-node__ref" title={ref?.title || refSlug || 'no reference set — pick one in the inspector'}>
           {ref
             ? <>{ref.authors || ref.slug}{ref.year ? ` (${ref.year})` : ''}{ref.doi ? <span className="doi"> · {ref.doi}</span> : null}</>

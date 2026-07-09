@@ -56,7 +56,7 @@ def test_to_dict_omits_empties():
 # --- NodeType 카탈로그 (데이터로 존재, 하드코딩 아님) ---
 
 def test_catalog_loads(seeded):
-    assert NodeType.objects.count() == 17          # + boundary + unit + merge (terminal chart) + reference
+    assert NodeType.objects.count() == 19          # + boundary + unit + merge (terminal chart) + reference + section + horizon (provenance)
     assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "clamp", "reference"}
     assert NodeType.objects.get(slug="published-age").category == "data"
 

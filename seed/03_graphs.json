@@ -263,6 +263,170 @@
   }
  },
  {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sec-fad-fortunehead",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Fortune Head (GSSP)",
+   "params": {
+    "locality": "Fortune Head (GSSP)",
+    "region": "SE Newfoundland, Canada",
+    "note": "Chapel Island Fm · GSSP section for the base of the Cambrian"
+   },
+   "x": -440.0,
+   "y": -60.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "hor-fad-fortunehead",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Horizon · T. pedum FAD level",
+   "params": {
+    "position": "T. pedum FAD level",
+    "note": "2.4 m above base of Member 2, Chapel Island Fm — the golden spike horizon"
+   },
+   "x": -200.0,
+   "y": -60.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sec-oman",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ara Group (subsurface)",
+   "params": {
+    "locality": "Ara Group (subsurface)",
+    "region": "Huqf area, Oman",
+    "note": "cited U–Pb ash-bed source (illustrative)"
+   },
+   "x": -440.0,
+   "y": 70.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "hor-oman",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Horizon · Ara Group ash bed",
+   "params": {
+    "position": "Ara Group ash bed",
+    "note": "ash bed bracketing the boundary interval (illustrative)"
+   },
+   "x": -200.0,
+   "y": 70.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sec-namibia",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Nama Group",
+   "params": {
+    "locality": "Nama Group",
+    "region": "Namibia",
+    "note": "Ediacaran–Cambrian succession (illustrative)"
+   },
+   "x": -440.0,
+   "y": 200.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "hor-namibia",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Horizon · Nama Group ash bed",
+   "params": {
+    "position": "Nama Group ash bed",
+    "note": "ash bed, upper Nama Group (illustrative · approximate)"
+   },
+   "x": -200.0,
+   "y": 200.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sec-siberia",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ust'-Yudoma / SE Siberia",
+   "params": {
+    "locality": "Ust'-Yudoma / SE Siberia",
+    "region": "Siberian Platform",
+    "note": "boundary succession with δ13C (BACE) record (illustrative)"
+   },
+   "x": -440.0,
+   "y": 330.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "hor-siberia",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Horizon · Siberia ash bed",
+   "params": {
+    "position": "Siberia ash bed",
+    "note": "ash bed near the BACE excursion (illustrative · approximate)"
+   },
+   "x": -200.0,
+   "y": 330.0,
+   "group": null
+  }
+ },
+ {
   "model": "graph.edge",
   "fields": {
    "graph": [
@@ -374,6 +538,158 @@
    ],
    "target_port": "signals",
    "kind": "calibration-transfer"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sec-fad-fortunehead"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "fad-fortunehead"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "hor-fad-fortunehead"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "fad-fortunehead"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sec-oman"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "oman"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "hor-oman"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "oman"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sec-namibia"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "namibia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "hor-namibia"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "namibia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sec-siberia"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "siberia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "hor-siberia"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "siberia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
   }
  },
  {
