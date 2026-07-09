@@ -4,6 +4,7 @@ import { ReactFlowProvider } from '@xyflow/react'
 import Editor from './Editor.jsx'
 import Vault from './Vault.jsx'
 import Proposals from './Proposals.jsx'
+import Library from './Library.jsx'
 import Users from './Users.jsx'
 import LoginBar from './LoginBar.jsx'
 import { whoami } from './api.js'
@@ -26,6 +27,7 @@ export default function App() {
         <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
         <button className={view === 'vault' ? 'active' : ''} onClick={() => setView('vault')}>Vault</button>
         <button className={view === 'proposals' ? 'active' : ''} onClick={() => setView('proposals')}>Proposals</button>
+        <button className={view === 'library' ? 'active' : ''} onClick={() => setView('library')}>Bibliography</button>
         {user?.is_staff && (
           <span className="tb-menu nav-menu">
             <button className={`tb-menu-btn${sysOpen ? ' open' : ''}${view === 'users' ? ' active' : ''}`}
@@ -47,9 +49,11 @@ export default function App() {
           ? <ReactFlowProvider><Editor onBaked={goVault} onProposed={() => setView('proposals')} user={user} /></ReactFlowProvider>
           : view === 'vault'
             ? <Vault initialReleaseId={vaultReleaseId} user={user} />
-            : view === 'users'
-              ? <Users user={user} />
-              : <Proposals user={user} />}
+            : view === 'library'
+              ? <Library user={user} />
+              : view === 'users'
+                ? <Users user={user} />
+                : <Proposals user={user} />}
       </div>
     </div>
   )

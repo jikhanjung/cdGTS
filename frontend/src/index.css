@@ -613,6 +613,18 @@ body {
 .biblio-feeds { color: #767688; }
 .biblio-by { color: #9a9aa6; }
 .insp-ref-by { color: #9a7a3a; font-size: 11px; margin-top: 3px; }
+/* Bibliography library page (top-level nav) */
+.biblio-page .biblio-search {
+  flex: 1; max-width: 320px; margin-left: auto; padding: 6px 10px;
+  border: 1px solid #d0d0d8; border-radius: 6px; font-size: 13px;
+}
+.biblio-page .users-head .primary, .biblio-page .users-head .muted { margin-left: 12px; }
+.biblio-table td .biblio-authors,
+.biblio-table td .biblio-year,
+.biblio-table td .biblio-title,
+.biblio-table td .biblio-container { font-size: 13px; }
+.bake-actions button.danger { color: #b3261e; border-color: #e6bcb7; background: #fff; }
+.bake-actions button.danger:hover:not(:disabled) { background: #fdecea; }
 /* group inspector meta list */
 .insp-meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 8px 0 4px; font-size: 12px; align-items: baseline; }
 .insp-meta dt { color: #767688; white-space: nowrap; }

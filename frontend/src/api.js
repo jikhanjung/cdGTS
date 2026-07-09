@@ -45,6 +45,11 @@ export const removeMembership = (id, membership_id) =>
 export const listReferences = () => fetch('/api/references/').then(j)
 export const createReference = (body) =>
   fetch('/api/references/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
+export const updateReference = (id, patch) =>
+  fetch(`/api/references/${id}/`, { method: 'PATCH', headers: csrfHeaders(), body: JSON.stringify(patch) }).then(j)
+// Delete a registry entry. 409 with { detail, cited_by } if any graph still cites it.
+export const deleteReference = (id) =>
+  fetch(`/api/references/${id}/`, { method: 'DELETE', headers: csrfHeaders() }).then(j)
 // This graph's bibliography — references cited by its `reference` nodes (+ per-boundary attribution).
 export const graphReferences = (id) => fetch(`/api/graphs/${id}/references/`).then(j)
 // A baked release's bibliography — references snapshotted at bake (+ which boundary each feeds).
