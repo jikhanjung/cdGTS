@@ -45,6 +45,7 @@ export default function Bibliography({ embedReleaseId }) {
                   ? <a href={r.link} target="_blank" rel="noreferrer" className="biblio-link">{r.doi ? `doi:${r.doi}` : r.link} ↗</a>
                   : <span className="muted">no DOI / URL</span>}
                 {feeds[r.slug]?.length ? <span className="biblio-feeds">feeds: {feeds[r.slug].join(', ')}</span> : null}
+                {r.created_by ? <span className="biblio-by">added by {r.created_by}</span> : null}
               </div>
             </li>
           ))}

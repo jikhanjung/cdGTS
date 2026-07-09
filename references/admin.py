@@ -5,6 +5,6 @@ from .models import Reference
 
 @admin.register(Reference)
 class ReferenceAdmin(admin.ModelAdmin):
-    list_display = ("slug", "authors", "year", "doi", "kind")
-    list_filter = ("kind", "year")
+    list_display = ("slug", "authors", "year", "doi", "kind", "created_by")
+    list_filter = ("kind", "year", "created_by")
     search_fields = ("slug", "title", "authors", "doi")

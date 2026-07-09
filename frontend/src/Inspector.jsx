@@ -202,6 +202,7 @@ function ReferenceField({ name, value, references, onParam, onCreateReference })
                 {current.doi ? `doi:${current.doi}` : current.link} ↗
               </a>
             : <span className="insp-note">no DOI / URL</span>}
+          {current.created_by && <div className="insp-ref-by">added by {current.created_by}</div>}
         </div>
       )}
       {adding

@@ -7,7 +7,12 @@ so provenance is a first-class, wire-able citizen. A bake can later walk cite ed
 collect the full bibliography of a result.
 
 Design: docs/node-graph-paradigm.md (everything is a node) · cite edge in graph.models.Edge.
+
+Ownership: the registry is a **global shared library** (a DOI is a global fact, not per-user), but
+`created_by` records who added an entry, and edits/deletes are limited to that creator or staff
+(references.permissions.ReferenceAccessPermission). A reference cited by any graph can't be deleted.
 """
+from django.conf import settings
 from django.db import models
 
 
@@ -36,6 +41,10 @@ class Reference(models.Model):
     url = models.URLField(blank=True, help_text="Fallback link when there is no DOI.")
     kind = models.CharField(max_length=10, choices=Kind.choices, default=Kind.ARTICLE)
     note = models.TextField(blank=True)
+    created_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="+",
+        help_text="Who added this entry (null = system/seed). Only they or staff may edit/delete it.",
+    )
 
     objects = ReferenceManager()
 

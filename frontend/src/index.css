@@ -611,6 +611,8 @@ body {
 .biblio-meta { margin-top: 4px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; }
 .biblio-link { color: #a0631a; font-family: ui-monospace, Menlo, monospace; word-break: break-all; }
 .biblio-feeds { color: #767688; }
+.biblio-by { color: #9a9aa6; }
+.insp-ref-by { color: #9a7a3a; font-size: 11px; margin-top: 3px; }
 /* group inspector meta list */
 .insp-meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 8px 0 4px; font-size: 12px; align-items: baseline; }
 .insp-meta dt { color: #767688; white-space: nowrap; }
