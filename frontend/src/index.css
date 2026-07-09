@@ -589,6 +589,19 @@ body {
 .insp-newref { display: grid; gap: 5px; margin: 6px 0; padding: 8px; border: 1px dashed #d8bb7e; border-radius: 6px; }
 .insp-newref-actions { display: flex; gap: 8px; }
 .insp-newref-actions button { flex: 1; padding: 4px; border: 1px solid #d0d0d8; border-radius: 5px; background: #fff; cursor: pointer; font-size: 12px; }
+/* Vault "References" (bibliography) view */
+.biblio-view { padding: 12px 4px; }
+.biblio-head { font-size: 13px; color: #55555f; margin-bottom: 10px; }
+.biblio-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.biblio-item { padding: 8px 10px; border: 1px solid #e2e2ea; border-radius: 8px; background: #fff; }
+.biblio-cite { font-size: 13px; color: #2a2a33; line-height: 1.4; }
+.biblio-authors { font-weight: 600; }
+.biblio-year { color: #55555f; }
+.biblio-title { color: #3a3a44; }
+.biblio-container { color: #767688; font-style: italic; }
+.biblio-meta { margin-top: 4px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; }
+.biblio-link { color: #a0631a; font-family: ui-monospace, Menlo, monospace; word-break: break-all; }
+.biblio-feeds { color: #767688; }
 /* group inspector meta list */
 .insp-meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 8px 0 4px; font-size: 12px; align-items: baseline; }
 .insp-meta dt { color: #767688; white-space: nowrap; }

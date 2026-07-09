@@ -44,15 +44,18 @@ class GraphViewSet(viewsets.ModelViewSet):
         from references.models import Reference
         from references.serializers import ReferenceSerializer
 
+        from .services import graph_bibliography
+
         graph = self.get_object()
         ref_nodes = [n for n in graph.nodes.select_related("node_type") if n.node_type.slug == "reference"]
         cites = {}
         for e in graph.edges.filter(kind="cite").select_related("source", "target"):
             cites.setdefault(e.source.key, []).append(e.target.key)
-        slugs = [s for s in ((n.params or {}).get("reference") for n in ref_nodes) if s]
-        refs = Reference.objects.filter(slug__in=slugs)
+        biblio = graph_bibliography(graph)
+        refs = Reference.objects.filter(slug__in=biblio["all"])
         return Response({
             "bibliography": ReferenceSerializer(refs, many=True).data,
+            "by_boundary": biblio["by_boundary"],       # contributing refs per gateway boundary (bake→bibliography)
             "citations": [
                 {"node": n.key, "reference": (n.params or {}).get("reference"), "cites": cites.get(n.key, [])}
                 for n in ref_nodes

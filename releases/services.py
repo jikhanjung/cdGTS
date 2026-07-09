@@ -39,8 +39,11 @@ def _write_graph_records(graph, release):
     """Evaluate `graph` and (re)write its gateway outputs as this release's BoundaryRecords. Returns count."""
     from engine.evaluate import evaluate_graph
 
+    from graph.services import graph_bibliography
+
     run = evaluate_graph(graph)
     results = {r.node_key: r for r in run.results.all()}
+    biblio = graph_bibliography(graph)["by_boundary"]      # per-boundary contributing references (cite provenance)
     release.records.all().delete()
     rows = []
     for gw in graph.gateways.select_related("boundary", "node"):
@@ -55,6 +58,7 @@ def _write_graph_records(graph, release):
             value_ma=(dist or {}).get("value_ma") if dist else None,
             uncertainty=dist,
             provenance_ref=f"{graph.slug}::{gw.node.key}",
+            references=biblio.get(gw.boundary.slug, []),
         ))
     BoundaryRecord.objects.bulk_create(rows)
     return len(rows)

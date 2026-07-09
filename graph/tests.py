@@ -333,6 +333,7 @@ def test_graph_references_endpoint(api, graph, db):
     assert [r["slug"] for r in data["bibliography"]] == ["cohen-2013"]
     assert data["bibliography"][0]["link"] == "https://doi.org/10.1130/2012.chart"
     assert data["citations"] == [{"node": "ref1", "reference": "cohen-2013", "cites": ["obs1"]}]
+    assert data["by_boundary"] == {}                 # no gateway in this graph → no per-boundary attribution
 
 
 # --- P05.2 ownership & visibility ---

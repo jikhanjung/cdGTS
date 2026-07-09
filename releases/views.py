@@ -59,6 +59,25 @@ class ReleaseViewSet(viewsets.ReadOnlyModelViewSet):
         b = get_object_or_404(vis, pk=request.query_params.get("b"))
         return Response(diff_releases(a, b))
 
+    @action(detail=True, methods=["get"])
+    def references(self, request, pk=None):
+        """
+        This release's bibliography — the references snapshotted onto its records at bake (cite provenance),
+        plus which boundaries each feeds. `by_boundary` maps a boundary slug → contributing reference slugs.
+        """
+        from references.models import Reference
+        from references.serializers import ReferenceSerializer
+
+        rel = self.get_object()
+        by_boundary = {rec.boundary.slug: rec.references
+                       for rec in rel.records.select_related("boundary") if rec.references}
+        slugs = sorted({s for refs in by_boundary.values() for s in refs})
+        refs = Reference.objects.filter(slug__in=slugs)
+        return Response({
+            "bibliography": ReferenceSerializer(refs, many=True).data,
+            "by_boundary": by_boundary,
+        })
+
     # --- P05.5 sandbox overrides ---
     @action(detail=True, methods=["post"])
     def sandbox(self, request, pk=None):

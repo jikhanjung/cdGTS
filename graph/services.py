@@ -1,8 +1,57 @@
 """Graph fork (P05.3) — deep-clone a graph into a new sandbox the user owns."""
+from collections import defaultdict, deque
+
 from django.db import transaction
 from django.utils.text import slugify
 
 from .models import Edge, Gateway, Graph, NodeGroup, NodeInstance
+
+
+def graph_bibliography(graph):
+    """
+    Which registry references feed each boundary — the bake→bibliography seam.
+
+    A `reference` node cites a data/model node via a `cite` edge. It **contributes** to a gateway's
+    boundary when its cited node lies in the upstream data-flow cone of that gateway's node (walk data
+    edges backward). `order`/`cite` edges are not data flow, so they don't propagate the cone.
+
+    Returns {"by_boundary": {boundary_slug: [ref_slug, ...]}, "all": [ref_slug, ...] present in the graph}.
+    """
+    insts = list(graph.nodes.select_related("node_type"))
+    ref_slug_of = {n.key: (n.params or {}).get("reference")
+                   for n in insts if n.node_type.slug == "reference"}
+
+    back = defaultdict(list)          # target key -> [source keys]  (data-flow edges only)
+    cited_by = defaultdict(list)      # cited node key -> [reference node keys]
+    for e in graph.edges.select_related("source", "target"):
+        if e.kind == Edge.Kind.CITE:
+            cited_by[e.target.key].append(e.source.key)
+        elif e.kind not in Edge.NON_DATA_KINDS:
+            back[e.target.key].append(e.source.key)
+
+    def upstream(start):              # data-flow cone (incl. start)
+        seen, q = {start}, deque([start])
+        while q:
+            for s in back.get(q.popleft(), []):
+                if s not in seen:
+                    seen.add(s)
+                    q.append(s)
+        return seen
+
+    by_boundary = {}
+    for gw in graph.gateways.select_related("boundary", "node"):
+        if gw.boundary is None:
+            continue
+        refs = []
+        for node_key in upstream(gw.node.key):
+            for rk in cited_by.get(node_key, []):
+                slug = ref_slug_of.get(rk)
+                if slug and slug not in refs:
+                    refs.append(slug)
+        by_boundary[gw.boundary.slug] = refs
+
+    every = sorted({s for s in ref_slug_of.values() if s})
+    return {"by_boundary": by_boundary, "all": every}
 
 
 def _unique_slug(base):

@@ -45,8 +45,10 @@ export const removeMembership = (id, membership_id) =>
 export const listReferences = () => fetch('/api/references/').then(j)
 export const createReference = (body) =>
   fetch('/api/references/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
-// This graph's bibliography — references cited by its `reference` nodes (+ per-node cite targets).
+// This graph's bibliography — references cited by its `reference` nodes (+ per-boundary attribution).
 export const graphReferences = (id) => fetch(`/api/graphs/${id}/references/`).then(j)
+// A baked release's bibliography — references snapshotted at bake (+ which boundary each feeds).
+export const releaseReferences = (id) => fetch(`/api/releases/${id}/references/`).then(j)
 
 export const listNodeTypes = () => fetch('/api/node-types/').then(j)
 export const listGraphs = () => fetch('/api/graphs/').then(j)

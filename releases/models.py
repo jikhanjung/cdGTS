@@ -235,6 +235,8 @@ class BoundaryRecord(models.Model):
         ModelCandidate, null=True, blank=True, on_delete=models.SET_NULL, related_name="records",
     )
     provenance_ref = models.CharField(max_length=300, blank=True)
+    references = models.JSONField(default=list, blank=True,
+                                  help_text="Contributing reference slugs — cite-edge provenance snapshot at bake.")
     narrative = models.TextField(blank=True, help_text="GTS narrate prose (stub)")
 
     class Meta:

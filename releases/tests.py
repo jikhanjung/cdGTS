@@ -70,6 +70,45 @@ def test_vault_list_excludes_transient(chrono, nodes):
     assert "transient" not in kinds and "bake" in kinds
 
 
+# --- bake → bibliography (cite provenance) ---
+
+def test_bake_collects_bibliography(chrono, nodes):
+    from graph.models import Edge
+    from references.models import Reference
+    g = _graph_with_gateway()
+    pub = g.nodes.get(key="pub")
+    Reference.objects.create(slug="cohen-2013", doi="10.1130/x", title="ICS chart", authors="Cohen", year=2013)
+    ref = NodeInstance.objects.create(graph=g, key="ref1",
+                                      node_type=NodeType.objects.get(slug="reference"),
+                                      params={"reference": "cohen-2013"})
+    Edge.objects.create(graph=g, source=ref, source_port="citation", target=pub, target_port="cited", kind="cite")
+    rel, _ = snapshot_graph(g)
+    assert rel.records.get().references == ["cohen-2013"]        # cite provenance snapshot on the record
+    data = APIClient().get(f"/api/releases/{rel.pk}/references/").data
+    assert [r["slug"] for r in data["bibliography"]] == ["cohen-2013"]
+    assert data["by_boundary"]["base-cambrian"] == ["cohen-2013"]
+
+
+def test_bibliography_only_includes_upstream_cited(chrono, nodes):
+    from graph.models import Edge
+    from graph.services import graph_bibliography
+    from references.models import Reference
+    g = _graph_with_gateway()
+    pub = g.nodes.get(key="pub")
+    Reference.objects.create(slug="rel-ref", title="R")
+    Reference.objects.create(slug="unrel-ref", title="U")
+    r1 = NodeInstance.objects.create(graph=g, key="r1", node_type=NodeType.objects.get(slug="reference"),
+                                     params={"reference": "rel-ref"})
+    Edge.objects.create(graph=g, source=r1, source_port="citation", target=pub, target_port="cited", kind="cite")
+    iso = NodeInstance.objects.create(graph=g, key="iso", node_type=NodeType.objects.get(slug="published-age"), params={})
+    r2 = NodeInstance.objects.create(graph=g, key="r2", node_type=NodeType.objects.get(slug="reference"),
+                                     params={"reference": "unrel-ref"})
+    Edge.objects.create(graph=g, source=r2, source_port="citation", target=iso, target_port="cited", kind="cite")
+    biblio = graph_bibliography(g)
+    assert biblio["by_boundary"]["base-cambrian"] == ["rel-ref"]   # only the upstream-cited reference contributes
+    assert set(biblio["all"]) == {"rel-ref", "unrel-ref"}          # both reference nodes present in the graph
+
+
 # --- P05.5: sandbox overrides (baseline + per-boundary candidate swap) ---
 
 @pytest.fixture
