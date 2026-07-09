@@ -41,6 +41,13 @@ export const addMembership = (id, authority, role) =>
 export const removeMembership = (id, membership_id) =>
   fetch(`/api/users/${id}/remove_membership/`, { method: 'POST', headers: csrfHeaders(), body: JSON.stringify({ membership_id }) }).then(j)
 
+// --- references (provenance registry, DOI-centric) ---
+export const listReferences = () => fetch('/api/references/').then(j)
+export const createReference = (body) =>
+  fetch('/api/references/', { method: 'POST', headers: csrfHeaders(), body: JSON.stringify(body) }).then(j)
+// This graph's bibliography — references cited by its `reference` nodes (+ per-node cite targets).
+export const graphReferences = (id) => fetch(`/api/graphs/${id}/references/`).then(j)
+
 export const listNodeTypes = () => fetch('/api/node-types/').then(j)
 export const listGraphs = () => fetch('/api/graphs/').then(j)
 export const getGraph = (id) => fetch(`/api/graphs/${id}/`).then(j)

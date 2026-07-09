@@ -700,5 +700,32 @@
    "multiple": false,
    "order": 0
   }
+ },
+ {
+  "model": "nodes.nodetype",
+  "fields": {
+   "slug": "reference",
+   "name": "Reference",
+   "category": "reference",
+   "description": "A bibliographic source (DOI-centric) for a data/model node. Wire its citation port to the node it sources with a cite edge; a bake can walk cite edges to collect the bibliography.",
+   "params_schema": {
+    "reference": {
+     "type": "reference"
+    }
+   }
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "reference"
+   ],
+   "name": "citation",
+   "direction": "out",
+   "datatype": "any",
+   "multiple": true,
+   "order": 0
+  }
  }
 ]

@@ -2,7 +2,8 @@
 
 **Last updated**: 2026-07-09. 운영 **cdgts.paleobytes.info @ 0.1.34** 배포 완료. 개발/테스트 `127.0.0.1:8011` @ **0.1.34**.
 **이미지 `honestjung/cdgts:0.1.35` 빌드·푸시 완료·미배포**(P06.4a+L2/L3+retype demo; 배포 시 신규 worker 서비스 주의 — devlog 126).
-백엔드 **pytest 147 passed**. devlog 001~122 + 리뷰/계획(R01·P04·P05·P06·P06.4) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5)** + Editor UX + staff 사용자 관리·프로필 + **P06 Science Engine(06.1 공분산 백본·06.2 공분산 인지 게이트·06.2b L1b/L2 assert-기반·06.3 clamp reconcile·06.3b 캡스톤 데모)** + Science Engine 튜토리얼(docs) + ICC 차트 경계 연대(Ma) + dirty시 Evaluate 비활성 + **docs 현행화(Layer 0–6→노드 종류, archive)** → **0.1.34 정식 릴리스** 운영 배포 완료. **P06.4a(비동기 평가 잡+워커 인프라, 커널 해석적 유지) 구현·미배포**([devlog 123](devlog/20260708_123_p06-4a-async-eval-worker.md)). **L2/L3 게이트 후속**(L2 fail 상세 note; 도메인 임계 warn 은 보류)([devlog 124](devlog/20260708_124_l2-l3-gate-followup.md)). **retype diff 실데모**(diff 에 shape 축 추가 + Cryogenian GSSA→GSSP seed_demo 쌍)([devlog 125](devlog/20260709_125_retype-diff-demo.md), pytest 147). **다음: P06.4b(PyMC joint 커널) · clamp 통합.** (운영에서 캡스톤 데모 보려면 `docker exec <컨테이너> python manage.py seed_demo` 1회 — 선택.)
+**레퍼런스 노드**(새 `references` 앱 + `reference` NodeType + `cite` 엣지 + 그래프 참고문헌 API + 프론트 팔레트/cite 배선/인스펙터 DOI)([devlog 127](devlog/20260709_127_reference-nodes.md), 미빌드/미배포). 배포 시 `seed --mode=add` 1회.
+백엔드 **pytest 154 passed**. devlog 001~122 + 리뷰/계획(R01·P04·P05·P06·P06.4) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5)** + Editor UX + staff 사용자 관리·프로필 + **P06 Science Engine(06.1 공분산 백본·06.2 공분산 인지 게이트·06.2b L1b/L2 assert-기반·06.3 clamp reconcile·06.3b 캡스톤 데모)** + Science Engine 튜토리얼(docs) + ICC 차트 경계 연대(Ma) + dirty시 Evaluate 비활성 + **docs 현행화(Layer 0–6→노드 종류, archive)** → **0.1.34 정식 릴리스** 운영 배포 완료. **P06.4a(비동기 평가 잡+워커 인프라, 커널 해석적 유지) 구현·미배포**([devlog 123](devlog/20260708_123_p06-4a-async-eval-worker.md)). **L2/L3 게이트 후속**(L2 fail 상세 note; 도메인 임계 warn 은 보류)([devlog 124](devlog/20260708_124_l2-l3-gate-followup.md)). **retype diff 실데모**(diff 에 shape 축 추가 + Cryogenian GSSA→GSSP seed_demo 쌍)([devlog 125](devlog/20260709_125_retype-diff-demo.md), pytest 147). **다음: P06.4b(PyMC joint 커널) · clamp 통합.** (운영에서 캡스톤 데모 보려면 `docker exec <컨테이너> python manage.py seed_demo` 1회 — 선택.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -12,7 +13,7 @@
 - **성격**: 브레인스토밍 저장소 → **실행 가능한 코드베이스 + 실배포**(개념 코퍼스는 `docs/` 에 그대로 유지).
 - **스택**: Django **5.2.12**, DB **SQLite**(공간 기능 착수 시 PostGIS), **DRF 3.17.1**, 프론트 **React 18 +
   @xyflow/react 12 + Vite**(`frontend/`, dev 는 `/api` 프록시). venv `/home/jikhanjung/venv/cdGTS`.
-- **앱 6개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases · accounts):
+- **앱 7개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases · accounts · references):
   - `chrono` — 정본 registry(Unit 이중명명·Boundary·Lineage·Authority·Ratification·Locality).
     ICS chart.ttl 기반, **Subperiod(아계) rank 포함**(Carboniferous Mississippian/Pennsylvanian).
   - `nodes` — 타입 시스템(NodeType + Port) + `Distribution` 값객체(충실도 L0–L5). `published-age`(공표값 leaf) 포함.
@@ -31,6 +32,9 @@
     `snapshot_graph` · **`Proposal`**(propose/ratify/reject = CI) · `verify_graph`/`publish_graph`.
   - `accounts` — **`Membership`**(User↔Authority·role) + 개인 fork Authority 시그널 + 세션 인증
     `/api/auth/{whoami,login,logout}` + 중앙 **`can_ratify`**(P05.1·.4).
+  - `references` — **`Reference`**(DOI 레지스트리: slug·doi·title·authors·year·kind, `link`). 그래프의
+    `reference` NodeType 이 `cite` 엣지(비-데이터)로 데이터/모델 노드를 인용 → provenance 가 그래프 1급 시민.
+    `GET /api/graphs/{id}/references/`(bibliography+citations = bake→참고문헌 seam). (devlog 127)
 - **프론트 — 노드 에디터(`Editor.jsx`)**: 팔레트/캔버스/인스펙터. 주요 UX:
   - 헤더에 **버전 배지**(`v0.1.x`), **auto-evaluate**(로드/저장 시 자동) + **saved/unsaved 표시**(● Unsaved / ✓ Saved).
   - **boundary 노드**: 컴팩트(반높이 ◈), 입력 age(또는 공표값)를 노드 얼굴·인스펙터에 표시, Phanerozoic 경계는

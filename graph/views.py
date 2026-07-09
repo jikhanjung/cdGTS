@@ -33,3 +33,28 @@ class GraphViewSet(viewsets.ModelViewSet):
         source = self.get_object()          # get_queryset enforces "can only fork what you can see"
         fork = fork_graph(source, request.user, name=request.data.get("name"))
         return Response(self.get_serializer(fork).data, status=201)
+
+    @action(detail=True, methods=["get"])
+    def references(self, request, pk=None):
+        """
+        This graph's bibliography — Reference entries cited by its `reference` nodes.
+        `citations` maps each reference node to the data/model nodes it sources (cite edges).
+        Seam for bake→bibliography: collect a result's sources by walking cite edges.
+        """
+        from references.models import Reference
+        from references.serializers import ReferenceSerializer
+
+        graph = self.get_object()
+        ref_nodes = [n for n in graph.nodes.select_related("node_type") if n.node_type.slug == "reference"]
+        cites = {}
+        for e in graph.edges.filter(kind="cite").select_related("source", "target"):
+            cites.setdefault(e.source.key, []).append(e.target.key)
+        slugs = [s for s in ((n.params or {}).get("reference") for n in ref_nodes) if s]
+        refs = Reference.objects.filter(slug__in=slugs)
+        return Response({
+            "bibliography": ReferenceSerializer(refs, many=True).data,
+            "citations": [
+                {"node": n.key, "reference": (n.params or {}).get("reference"), "cites": cites.get(n.key, [])}
+                for n in ref_nodes
+            ],
+        })

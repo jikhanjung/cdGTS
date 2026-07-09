@@ -527,6 +527,13 @@ body {
 .cdgts-node.boundary:has(.cdgts-node__bage) .cdgts-node__header { border-radius: 4px 4px 0 0; }
 .cdgts-node__bage { padding: 2px 9px; text-align: center; font-size: 11px; font-weight: 600; color: #4a2f6b; background: #f3ecfb; border-radius: 0 0 3px 3px; font-variant-numeric: tabular-nums; }
 .cdgts-node__bage .cached { color: #2d7d46; }
+/* reference node face — shows the cited source (authors/year · DOI). */
+.cdgts-node__ref { padding: 3px 9px; font-size: 11px; color: #7a5b1e; background: #fbf4e6; border-radius: 0 0 3px 3px; line-height: 1.4; }
+.cdgts-node__ref .doi { opacity: 0.65; font-family: ui-monospace, Menlo, monospace; }
+.cdgts-node__ref .muted { opacity: 0.5; font-style: italic; }
+/* cited handle (amber) — receives a reference's cite edge. Small square, distinct from data/order ports. */
+.cdgts-node .cite-port { width: 8px; height: 8px; border-radius: 2px; border: 1px solid #fff; }
+.cite-edge { pointer-events: stroke; }
 /* title ellipsizes to fit width — so the node doesn't stretch to the title length. Details go in the description tooltip. */
 .cdgts-node__title {
   font-weight: 600; flex: 1 1 auto; min-width: 0;
@@ -574,6 +581,14 @@ body {
 .insp-dist legend { font-size: 11px; color: #55555f; padding: 0 4px; font-weight: 600; }
 .insp-note { font-size: 12px; color: #767688; line-height: 1.5; margin: 6px 0; }
 .insp-note code { background: #ececf2; padding: 1px 4px; border-radius: 4px; }
+/* reference param — picked source meta + inline add form */
+.insp-ref-meta { margin: 5px 0; padding: 6px 8px; background: #fbf4e6; border-radius: 6px; font-size: 12px; }
+.insp-ref-title { color: #2a2a33; margin-bottom: 2px; }
+.insp-ref-link { color: #a0631a; font-family: ui-monospace, Menlo, monospace; font-size: 11px; word-break: break-all; }
+.insp-linkbtn { background: none; border: none; color: #3b6fb0; font-size: 12px; cursor: pointer; padding: 2px 0; }
+.insp-newref { display: grid; gap: 5px; margin: 6px 0; padding: 8px; border: 1px dashed #d8bb7e; border-radius: 6px; }
+.insp-newref-actions { display: flex; gap: 8px; }
+.insp-newref-actions button { flex: 1; padding: 4px; border: 1px solid #d0d0d8; border-radius: 5px; background: #fff; cursor: pointer; font-size: 12px; }
 /* group inspector meta list */
 .insp-meta { display: grid; grid-template-columns: auto 1fr; gap: 5px 12px; margin: 8px 0 4px; font-size: 12px; align-items: baseline; }
 .insp-meta dt { color: #767688; white-space: nowrap; }

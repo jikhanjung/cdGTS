@@ -156,8 +156,8 @@ class GraphSerializer(serializers.ModelSerializer):
                     raise serializers.ValidationError(
                         f"Edge references missing node key: {e[endpoint]!r}"
                     )
-            # order edge 는 경계 세로 포트 연결(제약) — 데이터 포트 방향 검증에서 제외.
-            if e.get("kind") == Edge.Kind.ORDER:
+            # order/cite edge 는 데이터 포트가 아니라 제약·주석 연결 — 데이터 포트 방향 검증에서 제외.
+            if e.get("kind") in Edge.NON_DATA_KINDS:
                 continue
             st = key_to_type[e["source"]]
             tt = key_to_type[e["target"]]
@@ -177,7 +177,7 @@ class GraphSerializer(serializers.ModelSerializer):
             k for k, t in key_to_type.items()
             if t.category == NodeType.Category.CLAMP or t.slug in breaker_slugs
         }
-        data_edges = [(e["source"], e["target"]) for e in edges if e.get("kind") != Edge.Kind.ORDER]
+        data_edges = [(e["source"], e["target"]) for e in edges if e.get("kind") not in Edge.NON_DATA_KINDS]
         stuck = find_unbroken_cycles(keys, breaker_keys, data_edges)
         if stuck:
             raise serializers.ValidationError(

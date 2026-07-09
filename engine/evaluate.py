@@ -14,6 +14,9 @@ from collections import defaultdict
 
 from . import kernels
 
+# order/cite = 데이터 흐름이 아닌 엣지(제약·주석) — 평가 위상·순환 판정에서 제외.
+_NON_DATA_KINDS = frozenset({"order", "cite"})
+
 
 def content_hash(type_slug, params, input_hashes):
     payload = json.dumps([type_slug, params, sorted(input_hashes)], sort_keys=True, ensure_ascii=False)
@@ -75,7 +78,8 @@ def needs_async(graph):
     if any(n.node_type.slug == "joint-inference" for n in insts):
         return True
     data_edges = [(e.source.key, e.target.key)
-                  for e in graph.edges.select_related("source", "target") if e.kind != "order"]
+                  for e in graph.edges.select_related("source", "target")
+                  if e.kind not in _NON_DATA_KINDS]
     return bool(find_unbroken_cycles([n.key for n in insts], set(), data_edges))
 
 
@@ -84,8 +88,8 @@ def evaluate_graph(graph):
     from .models import EvalRun, NodeResult
 
     insts = list(graph.nodes.select_related("node_type"))
-    # order edge 는 데이터 흐름이 아니라 제약(경계 세로 포트 연결) — 평가 위상에서 제외, _certify 만 읽음.
-    edges = [e for e in graph.edges.select_related("source", "target") if e.kind != "order"]
+    # order/cite edge 는 데이터 흐름이 아니라 제약·주석 — 평가 위상에서 제외(order 는 _certify 만 읽음).
+    edges = [e for e in graph.edges.select_related("source", "target") if e.kind not in _NON_DATA_KINDS]
 
     node_meta = {
         n.key: {
@@ -191,7 +195,8 @@ def _certify(run, graph, results):
     breaker_keys = {n.key for n in insts
                     if n.node_type.category == "clamp" or n.node_type.slug == "joint-inference"}
     data_edges = [(e.source.key, e.target.key)
-                  for e in graph.edges.select_related("source", "target") if e.kind != "order"]
+                  for e in graph.edges.select_related("source", "target")
+                  if e.kind not in _NON_DATA_KINDS]
     stuck = find_unbroken_cycles([n.key for n in insts], breaker_keys, data_edges)
     if stuck:
         checks["L0"] = "fail"

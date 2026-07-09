@@ -8,7 +8,7 @@ const BUDGET_KEYS = ['analytical', 'systematic', 'model']
 const numOrUndef = (v) => (v === '' || v == null ? undefined : Number(v))
 
 // --- Individual parameter controls ---
-function ParamField({ name, spec, value, nodeKeys, onParam, onDist }) {
+function ParamField({ name, spec, value, nodeKeys, references, onCreateReference, onParam, onDist }) {
   const help = spec.help
   const label = (
     <label className="insp-label" title={help || ''}>
@@ -94,6 +94,14 @@ function ParamField({ name, spec, value, nodeKeys, onParam, onDist }) {
         </div>
       )
 
+    case 'reference':
+      return (
+        <ReferenceField
+          name={name} value={value} references={references || []}
+          onParam={onParam} onCreateReference={onCreateReference}
+        />
+      )
+
     case 'distribution':
       return <DistributionField name={name} value={value || {}} onDist={onDist} />
 
@@ -168,8 +176,76 @@ function DistributionField({ name, value, onDist }) {
   )
 }
 
+// reference param — pick a source from the DOI-centric registry, or add a new one inline.
+function ReferenceField({ name, value, references, onParam, onCreateReference }) {
+  const [adding, setAdding] = useState(false)
+  const current = references.find((r) => r.slug === value)
+  return (
+    <div className="insp-field">
+      <label className="insp-label">{name} · source</label>
+      <select
+        className="insp-input" value={value ?? ''}
+        onChange={(e) => onParam(name, e.target.value || undefined)}
+      >
+        <option value="">—</option>
+        {references.map((r) => (
+          <option key={r.slug} value={r.slug}>
+            {(r.authors || r.slug)}{r.year ? ` (${r.year})` : ''}
+          </option>
+        ))}
+      </select>
+      {current && (
+        <div className="insp-ref-meta">
+          <div className="insp-ref-title">{current.title}</div>
+          {current.link
+            ? <a href={current.link} target="_blank" rel="noreferrer" className="insp-ref-link">
+                {current.doi ? `doi:${current.doi}` : current.link} ↗
+              </a>
+            : <span className="insp-note">no DOI / URL</span>}
+        </div>
+      )}
+      {adding
+        ? <NewReferenceForm
+            onCreate={async (body) => { const r = await onCreateReference(body); onParam(name, r.slug); setAdding(false) }}
+            onCancel={() => setAdding(false)}
+          />
+        : <button type="button" className="insp-linkbtn" onClick={() => setAdding(true)}>＋ new reference</button>}
+    </div>
+  )
+}
+
+function NewReferenceForm({ onCreate, onCancel }) {
+  const [f, setF] = useState({ slug: '', doi: '', title: '', authors: '', year: '' })
+  const [err, setErr] = useState(null)
+  const set = (k) => (e) => setF((prev) => ({ ...prev, [k]: e.target.value }))
+  const submit = async () => {
+    if (!f.slug || !f.title) { setErr('slug and title are required'); return }
+    try {
+      await onCreate({
+        slug: f.slug, doi: f.doi || '', title: f.title,
+        authors: f.authors || '', year: f.year ? Number(f.year) : null,
+      })
+      setErr(null)
+    } catch (ex) { setErr(ex?.data ? JSON.stringify(ex.data) : String(ex.message || ex)) }
+  }
+  return (
+    <div className="insp-newref">
+      <input className="insp-input" placeholder="slug (e.g. cohen-2013)" value={f.slug} onChange={set('slug')} />
+      <input className="insp-input" placeholder="DOI (10.xxxx/…)" value={f.doi} onChange={set('doi')} />
+      <input className="insp-input" placeholder="title" value={f.title} onChange={set('title')} />
+      <input className="insp-input" placeholder="authors" value={f.authors} onChange={set('authors')} />
+      <input className="insp-input" type="number" placeholder="year" value={f.year} onChange={set('year')} />
+      {err && <div className="insp-json-err">{err}</div>}
+      <div className="insp-newref-actions">
+        <button type="button" onClick={submit}>Add</button>
+        <button type="button" onClick={onCancel}>Cancel</button>
+      </div>
+    </div>
+  )
+}
+
 // --- Inspector panel ---
-export default function Inspector({ node, type, group, groupExtra, nodeKeys, open, onClose, onHide, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
+export default function Inspector({ node, type, group, groupExtra, nodeKeys, references, onCreateReference, open, onClose, onHide, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
   const cls = `inspector${open ? ' open' : ''}`
   if (!node && group) {
     return <GroupInspector cls={cls} group={group} extra={groupExtra} onClose={onClose} onHide={onHide} onGroupName={onGroupName} />
@@ -239,7 +315,8 @@ export default function Inspector({ node, type, group, groupExtra, nodeKeys, ope
         : schemaKeys.map((k) => (
             <ParamField
               key={k} name={k} spec={schema[k]} value={params[k]}
-              nodeKeys={nodeKeys} onParam={onParam} onDist={onDist}
+              nodeKeys={nodeKeys} references={references} onCreateReference={onCreateReference}
+              onParam={onParam} onDist={onDist}
             />
           ))}
 

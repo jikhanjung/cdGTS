@@ -287,6 +287,54 @@ def test_certify_l1_reads_order_edges(api, graph):
     assert cert.checks["L1"] == "fail" and cert.passed is False
 
 
+# --- reference nodes + cite edges (provenance) ---
+
+def _cite_graph():
+    """reference 노드 → cite edge → data 노드. cite 는 데이터 흐름이 아닌 provenance 주석."""
+    return {
+        "nodes": [
+            {"key": "obs1", "node_type": "radiometric-uPb", "x": 0, "y": 0, "params": {}},
+            {"key": "ref1", "node_type": "reference", "x": -200, "y": 0,
+             "params": {"reference": "cohen-2013"}},
+        ],
+        "edges": [
+            {"source": "ref1", "source_port": "citation", "target": "obs1",
+             "target_port": "cited", "kind": "cite"},
+        ],
+        "viewport": {},
+    }
+
+
+def test_cite_edge_roundtrip_and_data_exempt(api, graph):
+    """cite edge 는 포트 검증·데이터 사이클 판정에서 제외되고 왕복한다(대상에 선언 포트 불필요)."""
+    put = api.put(f"/api/graphs/{graph.pk}/", _cite_graph(), format="json")
+    assert put.status_code == 200, put.data
+    edges = api.get(f"/api/graphs/{graph.pk}/").data["edges"]
+    assert edges[0]["kind"] == "cite" and edges[0]["target_port"] == "cited"
+
+
+def test_cite_edge_ignored_by_evaluation(api, graph):
+    """cite edge 는 평가 위상에서 제외 — reference 노드가 data 노드 결과를 바꾸지 않는다."""
+    from engine.evaluate import evaluate_graph
+    api.put(f"/api/graphs/{graph.pk}/", _cite_graph(), format="json")
+    g = Graph.objects.get(pk=graph.pk)
+    run = evaluate_graph(g)
+    by_key = {r.node_key: r for r in run.results.all()}
+    assert by_key["obs1"].provenance == []          # cite 는 data provenance 가 아님
+    assert by_key["ref1"].distribution is None       # reference 노드는 값 없음
+
+
+def test_graph_references_endpoint(api, graph, db):
+    """그래프 참고문헌 API — reference 노드가 가리키는 Reference + cite 대상(bake→bibliography 토대)."""
+    from references.models import Reference
+    Reference.objects.create(slug="cohen-2013", doi="10.1130/2012.chart", title="ICS chart", authors="Cohen", year=2013)
+    api.put(f"/api/graphs/{graph.pk}/", _cite_graph(), format="json")
+    data = api.get(f"/api/graphs/{graph.pk}/references/").data
+    assert [r["slug"] for r in data["bibliography"]] == ["cohen-2013"]
+    assert data["bibliography"][0]["link"] == "https://doi.org/10.1130/2012.chart"
+    assert data["citations"] == [{"node": "ref1", "reference": "cohen-2013", "cites": ["obs1"]}]
+
+
 # --- P05.2 ownership & visibility ---
 
 def test_anonymous_cannot_write(graph):

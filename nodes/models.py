@@ -24,6 +24,7 @@ class NodeType(models.Model):
         DATA = "data", "Data (immutable observation / leaf)"
         PROCESS = "process", "Process (transform / model)"
         CLAMP = "clamp", "Clamp (governance gate)"
+        REFERENCE = "reference", "Reference (provenance / citation)"
 
     slug = models.SlugField(unique=True, help_text="Identifier = engine kernel binding key. e.g. age-depth-model")
     name = models.CharField(max_length=200)

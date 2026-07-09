@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'engine.apps.EngineConfig',
     'releases.apps.ReleasesConfig',
     'accounts.apps.AccountsConfig',
+    'references.apps.ReferencesConfig',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.auth',

@@ -183,6 +183,10 @@ class Edge(models.Model):
         CO_LOCATION = "co-location", "co-location"
         CALIBRATION_TRANSFER = "calibration-transfer", "calibration-transfer"
         ORDER = "order", "order"  # boundary vertical-port connection = order constraint (replaces the order node). Not data flow.
+        CITE = "cite", "cite"     # reference node → cited data/model node. Provenance annotation, not data flow.
+
+    # Non-data edge kinds: excluded from evaluation topology, cycle detection, and port validation.
+    NON_DATA_KINDS = frozenset({Kind.ORDER, Kind.CITE})
 
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="edges")
     source = models.ForeignKey(NodeInstance, on_delete=models.CASCADE, related_name="out_edges")

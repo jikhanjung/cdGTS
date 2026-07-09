@@ -16,6 +16,7 @@ import VerifyPanel from './VerifyPanel.jsx'
 import {
   listNodeTypes, listGraphs, getGraph, createGraph, saveGraph, evaluateGraph, getEvalJob, verifyGraph,
   bakeGraph, suggestBakeName, forkGraph, updateGraphInfo, proposeGraph,
+  listReferences, createReference,
 } from './api.js'
 
 const nodeTypes = { cdgts: CdgtsNode, cdgtsGroup: GroupNode, cdgtsStub: StubNode,
@@ -40,9 +41,13 @@ const nodeWidth = (slug, w) => (rfType(slug) === 'cdgtsOrder' ? undefined : (w |
 const ORDER_EDGE_STYLE = { className: 'order-edge', style: { stroke: '#8b5cf6', strokeDasharray: '4 3' } }
 // order ports are the vertical younger(source,top)/older(target,bottom) handles; a younger→older connection is an order edge.
 const isOrderConn = (srcH, tgtH) => srcH === 'younger' && tgtH === 'older'
+// cite edge = reference node's citation(out) → any node's cited(in) handle. Provenance annotation, not data flow (amber dashed).
+const CITE_EDGE_STYLE = { className: 'cite-edge', style: { stroke: '#c0842e', strokeDasharray: '2 3' } }
+const isCiteConn = (srcH, tgtH) => srcH === 'citation' && tgtH === 'cited'
+const edgeStyleFor = (kind) => (kind === 'order' ? ORDER_EDGE_STYLE : kind === 'cite' ? CITE_EDGE_STYLE : {})
 
 // --- API ↔ React Flow conversion (nodes/edges are always the 'full real' set; the view is derived via buildView) ---
-function apiToRF(graph, typeMap) {
+function apiToRF(graph, typeMap, refMap = {}) {
   const nodes = graph.nodes.map((n) => {
     const t = typeMap[n.node_type] || { category: 'process', ports: [] }
     return {
@@ -52,6 +57,7 @@ function apiToRF(graph, typeMap) {
         nodeType: n.node_type, nature: n.nature || 'generic',
         label: n.label, description: n.description || '',
         params: n.params, category: t.category, ports: t.ports, group: n.group || null,
+        referenceInfo: t.category === 'reference' ? refMap[n.params?.reference] || null : undefined,
       },
     }
   })
@@ -60,7 +66,7 @@ function apiToRF(graph, typeMap) {
     source: e.source, target: e.target,
     sourceHandle: e.source_port, targetHandle: e.target_port,
     data: { kind: e.kind },
-    ...(e.kind === 'order' ? ORDER_EDGE_STYLE : {}),
+    ...edgeStyleFor(e.kind),
   }))
   const groups = (graph.groups || []).map((g) => ({ ...g }))
   return { nodes, edges, groups }
@@ -246,6 +252,7 @@ function buildView(nodes, edges, groups, activeGroup) {
 
 export default function Editor({ onBaked, onProposed, user } = {}) {
   const [types, setTypes] = useState([])
+  const [references, setReferences] = useState([])   // provenance registry (DOI-centric)
   const [graphs, setGraphs] = useState([])
   const [graphId, setGraphId] = useState(null)
   const [graphName, setGraphName] = useState('')
@@ -279,6 +286,14 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const { screenToFlowPosition, getViewport, setViewport, fitView } = useReactFlow()
 
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
+  const refMap = useMemo(() => Object.fromEntries(references.map((r) => [r.slug, r])), [references])
+
+  // Add a reference to the registry (inspector quick-add). Returns the created reference.
+  const onCreateReference = useCallback(async (body) => {
+    const created = await createReference(body)
+    setReferences((rs) => [...rs.filter((r) => r.slug !== created.slug), created])
+    return created
+  }, [])
 
   // Structural signature (nodes·edges·groups, excluding viewport and evaluation results) → compare against the last
   // saved/loaded snapshot to know if there are unsaved edits.
@@ -365,6 +380,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       try {
         const ts = await listNodeTypes()
         setTypes(ts)
+        listReferences().then(setReferences).catch(() => {})   // provenance registry (non-fatal)
         const tmap = Object.fromEntries(ts.map((t) => [t.slug, t]))
         let gs = await listGraphs()
         let g = gs[0]
@@ -380,6 +396,20 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     try { hydrate(await getGraph(id), typeMap) }
     catch (e) { setError(e.data || String(e)); setStatus('Load failed') }
   }, [typeMap, hydrate])
+
+  // Keep reference nodes' shown citation resolved against the registry (covers late-loaded refs and inspector picks).
+  const refSig = useMemo(
+    () => nodes.filter((n) => n.data.category === 'reference')
+      .map((n) => `${n.id}:${n.data.params?.reference || ''}`).join('|'),
+    [nodes],
+  )
+  useEffect(() => {
+    setNodes((nds) => nds.map((n) => {
+      if (n.data.category !== 'reference') return n
+      const info = refMap[n.data.params?.reference] || null
+      return n.data.referenceInfo === info ? n : { ...n, data: { ...n.data, referenceInfo: info } }
+    }))
+  }, [refMap, refSig, setNodes])
 
   // Fork the current graph into a sandbox you own (P05.3), then switch to editing it.
   const [forkDialog, setForkDialog] = useState(null)   // { name, busy } | null
@@ -460,12 +490,13 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       const [, m, p] = targetHandle.split(':'); target = m; targetHandle = p
     }
     if (['group:', 'stub-'].some((p) => source?.startsWith(p) || target?.startsWith(p))) return
-    const isOrder = isOrderConn(sourceHandle, targetHandle)
+    const kind = isOrderConn(sourceHandle, targetHandle) ? 'order'
+      : isCiteConn(sourceHandle, targetHandle) ? 'cite' : 'data'
     const id = `${source}:${sourceHandle}->${target}:${targetHandle}`
     setEdges((eds) => eds.concat({
       id, source, target, sourceHandle, targetHandle,
-      data: { kind: isOrder ? 'order' : 'data' },
-      ...(isOrder ? ORDER_EDGE_STYLE : {}),
+      data: { kind },
+      ...edgeStyleFor(kind),
     }))
   }, [setEdges])
 
@@ -1186,6 +1217,8 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         groupExtra={groupExtra}
         onGroupName={(v) => selectedGroup && onGroupName(selectedGroup.key, v)}
         nodeKeys={nodeKeys}
+        references={references}
+        onCreateReference={onCreateReference}
         onLabel={(v) => onLabel(selectedNode.id, v)}
         onDescription={(v) => onDescription(selectedNode.id, v)}
         onParam={(k, v) => onParam(selectedNode.id, k, v)}

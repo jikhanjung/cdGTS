@@ -4,7 +4,10 @@ export const CATEGORY_COLOR = {
   data: '#2d7d46',      // observation leaf
   process: '#3b6fb0',   // transform·model
   clamp: '#a24bd8',     // governance gate
+  reference: '#c0842e', // provenance / citation (amber)
 }
+
+export const CITE_COLOR = '#c0842e'   // cite edge / cited handle — amber, distinct from order purple.
 
 // Spread ports vertically (i-th / (n+1)).
 const topPct = (i, n) => `${((i + 1) / (n + 1)) * 100}%`
@@ -28,6 +31,9 @@ export default function CdgtsNode({ data, selected }) {
   const boundaryMa = data.result?.distribution?.value_ma ?? data.params?.distribution?.value_ma
   const isUnit = data.nodeType === 'unit'
   const isMerge = data.nodeType === 'merge'
+  const isReference = data.category === 'reference'
+  const ref = data.referenceInfo   // resolved Reference (injected by the Editor from the registry), if any
+  const refSlug = data.params?.reference
   const color = isBoundary ? BOUNDARY_COLOR : isUnit ? UNIT_COLOR : (CATEGORY_COLOR[data.category] || '#888')
   const rows = Math.max(inputs.length, outputs.length, 1)
 
@@ -45,6 +51,13 @@ export default function CdgtsNode({ data, selected }) {
         </span>
         <span className="cdgts-node__cat">{isBoundary ? '◈ boundary' : isUnit ? '▭ time period' : isMerge ? '▽ Merge' : data.category}</span>
       </div>
+      {isReference && (
+        <div className="cdgts-node__ref" title={ref?.title || refSlug || 'no reference set — pick one in the inspector'}>
+          {ref
+            ? <>{ref.authors || ref.slug}{ref.year ? ` (${ref.year})` : ''}{ref.doi ? <span className="doi"> · {ref.doi}</span> : null}</>
+            : (refSlug || <span className="muted">no reference</span>)}
+        </div>
+      )}
       {isBoundary && boundaryMa != null && (
         <div className="cdgts-node__bage"
              title={data.result ? (data.result.cached ? 'age (cache reuse)' : 'age (recomputed)') : 'published value — evaluate to resolve inputs'}>
@@ -105,6 +118,14 @@ export default function CdgtsNode({ data, selected }) {
           style={{ background: ORDER_COLOR }}
         />
       ))}
+      {/* Every non-reference node can be cited: a target handle to receive a reference's cite edge. */}
+      {!isReference && (
+        <Handle
+          type="target" position={Position.Top} id="cited"
+          title="cited — connect a reference's citation port here"
+          className="cite-port" style={{ left: 14, background: CITE_COLOR }}
+        />
+      )}
     </div>
   )
 }
