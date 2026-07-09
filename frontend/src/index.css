@@ -586,6 +586,10 @@ body {
 .insp-fields:disabled { opacity: 0.85; }
 .insp-readonly { color: #8a5a00; background: #fbf4e6; padding: 6px 8px; border-radius: 6px; }
 .palette-item.disabled { opacity: 0.4; cursor: not-allowed; }
+/* prominent "Fork to edit" affordance shown next to the read-only badge */
+.fork-to-edit { padding: 4px 10px; border: 1px solid #3b6fb0; border-radius: 6px; background: #3b6fb0; color: #fff; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.fork-to-edit:hover { background: #335f97; }
+.fork-to-edit:disabled { opacity: 0.5; cursor: default; }
 /* reference param — picked source meta + inline add form */
 .insp-ref-meta { margin: 5px 0; padding: 6px 8px; background: #fbf4e6; border-radius: 6px; font-size: 12px; }
 .insp-ref-title { color: #2a2a33; margin-bottom: 2px; }

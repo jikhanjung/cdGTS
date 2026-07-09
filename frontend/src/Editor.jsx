@@ -1026,9 +1026,15 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               {dirty ? '● Unsaved' : '✓ Saved'}
             </span>
           ) : (
-            <span className="save-state readonly" title={currentGraph?.owner ? `Owned by ${currentGraph.owner}` : 'System / demo graph'}>
-              🔒 Read-only
-            </span>
+            <>
+              <span className="save-state readonly" title={currentGraph?.owner ? `Owned by ${currentGraph.owner}` : 'System / demo graph'}>
+                🔒 Read-only
+              </span>
+              {authed && (
+                <button className="fork-to-edit" onClick={onOpenFork} disabled={!graphId}
+                        title="Copy this graph into a sandbox you own, then edit it">Fork to edit →</button>
+              )}
+            </>
           )}
           <div className="tb-menu">
             <button className={`tb-menu-btn${actionsOpen ? ' open' : ''}`} onClick={() => setActionsOpen((v) => !v)}
