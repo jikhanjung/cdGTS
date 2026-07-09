@@ -12,6 +12,8 @@ import hashlib
 import json
 from collections import defaultdict
 
+from django.db import transaction
+
 from . import kernels
 
 # order/cite = 데이터 흐름이 아닌 엣지(제약·주석) — 평가 위상·순환 판정에서 제외.
@@ -109,9 +111,10 @@ def evaluate_graph(graph):
     prev = graph.eval_runs.first()   # ordering=-id → 직전 run
     prev_results = {r.node_key: r for r in prev.results.all()} if prev else {}
 
-    run = EvalRun.objects.create(graph=graph)
+    # 무거운 계산은 트랜잭션 밖에서 — SQLite write 락을 오래 물지 않도록. row 는 아직 run 이 없으니
+    # (node_key, hash, dist, prov, cached) 튜플로 모아 두고, 커밋 단계에서 NodeResult 로 만든다.
     results = {}
-    rows = []
+    row_data = []
     stats = {"computed": 0, "cached": 0}
 
     for key in order:
@@ -130,14 +133,17 @@ def evaluate_graph(graph):
             stats["computed"] += 1
 
         results[key] = {"hash": h, "distribution": dist, "provenance": prov}
-        rows.append(NodeResult(eval_run=run, node_key=key, content_hash=h,
-                               distribution=dist, provenance=prov, cached=cached))
+        row_data.append((key, h, dist, prov, cached))
 
-    NodeResult.objects.bulk_create(rows)
-    run.stats = stats
-    run.save(update_fields=["stats"])
-
-    _certify(run, graph, results)
+    # 쓰기만 원자화 — 평가 도중/중간 실패로 NodeResult 없는 반쪽 EvalRun 이 남지 않도록.
+    with transaction.atomic():
+        run = EvalRun.objects.create(graph=graph, stats=stats)
+        NodeResult.objects.bulk_create([
+            NodeResult(eval_run=run, node_key=key, content_hash=h,
+                       distribution=dist, provenance=prov, cached=cached)
+            for (key, h, dist, prov, cached) in row_data
+        ])
+        _certify(run, graph, results)
     return run
 
 

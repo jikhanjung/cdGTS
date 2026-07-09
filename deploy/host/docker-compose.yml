@@ -11,7 +11,10 @@ services:
       # prod(dolfinid)는 미설정(127.0.0.1 유지) — 공인 IP 직접 노출 금지, nginx 경유만.
       - "${HTTP_BIND:-127.0.0.1}:8011:8000"
     volumes:
-      - /srv/cdGTS/db.sqlite3:/app/db.sqlite3
+      # WAL 을 위해 파일이 아닌 *디렉터리* 를 마운트 — web·worker 가 -wal/-shm 형제 파일을
+      # 공유해야 서로의 커밋을 본다(파일만 마운트하면 컨테이너별 사설 WAL 로 갈라짐).
+      # host DB 위치(/srv/cdGTS/db.sqlite3)는 그대로. DATABASE_PATH=/app/hostdb/db.sqlite3.
+      - /srv/cdGTS:/app/hostdb
     env_file:
       - /srv/cdGTS/.env
     restart: unless-stopped
@@ -28,7 +31,10 @@ services:
     container_name: cdgts-worker
     command: python manage.py run_worker
     volumes:
-      - /srv/cdGTS/db.sqlite3:/app/db.sqlite3
+      # WAL 을 위해 파일이 아닌 *디렉터리* 를 마운트 — web·worker 가 -wal/-shm 형제 파일을
+      # 공유해야 서로의 커밋을 본다(파일만 마운트하면 컨테이너별 사설 WAL 로 갈라짐).
+      # host DB 위치(/srv/cdGTS/db.sqlite3)는 그대로. DATABASE_PATH=/app/hostdb/db.sqlite3.
+      - /srv/cdGTS:/app/hostdb
     env_file:
       - /srv/cdGTS/.env
     restart: unless-stopped

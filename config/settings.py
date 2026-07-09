@@ -116,6 +116,9 @@ DATABASES = {
         'OPTIONS': {
             'timeout': 20,
             'transaction_mode': 'IMMEDIATE',
+            # web·worker 두 컨테이너가 같은 SQLite 파일에 동시 접근 — WAL 로 reader 가 writer 에
+            # 막히지 않게. (single-writer 는 유지; writer 경합은 timeout 이 흡수.) 같은 호스트 필수(충족).
+            'init_command': 'PRAGMA journal_mode=WAL;',
         },
     }
 }
