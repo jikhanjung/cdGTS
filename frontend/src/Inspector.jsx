@@ -245,10 +245,10 @@ function NewReferenceForm({ onCreate, onCancel }) {
 }
 
 // --- Inspector panel ---
-export default function Inspector({ node, type, group, groupExtra, nodeKeys, references, onCreateReference, open, onClose, onHide, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
+export default function Inspector({ node, type, group, groupExtra, nodeKeys, references, onCreateReference, readOnly, open, onClose, onHide, onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName }) {
   const cls = `inspector${open ? ' open' : ''}`
   if (!node && group) {
-    return <GroupInspector cls={cls} group={group} extra={groupExtra} onClose={onClose} onHide={onHide} onGroupName={onGroupName} />
+    return <GroupInspector cls={cls} group={group} extra={groupExtra} readOnly={readOnly} onClose={onClose} onHide={onHide} onGroupName={onGroupName} />
   }
   if (!node) {
     return (
@@ -291,44 +291,48 @@ export default function Inspector({ node, type, group, groupExtra, nodeKeys, ref
         </div>
       )}
 
-      <div className="insp-field">
-        <label className="insp-label">label</label>
-        <input
-          type="text" className="insp-input"
-          defaultValue={node.data.label ?? ''} placeholder={node.data.nodeType}
-          onChange={(e) => onLabel(e.target.value)}
-        />
-      </div>
+      {readOnly && <p className="insp-note insp-readonly">🔒 Read-only — you don’t own this graph, so its fields can’t be edited.</p>}
 
-      <div className="insp-field">
-        <label className="insp-label">description</label>
-        <textarea
-          className="insp-input insp-desc" rows={3}
-          defaultValue={node.data.description ?? ''}
-          placeholder="Detailed description — keep the title short, put details here (shown in the node title tooltip)"
-          onChange={(e) => onDescription(e.target.value)}
-        />
-      </div>
+      <fieldset className="insp-fields" disabled={readOnly}>
+        <div className="insp-field">
+          <label className="insp-label">label</label>
+          <input
+            type="text" className="insp-input"
+            defaultValue={node.data.label ?? ''} placeholder={node.data.nodeType}
+            onChange={(e) => onLabel(e.target.value)}
+          />
+        </div>
 
-      {schemaKeys.length === 0
-        ? <p className="insp-note">This node type has no defined parameters.</p>
-        : schemaKeys.map((k) => (
-            <ParamField
-              key={k} name={k} spec={schema[k]} value={params[k]}
-              nodeKeys={nodeKeys} references={references} onCreateReference={onCreateReference}
-              onParam={onParam} onDist={onDist}
-            />
-          ))}
+        <div className="insp-field">
+          <label className="insp-label">description</label>
+          <textarea
+            className="insp-input insp-desc" rows={3}
+            defaultValue={node.data.description ?? ''}
+            placeholder="Detailed description — keep the title short, put details here (shown in the node title tooltip)"
+            onChange={(e) => onDescription(e.target.value)}
+          />
+        </div>
 
-      <RawJson params={params} onReplaceParams={onReplaceParams} />
+        {schemaKeys.length === 0
+          ? <p className="insp-note">This node type has no defined parameters.</p>
+          : schemaKeys.map((k) => (
+              <ParamField
+                key={k} name={k} spec={schema[k]} value={params[k]}
+                nodeKeys={nodeKeys} references={references} onCreateReference={onCreateReference}
+                onParam={onParam} onDist={onDist}
+              />
+            ))}
 
-      <p className="insp-foot">After making changes, click <b>Save</b> in the toolbar to apply them.</p>
+        <RawJson params={params} onReplaceParams={onReplaceParams} />
+      </fieldset>
+
+      {!readOnly && <p className="insp-foot">After making changes, click <b>Save</b> in the toolbar to apply them.</p>}
     </aside>
   )
 }
 
 // --- Group inspector (shown when a node group / collapsed group node is selected) ---
-function GroupInspector({ cls, group, extra, onClose, onHide, onGroupName }) {
+function GroupInspector({ cls, group, extra, readOnly, onClose, onHide, onGroupName }) {
   const isUnit = group.kind === 'unit'
   const color = '#a142f4'   // lavender — matches the group node
   return (
@@ -342,7 +346,7 @@ function GroupInspector({ cls, group, extra, onClose, onHide, onGroupName }) {
       <div className="insp-field">
         <label className="insp-label">name</label>
         <input
-          type="text" className="insp-input"
+          type="text" className="insp-input" disabled={readOnly}
           defaultValue={group.name ?? ''} placeholder={group.key}
           onChange={(e) => onGroupName(e.target.value)}
         />

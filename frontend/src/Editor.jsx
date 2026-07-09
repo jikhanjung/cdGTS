@@ -288,6 +288,11 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const typeMap = useMemo(() => Object.fromEntries(types.map((t) => [t.slug, t])), [types])
   const refMap = useMemo(() => Object.fromEntries(references.map((r) => [r.slug, r])), [references])
 
+  // P05.2 ownership: only the owner (or staff) may edit/save. Others get a read-only view (no canvas/inspector edits).
+  const currentGraph = graphs.find((g) => g.id === graphId)
+  const authed = !!user?.authenticated
+  const canEdit = authed && (currentGraph?.owner === user.username || user.is_staff)
+
   // Add a reference to the registry (inspector quick-add). Returns the created reference.
   const onCreateReference = useCallback(async (body) => {
     const created = await createReference(body)
@@ -480,6 +485,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   }, [setEdges])
 
   const onConnect = useCallback((c) => {
+    if (!canEdit) return
     let { source, sourceHandle, target, targetHandle } = c
     // Drawing from/to a group port (e.g. a collapsed node's upper/lower order port) → resolve to the member node's real port.
     // Group handle id convention (buildView): output `out:<member>:<port>` · input `in:<member>:<port>`.
@@ -498,10 +504,11 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       data: { kind },
       ...edgeStyleFor(kind),
     }))
-  }, [setEdges])
+  }, [setEdges, canEdit])
 
   // shared node creation — used by both desktop drop and touch tap-to-add.
   const addNodeAt = useCallback((slug, position) => {
+    if (!canEdit) return
     const t = typeMap[slug]
     if (!t) return
     const key = `${slug}#${Math.random().toString(36).slice(2, 7)}`
@@ -512,7 +519,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       data: { nodeType: slug, nature, label: '', description: '', params: {}, category: t.category, ports: t.ports, group: activeGroup || null },
     }))
     setStatus(`${t.name} added`)
-  }, [typeMap, setNodes, activeGroup])
+  }, [typeMap, setNodes, activeGroup, canEdit])
 
   const onDragOver = useCallback((e) => { e.preventDefault(); e.dataTransfer.dropEffect = 'move' }, [])
   const onDrop = useCallback((e) => {
@@ -537,7 +544,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   // touch: long press (≈0.5s, if no movement) → context menu. Use elementFromPoint to detect node/group/empty area.
   const cancelLongPress = useCallback(() => { if (lpRef.current) { clearTimeout(lpRef.current); lpRef.current = null } }, [])
   const onTouchStartFlow = useCallback((e) => {
-    if (!IS_TOUCH || e.touches.length !== 1) return
+    if (!IS_TOUCH || e.touches.length !== 1 || !canEdit) return
     const { clientX: x, clientY: y } = e.touches[0]
     cancelLongPress()
     lpFiredRef.current = false
@@ -550,7 +557,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       else if (id && !id.startsWith('stub-')) setMenu({ x, y, kind: 'node', id })
       else setMenu({ x, y, kind: 'pane' })
     }, 500)
-  }, [cancelLongPress])
+  }, [cancelLongPress, canEdit])
 
   // --- create · merge / ungroup / drill-in groups ---
   // Combine real nodes + groups (collapsed nodes) into one. If groups are mixed in, absorb their members too and **merge** (single hierarchy kept);
@@ -605,17 +612,20 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const closeMenu = useCallback(() => setMenu(null), [])
   const onNodeContextMenu = useCallback((e, node) => {
     e.preventDefault()
+    if (!canEdit) return                       // read-only: no edit menu (group/delete)
     if (node.type === 'cdgtsGroup') setMenu({ x: e.clientX, y: e.clientY, kind: 'group', groupKey: node.data.key })
     else if (isRealNode(node.type)) setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
-  }, [])
+  }, [canEdit])
   const onPaneContextMenu = useCallback((e) => {
     e.preventDefault()
+    if (!canEdit) return
     setMenu({ x: e.clientX, y: e.clientY, kind: 'pane' })
-  }, [])
+  }, [canEdit])
   const onEdgeContextMenu = useCallback((e, edge) => {
     e.preventDefault()
+    if (!canEdit) return
     setMenu({ x: e.clientX, y: e.clientY, kind: 'edge', id: edge.id, edgeKind: edge.data?.kind })
-  }, [])
+  }, [canEdit])
   // view edge id is `v-<realid>`; strip it to remove the underlying real edge (works for order & rewired boundary/group edges too).
   const onDeleteEdge = useCallback((viewId) => {
     const realId = viewId?.startsWith('v-') ? viewId.slice(2) : viewId
@@ -862,10 +872,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     return path
   }, [groups, activeGroup])
 
-  // P05.2 ownership: only the owner (or staff) may save; any signed-in user may bake a readable graph.
-  const currentGraph = graphs.find((g) => g.id === graphId)
-  const authed = !!user?.authenticated
-  const canEdit = authed && (currentGraph?.owner === user.username || user.is_staff)
+  // any signed-in user may bake a readable graph; propose needs edit rights on a sandbox.
   const canBake = authed
   const canPropose = canEdit && currentGraph?.status === 'sandbox'
   const [actionsOpen, setActionsOpen] = useState(false)
@@ -979,16 +986,18 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
           </div>
         </div>
       )}
-      <aside className={`palette${paletteOpen ? ' open' : ''}`}>
+      <aside className={`palette${paletteOpen ? ' open' : ''}${canEdit ? '' : ' readonly'}`}>
         <h1>cdGTS</h1>
-        <p className="hint">{IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas'}</p>
+        <p className="hint">{!canEdit ? '🔒 Read-only — you can view but not edit this graph'
+          : (IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas')}</p>
         {['data', 'process', 'clamp', 'reference'].map((cat) => (
           <div key={cat} className="palette-group">
             <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
             {(grouped[cat] || []).map((t) => (
-              <div key={t.slug} className={`palette-item${pending === t.slug ? ' armed' : ''}`} draggable
-                   onDragStart={(e) => { e.dataTransfer.setData('application/cdgts', t.slug); e.dataTransfer.effectAllowed = 'move' }}
-                   onClick={() => { if (IS_TOUCH) armPending(t.slug) }}
+              <div key={t.slug} className={`palette-item${pending === t.slug ? ' armed' : ''}${canEdit ? '' : ' disabled'}`}
+                   draggable={canEdit}
+                   onDragStart={(e) => { if (!canEdit) { e.preventDefault(); return } e.dataTransfer.setData('application/cdgts', t.slug); e.dataTransfer.effectAllowed = 'move' }}
+                   onClick={() => { if (IS_TOUCH && canEdit) armPending(t.slug) }}
                    title={t.description} style={{ borderLeftColor: CATEGORY_COLOR[cat] }}>
                 {t.name}
               </div>
@@ -1122,6 +1131,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
             onPaneContextMenu={onPaneContextMenu}
             onPaneClick={onPaneClick}
             nodeTypes={nodeTypes}
+            nodesDraggable={canEdit}             // read-only: can't move nodes
+            nodesConnectable={canEdit}           // read-only: can't wire edges
+            deleteKeyCode={canEdit ? ['Backspace', 'Delete'] : null}   // read-only: delete key does nothing
             selectionOnDrag={!IS_TOUCH}          // desktop: left-drag = selection box
             autoPanOnSelection                   // auto-pan when the selection box reaches the viewport edge (reach off-screen nodes). Box start is anchored in flow coords upstream, so it no longer jumps.
             panOnDrag={IS_TOUCH ? true : [1]}    // touch: drag pan / desktop: middle button
@@ -1219,6 +1231,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         nodeKeys={nodeKeys}
         references={references}
         onCreateReference={onCreateReference}
+        readOnly={!canEdit}
         onLabel={(v) => onLabel(selectedNode.id, v)}
         onDescription={(v) => onDescription(selectedNode.id, v)}
         onParam={(k, v) => onParam(selectedNode.id, k, v)}
