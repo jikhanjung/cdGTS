@@ -1,28 +1,42 @@
 #!/bin/bash
 # deploy/build.sh — 테스트 + 버전 bump + Docker 이미지 빌드/푸시. (빌드 호스트 전용)
-# Usage: ./deploy/build.sh X.Y.Z
+# Usage: ./deploy/build.sh X.Y.Z [--fast]
+#   --fast : pytest 건너뜀(프론트 전용 변경 시 ~2분 단축). 백엔드 변경 시엔 --fast 없이.
 #
 # 책임 분리 (fsis2026 관행):
 #   - 본 스크립트: 빌드 호스트에서 test + bump + docker build + push
 #   - 운영/테스트 호스트(/srv/cdGTS) 동기화는 deploy/sync_to_srv.sh + host/deploy.sh
 set -e
 
-VERSION=$1
+VERSION=""
+FAST=0
+for arg in "$@"; do
+    case "$arg" in
+        --fast|--skip-tests) FAST=1 ;;
+        *) VERSION="$arg" ;;
+    esac
+done
 if [ -z "$VERSION" ]; then
-    echo "Usage: $0 X.Y.Z"
+    echo "Usage: $0 X.Y.Z [--fast]"
+    echo "  --fast : skip the pytest suite (frontend-only changes; ~2min faster). Backend changes → run full."
     exit 1
 fi
 
 VENV="${VENV:-$HOME/venv/cdGTS/bin/activate}"
 PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 IMAGE=honestjung/cdgts
+export DOCKER_BUILDKIT=1        # layer + inline caching
 
 cd "$PROJECT_DIR"
 
-echo "=== [1/4] Running tests ==="
-source "$VENV"
-python -m pytest -q
-echo "All tests passed."
+if [ "$FAST" = "1" ]; then
+    echo "=== [1/4] Tests SKIPPED (--fast) — frontend-only 변경 가정. 백엔드 바뀌면 --fast 빼고 재빌드 ==="
+else
+    echo "=== [1/4] Running tests ==="
+    source "$VENV"
+    python -m pytest -q
+    echo "All tests passed."
+fi
 
 echo ""
 echo "=== [2/4] Bumping version to $VERSION ==="
