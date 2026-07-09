@@ -118,12 +118,13 @@ export default function CdgtsNode({ data, selected }) {
           style={{ background: ORDER_COLOR }}
         />
       ))}
-      {/* Every non-reference node can be cited: a target handle to receive a reference's cite edge. */}
+      {/* Every non-reference node can be cited: a target handle on the LEFT edge (top corner), an amber
+          square set apart from the round data input ports. */}
       {!isReference && (
         <Handle
-          type="target" position={Position.Top} id="cited"
+          type="target" position={Position.Left} id="cited"
           title="cited — connect a reference's citation port here"
-          className="cite-port" style={{ left: 14, background: CITE_COLOR }}
+          className="cite-port" style={{ top: 5, background: CITE_COLOR }}
         />
       )}
     </div>

@@ -982,7 +982,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       <aside className={`palette${paletteOpen ? ' open' : ''}`}>
         <h1>cdGTS</h1>
         <p className="hint">{IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas'}</p>
-        {['data', 'process', 'clamp'].map((cat) => (
+        {['data', 'process', 'clamp', 'reference'].map((cat) => (
           <div key={cat} className="palette-group">
             <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
             {(grouped[cat] || []).map((t) => (
