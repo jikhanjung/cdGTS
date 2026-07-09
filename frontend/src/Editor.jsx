@@ -420,8 +420,13 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const [forkDialog, setForkDialog] = useState(null)   // { name, busy } | null
   const onOpenFork = useCallback(() => {
     setError(null)
+    if (!authed) {                          // fork = a new graph you own → requires sign-in
+      setStatus('Sign in to fork — a fork is a new graph you own and can edit.')
+      setError({ detail: 'Sign in to fork this graph (creates your own editable copy).' })
+      return
+    }
     setForkDialog({ name: `${graphName || 'graph'} (fork)`, busy: false })
-  }, [graphName])
+  }, [graphName, authed])
   const onConfirmFork = useCallback(async () => {
     const name = (forkDialog?.name || '').trim()
     setForkDialog((d) => d && ({ ...d, busy: true }))
@@ -1030,10 +1035,10 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               <span className="save-state readonly" title={currentGraph?.owner ? `Owned by ${currentGraph.owner}` : 'System / demo graph'}>
                 🔒 Read-only
               </span>
-              {authed && (
-                <button className="fork-to-edit" onClick={onOpenFork} disabled={!graphId}
-                        title="Copy this graph into a sandbox you own, then edit it">Fork to edit →</button>
-              )}
+              <button className="fork-to-edit" onClick={onOpenFork} disabled={!graphId}
+                      title={authed ? 'Copy this graph into a sandbox you own, then edit it' : 'Sign in to fork this graph into your own editable copy'}>
+                {authed ? 'Fork to edit →' : 'Sign in to fork'}
+              </button>
             </>
           )}
           <div className="tb-menu">
@@ -1057,13 +1062,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
                       {currentGraph?.status === 'proposed' ? 'Proposed ✓' : 'Propose…'}
                     </button>
                   )}
-                  {authed && (
-                    <>
-                      <div className="tb-menu-sep" />
-                      <button role="menuitem" disabled={!graphId} onClick={() => { setActionsOpen(false); onOpenFork() }}
-                              title="Copy this graph into a new sandbox you own">Fork…</button>
-                    </>
-                  )}
+                  <div className="tb-menu-sep" />
+                  <button role="menuitem" disabled={!graphId} onClick={() => { setActionsOpen(false); onOpenFork() }}
+                          title={authed ? 'Copy this graph into a new sandbox you own' : 'Sign in to fork this graph into your own editable copy'}>Fork…</button>
                 </div>
               </>
             )}
