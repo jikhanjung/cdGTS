@@ -532,7 +532,7 @@ body {
 .cdgts-node__ref .doi { opacity: 0.65; font-family: ui-monospace, Menlo, monospace; }
 .cdgts-node__ref .muted { opacity: 0.5; font-style: italic; }
 /* cited handle (amber) — receives a reference's cite edge. Small square, distinct from data/order ports. */
-.cdgts-node .cite-port { width: 8px; height: 8px; border-radius: 2px; border: 1px solid #fff; }
+.cdgts-node .cite-port { width: 6px; height: 6px; min-width: 6px; min-height: 6px; border-radius: 1px; border: 1px solid #fff; }
 .cite-edge { pointer-events: stroke; }
 /* title ellipsizes to fit width — so the node doesn't stretch to the title length. Details go in the description tooltip. */
 .cdgts-node__title {
