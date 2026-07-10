@@ -427,6 +427,82 @@
   }
  },
  {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-brasier-1994",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Brasier et al. (1994)",
+   "params": {
+    "reference": "brasier-1994-pc-boundary"
+   },
+   "x": -680.0,
+   "y": -60.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-bowring-2007",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (2007)",
+   "params": {
+    "reference": "bowring-2007-oman-huqf"
+   },
+   "x": -680.0,
+   "y": 70.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-grotzinger-1995",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Grotzinger et al. (1995)",
+   "params": {
+    "reference": "grotzinger-1995-namibia"
+   },
+   "x": -680.0,
+   "y": 200.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-bowring-1993",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (1993)",
+   "params": {
+    "reference": "bowring-1993-siberia"
+   },
+   "x": -680.0,
+   "y": 330.0,
+   "group": null
+  }
+ },
+ {
   "model": "graph.edge",
   "fields": {
    "graph": [
@@ -682,6 +758,82 @@
    "source": [
     "example-cambrian-base",
     "hor-siberia"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "siberia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-brasier-1994"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "fad-fortunehead"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-bowring-2007"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "oman"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-grotzinger-1995"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "namibia"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-bowring-1993"
    ],
    "source_port": "citation",
    "target": [

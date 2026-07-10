@@ -1,0 +1,62 @@
+[
+ {
+  "model": "references.reference",
+  "fields": {
+   "slug": "brasier-1994-pc-boundary",
+   "doi": "10.18814/epiiugs/1994/v17i1.2/002",
+   "title": "Decision on the Precambrian–Cambrian boundary stratotype",
+   "authors": "Brasier, Cowie & Taylor",
+   "year": 1994,
+   "container": "Episodes 17 (1–2): 3–8",
+   "url": "",
+   "kind": "article",
+   "note": "Formal ratification of the base-Cambrian GSSP at Fortune Head, SE Newfoundland (Canada), defined at the FAD of Treptichnus pedum.",
+   "created_by": null
+  }
+ },
+ {
+  "model": "references.reference",
+  "fields": {
+   "slug": "bowring-2007-oman-huqf",
+   "doi": "10.2475/10.2007.01",
+   "title": "Geochronologic constraints on the chronostratigraphic framework of the Neoproterozoic Huqf Supergroup, Sultanate of Oman",
+   "authors": "Bowring, Grotzinger, Condon, Ramezani, Newall & Allen",
+   "year": 2007,
+   "container": "American Journal of Science 307 (10): 1097–1145",
+   "url": "",
+   "kind": "article",
+   "note": "U–Pb CA-ID-TIMS ash-bed ages bracketing the Ediacaran–Cambrian transition in the Ara Group, Oman.",
+   "created_by": null
+  }
+ },
+ {
+  "model": "references.reference",
+  "fields": {
+   "slug": "grotzinger-1995-namibia",
+   "doi": "10.1126/science.270.5236.598",
+   "title": "Biostratigraphic and geochronologic constraints on early animal evolution",
+   "authors": "Grotzinger, Bowring, Saylor & Kaufman",
+   "year": 1995,
+   "container": "Science 270 (5236): 598–604",
+   "url": "",
+   "kind": "article",
+   "note": "U–Pb zircon ages from the Nama Group, Namibia, constraining Ediacaran fossils near the Precambrian–Cambrian boundary.",
+   "created_by": null
+  }
+ },
+ {
+  "model": "references.reference",
+  "fields": {
+   "slug": "bowring-1993-siberia",
+   "doi": "10.1126/science.11539488",
+   "title": "Calibrating rates of early Cambrian evolution",
+   "authors": "Bowring, Grotzinger, Isachsen, Knoll, Pelechaty & Kolosov",
+   "year": 1993,
+   "container": "Science 261 (5126): 1293–1298",
+   "url": "",
+   "kind": "article",
+   "note": "U–Pb zircon ages from lower Cambrian rocks of NE Siberia; classic anchor for the base of the Cambrian.",
+   "created_by": null
+  }
+ }
+]
