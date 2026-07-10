@@ -106,9 +106,9 @@ def test_icc_chart_tiles_by_rank(seeded):
     assert (sp["mississippian"]["top"], sp["mississippian"]["bottom"]) == (323.4, 358.86)
     assert (sp["pennsylvanian"]["top"], sp["pennsylvanian"]["bottom"]) == (298.9, 323.4)
     eon = {b["slug"]: b for b in lv["Eon"]}
-    # base-Cambrian/Paleozoic/Phanerozoic 동일 GSSP → 하나의 boundary 노드(bnd-base-cambrian, global-age-model 산출).
-    # 이전 published 538.8 이 아니라 계산값 538.795284 로 통일(같은 점이 같은 값).
-    assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.7953
+    # base-Cambrian/Paleozoic/Phanerozoic 동일 GSSP → 하나의 boundary 노드(bnd-base-cambrian).
+    # 연대는 realistic 모델(3 섹션 δ13C bracket→interpolate → 종합 → T. pedum FAD calibration-transfer) 계산값 538.82351.
+    assert eon["phanerozoic"]["top"] == 0.0 and eon["phanerozoic"]["bottom"] == 538.8235
     assert eon["hadean"]["bottom"] == 4567.0
     assert lv["Period"][0]["slug"] == "quaternary" and lv["Period"][0]["top"] == 0.0
     # 공식 ICS 색 주입 확인 (Triassic = #812B92)

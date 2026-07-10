@@ -48,6 +48,23 @@
   }
  },
  {
+  "model": "graph.nodegroup",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "grp-cambrian-sections",
+   "name": "Base Cambrian · δ13C-dated sections",
+   "collapsed": false,
+   "x": -720.0,
+   "y": -110.0,
+   "kind": "container",
+   "unit": null,
+   "lower": null,
+   "upper": null
+  }
+ },
+ {
   "model": "graph.nodeinstance",
   "fields": {
    "graph": [
@@ -65,7 +82,10 @@
    },
    "x": -420.0,
    "y": 150.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -93,7 +113,10 @@
    },
    "x": -130.0,
    "y": 20.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -114,7 +137,10 @@
    },
    "x": -130.0,
    "y": 150.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -142,7 +168,10 @@
    },
    "x": -130.0,
    "y": 280.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -162,7 +191,10 @@
    },
    "x": 200.0,
    "y": 150.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -181,7 +213,10 @@
    },
    "x": -700.0,
    "y": 150.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -333,7 +368,10 @@
    },
    "x": -700.0,
    "y": 530.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -354,7 +392,10 @@
    },
    "x": -420.0,
    "y": 530.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -382,7 +423,10 @@
    },
    "x": -130.0,
    "y": 400.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -403,7 +447,10 @@
    },
    "x": -130.0,
    "y": 530.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -431,7 +478,10 @@
    },
    "x": -130.0,
    "y": 660.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -451,7 +501,10 @@
    },
    "x": 200.0,
    "y": 530.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -470,7 +523,10 @@
    },
    "x": -700.0,
    "y": 910.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -491,7 +547,10 @@
    },
    "x": -420.0,
    "y": 910.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -519,7 +578,10 @@
    },
    "x": -130.0,
    "y": 780.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -540,7 +602,10 @@
    },
    "x": -130.0,
    "y": 910.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -568,7 +633,10 @@
    },
    "x": -130.0,
    "y": 1040.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -588,7 +656,10 @@
    },
    "x": 200.0,
    "y": 910.0,
-   "group": null
+   "group": [
+    "example-cambrian-base",
+    "grp-cambrian-sections"
+   ]
   }
  },
  {
@@ -1286,6 +1357,583 @@
    },
    "created_at": "2026-07-04T09:00:00Z",
    "updated_at": "2026-07-04T09:00:00Z"
+  }
+ },
+ {
+  "model": "graph.nodegroup",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "grp-cambrian-sections",
+   "name": "Base Cambrian · δ13C-dated sections",
+   "collapsed": false,
+   "x": -170.0,
+   "y": 190.0,
+   "kind": "container",
+   "unit": null,
+   "lower": null,
+   "upper": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "oman-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ara Group (Oman)\nAra Group · Sultanate of Oman",
+   "params": {
+    "locality": "Ara Group, Oman",
+    "region": "Oman",
+    "note": "subsurface Huqf area (illustrative depths)"
+   },
+   "x": 130.0,
+   "y": 450.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.3 ± 0.5 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.3,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.5
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 120
+   },
+   "x": 420.0,
+   "y": 320.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "bace-horizon",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 108 (target)",
+   "params": {
+    "depth": 108,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; no direct age → interpolation target"
+   },
+   "x": 420.0,
+   "y": 450.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.5 ± 0.5 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.5,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.5
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 95
+   },
+   "x": 420.0,
+   "y": 580.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "oman-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 108 → BACE age",
+   "params": {
+    "method": "linear",
+    "target_depth": 108
+   },
+   "x": 750.0,
+   "y": 450.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ref-bowring-2007",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (2007)",
+   "params": {
+    "reference": "bowring-2007-oman-huqf"
+   },
+   "x": -150.0,
+   "y": 450.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ref-grotzinger-1995",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Grotzinger et al. (1995)",
+   "params": {
+    "reference": "grotzinger-1995-namibia"
+   },
+   "x": -150.0,
+   "y": 830.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "nam-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Nama Group (Namibia)\nNama Group · Namibia",
+   "params": {
+    "locality": "Nama Group, Namibia",
+    "region": "Namibia",
+    "note": "illustrative depths"
+   },
+   "x": 130.0,
+   "y": 830.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "nam-ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.6 ± 1.0 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.6,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.0
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 210
+   },
+   "x": 420.0,
+   "y": 700.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "nam-bace",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 195 (target)",
+   "params": {
+    "depth": 195,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; interpolation target"
+   },
+   "x": 420.0,
+   "y": 830.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "nam-ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.4 ± 1.0 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.4,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.0
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 180
+   },
+   "x": 420.0,
+   "y": 960.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "nam-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 195",
+   "params": {
+    "method": "linear",
+    "target_depth": 195
+   },
+   "x": 750.0,
+   "y": 830.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ref-bowring-1993",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (1993)",
+   "params": {
+    "reference": "bowring-1993-siberia"
+   },
+   "x": -150.0,
+   "y": 1210.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "sib-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ust'-Yudoma (Siberia)\nSiberian Platform",
+   "params": {
+    "locality": "Ust'-Yudoma Fm, SE Siberia",
+    "region": "Siberian Platform",
+    "note": "illustrative depths"
+   },
+   "x": 130.0,
+   "y": 1210.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "sib-ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.0 ± 0.8 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.0,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.8
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 60
+   },
+   "x": 420.0,
+   "y": 1080.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "sib-bace",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 48 (target)",
+   "params": {
+    "depth": 48,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; interpolation target"
+   },
+   "x": 420.0,
+   "y": 1210.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "sib-ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.2 ± 0.8 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.2,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.8
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 35
+   },
+   "x": 420.0,
+   "y": 1340.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "sib-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 48",
+   "params": {
+    "method": "linear",
+    "target_depth": 48
+   },
+   "x": 750.0,
+   "y": 1210.0,
+   "group": [
+    "example-icc-partial",
+    "grp-cambrian-sections"
+   ]
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "synthesis",
+   "node_type": [
+    "cross-section-correlation"
+   ],
+   "label": "Cross-section synthesis\n(δ13C-correlated section ages → base of Cambrian)",
+   "params": {
+    "correlation_via": [
+     "d13C-BACE"
+    ]
+   },
+   "x": 1110.0,
+   "y": 830.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "ref-brasier-1994",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Brasier et al. (1994)",
+   "params": {
+    "reference": "brasier-1994-pc-boundary"
+   },
+   "x": 830.0,
+   "y": 340.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "fortune-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Fortune Head (GSSP)\nSE Newfoundland, Canada",
+   "params": {
+    "locality": "Fortune Head (GSSP)",
+    "region": "SE Newfoundland, Canada",
+    "note": "GSSP — T. pedum FAD defines the boundary; no radiometric ages here (dated elsewhere via δ13C)"
+   },
+   "x": 1110.0,
+   "y": 340.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "tpedum-fad",
+   "node_type": [
+    "biostratigraphic"
+   ],
+   "label": "T. pedum FAD (GSSP)\nboundary definition · not dated",
+   "params": {},
+   "x": 1390.0,
+   "y": 340.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "key": "calib-transfer",
+   "node_type": [
+    "calibration-transfer"
+   ],
+   "label": "δ13C calibration transfer\nBACE age → T. pedum FAD boundary",
+   "params": {},
+   "x": 1400.0,
+   "y": 600.0,
+   "group": null
   }
  },
  {
@@ -4826,136 +5474,6 @@
   }
  },
  {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "key": "oman",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Oman Ara Group ash-bed U–Pb\n538.8 ± 0.6 Ma (other continent)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 538.8,
-     "sigma": 2,
-     "budget": {
-      "analytical": 0.6
-     },
-     "note": "classic 542.0±0.3 → recent CA-ID-TIMS revised value (illustrative · approximate)"
-    }
-   },
-   "x": 1270,
-   "y": 571,
-   "group": null,
-   "description": "",
-   "width": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "key": "namibia",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Namibia ash-bed U–Pb\n≈538.6 Ma (illustrative · approximate)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 538.6,
-     "sigma": 2,
-     "budget": {
-      "analytical": 1.6
-     },
-     "note": "illustrative · approximate value"
-    }
-   },
-   "x": 1270,
-   "y": 661,
-   "group": null,
-   "description": "",
-   "width": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "key": "siberia",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Siberia ash-bed U–Pb\n≈539.0 Ma (illustrative · approximate)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 539.0,
-     "sigma": 2,
-     "budget": {
-      "analytical": 1.8
-     },
-     "note": "illustrative · approximate value"
-    }
-   },
-   "x": 1270,
-   "y": 751,
-   "group": null,
-   "description": "",
-   "width": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "key": "fad-fortunehead",
-   "node_type": [
-    "biostratigraphic"
-   ],
-   "label": "T. pedum FAD · Fortune Head (Canada)\n= boundary position · not directly datable",
-   "params": {},
-   "x": 1270,
-   "y": 481,
-   "group": null,
-   "description": "",
-   "width": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "key": "global-age-model",
-   "node_type": [
-    "cross-section-correlation"
-   ],
-   "label": "Global δ13C age model\n(BACE·Sr correlation · 130 successions · radiometric anchor)",
-   "params": {
-    "correlation_via": [
-     "d13C",
-     "Sr-isotope"
-    ]
-   },
-   "x": 1460,
-   "y": 706,
-   "group": null,
-   "description": "Transfers the Cambrian base (base-cambrian) age via other-continent U–Pb anchors + δ13C correlation.",
-   "width": null
-  }
- },
- {
   "model": "graph.edge",
   "fields": {
    "graph": [
@@ -4991,82 +5509,6 @@
    ],
    "target_port": "dated_horizons",
    "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "source": [
-    "example-icc-partial",
-    "oman"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-icc-partial",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "source": [
-    "example-icc-partial",
-    "namibia"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-icc-partial",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "source": [
-    "example-icc-partial",
-    "siberia"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-icc-partial",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "source": [
-    "example-icc-partial",
-    "fad-fortunehead"
-   ],
-   "source_port": "datum",
-   "target": [
-    "example-icc-partial",
-    "global-age-model"
-   ],
-   "target_port": "signals",
-   "kind": "calibration-transfer"
   }
  },
  {
@@ -11573,25 +12015,6 @@
    ],
    "source": [
     "example-icc-partial",
-    "global-age-model"
-   ],
-   "source_port": "correlated_age",
-   "target": [
-    "example-icc-partial",
-    "bnd-base-cambrian"
-   ],
-   "target_port": "age",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-icc-partial"
-   ],
-   "source": [
-    "example-icc-partial",
     "gssa-decree"
    ],
    "source_port": "out",
@@ -20796,6 +21219,557 @@
     "merge-ages-cambrian"
    ],
    "target_port": "parts",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "oman-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-icc-partial",
+    "ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "oman-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-icc-partial",
+    "bace-horizon"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "oman-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-icc-partial",
+    "ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "bace-horizon"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ref-bowring-2007"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-icc-partial",
+    "oman-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-icc-partial",
+    "nam-ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-icc-partial",
+    "nam-bace"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-icc-partial",
+    "nam-ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-bace"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ref-grotzinger-1995"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-icc-partial",
+    "nam-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-icc-partial",
+    "sib-ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-icc-partial",
+    "sib-bace"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-icc-partial",
+    "sib-ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-bace"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-icc-partial",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-icc-partial",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ref-bowring-1993"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-icc-partial",
+    "sib-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "oman-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "nam-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "sib-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-icc-partial",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "ref-brasier-1994"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-icc-partial",
+    "fortune-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "fortune-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-icc-partial",
+    "tpedum-fad"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "synthesis"
+   ],
+   "source_port": "correlated_age",
+   "target": [
+    "example-icc-partial",
+    "calib-transfer"
+   ],
+   "target_port": "reference",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "tpedum-fad"
+   ],
+   "source_port": "datum",
+   "target": [
+    "example-icc-partial",
+    "calib-transfer"
+   ],
+   "target_port": "target",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-icc-partial"
+   ],
+   "source": [
+    "example-icc-partial",
+    "calib-transfer"
+   ],
+   "source_port": "calibrated",
+   "target": [
+    "example-icc-partial",
+    "bnd-base-cambrian"
+   ],
+   "target_port": "age",
    "kind": "data"
   }
  }
