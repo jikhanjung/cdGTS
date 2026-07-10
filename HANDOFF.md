@@ -1,9 +1,14 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-09. 운영 **cdgts.paleobytes.info @ 0.1.34** 배포 완료. 개발/테스트 `127.0.0.1:8011` @ **0.1.34**.
-**이미지 `honestjung/cdgts:0.1.35` 빌드·푸시 완료·미배포**(P06.4a+L2/L3+retype demo; 배포 시 신규 worker 서비스 주의 — devlog 126).
-**레퍼런스 노드**(새 `references` 앱 + `reference` NodeType + `cite` 엣지 + 프론트 팔레트/cite 배선/인스펙터 DOI)([devlog 127](devlog/20260709_127_reference-nodes.md)) + **bake→bibliography**(cite 상류 역추적 → `BoundaryRecord.references` 스냅샷 + Vault "References" 탭)([devlog 128](devlog/20260709_128_bake-bibliography.md)). 미빌드/미배포, 배포 시 `seed --mode=add` 1회.
-백엔드 **pytest 156 passed**. devlog 001~122 + 리뷰/계획(R01·P04·P05·P06·P06.4) push. P04(불변 Bake·Vault) + **P05(멀티유저 CI .1~.5)** + Editor UX + staff 사용자 관리·프로필 + **P06 Science Engine(06.1 공분산 백본·06.2 공분산 인지 게이트·06.2b L1b/L2 assert-기반·06.3 clamp reconcile·06.3b 캡스톤 데모)** + Science Engine 튜토리얼(docs) + ICC 차트 경계 연대(Ma) + dirty시 Evaluate 비활성 + **docs 현행화(Layer 0–6→노드 종류, archive)** → **0.1.34 정식 릴리스** 운영 배포 완료. **P06.4a(비동기 평가 잡+워커 인프라, 커널 해석적 유지) 구현·미배포**([devlog 123](devlog/20260708_123_p06-4a-async-eval-worker.md)). **L2/L3 게이트 후속**(L2 fail 상세 note; 도메인 임계 warn 은 보류)([devlog 124](devlog/20260708_124_l2-l3-gate-followup.md)). **retype diff 실데모**(diff 에 shape 축 추가 + Cryogenian GSSA→GSSP seed_demo 쌍)([devlog 125](devlog/20260709_125_retype-diff-demo.md), pytest 147). **다음: P06.4b(PyMC joint 커널) · clamp 통합.** (운영에서 캡스톤 데모 보려면 `docker exec <컨테이너> python manage.py seed_demo` 1회 — 선택.)
+**Last updated**: 2026-07-10. 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.47** 배포·검증. 운영 `cdgts.paleobytes.info` 는 마지막 확인 **0.1.34**(본 세션에서 운영 미배포). 이미지 `honestjung/cdgts:0.1.35~0.1.47` dockerhub push 완료. **운영 배포는 사용자 승인 후**(0.1.47 dockerhub 준비됨; seed 변경 → 배포 시 `seed --mode=replace` 재시드 필요).
+
+**P07 — Base of Cambrian realistic model**(커밋 `09abf6f`~`91aabbb`; devlog 미작성, [계획 P07](devlog/20260710_P07_base-cambrian-provenance-slice.md)): provenance vertical slice 를 실제 base-of-Cambrian 추론 구조로 구현.
+- **노드 타입**: `section`(data — locality, h1/h2/h3 로 horizon emit, **cite 대상** = 섹션 레벨 provenance) · `horizon`(data — `depth`(섹션 base 기준)+`datum`, age 없는 undated horizon = 보간 target) · `radiometric-uPb`·`biostratigraphic` 에 `section` 입력 포트. `reference` = 유일 인용 노드 + DOI 레지스트리(`seed/02b_references.json`: Brasier94·Bowring07·Grotzinger95·Bowring93).
+- **추론 구조**: 3 dated 섹션(Oman·Namibia·Siberia) 각 2 U-Pb ash bed 가 δ13C BACE horizon 을 bracket → `age-depth-model` interpolate(섹션별 경계 연대) → `cross-section-correlation` 종합 → Fortune Head **T. pedum FAD**(biostratigraphic, 연대 없음 = **경계 정의**) 로 `calibration-transfer`(reference=dated 연대, target=FAD; "정의는 FAD·연대는 δ13C 로 딴 데서") → **base of Cambrian = 538.82351 Ma**. 커널: `age-depth-model` 이 depth-만 있는 입력(boundary horizon)을 보간 target 으로 읽음(`target_depth` param 폴백).
+- **그룹·example④**: 3 dated 섹션 evidence 18 노드 → NodeGroup "Base Cambrian · δ13C-dated sections" 하나. **realistic 모델을 example④(전 ICC 조립 그래프)에도 반영** — 옛 flat(global-age-model) 제거, `calib-transfer → bnd-base-cambrian.age`, 섹션 그룹 동일 적용(279 노드). 각 섹션 논문 cite → bibliography 4건 전파.
+- 예제③(example-cambrian-base) **23 노드** · 예제④(example-icc-partial) **279 노드**. **pytest 159 passed.**
+
+**배경(0.1.35~0.1.46)**: **레퍼런스 노드 + bake→bibliography**(devlog 127·128) 위에 P07 을 쌓음. 이전 P04(불변 Bake·Vault) · P05(멀티유저 CI) · P06(Science Engine: 공분산 백본·정합성 게이트 L1/L2·clamp reconcile) · P06.4a(비동기 워커) 는 그대로. **다음: P07 durability(운영 반영) · devlog 작성 · P06.4b(PyMC) · clamp 통합.**
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
