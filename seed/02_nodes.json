@@ -191,6 +191,19 @@
    "node_type": [
     "radiometric-uPb"
    ],
+   "name": "section",
+   "direction": "in",
+   "datatype": "any",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "radiometric-uPb"
+   ],
    "name": "age",
    "direction": "out",
    "datatype": "distribution",
@@ -220,6 +233,19 @@
    "name": "reversals",
    "direction": "out",
    "datatype": "signal",
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "biostratigraphic"
+   ],
+   "name": "section",
+   "direction": "in",
+   "datatype": "any",
    "multiple": false,
    "order": 0
   }
@@ -733,8 +759,8 @@
   "fields": {
    "slug": "section",
    "name": "Stratigraphic section",
-   "category": "reference",
-   "description": "A measured stratigraphic section / locality (provenance context, not computed). Wire its citation port to the data node observed there with a cite edge; a bake walks cite edges into the bibliography.",
+   "category": "data",
+   "description": "A measured stratigraphic section at a locality. Emits its horizons (up to 3: h1/h2/h3). Cite-able: a reference node describing the section wires to its cited handle, so section-level provenance has a home. The h* edges are structural (carry no value) but keep the section in the boundary's data-flow cone so its references propagate to the bibliography.",
    "params_schema": {
     "locality": {
      "type": "string",
@@ -756,28 +782,54 @@
    "node_type": [
     "section"
    ],
-   "name": "citation",
+   "name": "h1",
    "direction": "out",
    "datatype": "any",
-   "multiple": true,
+   "multiple": false,
    "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "section"
+   ],
+   "name": "h2",
+   "direction": "out",
+   "datatype": "any",
+   "multiple": false,
+   "order": 1
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "section"
+   ],
+   "name": "h3",
+   "direction": "out",
+   "datatype": "any",
+   "multiple": false,
+   "order": 2
   }
  },
  {
   "model": "nodes.nodetype",
   "fields": {
    "slug": "horizon",
-   "name": "Horizon / bed / sample",
-   "category": "reference",
-   "description": "A specific horizon / bed / sample where an age or datum was observed (provenance context, not computed). Wire its citation port to the data node with a cite edge. Depth is metadata here; feed age–depth models via the model node's params.",
+   "name": "Horizon",
+   "category": "data",
+   "description": "A stratigraphic level in a section, at a given depth (distance from section base). Carries no age of its own — an undated horizon (e.g. the boundary/correlation level marked by a δ13C excursion or fossil FAD) is the interpolation target: it feeds an age-depth model whose bracketing inputs are dated beds. Cite-able for its source.",
    "params_schema": {
-    "position": {
-     "type": "string",
-     "help": "Stratigraphic position (e.g. ash bed within the Ara Group)"
-    },
-    "depth_m": {
+    "depth": {
      "type": "number",
-     "help": "Depth / height in metres (metadata · not an age–depth input)"
+     "help": "Distance from section base (a stratigraphic coordinate; higher = up-section)"
+    },
+    "datum": {
+     "type": "string",
+     "help": "Correlation signal at this level (e.g. δ13C BACE, T. pedum FAD)"
     },
     "note": {
      "type": "string"
@@ -791,10 +843,23 @@
    "node_type": [
     "horizon"
    ],
-   "name": "citation",
-   "direction": "out",
+   "name": "section",
+   "direction": "in",
    "datatype": "any",
-   "multiple": true,
+   "multiple": false,
+   "order": 0
+  }
+ },
+ {
+  "model": "nodes.port",
+  "fields": {
+   "node_type": [
+    "horizon"
+   ],
+   "name": "out",
+   "direction": "out",
+   "datatype": "distribution",
+   "multiple": false,
    "order": 0
   }
  }

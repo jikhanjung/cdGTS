@@ -51,6 +51,1044 @@
   "model": "graph.nodeinstance",
   "fields": {
    "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "oman-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ara Group (Oman)\nAra Group · Sultanate of Oman",
+   "params": {
+    "locality": "Ara Group, Oman",
+    "region": "Oman",
+    "note": "subsurface Huqf area (illustrative depths)"
+   },
+   "x": -420.0,
+   "y": 150.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.3 ± 0.5 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.3,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.5
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 120
+   },
+   "x": -130.0,
+   "y": 20.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "bace-horizon",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 108 (target)",
+   "params": {
+    "depth": 108,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; no direct age → interpolation target"
+   },
+   "x": -130.0,
+   "y": 150.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.5 ± 0.5 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.5,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.5
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 95
+   },
+   "x": -130.0,
+   "y": 280.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "oman-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 108 → BACE age",
+   "params": {
+    "method": "linear",
+    "target_depth": 108
+   },
+   "x": 200.0,
+   "y": 150.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-bowring-2007",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (2007)",
+   "params": {
+    "reference": "bowring-2007-oman-huqf"
+   },
+   "x": -700.0,
+   "y": 150.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "oman-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-cambrian-base",
+    "ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "oman-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-cambrian-base",
+    "bace-horizon"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "oman-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-cambrian-base",
+    "ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "bace-horizon"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-cambrian-base",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "oman-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-bowring-2007"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "oman-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-grotzinger-1995",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Grotzinger et al. (1995)",
+   "params": {
+    "reference": "grotzinger-1995-namibia"
+   },
+   "x": -700.0,
+   "y": 530.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "nam-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Nama Group (Namibia)\nNama Group · Namibia",
+   "params": {
+    "locality": "Nama Group, Namibia",
+    "region": "Namibia",
+    "note": "illustrative depths"
+   },
+   "x": -420.0,
+   "y": 530.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "nam-ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.6 ± 1.0 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.6,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.0
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 210
+   },
+   "x": -130.0,
+   "y": 400.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "nam-bace",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 195 (target)",
+   "params": {
+    "depth": 195,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; interpolation target"
+   },
+   "x": -130.0,
+   "y": 530.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "nam-ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.4 ± 1.0 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.4,
+     "sigma": 2,
+     "budget": {
+      "analytical": 1.0
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 180
+   },
+   "x": -130.0,
+   "y": 660.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "nam-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 195",
+   "params": {
+    "method": "linear",
+    "target_depth": 195
+   },
+   "x": 200.0,
+   "y": 530.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-bowring-1993",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Bowring et al. (1993)",
+   "params": {
+    "reference": "bowring-1993-siberia"
+   },
+   "x": -700.0,
+   "y": 910.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sib-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Ust'-Yudoma (Siberia)\nSiberian Platform",
+   "params": {
+    "locality": "Ust'-Yudoma Fm, SE Siberia",
+    "region": "Siberian Platform",
+    "note": "illustrative depths"
+   },
+   "x": -420.0,
+   "y": 910.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sib-ash-upper",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (upper)\n538.0 ± 0.8 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 538.0,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.8
+     },
+     "note": "illustrative U–Pb ash-bed age (upper)"
+    },
+    "depth": 60
+   },
+   "x": -130.0,
+   "y": 780.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sib-bace",
+   "node_type": [
+    "horizon"
+   ],
+   "label": "Boundary horizon · δ13C BACE\ndepth 48 (target)",
+   "params": {
+    "depth": 48,
+    "datum": "δ13C BACE (basal Cambrian excursion)",
+    "note": "correlates to base of Cambrian; interpolation target"
+   },
+   "x": -130.0,
+   "y": 910.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sib-ash-lower",
+   "node_type": [
+    "radiometric-uPb"
+   ],
+   "label": "Ash bed (lower)\n539.2 ± 0.8 Ma · U–Pb",
+   "params": {
+    "distribution": {
+     "fidelity": "sym",
+     "value_ma": 539.2,
+     "sigma": 2,
+     "budget": {
+      "analytical": 0.8
+     },
+     "note": "illustrative U–Pb ash-bed age (lower)"
+    },
+    "depth": 35
+   },
+   "x": -130.0,
+   "y": 1040.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "sib-interp",
+   "node_type": [
+    "age-depth-model"
+   ],
+   "label": "Interpolate (age–depth)\ntarget = 48",
+   "params": {
+    "method": "linear",
+    "target_depth": 48
+   },
+   "x": 200.0,
+   "y": 910.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "synthesis",
+   "node_type": [
+    "cross-section-correlation"
+   ],
+   "label": "Cross-section synthesis\n(δ13C-correlated section ages → base of Cambrian)",
+   "params": {
+    "correlation_via": [
+     "d13C-BACE"
+    ]
+   },
+   "x": 560.0,
+   "y": 530.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-cambrian-base",
+    "nam-ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-cambrian-base",
+    "nam-bace"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-cambrian-base",
+    "nam-ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-bace"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-cambrian-base",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "nam-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-grotzinger-1995"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "nam-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-cambrian-base",
+    "sib-ash-upper"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-section"
+   ],
+   "source_port": "h2",
+   "target": [
+    "example-cambrian-base",
+    "sib-bace"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-section"
+   ],
+   "source_port": "h3",
+   "target": [
+    "example-cambrian-base",
+    "sib-ash-lower"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-ash-upper"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-bace"
+   ],
+   "source_port": "out",
+   "target": [
+    "example-cambrian-base",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-ash-lower"
+   ],
+   "source_port": "age",
+   "target": [
+    "example-cambrian-base",
+    "sib-interp"
+   ],
+   "target_port": "dated_horizons",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-bowring-1993"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "sib-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "oman-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-cambrian-base",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "nam-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-cambrian-base",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "sib-interp"
+   ],
+   "source_port": "horizon_age",
+   "target": [
+    "example-cambrian-base",
+    "synthesis"
+   ],
+   "target_port": "anchors",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "ref-brasier-1994",
+   "node_type": [
+    "reference"
+   ],
+   "label": "Ref · Brasier et al. (1994)",
+   "params": {
+    "reference": "brasier-1994-pc-boundary"
+   },
+   "x": 280.0,
+   "y": 40.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "fortune-section",
+   "node_type": [
+    "section"
+   ],
+   "label": "Section · Fortune Head (GSSP)\nSE Newfoundland, Canada",
+   "params": {
+    "locality": "Fortune Head (GSSP)",
+    "region": "SE Newfoundland, Canada",
+    "note": "GSSP — T. pedum FAD defines the boundary; no radiometric ages here (dated elsewhere via δ13C)"
+   },
+   "x": 560.0,
+   "y": 40.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "tpedum-fad",
+   "node_type": [
+    "biostratigraphic"
+   ],
+   "label": "T. pedum FAD (GSSP)\nboundary definition · not dated",
+   "params": {},
+   "x": 840.0,
+   "y": 40.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "key": "calib-transfer",
+   "node_type": [
+    "calibration-transfer"
+   ],
+   "label": "δ13C calibration transfer\nBACE age → T. pedum FAD boundary",
+   "params": {},
+   "x": 850.0,
+   "y": 300.0,
+   "group": null
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "ref-brasier-1994"
+   ],
+   "source_port": "citation",
+   "target": [
+    "example-cambrian-base",
+    "fortune-section"
+   ],
+   "target_port": "cited",
+   "kind": "cite"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "fortune-section"
+   ],
+   "source_port": "h1",
+   "target": [
+    "example-cambrian-base",
+    "tpedum-fad"
+   ],
+   "target_port": "section",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "synthesis"
+   ],
+   "source_port": "correlated_age",
+   "target": [
+    "example-cambrian-base",
+    "calib-transfer"
+   ],
+   "target_port": "reference",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.edge",
+  "fields": {
+   "graph": [
+    "example-cambrian-base"
+   ],
+   "source": [
+    "example-cambrian-base",
+    "tpedum-fad"
+   ],
+   "source_port": "datum",
+   "target": [
+    "example-cambrian-base",
+    "calib-transfer"
+   ],
+   "target_port": "target",
+   "kind": "data"
+  }
+ },
+ {
+  "model": "graph.nodeinstance",
+  "fields": {
+   "graph": [
     "example-gssa-precambrian"
    ],
    "key": "gssa-decree",
@@ -143,366 +1181,6 @@
   }
  },
  {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "oman",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Oman Ara Group ash-bed U–Pb\n538.8 ± 0.6 Ma (other continent)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 538.8,
-     "sigma": 2,
-     "budget": {
-      "analytical": 0.6
-     },
-     "note": "classic 542.0±0.3 → recent CA-ID-TIMS revised value (illustrative · approximate)"
-    }
-   },
-   "x": 80.0,
-   "y": 70.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "namibia",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Namibia ash-bed U–Pb\n≈538.6 Ma (illustrative · approximate)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 538.6,
-     "sigma": 2,
-     "budget": {
-      "analytical": 1.6
-     },
-     "note": "illustrative · approximate value"
-    }
-   },
-   "x": 80.0,
-   "y": 200.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "siberia",
-   "node_type": [
-    "radiometric-uPb"
-   ],
-   "label": "Siberia ash-bed U–Pb\n≈539.0 Ma (illustrative · approximate)",
-   "params": {
-    "distribution": {
-     "fidelity": "sym",
-     "value_ma": 539.0,
-     "sigma": 2,
-     "budget": {
-      "analytical": 1.8
-     },
-     "note": "illustrative · approximate value"
-    }
-   },
-   "x": 80.0,
-   "y": 330.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "fad-fortunehead",
-   "node_type": [
-    "biostratigraphic"
-   ],
-   "label": "T. pedum FAD · Fortune Head (Canada)\n= boundary position · not directly datable",
-   "params": {},
-   "x": 80.0,
-   "y": -60.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "global-age-model",
-   "node_type": [
-    "cross-section-correlation"
-   ],
-   "label": "Global δ13C age model\n(BACE·Sr correlation · 130 successions · radiometric anchor)",
-   "params": {
-    "correlation_via": [
-     "d13C",
-     "Sr-isotope"
-    ]
-   },
-   "x": 500.0,
-   "y": 230.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "sec-fad-fortunehead",
-   "node_type": [
-    "section"
-   ],
-   "label": "Section · Fortune Head (GSSP)",
-   "params": {
-    "locality": "Fortune Head (GSSP)",
-    "region": "SE Newfoundland, Canada",
-    "note": "Chapel Island Fm · GSSP section for the base of the Cambrian"
-   },
-   "x": -440.0,
-   "y": -60.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "hor-fad-fortunehead",
-   "node_type": [
-    "horizon"
-   ],
-   "label": "Horizon · T. pedum FAD level",
-   "params": {
-    "position": "T. pedum FAD level",
-    "note": "2.4 m above base of Member 2, Chapel Island Fm — the golden spike horizon"
-   },
-   "x": -200.0,
-   "y": -60.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "sec-oman",
-   "node_type": [
-    "section"
-   ],
-   "label": "Section · Ara Group (subsurface)",
-   "params": {
-    "locality": "Ara Group (subsurface)",
-    "region": "Huqf area, Oman",
-    "note": "cited U–Pb ash-bed source (illustrative)"
-   },
-   "x": -440.0,
-   "y": 70.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "hor-oman",
-   "node_type": [
-    "horizon"
-   ],
-   "label": "Horizon · Ara Group ash bed",
-   "params": {
-    "position": "Ara Group ash bed",
-    "note": "ash bed bracketing the boundary interval (illustrative)"
-   },
-   "x": -200.0,
-   "y": 70.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "sec-namibia",
-   "node_type": [
-    "section"
-   ],
-   "label": "Section · Nama Group",
-   "params": {
-    "locality": "Nama Group",
-    "region": "Namibia",
-    "note": "Ediacaran–Cambrian succession (illustrative)"
-   },
-   "x": -440.0,
-   "y": 200.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "hor-namibia",
-   "node_type": [
-    "horizon"
-   ],
-   "label": "Horizon · Nama Group ash bed",
-   "params": {
-    "position": "Nama Group ash bed",
-    "note": "ash bed, upper Nama Group (illustrative · approximate)"
-   },
-   "x": -200.0,
-   "y": 200.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "sec-siberia",
-   "node_type": [
-    "section"
-   ],
-   "label": "Section · Ust'-Yudoma / SE Siberia",
-   "params": {
-    "locality": "Ust'-Yudoma / SE Siberia",
-    "region": "Siberian Platform",
-    "note": "boundary succession with δ13C (BACE) record (illustrative)"
-   },
-   "x": -440.0,
-   "y": 330.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "hor-siberia",
-   "node_type": [
-    "horizon"
-   ],
-   "label": "Horizon · Siberia ash bed",
-   "params": {
-    "position": "Siberia ash bed",
-    "note": "ash bed near the BACE excursion (illustrative · approximate)"
-   },
-   "x": -200.0,
-   "y": 330.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "ref-brasier-1994",
-   "node_type": [
-    "reference"
-   ],
-   "label": "Ref · Brasier et al. (1994)",
-   "params": {
-    "reference": "brasier-1994-pc-boundary"
-   },
-   "x": -680.0,
-   "y": -60.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "ref-bowring-2007",
-   "node_type": [
-    "reference"
-   ],
-   "label": "Ref · Bowring et al. (2007)",
-   "params": {
-    "reference": "bowring-2007-oman-huqf"
-   },
-   "x": -680.0,
-   "y": 70.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "ref-grotzinger-1995",
-   "node_type": [
-    "reference"
-   ],
-   "label": "Ref · Grotzinger et al. (1995)",
-   "params": {
-    "reference": "grotzinger-1995-namibia"
-   },
-   "x": -680.0,
-   "y": 200.0,
-   "group": null
-  }
- },
- {
-  "model": "graph.nodeinstance",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "key": "ref-bowring-1993",
-   "node_type": [
-    "reference"
-   ],
-   "label": "Ref · Bowring et al. (1993)",
-   "params": {
-    "reference": "bowring-1993-siberia"
-   },
-   "x": -680.0,
-   "y": 330.0,
-   "group": null
-  }
- },
- {
   "model": "graph.edge",
   "fields": {
    "graph": [
@@ -538,310 +1216,6 @@
    ],
    "target_port": "dated_horizons",
    "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "oman"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-cambrian-base",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "namibia"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-cambrian-base",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "siberia"
-   ],
-   "source_port": "age",
-   "target": [
-    "example-cambrian-base",
-    "global-age-model"
-   ],
-   "target_port": "anchors",
-   "kind": "data"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "fad-fortunehead"
-   ],
-   "source_port": "datum",
-   "target": [
-    "example-cambrian-base",
-    "global-age-model"
-   ],
-   "target_port": "signals",
-   "kind": "calibration-transfer"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "sec-fad-fortunehead"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "fad-fortunehead"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "hor-fad-fortunehead"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "fad-fortunehead"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "sec-oman"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "oman"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "hor-oman"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "oman"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "sec-namibia"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "namibia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "hor-namibia"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "namibia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "sec-siberia"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "siberia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "hor-siberia"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "siberia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "ref-brasier-1994"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "fad-fortunehead"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "ref-bowring-2007"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "oman"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "ref-grotzinger-1995"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "namibia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
-  }
- },
- {
-  "model": "graph.edge",
-  "fields": {
-   "graph": [
-    "example-cambrian-base"
-   ],
-   "source": [
-    "example-cambrian-base",
-    "ref-bowring-1993"
-   ],
-   "source_port": "citation",
-   "target": [
-    "example-cambrian-base",
-    "siberia"
-   ],
-   "target_port": "cited",
-   "kind": "cite"
   }
  },
  {
@@ -890,9 +1264,9 @@
    "name": "Cambrian base boundary",
    "node": [
     "example-cambrian-base",
-    "global-age-model"
+    "calib-transfer"
    ],
-   "output_port": "correlated_age",
+   "output_port": "calibrated",
    "boundary": [
     "base-cambrian"
    ]

@@ -156,14 +156,21 @@ def age_depth_model(inputs, params):
     """
     params = params or {}
     method = params.get("method", "linear")
-    target = params.get("target_depth")
 
     horizons = []
+    target_from_input = None
     for i in inputs:
         depth = (i.get("params") or {}).get("depth")
+        if depth is None:
+            continue
         m = moments(i.get("dist"))
-        if depth is not None and m is not None:
+        if m is not None:
             horizons.append((float(depth), m[0], m[1], component_sigmas(i.get("dist"))))
+        elif target_from_input is None:
+            target_from_input = float(depth)   # depth 만 있고 age 없는 입력 = 보간 target(경계 horizon)
+
+    # target: undated horizon 입력 우선, 없으면 target_depth param 폴백
+    target = target_from_input if target_from_input is not None else params.get("target_depth")
 
     dists = [i.get("dist") for i in inputs]
     if not horizons:
