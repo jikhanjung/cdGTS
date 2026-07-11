@@ -6,7 +6,7 @@
 - **0.1.48** 읽기전용 그룹 드릴인([devlog 132](devlog/20260711_132_readonly-group-drillin.md), 프론트 전용).
 - **0.1.49** 레퍼런스 후속([devlog 133](devlog/20260711_133_reference-followups.md)): 노드 얼굴 DOI 링크 · **Crossref 자동 메타데이터**(`references/crossref.py` + `GET /api/references/crossref/`, 로그인 필요) · narrate 응답에 bibliography. ⚠️ Crossref 는 컨테이너 외부망(api.crossref.org) 필요.
 - **0.1.50** Tier-1 CI 플로우 시나리오 테스트([devlog 134](devlog/20260711_134_ci-flow-scenario-test.md), `test_ci_flow.py`, 실제 세션+CSRF) + **gateway-wipe 버그 수정**: 그래프 PUT 저장이 `Gateway.node` CASCADE 로 boundary gateway 를 지우던 것을 node key 재링크로 보존(편집→bake/propose 실동작 변경). pytest **166**.
-- **0.1.48~0.1.52 운영 반영 완료**(gateway-wipe 잠복 버그도 운영에서 닫힘). ⚠️ **clamp 축소(0.1.51)는 seed 변경** — 운영 example 그래프에 clamp 노드 제거·GSSA=`published-age` leaf 를 반영하려면 `docker exec <컨테이너> python manage.py seed --mode=replace` 1회 필요(미실행 시 옛 `pin` 노드 잔존). P07 realistic 모델도 동일 재시드 경로로 반영됨.
+- **0.1.48~0.1.52 운영 반영 완료 + 재시드 완료**(`seed --mode=replace`). gateway-wipe 잠복 버그 닫힘, clamp 축소(pin/range/freeze-version NodeType 제거·GSSA=`published-age` leaf)·P07 realistic 모델 모두 운영 반영됨.
 
 **P07 — Base of Cambrian realistic model**([devlog 131](devlog/20260710_131_p07-base-cambrian-realistic-model.md) · [계획 P07](devlog/20260710_P07_base-cambrian-provenance-slice.md)): provenance vertical slice 를 실제 base-of-Cambrian 추론 구조로 구현.
 - **노드 타입**: `section`(data — locality, h1/h2/h3 로 horizon emit, **cite 대상** = 섹션 레벨 provenance) · `horizon`(data — `depth`(섹션 base 기준)+`datum`, age 없는 undated horizon = 보간 target) · `radiometric-uPb`·`biostratigraphic` 에 `section` 입력 포트. `reference` = 유일 인용 노드 + DOI 레지스트리(`seed/02b_references.json`: Brasier94·Bowring07·Grotzinger95·Bowring93).
