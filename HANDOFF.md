@@ -1,6 +1,7 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-11. 운영 `cdgts.paleobytes.info` @ **0.1.47** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.50**. 이미지 `honestjung/cdgts:0.1.35~0.1.50` dockerhub push 완료.
+**Last updated**: 2026-07-11. 운영 `cdgts.paleobytes.info` @ **0.1.47** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.51**. 이미지 `honestjung/cdgts:0.1.35~0.1.51` dockerhub push 완료.
+- **0.1.51** clamp 축소([devlog 135](devlog/20260711_135_clamp-scopedown.md) · 근거 [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)): clamp를 별도 개념에서 제거하고 **authored leaf로 수렴**. GSSA pin 2개→`published-age`(값 동일 2500 Ma), `pin`/`range`/`freeze-version` NodeType 제거(19→16, `order` 유지), cycle-breaker=joint-inference 전용, `releases.Clamp`/reconcile은 **DEMO-ONLY 격리**. pytest 165. ⚠️ **seed 변경 → 배포 시 `seed --mode=replace`**(테스트 반영 완료).
 - **0.1.48** 읽기전용 그룹 드릴인([devlog 132](devlog/20260711_132_readonly-group-drillin.md), 프론트 전용).
 - **0.1.49** 레퍼런스 후속([devlog 133](devlog/20260711_133_reference-followups.md)): 노드 얼굴 DOI 링크 · **Crossref 자동 메타데이터**(`references/crossref.py` + `GET /api/references/crossref/`, 로그인 필요) · narrate 응답에 bibliography. ⚠️ Crossref 는 컨테이너 외부망(api.crossref.org) 필요.
 - **0.1.50** Tier-1 CI 플로우 시나리오 테스트([devlog 134](devlog/20260711_134_ci-flow-scenario-test.md), `test_ci_flow.py`, 실제 세션+CSRF) + **gateway-wipe 버그 수정**: 그래프 PUT 저장이 `Gateway.node` CASCADE 로 boundary gateway 를 지우던 것을 node key 재링크로 보존(편집→bake/propose 실동작 변경). pytest **166**.
