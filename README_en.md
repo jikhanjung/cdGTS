@@ -6,7 +6,7 @@
 
 *English · [한국어](README.md)*
 
-> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is built as Django apps + a React node editor, and **v0.1.47** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart with 3 scale modes / narrate + boundary–span duality model, node groups, nesting, order/L2 coherence gates, merge geometry, and Science CI). On top of that, all now deployed: an **immutable Bake·Vault** (P04), **multiuser CI** (session auth, ownership/visibility, fork, propose→review→ratify, P05), a **science engine** (covariance backbone, coherence gate, clamp reconcile, async worker, P06), and **reference nodes + bake→bibliography with a realistic base-of-Cambrian model** (538.82351 Ma, P07). The concept corpus stays in `docs/`.
+> Status: concept (brainstorming) → **implemented & deployed**. Schema v0 is built as Django apps + a React node editor, and **v0.1.52** is deployed to production at [cdgts.paleobytes.info](https://cdgts.paleobytes.info) (ICC table / chart with 3 scale modes / narrate + boundary–span duality model, node groups, nesting, order/L2 coherence gates, merge geometry, and Science CI). On top of that, all now deployed: an **immutable Bake·Vault** (P04), **multiuser CI** (session auth, ownership/visibility, fork, propose→review→ratify, P05), a **science engine** (covariance backbone, coherence gate, async worker, P06), and **reference nodes + bake→bibliography with a realistic base-of-Cambrian model** (538.82351 Ma, P07). (**clamp** was scoped down on review — it converges on an authored leaf rather than a distinct concept, [cycles §12](docs/cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).) The concept corpus stays in `docs/`.
 
 ## What is it
 
@@ -67,7 +67,7 @@ The top-level map over everything is **[docs/concept-map_en.md](docs/concept-map
 Different threads repeatedly converged to the same structure (details in [concept-map](docs/concept-map_en.md) §3):
 
 - **Provenance depth = a single axis** — coherence level, distribution fidelity, and cycle resolution all depend on it.
-- **The clamp is the unifier** — GSSA (pin = point mass) · cycle-cutting · distribution operators fold into one primitive.
+- **The clamp is the unifier** — GSSA (pin = point mass) · cycle-cutting · distribution operators fold into one primitive. (→ **reconsidered & scoped down**: on the evidence of usage it is not needed as a distinct concept and converges on an authored leaf — [cycles §12](docs/cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).)
 - **The ICC/GTS = bake/narrate dichotomy** recurs in the gate · competing models · diff · distribution.
 
 ## Status
@@ -75,9 +75,9 @@ Different threads repeatedly converged to the same structure (details in [concep
 Concept (brainstorming) → **implemented & deployed**. Schema v0 (all five §4 open questions resolved) has been brought down into a runnable app.
 
 - **Stack**: Django 5.2 + SQLite + DRF + React Flow (Vite). 7 apps (chrono·nodes·graph·engine·releases·accounts·references) + a front-end node editor, a **Vault** hub (ICC table·chart·narrate·diff), **Proposals** (CI review), and **Bibliography** (the reference registry). Backend `pytest` 159 passed.
-- **Engine**: value + provenance propagation (pass-through) · coherence gate (L1 authored order edges · L2 duration) · value/topology diff · **covariance backbone & clamp reconcile** (P06 science engine) · **async evaluation worker** (P06.4a) · merge-node geometry tiling (age→period→era→chart). A compute kernel (numpy/scipy) runs the real age-depth model and MC.
+- **Engine**: value + provenance propagation (pass-through) · coherence gate (L1 authored order edges · L2 duration) · value/topology diff · **covariance backbone** (P06 science engine) · **async evaluation worker** (P06.4a) · merge-node geometry tiling (age→period→era→chart). A compute kernel (numpy/scipy) runs the real age-depth model and MC. (clamp reconcile is isolated as DEMO-ONLY per [cycles §12](docs/cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).)
 - **Editor/chart**: node groups (nesting, merge, drill-in — logged-out read-only viewers can drill in too) + boundary–span duality (boundary/unit) + order edges · auto-evaluate/saved indicator · selection rings & multi-select · **reference nodes (cite edges)** · ICC chart with 3 scale modes (Log·Linear·Table) + zoom/pan + uncertainty bands · one-click Science-CI diff · mobile support.
 - **Artifacts/CI** (P04·P05·P06·P07, deployed): **Bake** (graph → immutable Release) → **Vault** (view/compare Releases) · session login · ownership/visibility · **Fork** · **Propose→Review→Ratify** (an authority member ratifies into a new published baseline) · **bake→bibliography** (graph citations → reference list) · a **realistic base-of-Cambrian model** (δ13C-dated sections → cross-section correlation → T. pedum FAD, 538.82351 Ma).
-- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.47**, test `:8011` @ **0.1.48**. Deploys via `deploy-prod.sh` (pre-deploy DB snapshot) + an nginx maintenance page. Dev/test pulls the production DB daily (NAS offsite backup, 04:00 cron).
+- **Deployment**: Docker image `honestjung/cdgts`. Production [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.52**, test `:8011` @ **0.1.52**. Deploys via `deploy-prod.sh` (pre-deploy DB snapshot + DB-binding check) + an nginx maintenance page. Dev/test pulls the production DB daily (NAS offsite backup, 04:00 cron).
 
 The current-state headline is in [HANDOFF.md](HANDOFF.md), per-round changes in [`devlog/`](devlog/), and the remaining open questions in [TODOs.md](TODOs.md).

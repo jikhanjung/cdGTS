@@ -1,12 +1,12 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-11. 운영 `cdgts.paleobytes.info` @ **0.1.47** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.52**. 이미지 `honestjung/cdgts:0.1.35~0.1.52` dockerhub push 완료.
+**Last updated**: 2026-07-11. 운영 `cdgts.paleobytes.info` @ **0.1.52** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.52**. 이미지 `honestjung/cdgts:0.1.35~0.1.52` dockerhub push 완료. **운영 0.1.52 배포 함정 대응**: compose 볼륨을 파일→디렉터리 바인드로 바꾼 뒤 prod `.env` 의 `DATABASE_PATH` 가 `/app/hostdb/db.sqlite3` 로 안 바뀌면 컨테이너가 이미지 내부 빈 DB 로 폴백 → `deploy.sh` 에 **`[5/5] DB 바인딩 검증 게이트`** 추가(636779b, 실데이터는 호스트에 안전했음).
 - **0.1.52** Editor.jsx 분해 1차([devlog 137](devlog/20260711_137_editor-decompose.md)): 순수 뷰 레이어 `graphView.js`(apiToRF/rfToApi/buildView) + 컨텍스트 메뉴 `EditorMenu.jsx` 추출, Editor.jsx **1252→990줄**. 프론트 전용, 브라우저 스모크 3/3 통과. **Tier 2 스모크 스캐폴딩**(devlog 136, `frontend/e2e/`, Playwright·비블로킹)도 이 세션 산출.
 - **0.1.51** clamp 축소([devlog 135](devlog/20260711_135_clamp-scopedown.md) · 근거 [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)): clamp를 별도 개념에서 제거하고 **authored leaf로 수렴**. GSSA pin 2개→`published-age`(값 동일 2500 Ma), `pin`/`range`/`freeze-version` NodeType 제거(19→16, `order` 유지), cycle-breaker=joint-inference 전용, `releases.Clamp`/reconcile은 **DEMO-ONLY 격리**. pytest 165. ⚠️ **seed 변경 → 배포 시 `seed --mode=replace`**(테스트 반영 완료).
 - **0.1.48** 읽기전용 그룹 드릴인([devlog 132](devlog/20260711_132_readonly-group-drillin.md), 프론트 전용).
 - **0.1.49** 레퍼런스 후속([devlog 133](devlog/20260711_133_reference-followups.md)): 노드 얼굴 DOI 링크 · **Crossref 자동 메타데이터**(`references/crossref.py` + `GET /api/references/crossref/`, 로그인 필요) · narrate 응답에 bibliography. ⚠️ Crossref 는 컨테이너 외부망(api.crossref.org) 필요.
 - **0.1.50** Tier-1 CI 플로우 시나리오 테스트([devlog 134](devlog/20260711_134_ci-flow-scenario-test.md), `test_ci_flow.py`, 실제 세션+CSRF) + **gateway-wipe 버그 수정**: 그래프 PUT 저장이 `Gateway.node` CASCADE 로 boundary gateway 를 지우던 것을 node key 재링크로 보존(편집→bake/propose 실동작 변경). pytest **166**.
-- 위 셋 다 **운영 미반영**(무마이그레이션·무시드; 승인 시 운영 배포 — gateway-wipe 는 운영에도 있던 잠복 버그라 함께 닫힘). ⚠️ **P07 은 seed 변경** — 컨테이너 스왑만으로는 example 그래프가 옛 flat 모델. 운영에 realistic 모델(538.82351·example④·그룹) 반영하려면 `docker exec <컨테이너> python manage.py seed --mode=replace` 1회 필요(미실행 시 후속).
+- **0.1.48~0.1.52 운영 반영 완료**(gateway-wipe 잠복 버그도 운영에서 닫힘). ⚠️ **clamp 축소(0.1.51)는 seed 변경** — 운영 example 그래프에 clamp 노드 제거·GSSA=`published-age` leaf 를 반영하려면 `docker exec <컨테이너> python manage.py seed --mode=replace` 1회 필요(미실행 시 옛 `pin` 노드 잔존). P07 realistic 모델도 동일 재시드 경로로 반영됨.
 
 **P07 — Base of Cambrian realistic model**([devlog 131](devlog/20260710_131_p07-base-cambrian-realistic-model.md) · [계획 P07](devlog/20260710_P07_base-cambrian-provenance-slice.md)): provenance vertical slice 를 실제 base-of-Cambrian 추론 구조로 구현.
 - **노드 타입**: `section`(data — locality, h1/h2/h3 로 horizon emit, **cite 대상** = 섹션 레벨 provenance) · `horizon`(data — `depth`(섹션 base 기준)+`datum`, age 없는 undated horizon = 보간 target) · `radiometric-uPb`·`biostratigraphic` 에 `section` 입력 포트. `reference` = 유일 인용 노드 + DOI 레지스트리(`seed/02b_references.json`: Brasier94·Bowring07·Grotzinger95·Bowring93).
@@ -70,7 +70,7 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영**:
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.25**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.32**(P04+P05).
+  - **운영서버** `cdgts.paleobytes.info` @ **0.1.52**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.52**.
     테스트 DB(prod 미러)에 P05 검증용 계정 세팅: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 분리 + prod→test sync.
     이 호스트(m710q)는 **빌드 호스트이자 테스트 서버** — deploy-dev.sh 로 스냅샷 없이 즉시 스왑.

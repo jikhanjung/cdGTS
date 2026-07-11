@@ -6,7 +6,7 @@
 
 *[English](README_en.md) · 한국어*
 
-> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.47** 배포. ICC 테이블·차트(3 스케일 모드)·서술 + 경계·구간 이중성 모델 + 노드그룹·중첩·order/L2 정합성 게이트 + merge geometry + Science CI 위에, **불변 Bake·Vault**(P04) · **멀티유저 CI**(세션 인증·소유/가시성·fork·propose→review→ratify, P05) · **과학 엔진**(공분산 백본·정합성 게이트·clamp reconcile·비동기 워커, P06) · **레퍼런스 노드 + bake→bibliography 와 realistic base-of-Cambrian 모델**(538.82351 Ma, P07) 까지 모두 배포됨. 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
+> 상태: 개념(브레인스토밍) → **구현·배포**. 스키마 v0 를 Django 앱 + React 노드 에디터로 구현, 운영서버 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) 에 **v0.1.52** 배포. ICC 테이블·차트(3 스케일 모드)·서술 + 경계·구간 이중성 모델 + 노드그룹·중첩·order/L2 정합성 게이트 + merge geometry + Science CI 위에, **불변 Bake·Vault**(P04) · **멀티유저 CI**(세션 인증·소유/가시성·fork·propose→review→ratify, P05) · **과학 엔진**(공분산 백본·정합성 게이트·비동기 워커, P06) · **레퍼런스 노드 + bake→bibliography 와 realistic base-of-Cambrian 모델**(538.82351 Ma, P07) 까지 모두 배포됨. (**clamp** 은 재검토로 축소 — 별도 개념 대신 authored leaf 로 수렴, [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).) 개념 코퍼스는 `docs/` 에 그대로 유지됩니다.
 
 ## 무엇인가
 
@@ -69,7 +69,7 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 서로 다른 스레드가 반복해서 같은 구조로 모였습니다 (상세는 [concept-map](docs/concept-map.md) §3):
 
 - **provenance 깊이 = 하나의 축** — 정합성 레벨·분포 충실도·순환 해소가 모두 여기에 종속.
-- **clamp가 통일자** — GSSA(pin=점질량) · 순환 절단 · 분포 연산이 한 원시타입으로.
+- **clamp가 통일자** — GSSA(pin=점질량) · 순환 절단 · 분포 연산이 한 원시타입으로. (→ **재검토·축소**: 구현·사용 현황상 별도 개념 불필요, authored leaf 로 수렴 — [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).)
 - **ICC/GTS = bake/narrate 이분법**이 게이트·경쟁모델·diff·분포에서 반복.
 
 ## 상태
@@ -77,9 +77,9 @@ Provenance(FAIR 원칙), 증분 재평가, what-if 비교가 그래프 구조에
 개념(브레인스토밍) → **구현·배포** 단계입니다. 스키마 v0(§4 열린 질문 5개 모두 정리)를 실행 가능한 앱으로 내렸습니다.
 
 - **스택**: Django 5.2 + SQLite + DRF + React Flow(Vite). 7개 앱(chrono·nodes·graph·engine·releases·accounts·references) + 프론트: 노드 에디터 · **Vault**(ICC 테이블·차트·서술·diff 허브) · **Proposals**(CI 리뷰) · **Bibliography**(레퍼런스 레지스트리). 백엔드 `pytest` 159 passed.
-- **엔진**: 값+provenance 전파(pass-through) · 정합성 게이트(L1 authored order edge · L2 duration) · 값/토폴로지 diff · **공분산 백본·clamp reconcile**(P06 과학 엔진) · **비동기 평가 워커**(P06.4a) · merge 노드 geometry 타일링(age→period→era→chart). 계산 커널(numpy/scipy)로 age-depth model·MC 실계산.
+- **엔진**: 값+provenance 전파(pass-through) · 정합성 게이트(L1 authored order edge · L2 duration) · 값/토폴로지 diff · **공분산 백본**(P06 과학 엔진) · **비동기 평가 워커**(P06.4a) · merge 노드 geometry 타일링(age→period→era→chart). 계산 커널(numpy/scipy)로 age-depth model·MC 실계산. (clamp reconcile 은 [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가) 로 DEMO-ONLY 격리.)
 - **에디터/차트**: 노드그룹(중첩·병합·드릴인, 로그아웃 읽기전용도 드릴인 열람 가능) + 경계·구간 이중성(boundary/unit) + order edge · auto-evaluate/saved 표시 · 선택 링/다중선택 · **레퍼런스 노드(cite 엣지)** · ICC 차트 3 스케일 모드(Log·Linear·Table) + 줌/팬 + 불확실성 밴드 · Science CI 원클릭 diff · 모바일 대응.
 - **아티팩트/CI**(P04·P05·P06·P07, 배포 완료): **Bake**(그래프 → 불변 Release) → **Vault**(Release 열람·비교 허브) · 세션 로그인 · 소유/가시성 · **Fork** · **Propose→Review→Ratify**(권한자 승인 시 새 공표 baseline) · **bake→bibliography**(그래프 인용 → 참고문헌) · **realistic base-of-Cambrian 모델**(δ13C-dated 섹션 → cross-section correlation → T. pedum FAD, 538.82351 Ma).
-- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.47**, 테스트 `:8011` @ **0.1.48**. 배포는 `deploy-prod.sh`(배포 전 DB 스냅샷) + nginx 점검 페이지. 개발/테스트가 운영 DB 를 일일 pull(NAS 오프사이트 백업, 04:00 cron).
+- **배포**: Docker 이미지 `honestjung/cdgts`. 운영 [cdgts.paleobytes.info](https://cdgts.paleobytes.info) @ **v0.1.52**, 테스트 `:8011` @ **0.1.52**. 배포는 `deploy-prod.sh`(배포 전 DB 스냅샷 + DB 바인딩 검증) + nginx 점검 페이지. 개발/테스트가 운영 DB 를 일일 pull(NAS 오프사이트 백업, 04:00 cron).
 
 현재 상태 헤드라인은 [HANDOFF.md](HANDOFF.md), 라운드별 변경은 [`devlog/`](devlog/), 미해결 열린 질문은 [TODOs.md](TODOs.md) 참조.
