@@ -63,10 +63,11 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 *Which node kinds can exist* = vocabulary. Not instances.
 
-- `NodeType` — `category: data | process | clamp`, port spec (in/out types), parameter schema (JSON). **16 implemented:**
-  - data (5): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (immutable·cited·leaf)
+- `NodeType` — `category: data | process | clamp | reference`, port spec (in/out types), parameter schema (JSON). **16 implemented:**
+  - data (7): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (immutable·cited·leaf; GSSA is also an authored `published-age` leaf — not the old `pin`), `section`, `horizon`
   - process (7): `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`, `boundary` (0-cell point), `unit` (time span 1-cell), `merge` (terminal geometry merge → ICC chart)
-  - clamp (4): `pin | range | order | freeze-version` (GSSA = special case of `pin`)
+  - clamp (1): `order` (pin·range·freeze-version were removed — [cycles §12 reconsideration](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept))
+  - reference (1): `reference` (DOI-centric bibliographic source)
 - `Distribution` (value object) — the schema's `uncertainty` fidelity ladder **L0–L5**:
   `fidelity: exact|sym|decomposed|shape|joint|full`, `budget{analytical,systematic,model}`,
   `shared_components`, `posterior_ref`. What edges carry = this distribution (not a scalar).
@@ -88,7 +89,7 @@ One network a scholar built on the canvas. Backend state of the drag&drop editor
 - `Gateway` — **unit of ratification·citation·version (contract)**. Exposes a node group's output
   as a fixed type. The target that the schema's `BoundaryGateway` references.
 
-> Invariant: keep it a DAG (no cycles) — except cut by `joint-inference`/clamp nodes (cycles §).
+> Invariant: keep it a DAG (no cycles) — except cut by `joint-inference` nodes (cycles §).
 
 ### 2.4 `engine` — evaluation ("making it run")
 

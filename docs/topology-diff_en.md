@@ -68,6 +68,7 @@ The three derive from one another (edit script + lineage → changelog → visua
 - **Clamps give the vocabulary for retype.** Since GSSA = `Clamp{pin}`, a **GSSA→GSSP conversion = remove the
   clamp + add a provenance subgraph + retype the definition.** The topology diff is described in clamp
   operations. ([cycles_en.md](cycles_en.md))
+  > ⚠️ **Reconsidered (2026-07):** with clamp scoped down, GSSA is now an authored `published-age` **leaf**, not `Clamp{pin}` — so read GSSA→GSSP not as "remove a clamp" but as **retyping a leaf value into a derived subgraph**. See [cycles_en.md §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
 - **A trigger to re-run the coherence gate.** A split changes the ordering set; a retype changes the required
   provenance → a topology diff calls for gate re-validation. ([coherence-gate_en.md](coherence-gate_en.md))
 - **A release-manifest diff = the coarse topology diff** (boundary set + selection + clamps). The fine level is a

@@ -55,6 +55,7 @@ Where the messy science (interpolation, correlation, joint estimation) and chart
 
 ### clamp — governance gates
 Where consensus / ratification touches the numbers.
+> ⚠️ **Reconsidered (2026-07):** clamp was scoped down from a distinct first-class concept — the only surviving graph NodeType is `order`, and value-fixing folds into an authored `published-age` (GSSA) **leaf** (`pin`, `range`, `freeze-version` removed; `releases.Clamp` + reconcile are DEMO-ONLY). See [cycles_en.md §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
 - **`pin`** — fixes a value (GSSA = a special case of pin).
 - **`range`** — interval clamp [min, max].
 - **`order`** — checks temporal order of two boundaries (older ≥ younger).

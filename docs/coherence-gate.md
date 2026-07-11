@@ -79,6 +79,7 @@ L1a·L1b·L2의 "인접 경계쌍"은 **값을 정렬해 이웃을 자동 추론
   "릴리스 보정값"이 생기고 릴리스 자체가 하나의 추론 노드가 됨.
   → **재조정은 자동 joint inference보다 subcommission의 authored `Clamp`로 하는 편이 정직하다**(갈라짐이
   이름 붙은·귀속 가능한 거버넌스 결정이 됨). 상세: [cycles.md](cycles.md).
+  > ⚠️ **재검토(2026-07):** clamp는 별도 개념에서 축소됨 — 여기서 authored 재조정은 `releases.Clamp`+reconcile(**데모 전용**)이 아니라 authored `published-age` **leaf** / joint-inference 노드로 접힌다. 근거: [cycles.md §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
 
 **깔끔한 매핑 하나가 떨어진다 — 두 모드가 ICC/GTS와 정확히 붙는다:**
 

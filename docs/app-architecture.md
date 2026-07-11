@@ -61,10 +61,11 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 *무슨 종류의 노드가 존재할 수 있는가* = 어휘. 인스턴스 아님.
 
-- `NodeType` — `category: data | process | clamp`, 포트 스펙(입출력 타입), 파라미터 스키마(JSON). **구현 16종:**
-  - 데이터(5): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (불변·인용·leaf)
+- `NodeType` — `category: data | process | clamp | reference`, 포트 스펙(입출력 타입), 파라미터 스키마(JSON). **구현 16종:**
+  - 데이터(7): `radiometric-uPb`, `astronomical`, `magnetostratigraphic`, `biostratigraphic`, `published-age` (불변·인용·leaf; GSSA도 여기 authored 리프 — 옛 `pin` 아님), `section`, `horizon`
   - 프로세스(7): `age-depth-model`, `cross-section-correlation`, `calibration-transfer`, `joint-inference`, `boundary`(경계점 0-cell), `unit`(시간 span 1-cell), `merge`(말단 기하 병합→ICC 차트)
-  - clamp(4): `pin | range | order | freeze-version` (GSSA = `pin`의 특수사례)
+  - clamp(1): `order` (pin·range·freeze-version는 제거됨 — [cycles §12 재검토](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가))
+  - reference(1): `reference` (DOI 중심 서지 출처)
 - `Distribution`(값 객체) — 스키마 `uncertainty` 충실도 사다리 **L0–L5**:
   `fidelity: exact|sym|decomposed|shape|joint|full`, `budget{analytical,systematic,model}`,
   `shared_components`, `posterior_ref`. 엣지가 흘리는 것 = 이 분포(스칼라 아님).
@@ -85,7 +86,7 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 - `Gateway` — **비준·인용·버전의 단위(계약)**. 노드그룹 출력을 고정 타입으로 노출.
   스키마 `BoundaryGateway`가 참조하는 대상.
 
-> 불변식: DAG 유지(사이클 금지) — 단 `joint-inference`/clamp 노드로 절단 허용(cycles §).
+> 불변식: DAG 유지(사이클 금지) — 단 `joint-inference` 노드로 절단 허용(cycles §).
 
 ### 2.4 `engine` — 평가 ("작동하게 만들기")
 

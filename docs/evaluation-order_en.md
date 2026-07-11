@@ -105,6 +105,7 @@ And "sweep old→young" is just **one greedy, sequential** way to resolve that c
   dependency order) → certify (post-hoc temporal-coherence check)."
 - If ordering must **actually adjust values**, that belongs to the **coherence gate's reconcile (L3b) / clamp**,
   not to a traversal direction. → [coherence-gate_en.md](coherence-gate_en.md) §3, [cycles_en.md](cycles_en.md).
+  > ⚠️ **Reconsidered (2026-07):** clamp was scoped down — cycle-cutting folds into an authored `published-age` **leaf** / a joint-inference node / an `order` edge, not a `Clamp` primitive. See [cycles_en.md §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
 
 ## 7. Remaining open questions
 

@@ -108,6 +108,7 @@ GSSA = exact = **δ(2500)**, a zero-variance **point mass**. The polymorphic val
 - **pin** = collapse to δ, **range** = truncate to `[min,max]`, **order** = truncate to the ordered region.
 
 → The clamp of [cycles_en.md](cycles_en.md) and the distribution representation close into one root.
+> ⚠️ **Reconsidered (2026-07):** clamp was scoped down from a distinct concept — `pin` folds into an authored GSSA **leaf** (a point mass δ), `order` into an order edge, and `range` was removed. The surviving point here ("a decreed value is a degenerate distribution") still holds. See [cycles_en.md §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
 
 ## 7. The canonical rung — the official level ICC freezes
 

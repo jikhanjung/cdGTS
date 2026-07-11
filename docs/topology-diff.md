@@ -57,6 +57,7 @@
 
 - **clamp가 retype의 어휘를 준다.** GSSA = `Clamp{pin}`이므로 **GSSA→GSSP 전환 = clamp 제거 + provenance
   서브그래프 추가 + definition retype.** 토폴로지 diff가 clamp 연산으로 서술된다. ([cycles.md](cycles.md))
+  > ⚠️ **재검토(2026-07):** clamp가 축소되면서 GSSA는 이제 `Clamp{pin}`이 아니라 authored `published-age` **leaf** — 따라서 GSSA→GSSP는 "clamp 제거"가 아니라 **leaf 값을 파생 서브그래프로 retype**하는 것으로 읽는다. 근거: [cycles.md §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
 - **정합성 게이트 재실행 트리거.** 분할은 순서 집합을, retype은 요구 provenance를 바꿈 → 토폴로지 diff는
   게이트 재검증을 부른다. ([coherence-gate.md](coherence-gate.md))
 - **릴리스 매니페스트 diff = 거친 토폴로지 diff** (경계 집합 + selection + clamps). 미세 층위는 provenance 그래프 diff.

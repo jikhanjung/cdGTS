@@ -122,6 +122,12 @@ Clamp:
 # 주: provenance 엣지엔 type(co-location | calibration-transfer)이 붙어 게이트가 사이클을 탐지한다.
 ```
 
+> **[재검토됨]** 위 그래프 수준 `Clamp` 노드는 이후 **축소**됐다: 그래프 clamp NodeType 중 `pin`·`range`·`freeze-version`은
+> 제거되고 `order`만 남았으며, **GSSA는 `pin` clamp가 아니라 authored `published-age` leaf**로 표현된다(사이클 절단도
+> `joint-inference` 하나로 통합). `releases.Clamp` + verify/reconcile는 코드에 남아 있으나 **데모 전용으로 격리**됐다.
+> 따라서 위 `kind: pin | range | order | freeze-version`과 `GSSA = Clamp{kind: pin}`는 **역사/설계 기록**으로 읽어야 한다.
+> 배경: [cycles §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
+
 ## 3. 세 케이스 적용
 
 ### A. P–T 경계 — GSSP · 국소 보간

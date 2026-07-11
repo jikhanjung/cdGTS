@@ -55,6 +55,7 @@
 
 ### clamp — 거버넌스 게이트
 합의·비준이 값에 개입하는 지점.
+> ⚠️ **재검토(2026-07):** clamp는 별도 1급 개념에서 축소됨 — 그래프 NodeType은 `order` 하나만 남고, 값 고정은 authored `published-age`(GSSA) **leaf**로 접힘(`pin`·`range`·`freeze-version` 제거, `releases.Clamp`+reconcile은 데모 전용). 근거: [cycles.md §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
 - **`pin`** — 값 고정(GSSA = pin의 특수 case).
 - **`range`** — 구간 [min, max] 절단.
 - **`order`** — 두 경계 순서 검사(older ≥ younger).

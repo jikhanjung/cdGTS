@@ -32,7 +32,7 @@ The only node taxonomy in the implementation is three categories (`nodes.NodeTyp
 |---|---|---|---|
 | **data** | Immutable, cited observation leaf. Surfaces `params.distribution` as-is | L2 | radiometric-uPb · astronomical · magnetostratigraphic · biostratigraphic · **published-age** |
 | **process** | Input distributions → output distribution (computation) | L3 · L4 · L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference |
-| **clamp** | Pin a value or constrain | (outside the layers) | pin · range · order · freeze-version |
+| **clamp** | Pin a value or constrain | (outside the layers) | **order** (pin · range · freeze-version were removed — [cycles](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept)) |
 
 L2 folded into data; L3·L4·L5 into process. The layer number dissolved into "depth within a specific DAG" — an
 **emergent property, not a taxonomy**.
@@ -41,12 +41,13 @@ L2 folded into data; L3·L4·L5 into process. The layer number dissolved into "d
 
 `clamp` had no place in the layer model, yet in practice it **cuts across two layers**:
 
-- **GSSA** (L1, boundary definition) = a `pin` clamp — a point mass δ,
-- **coherence constraints** (L5, order/duration) = `order` / `range` clamps.
+- **GSSA** (L1, boundary definition) = an authored `published-age` leaf (data category) — a point mass δ. (Originally modeled as a `pin` clamp, since reconsidered.)
+- **coherence constraints** (L5, order) = an `order` edge (the range/pin clamps were removed).
 
 Layer numbers can't express "L1 and L5 are the same kind." Categories can. That is both evidence the layers were
 the wrong cut, and the implementation-side confirmation of [concept-map](concept-map_en.md) §3-2 "clamp is the
-unifier."
+unifier" — though that "clamp as unifier" premise was itself later reconsidered, scoping down clamp as a distinct
+concept ([cycles](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept)).
 
 ## 4. Yet the layers didn't fully vanish — tiers
 
@@ -73,7 +74,8 @@ release).
 
 - **Tiers are solid**: registry (chrono) · graph/engine · release (releases), 1:1 across three apps.
 - **Categories are solid**: data/process/clamp dispatch at runtime via [engine.kernels](../engine/kernels.py)
-  `compute` (`category=="data"→params.distribution`, process→kernel, clamp→pin/range/order).
+  `compute` (`category=="data"→params.distribution`, process→kernel, clamp→order). (pin/range/freeze-version were
+  removed and GSSA moved to a `published-age` data leaf — [cycles](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).)
 - **The shallow parts stay shallow**: within process, the depth of L4 (correlation) and L5 (joint/coherence) is
   unfinished — notably the global coherence gate (`engine._certify`) is an ordering-dependent monotonicity stub.
   That is a separate task, orthogonal to this tier/category re-description.

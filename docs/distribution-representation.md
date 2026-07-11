@@ -99,6 +99,7 @@ GSSA = 정확 = **δ(2500)**, 분산 0의 **점질량(point mass)**. 다형 valu
 - **pin** = δ로 붕괴, **range** = `[min,max]` 절단, **order** = 순서 영역 절단.
 
 → [cycles.md](cycles.md)의 clamp와 분포 표현이 한 뿌리로 봉합된다.
+> ⚠️ **재검토(2026-07):** clamp는 별도 개념에서 축소됨 — `pin`은 authored GSSA **leaf**의 점질량(δ)으로, `order`는 order 엣지로 접히고 `range`는 제거됨. 여기서 남는 요지("결정값=퇴화 분포")는 유효. 근거: [cycles.md §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
 
 ## 7. canonical rung — ICC가 얼리는 정본 층
 

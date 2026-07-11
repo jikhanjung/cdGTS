@@ -93,10 +93,17 @@ Var(지속시간) = Var(아래) + Var(위) − 2·Cov(아래, 위)
 
 ## 3. 실습 2 — Clamp: 검증만(L3a) vs 적용(L3b)
 
+> **⚠️ 재검토됨 — 이 실습은 데모 전용입니다.** "clamp"을 별도 1급 개념으로 둘지 재검토한 결과 **축소**됐습니다:
+> 그래프 clamp NodeType(`pin`·`range`·`freeze-version`)은 제거되고 `order`만 남았으며, GSSA는 `pin` clamp가 아니라
+> authored `published-age` leaf가 됐고, 사이클 절단은 `joint-inference` 하나로 통합됐습니다. `releases.Clamp` +
+> verify/reconcile는 코드에 **남아 있지만 데모 전용으로 격리**됐습니다(오직 `seed_demo`만 생성, Vault 탭도 **"Clamps (demo)"**).
+> 그래서 아래 실습은 **거버넌스 아이디어의 시연**으로서 여전히 동작합니다 — 살아있는 제품 기능이 아닙니다.
+> 배경: [cycles §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가).
+
 **Clamp** = 소위원회가 authored한 거버넌스 제약(pin/range/order/freeze). 릴리스가 이걸 어떻게 대하느냐가 두 계약으로 갈립니다.
 
 ### 단계
-1. **Vault** 화면 → 릴리스 목록에서 **ICS-2024/12** 선택 → **Clamps** 탭.
+1. **Vault** 화면 → 릴리스 목록에서 **ICS-2024/12** 선택 → **Clamps (demo)** 탭.
 2. 표에 clamp 2개:
    - `base-triassic` **range [250, 253]** → **honored**(값 251.9가 범위 안).
    - `base-cambrian` **pin 536.0** → **violation**: `538.8 ≠ pin 536.0`.

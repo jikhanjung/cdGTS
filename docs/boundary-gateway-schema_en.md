@@ -127,6 +127,13 @@ Clamp:
 # note: provenance edges carry a type (co-location | calibration-transfer) so the gate can detect cycles.
 ```
 
+> **[reconsidered]** The graph-level `Clamp` node above was later **scoped down**: of the graph clamp NodeTypes,
+> `pin` · `range` · `freeze-version` were removed, leaving only `order`, and **GSSA is now represented as an authored
+> `published-age` leaf rather than a `pin` clamp** (cycle-breaking is also unified into a single `joint-inference`).
+> `releases.Clamp` + verify/reconcile remain in the code but are **isolated as demo-only**. So read the
+> `kind: pin | range | order | freeze-version` and `GSSA = Clamp{kind: pin}` above as **historical/design** record.
+> Background: [cycles §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
+
 ## 3. Applied to the three cases
 
 ### A. P–T boundary — GSSP · local interpolation

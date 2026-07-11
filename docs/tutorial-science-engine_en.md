@@ -98,11 +98,19 @@ skipped). The boundaries are **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 M
 
 ## 3. Exercise 2 — Clamps: verify-only (L3a) vs apply (L3b)
 
+> **⚠️ Reconsidered — this exercise is DEMO-ONLY.** Whether "clamp" deserves to be a distinct first-class concept was
+> reconsidered and **scoped down**: the graph clamp NodeTypes (`pin` · `range` · `freeze-version`) were removed, leaving only
+> `order`; GSSA is now an authored `published-age` leaf rather than a `pin` clamp; and cycle-breaking is unified into a single
+> `joint-inference`. `releases.Clamp` + verify/reconcile **still exist but are isolated as demo-only** (only `seed_demo`
+> creates them, and the Vault tab is now labeled **"Clamps (demo)"**). So the walkthrough below still works as a
+> **demonstration of the governance idea** — not as a live product feature.
+> Background: [cycles §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
+
 A **Clamp** is an authored governance constraint (pin/range/order/freeze) placed by a subcommission. How a release treats it
 splits into two contracts.
 
 ### Steps
-1. In the **Vault**, select release **ICS-2024/12** → the **Clamps** tab.
+1. In the **Vault**, select release **ICS-2024/12** → the **Clamps (demo)** tab.
 2. The table shows two clamps:
    - `base-triassic` **range [250, 253]** → **honored** (value 251.9 is inside).
    - `base-cambrian` **pin 536.0** → **violation**: `538.8 ≠ pin 536.0`.

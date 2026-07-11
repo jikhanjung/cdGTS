@@ -83,6 +83,7 @@ This sets the gate's character:
   the record number** — a "release-adjusted age" appears and the release itself becomes an inference node.
   → **Reconciliation is more honest done via a subcommission's authored `Clamp` than via automatic joint
   inference** (the divergence becomes a named, attributable governance decision). Detail: [cycles_en.md](cycles_en.md).
+  > ⚠️ **Reconsidered (2026-07):** clamp was scoped down — this authored reconciliation folds into an authored `published-age` **leaf** / a joint-inference node, not `releases.Clamp` + reconcile (which are **DEMO-ONLY**). See [cycles_en.md §12](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).
 
 **A clean mapping falls out — the two modes map exactly onto ICC/GTS:**
 
