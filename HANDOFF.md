@@ -14,7 +14,7 @@
 - **그룹·example④**: 3 dated 섹션 evidence 18 노드 → NodeGroup "Base Cambrian · δ13C-dated sections" 하나. **realistic 모델을 example④(전 ICC 조립 그래프)에도 반영** — 옛 flat(global-age-model) 제거, `calib-transfer → bnd-base-cambrian.age`, 섹션 그룹 동일 적용(279 노드). 각 섹션 논문 cite → bibliography 4건 전파.
 - 예제③(example-cambrian-base) **23 노드** · 예제④(example-icc-partial) **279 노드**. **pytest 159 passed.**
 
-**배경(0.1.35~0.1.46)**: **레퍼런스 노드 + bake→bibliography**(devlog 127·128) 위에 P07 을 쌓음. 이전 P04(불변 Bake·Vault) · P05(멀티유저 CI) · P06(Science Engine: 공분산 백본·정합성 게이트 L1/L2·clamp reconcile) · P06.4a(비동기 워커) 는 그대로. **다음: P07 durability(운영 반영) · devlog 작성 · P06.4b(PyMC) · clamp 통합.**
+**배경(0.1.35~0.1.46)**: **레퍼런스 노드 + bake→bibliography**(devlog 127·128) 위에 P07 을 쌓음. 이전 P04(불변 Bake·Vault) · P05(멀티유저 CI) · P06(Science Engine: 공분산 백본·정합성 게이트 L1/L2·clamp reconcile) · P06.4a(비동기 워커) 는 그대로. **다음: P06.4b(PyMC joint) · 아크 A(L2/L3) · Editor 분해 2차(상호작용 스모크 후).** (P07 운영 반영·devlog·clamp 통합→축소·Editor 분해 1차·Tier1/2 테스트는 완료.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -81,6 +81,10 @@
 - **테스트**: 백엔드 `pytest` **114 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 포함). 테스트 fixture 는 seed 파일 loaddata.
 - **문서 코퍼스**: `docs/` 14주제 × 한/영 + README + app-architecture + naming(태그라인·표기 규칙) +
   evaluation-order(의존 vs 연대순, order=사후 검사) + boundary-span-duality. 진입점 `docs/concept-map.md`.
+  **clamp 축소([cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가))를 문서 전반에 정합화** —
+  concept-map(수렴점 #2·미션)·tier-category-model·app-architecture·tutorial-science-engine·boundary-gateway-schema
+  + 개념 문서 5종(idea·distribution·topology-diff·coherence-gate·evaluation-order)에 반영. GSSA=authored `published-age` leaf ·
+  clamp 카테고리=`order`만 · `releases.Clamp`=DEMO-ONLY 로 일관(한/영 동기화, 앵커 검증).
 - **원격**: `git@github.com:jikhanjung/cdGTS.git`, main 직접 커밋·push.
 
 ## 개념/구현 진척 한 줄 정리
@@ -146,7 +150,7 @@
 - [ ] **L2/L3 확장** — L2 warn 임계(과소/과대 duration 의심) · L3 joint reconcile · 프론트 cert 뷰 L2 상세(047 이월).
 - [ ] **계산 커널 확장** — age-depth 외 joint/베이지안 등 노드타입별 실제 커널(별도 워커·PyMC).
 - [~] **인증·소유권** — 현재 API AllowAny(dev). 로그인·그래프 소유·샌드박스 권한. → **아크 C, [P05](devlog/20260707_P05_arc-c-multiuser-ci-platform.md) 계획**(P04 선행).
-- [ ] **clamp 통합** — order edge 로 활성화됨; 나머지 graph clamp ↔ releases.Clamp(authored 거버넌스) 관계 정리.
+- [x] **clamp 통합 → 축소로 종결** — graph clamp ↔ releases.Clamp *통합*이 목표였으나 재검토 결과 **별도 개념 불필요**(authored leaf 수렴). graph clamp NodeType 제거·GSSA=leaf·`releases.Clamp` DEMO-ONLY 격리 + 문서 전반 정합화. [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가) · devlog 135.
 - [ ] **PostGIS** — chrono.Locality lat/lon → PointField(공간 차원 착수 시).
 - [ ] **retype diff 실데모** — Ediacaran/Cryogenian 경계 추가로 GSSA→GSSP retype 시나리오(030 메모).
 - [ ] **미해결 열린 질문** — 각 설계 문서 말미. → `TODOs.md` §2.
