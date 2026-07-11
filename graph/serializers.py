@@ -170,18 +170,14 @@ class GraphSerializer(serializers.ModelSerializer):
                     f"{tt.slug} has no input port {e['target_port']!r}."
                 )
 
-        # DAG 불변식: cycle-breaker(clamp/joint-inference) 로만 순환 절단 허용.
-        # order edge 는 데이터 흐름이 아니라 제약 — 데이터 DAG 사이클 판정에서 제외.
-        breaker_slugs = {"joint-inference"}
-        breaker_keys = {
-            k for k, t in key_to_type.items()
-            if t.category == NodeType.Category.CLAMP or t.slug in breaker_slugs
-        }
+        # DAG 불변식: cycle-breaker(joint-inference) 로만 순환 절단 허용 — 상호보정 루프는 그 노드 *안*에서
+        # 접힌다(cycles §12). order edge 는 데이터 흐름이 아니라 제약 — 데이터 DAG 사이클 판정에서 제외.
+        breaker_keys = {k for k, t in key_to_type.items() if t.slug == "joint-inference"}
         data_edges = [(e["source"], e["target"]) for e in edges if e.get("kind") not in Edge.NON_DATA_KINDS]
         stuck = find_unbroken_cycles(keys, breaker_keys, data_edges)
         if stuck:
             raise serializers.ValidationError(
-                f"Unbroken cycle (no joint-inference/clamp): {sorted(stuck)}"
+                f"Unbroken cycle (no joint-inference breaker): {sorted(stuck)}"
             )
         return attrs
 

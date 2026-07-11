@@ -120,37 +120,6 @@
  {
   "model": "nodes.nodetype",
   "fields": {
-   "slug": "pin",
-   "name": "Clamp: pin",
-   "category": "clamp",
-   "description": "Fixes a value. GSSA = special case of Clamp{pin}.",
-   "params_schema": {
-    "value": {
-     "type": "number"
-    }
-   }
-  }
- },
- {
-  "model": "nodes.nodetype",
-  "fields": {
-   "slug": "range",
-   "name": "Clamp: range",
-   "category": "clamp",
-   "description": "Interval clamp [min, max].",
-   "params_schema": {
-    "min": {
-     "type": "number"
-    },
-    "max": {
-     "type": "number"
-    }
-   }
-  }
- },
- {
-  "model": "nodes.nodetype",
-  "fields": {
    "slug": "order",
    "name": "Clamp: order",
    "category": "clamp",
@@ -167,20 +136,6 @@
       "warn"
      ],
      "help": "hard = FAIL on violation · warn = warning"
-    }
-   }
-  }
- },
- {
-  "model": "nodes.nodetype",
-  "fields": {
-   "slug": "freeze-version",
-   "name": "Clamp: freeze-version",
-   "category": "clamp",
-   "description": "Cuts the version spiral — freezes to a specific release value.",
-   "params_schema": {
-    "version": {
-     "type": "string"
     }
    }
   }
@@ -416,84 +371,6 @@
    "direction": "out",
    "datatype": "distribution",
    "multiple": true,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "pin"
-   ],
-   "name": "target",
-   "direction": "in",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "pin"
-   ],
-   "name": "out",
-   "direction": "out",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "range"
-   ],
-   "name": "target",
-   "direction": "in",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "range"
-   ],
-   "name": "out",
-   "direction": "out",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "freeze-version"
-   ],
-   "name": "target",
-   "direction": "in",
-   "datatype": "any",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "freeze-version"
-   ],
-   "name": "out",
-   "direction": "out",
-   "datatype": "any",
-   "multiple": false,
    "order": 0
   }
  },

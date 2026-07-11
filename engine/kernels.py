@@ -4,9 +4,10 @@
 NodeType.slug → 커널 함수 레지스트리. 미등록 slug 는 pass-through(첫 입력 통과)로 폴백.
 이번 증분(결정론적, 해석적):
   - joint-inference / cross-section-correlation : **역분산 가중 결합**(독립 추정 결합 → 불확실성 축소).
-  - range(clamp) : **절단정규**(scipy truncnorm) 로 분포 재성형.
-  - pin(clamp)   : exact(value) (GSSA 점질량).
 후속(별도 과학 스택): age-depth 베이지안·joint MCMC·공분산 전파. 현재는 in-process numpy/scipy.
+
+> GSSA(옛 pin clamp)는 이제 authored `published-age` leaf(exact)로 표현한다 — cycles.md §12 참조.
+> `range_clamp`(절단정규)은 남겨두되(릴리스 reconcile 데모가 사용), 그래프 clamp 노드로는 쓰지 않는다.
 
 분포는 nodes.distribution.Distribution 의 dict 표현을 주고받는다.
 """
@@ -249,15 +250,6 @@ def compute(category, slug, inputs, params):
     """
     if category == "data":
         return (params or {}).get("distribution")
-    if slug == "pin":
-        v = (params or {}).get("value")
-        return Distribution.exact(v).to_dict() if v is not None else None
-    if slug == "range":
-        d = _first_non_null([i["dist"] for i in inputs])
-        lo, hi = (params or {}).get("min"), (params or {}).get("max")
-        if d is not None and lo is not None and hi is not None:
-            return range_clamp(d, float(lo), float(hi))
-        return d
     if slug == "boundary":
         # 경계 점 — 상류 계산(data/process)이 준 연대를 통과. 입력 없으면 자기 공표값(fallback).
         d = _first_non_null([i["dist"] for i in inputs])

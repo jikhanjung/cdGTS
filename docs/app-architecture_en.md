@@ -95,7 +95,7 @@ One network a scholar built on the canvas. Backend state of the drag&drop editor
 **Implemented (P06).** Past the initial pass-through skeleton, the engine has real kernels: `age-depth-model`
 (linear·spline MC), inverse-variance combine, **covariance-aware durations** (shared systematics → Cov), and
 topological-order propagation. The `published-age` leaf also supports the "reported value + provenance" path.
-Coheres with the mission ("humans clamp, the machine propagates·reconciles·diffs").
+Coheres with the mission ("humans author the nodes, the machine propagates·reconciles·diffs" — revised from the old "clamp", cycles §12).
 
 - `EvalRun` — an evaluation job over a `Graph` (subgraph). Status·trigger·input hash.
 - `NodeResult` — per-node output distribution + **content hash** (reuse cache if inputs unchanged =

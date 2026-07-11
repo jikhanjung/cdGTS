@@ -10,7 +10,7 @@ import Bibliography from './Bibliography.jsx'
 
 // Vault = the artifact hub. Lists baked Releases (published · user bakes · your sandboxes) and renders a selected
 // one as Chart / Table / Narrative / Clamps / Overrides, or diffs two. The Editor bakes into here; sandboxes override here.
-const MODES = [['chart', 'Chart'], ['table', 'Table'], ['narrative', 'Narrative'], ['clamps', 'Clamps'], ['references', 'References'], ['diff', 'Diff']]
+const MODES = [['chart', 'Chart'], ['table', 'Table'], ['narrative', 'Narrative'], ['clamps', 'Clamps (demo)'], ['references', 'References'], ['diff', 'Diff']]
 const fmtDate = (s) => (s ? new Date(s).toLocaleDateString() : '')
 
 export default function Vault({ initialReleaseId, user } = {}) {

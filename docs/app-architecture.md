@@ -91,7 +91,7 @@ chrono ◁─ nodes ◁─ graph ◁─ engine ◁─ releases
 
 **구현됨(P06).** 초기 pass-through 골격을 지나, 엔진은 실제 커널을 갖는다: `age-depth-model`(선형·스플라인 MC),
 역분산 결합, **공분산 인지 지속시간**(공유 계통 → Cov), 그리고 위상순 전파. `published-age` leaf 로 "발표값+출처"
-경로도 병행. 문서 미션("사람이 clamp, 기계가 전파·정합·diff")과 정합.
+경로도 병행. 문서 미션("사람이 authored 노드, 기계가 전파·정합·diff" — cycles §12, 옛 "clamp"에서 개정)과 정합.
 
 - `EvalRun` — 한 `Graph`(서브그래프)의 평가 작업. 상태·트리거·입력 해시.
 - `NodeResult` — 노드별 산출 분포 + **콘텐츠 해시**(입력 불변 시 캐시 재사용 = 증분 재평가).

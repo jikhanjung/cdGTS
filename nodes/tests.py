@@ -56,7 +56,7 @@ def test_to_dict_omits_empties():
 # --- NodeType 카탈로그 (데이터로 존재, 하드코딩 아님) ---
 
 def test_catalog_loads(seeded):
-    assert NodeType.objects.count() == 19          # + boundary + unit + merge (terminal chart) + reference + section + horizon (provenance)
+    assert NodeType.objects.count() == 16          # boundary·unit·merge·reference·section·horizon; clamp pin/range/freeze-version 제거(cycles §12)
     assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "clamp", "reference"}
     assert NodeType.objects.get(slug="published-age").category == "data"
 
@@ -69,10 +69,11 @@ def test_ports_wired(seeded):
     assert adm.input_ports.first().multiple is True
 
 
-def test_pin_clamp_has_value_param(seeded):
-    pin = NodeType.objects.get(slug="pin")
-    assert pin.category == NodeType.Category.CLAMP
-    assert "value" in pin.params_schema
+def test_graph_clamp_nodes_removed(seeded):
+    # cycles §12 축소: GSSA=authored leaf(published-age), 순환=joint-inference 노드 → 그래프 clamp 노드 불필요.
+    assert not NodeType.objects.filter(slug__in=["pin", "range", "freeze-version"]).exists()
+    # 남은 clamp 카테고리는 order(L1 선후 검사)뿐.
+    assert list(NodeType.objects.filter(category=NodeType.Category.CLAMP).values_list("slug", flat=True)) == ["order"]
 
 
 def test_edges_carry_distributions(seeded):

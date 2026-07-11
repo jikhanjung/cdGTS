@@ -303,7 +303,8 @@ def clamp_apply(dist, clamp):
 
 
 def verify_clamps(release):
-    """L3a — 베이크된 records 가 authored clamp 을 지키는지 검사(값 불변). 반환 violations[]."""
+    """L3a — 베이크된 records 가 authored clamp 을 지키는지 검사(값 불변). 반환 violations[].
+    ⚠️ DEMO-ONLY(cycles §12): 실 릴리스엔 authored clamp 이 없음. seed_demo 시연용."""
     if not release.records.exists():
         bake_release(release)
     recs = {r.boundary.slug: r for r in release.records.select_related("boundary")}
@@ -329,7 +330,8 @@ def verify_clamps(release):
 
 
 def reconcile_release(release):
-    """L3b — authored clamp 을 records 에 적용(값 이동 = GTS/narrate 계약). 반환 (changed, conflicts[])."""
+    """L3b — authored clamp 을 records 에 적용(값 이동 = GTS/narrate 계약). 반환 (changed, conflicts[]).
+    ⚠️ DEMO-ONLY(cycles §12): 릴리스 tier 에서 bake 값을 out-of-band 로 덮음(provenance 구멍). seed_demo 시연용."""
     if not release.records.exists():
         bake_release(release)
     by = _clamps_by_boundary(release)

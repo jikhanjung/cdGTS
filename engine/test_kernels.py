@@ -110,10 +110,6 @@ def test_compute_passthrough_fallback():
     assert compute("process", "calibration-transfer", [{"dist": d, "params": {}}], {}) == d
 
 
-def test_compute_pin():
-    assert compute("clamp", "pin", [], {"value": 2500}) == {"fidelity": "exact", "value_ma": 2500}
-
-
 def test_compute_data_emits_params():
     d = _sym(1.0, 0.1)
     assert compute("data", "radiometric-uPb", [], {"distribution": d}) == d

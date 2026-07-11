@@ -88,7 +88,13 @@ class CandidateOutput(models.Model):
 class Clamp(models.Model):
     """
     Governance clamp placed by a subcommission (schema Clamp). GSSA = a special case of Clamp{pin}.
-    A clamp *node* in graph is the in-graph representation; this is the *authored* governance record a release applies.
+
+    ⚠️ DEMO-ONLY (2026-07, cycles §12): kept to demonstrate the L3a verify / L3b reconcile idea (seed_demo),
+    but **not a live product feature** — no real release authors clamps. The reconsideration concluded a clamp
+    is not needed as a distinct concept: an authored value is a `published-age` leaf (GSSA), cycles fold into a
+    joint-inference node, order is an order edge. See docs/cycles.md §12. Applying a clamp at the release layer
+    also edits baked values out-of-band (a provenance hole); a real override belongs as an authored graph node
+    that re-bakes. Do not build graph-clamp ↔ this integration.
     """
     class Kind(models.TextChoices):
         PIN = "pin", "pin"

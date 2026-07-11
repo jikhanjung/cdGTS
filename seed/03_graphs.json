@@ -1164,11 +1164,14 @@
    ],
    "key": "gssa-decree",
    "node_type": [
-    "pin"
+    "published-age"
    ],
    "label": "GSSA decree: 2500 Ma\n(ICS·IUGS agreed round number · no uncertainty)",
    "params": {
-    "value": 2500
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2500
+    }
    },
    "x": 260.0,
    "y": 160.0,
@@ -5378,11 +5381,14 @@
    ],
    "key": "gssa-decree",
    "node_type": [
-    "pin"
+    "published-age"
    ],
    "label": "GSSA decree: 2500 Ma\n(ICS·IUGS agreed round number · no uncertainty)",
    "params": {
-    "value": 2500
+    "distribution": {
+     "fidelity": "exact",
+     "value_ma": 2500
+    }
    },
    "x": 2160,
    "y": 1098,

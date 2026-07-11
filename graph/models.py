@@ -172,8 +172,8 @@ class NodeInstance(models.Model):
 
     @property
     def is_cycle_breaker(self):
-        """Node that folds/breaks a cycle — joint-inference or clamp (cycles §)."""
-        return self.node_type.category == NodeType.Category.CLAMP or self.node_type.slug == "joint-inference"
+        """Node that folds a cycle — joint-inference (the mutual-calibration loop lives *inside* it). cycles §12."""
+        return self.node_type.slug == "joint-inference"
 
 
 class Edge(models.Model):

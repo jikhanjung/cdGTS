@@ -70,21 +70,26 @@ def test_age_depth_interpolates_through_graph(node_types):
     assert set(r.provenance) == {"h1", "h2"}            # 두 horizon 이 기여
 
 
-def test_pin_emits_exact(node_types):
-    g = Graph.objects.create(slug="p", name="P")
-    NodeInstance.objects.create(
-        graph=g, key="pin1", node_type=NodeType.objects.get(slug="pin"), params={"value": 2500},
+# GSSA(옛 pin clamp)는 이제 authored published-age leaf(exact) — cycles §12.
+def _exact_leaf(graph, key, value):
+    return NodeInstance.objects.create(
+        graph=graph, key=key, node_type=NodeType.objects.get(slug="published-age"),
+        params={"distribution": {"fidelity": "exact", "value_ma": value}},
     )
+
+
+def test_published_age_emits_exact(node_types):
+    g = Graph.objects.create(slug="p", name="P")
+    _exact_leaf(g, "leaf", 2500)
     run = evaluate_graph(g)
-    r = run.results.get(node_key="pin1")
-    assert r.distribution == {"fidelity": "exact", "value_ma": 2500}   # GSSA 점질량
+    r = run.results.get(node_key="leaf")
+    assert r.distribution == {"fidelity": "exact", "value_ma": 2500}   # GSSA = authored leaf
 
 
 def _order_graph(older_val, younger_val, min_gap=0, mode="hard"):
     g = Graph.objects.create(slug=f"ord-{older_val}-{younger_val}-{min_gap}-{mode}", name="Order")
-    pin = NodeType.objects.get(slug="pin")
-    older = NodeInstance.objects.create(graph=g, key="older", node_type=pin, params={"value": older_val})
-    younger = NodeInstance.objects.create(graph=g, key="younger", node_type=pin, params={"value": younger_val})
+    older = _exact_leaf(g, "older", older_val)
+    younger = _exact_leaf(g, "younger", younger_val)
     oc = NodeInstance.objects.create(graph=g, key="oc", node_type=NodeType.objects.get(slug="order"),
                                      params={"min_gap": min_gap, "mode": mode})
     Edge.objects.create(graph=g, source=older, source_port="out", target=oc, target_port="older")
@@ -151,11 +156,10 @@ def test_evaluate_endpoint(node_types):
 # --- 비동기 평가 잡 + 워커 (P06.4a) ---
 
 def _joint_graph():
-    """두 pin → joint-inference(constraints). joint 노드가 있으므로 needs_async=True."""
+    """두 exact leaf → joint-inference(constraints). joint 노드가 있으므로 needs_async=True."""
     g = Graph.objects.create(slug="joint", name="Joint")
-    pin = NodeType.objects.get(slug="pin")
-    a = NodeInstance.objects.create(graph=g, key="a", node_type=pin, params={"value": 500})
-    b = NodeInstance.objects.create(graph=g, key="b", node_type=pin, params={"value": 400})
+    a = _exact_leaf(g, "a", 500)
+    b = _exact_leaf(g, "b", 400)
     ji = NodeInstance.objects.create(graph=g, key="ji",
                                      node_type=NodeType.objects.get(slug="joint-inference"), params={})
     Edge.objects.create(graph=g, source=a, source_port="out", target=ji, target_port="constraints")

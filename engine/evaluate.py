@@ -1,11 +1,11 @@
 """
 평가 — 노드를 위상순으로 돌며 분포를 하류로 전파. 노드별 연산은 engine.kernels 가 담당
-(joint-inference·correlation=역분산 결합, range=절단, pin=exact, 나머지=pass-through 폴백).
+(joint-inference·correlation=역분산 결합, data leaf=params 분포 통과, 나머지=pass-through 폴백).
 
 증분: 노드 content_hash = sha1(타입, params, 정렬된 입력 해시). 이전 run 의 같은 node_key 가
 같은 해시면 결과 재사용(cached). leaf param 이 바뀌면 해시가 바뀌어 하류가 자동 dirty.
 
-순환: 저장 시 'breaker(clamp/joint-inference) 없는 순환'은 이미 거부됨. breaker 를 지나는 순환은
+순환: 저장 시 'breaker(joint-inference) 없는 순환'은 이미 거부됨. breaker 를 지나는 순환은
 위상정렬에서 남으므로, 남은 노드는 뒤에 붙여 available 한 상류만으로 1회 평가(진짜 joint 는 후속).
 """
 import hashlib
@@ -198,8 +198,7 @@ def _certify(run, graph, results):
 
     # L0 구조 — breaker 를 잘라낸 데이터 그래프가 acyclic 이어야. (저장 검증의 런타임 재확인.)
     insts = list(graph.nodes.select_related("node_type"))
-    breaker_keys = {n.key for n in insts
-                    if n.node_type.category == "clamp" or n.node_type.slug == "joint-inference"}
+    breaker_keys = {n.key for n in insts if n.node_type.slug == "joint-inference"}
     data_edges = [(e.source.key, e.target.key)
                   for e in graph.edges.select_related("source", "target")
                   if e.kind not in _NON_DATA_KINDS]
