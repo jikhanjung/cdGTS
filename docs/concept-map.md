@@ -31,7 +31,7 @@
 |---|---|---|---|
 | **data** | 불변·인용 관측 leaf (분포를 그대로 출력) | L2 | radiometric-uPb · astronomical · published-age |
 | **process** | 입력 분포 → 산출 분포 (계산) + 기하 조립 | L3·L4·L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference · boundary · unit · merge |
-| **clamp** | 값 못박기·제약 (레이어를 가로지름: GSSA=pin, 순서=order) | 레이어 밖 | pin · range · order · freeze-version |
+| **clamp** | 순서 제약(order). *별도 clamp 개념은 축소됨* — GSSA=authored leaf·순환=joint 노드로 접힘 ([cycles §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)) | 레이어 밖 | order (pin·range·freeze-version 제거) |
 
 ```mermaid
 flowchart LR
@@ -52,11 +52,11 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 | Layer | 무엇 | → 지금 | 어디서 다뤘나 |
 |---|---|---|---|
 | **0 명명** | 이중 명명·위계 (Stage ↔ Age) | registry | [idea](idea.md) §5 |
-| **1 경계 정의** | GSSP(지점) · GSSA(결정 숫자) | registry · clamp(pin) | [idea](idea.md) · 3 사례 |
+| **1 경계 정의** | GSSP(지점) · GSSA(결정 숫자) | registry · **authored leaf**(GSSA=published-age) | [idea](idea.md) · 3 사례 |
 | **2 원시 관측** | 방사·천문·자기·생층서 (불변·인용) | data | [idea](idea.md) · [P–T](case-permian-triassic.md) |
 | **3 국소 age model** | 한 섹션 age-depth 보간 | process | [P–T](case-permian-triassic.md) |
 | **4 상관** | 섹션 간 correlation (load-bearing) | process | [캄브리아](case-cambrian-base-correlation.md) |
-| **5 전역 종합 / 정합성 게이트** | 경계 집합 → 정합 차트 | process · clamp(order/range) | [coherence-gate](coherence-gate.md) · [cycles](cycles.md) |
+| **5 전역 종합 / 정합성 게이트** | 경계 집합 → 정합 차트 | process · **order edge**(L1) | [coherence-gate](coherence-gate.md) · [cycles](cycles.md) |
 | **6 배포** | ICC(bake) · GTS(narrate) | release | [idea](idea.md) · [versioning](versioning-global-vs-per-boundary.md) |
 
 ## 2. 문서 지도
@@ -84,7 +84,7 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 - [coherence-gate.md](coherence-gate.md) — Layer 5, 검사 사다리 L0–L3
 - [evaluation-order.md](evaluation-order.md) — 평가 순서 = 의존순(topo) ≠ 연대순 · order = 사후 검사
 - [competing-models.md](competing-models.md) — 네트워크 복수 후보 + 릴리스 선택
-- [cycles.md](cycles.md) — 국소=동시추정 / 전역=버전 나선 + **clamp**
+- [cycles.md](cycles.md) — 국소=동시추정 / 전역=버전 나선 + clamp (**§12 재검토: clamp 축소 → authored leaf**)
 - [topology-diff.md](topology-diff.md) — 값 diff와 직교하는 구조 diff
 - [distribution-representation.md](distribution-representation.md) — 불확실성 충실도 사다리 L0–L5
 
@@ -100,9 +100,10 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
    **순환 해소**([cycles](cycles.md)). "발표값+출처"뿐이면 낮은 층, 완전 모델링이면 높은 층.
    → [idea](idea.md) §7의 "계산까지 하나, 발표값+출처인가"가 이 축의 다른 이름.
 
-2. **clamp가 통일자.** GSSA = `Clamp{pin}` = 점질량 δ. 순환 절단 = `freeze-version` clamp. 분포 연산 =
-   pin(δ)/range(절단)/order(절단). → 세 문서([GSSA 사례](case-precambrian-gssa.md)·[cycles](cycles.md)·
-   [distribution](distribution-representation.md))가 clamp 하나로 봉합.
+2. **~~clamp가 통일자~~ → 재검토·축소.** 한때 GSSA=`Clamp{pin}`·순환 절단·분포 연산을 clamp 하나로 봉합한다고
+   봤으나, 구현·사용 현황(실 clamp 거의 0, 대부분 데모)상 **별도 개념이 불필요**. 각각 접힌다 — GSSA=authored
+   `published-age` leaf · 순환=joint-inference 노드(노드 *안* 캡슐화) · 순서=order edge · freeze=버전 나선.
+   통일자는 **authored 노드** 쪽으로 이동. ([cycles §12](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가))
 
 3. **ICC/GTS = bake/narrate 이분법이 반복.** 같은 축이 여러 곳에: 정합성 게이트(검증/재조정) ·
    경쟁 모델(선택/포락) · diff(값+거친토폴로지 / 전체배선) · 분포(중간 rung / L5). ICC = 단일 권위 스냅샷,
@@ -116,13 +117,14 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 
 ## 4. cdGTS의 미션 (재정의됨)
 
-"시대표를 자동 계산"이 아니라 **"subcommission이 책임 있는 clamp를 놓는 그래프를 주고, 나머지 전파·정합·diff는
-기계가 자동으로."** 사람은 authoritative 노드를 clamp, 기계는 전파·검사·diff. ([cycles](cycles.md) §9)
+"시대표를 자동 계산"이 아니라 **"subcommission이 책임 있는 authored 노드를 놓는 그래프를 주고, 나머지 전파·정합·diff는
+기계가 자동으로."** 사람은 authoritative 노드를 authored(값=leaf · 선후=order edge), 기계는 전파·검사·diff.
+(옛 "clamp" 프레이밍에서 개정 — [cycles](cycles.md) §9·§12)
 
 ## 5. 상태
 
 **정리됨:** 레이어 0–6 → **티어×카테고리 재구성**(구현) · 스키마 v0 · §4 열린 질문 5개(버전·경쟁모델·순환·토폴로지·분포) 전부 ·
-clamp 도입 · 세 수렴 봉합.
+clamp 도입 후 **재검토·축소**(별도 개념 불필요 → authored leaf 수렴, §12) · 수렴점 3개(2번은 축소로 개정).
 
 **아직 열림 (각 문서 말미):** 정합성 게이트의 최소 clamp 집합·나선 수렴 · joint 희소 공분산 재구성 정확도 ·
 후보 큐레이션 문지기 · 식별자 lineage 형식 · 실제 데이터 포맷/스택(전면 미정).
