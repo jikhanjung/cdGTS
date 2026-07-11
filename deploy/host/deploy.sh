@@ -23,11 +23,11 @@ PORT=8011
 # 스왑 직전 pre_deploy 스냅샷을 뜬다. dev/test DB 는 운영 복사본이라 스냅샷 불필요
 # (scripts/sync-cdgts-db.sh 가 운영서버 DB 를 pull → 히스토리 보관).
 
-echo "=== [1/4] Pulling ${IMAGE} ==="
+echo "=== [1/5] Pulling ${IMAGE} ==="
 docker pull "${IMAGE}"
 
 echo ""
-echo "=== [2/4] Updating .env (IMAGE_TAG=${VERSION}) ==="
+echo "=== [2/5] Updating .env (IMAGE_TAG=${VERSION}) ==="
 if grep -q '^IMAGE_TAG=' .env 2>/dev/null; then
     sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${VERSION}/" .env
 else
@@ -35,7 +35,7 @@ else
 fi
 
 echo ""
-echo "=== [3/4] Swap container (DB 볼륨 유지) ==="
+echo "=== [3/5] Swap container (DB 볼륨 유지) ==="
 if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
     echo "  pre-deploy DB snapshot (prod) — writer 정지 후 cp (이 동안 nginx 점검 페이지)"
     docker compose down
@@ -55,7 +55,7 @@ fi
 docker compose up -d cdgts
 
 echo ""
-echo "=== [4/4] Wait for backend ==="
+echo "=== [4/5] Wait for backend ==="
 for i in $(seq 1 60); do
     if curl -fsS -o /dev/null -m 2 "http://127.0.0.1:${PORT}/admin/login/"; then
         echo "  backend up after ${i}s"
@@ -63,6 +63,30 @@ for i in $(seq 1 60); do
     fi
     sleep 1
 done
+
+echo ""
+echo "=== [5/5] Verify DB binding (bind mount, not ephemeral image DB) ==="
+# compose 는 host DB 디렉터리를 /app/hostdb 로 바인드한다(docker-compose.yml).
+# .env 의 DATABASE_PATH 가 이 마운트를 벗어나면(예: /app/db.sqlite3) 컨테이너는
+# 이미지 내부의 빈 DB 로 폴백 → 사이트가 빈 데이터로 뜬다(실데이터는 $ROOT/db.sqlite3 에 안전).
+# 이 게이트는 그 오배선을 배포 직후 잡아 실패시킨다(0.1.52 배포 때 실제로 걸렸던 함정).
+EXPECT_PREFIX=/app/hostdb/
+DB_NAME=$(docker compose exec -T -e DJANGO_SETTINGS_MODULE=config.settings cdgts \
+    python -c "from django.conf import settings; print(settings.DATABASES['default']['NAME'])" \
+    2>/dev/null | tr -d '\r' | tail -n1)
+case "$DB_NAME" in
+    "${EXPECT_PREFIX}"*)
+        echo "  OK: container DB = ${DB_NAME} (host bind mount)"
+        ;;
+    *)
+        echo "  ✗ FATAL: container DB = '${DB_NAME:-<empty>}' — NOT under ${EXPECT_PREFIX}"
+        echo "    컨테이너가 마운트되지 않은 이미지 내부 DB 를 쓰고 있다 → 사이트가 빈 데이터로 뜬다."
+        echo "    실데이터는 ${ROOT}/db.sqlite3 에 안전. 고칠 곳:"
+        echo "      ${ROOT}/.env 의 DATABASE_PATH=${EXPECT_PREFIX}db.sqlite3 로 수정 후"
+        echo "      (cd ${ROOT} && docker compose up -d --force-recreate cdgts)"
+        exit 1
+        ;;
+esac
 
 echo ""
 echo "=== Done: cdgts -> ${VERSION} ==="
