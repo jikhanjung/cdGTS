@@ -55,7 +55,15 @@ export default function CdgtsNode({ data, selected }) {
       {isDoiRef && (
         <div className="cdgts-node__ref" title={ref?.title || refSlug || 'no reference set — pick one in the inspector'}>
           {ref
-            ? <>{ref.authors || ref.slug}{ref.year ? ` (${ref.year})` : ''}{ref.doi ? <span className="doi"> · {ref.doi}</span> : null}</>
+            ? <>{ref.authors || ref.slug}{ref.year ? ` (${ref.year})` : ''}
+                {ref.link
+                  ? <a className="doi nodrag" href={ref.link} target="_blank" rel="noreferrer"
+                       title={`Open ${ref.doi ? `doi:${ref.doi}` : ref.link} ↗`}
+                       onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()}>
+                      {' · '}{ref.doi || 'link'} ↗
+                    </a>
+                  : null}
+              </>
             : (refSlug || <span className="muted">no reference</span>)}
         </div>
       )}

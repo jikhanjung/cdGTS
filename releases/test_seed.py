@@ -202,6 +202,7 @@ def test_narrate_release_renders_and_persists(seeded):
     api.force_authenticate(user=get_user_model().objects.create_user("ed", password="pw12345", is_staff=True))
     resp = api.post(f"/api/releases/{r.pk}/narrate/")   # staff → persists narrative onto the shared release
     assert resp.status_code == 200
+    assert isinstance(resp.data["bibliography"], list)   # bake→bibliography surfaced in narrate (5c)
     secs = {s["rank"]: s["entries"] for s in resp.data["sections"]}
     assert list(secs) == ["Eon", "Era", "Period", "Subperiod", "Epoch", "Age"]
     # Subperiod 서술: Mississippian/Pennsylvanian (이중 명명 Subsystem)

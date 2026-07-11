@@ -1,6 +1,9 @@
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import APIException
+from rest_framework.response import Response
 
+from .crossref import CrossrefError, fetch_crossref
 from .models import Reference
 from .permissions import ReferenceAccessPermission
 from .serializers import ReferenceSerializer
@@ -23,6 +26,21 @@ class ReferenceViewSet(viewsets.ModelViewSet):
     queryset = Reference.objects.all()
     serializer_class = ReferenceSerializer
     permission_classes = [ReferenceAccessPermission]
+
+    @action(detail=False, methods=["get"])
+    def crossref(self, request):
+        """
+        GET /api/references/crossref/?doi=10.xxxx/… — fetch bibliographic metadata from Crossref to
+        autofill a new reference. Read-only proxy (no DB write). Login required (same bar as create),
+        so it isn't an open outbound proxy.
+        """
+        if not request.user.is_authenticated:
+            return Response({"detail": "Login required."}, status=403)
+        try:
+            data = fetch_crossref(request.query_params.get("doi"))
+        except CrossrefError as e:
+            return Response({"detail": str(e)}, status=e.status)
+        return Response(data)
 
     def perform_create(self, serializer):
         u = self.request.user

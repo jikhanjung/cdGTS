@@ -407,7 +407,13 @@ class ReleaseNarrateView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, pk):
+        from references.models import Reference
+        from references.serializers import ReferenceSerializer
+
         release = get_object_or_404(visible_releases(request.user), pk=pk)
         # Render for anyone who can see it; only owner/staff persist the narrative onto the shared records.
         sections = narrate_release(release, persist=can_write_release(request.user, release))
-        return Response({"release": release.version, "sections": sections})
+        # Bibliography — references snapshotted onto the records at bake (cite provenance), deduped.
+        slugs = sorted({s for rec in release.records.all() for s in (rec.references or [])})
+        bibliography = ReferenceSerializer(Reference.objects.filter(slug__in=slugs), many=True).data
+        return Response({"release": release.version, "sections": sections, "bibliography": bibliography})

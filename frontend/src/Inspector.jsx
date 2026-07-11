@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CATEGORY_COLOR } from './CdgtsNode.jsx'
+import { crossrefLookup } from './api.js'
 
 // distribution fidelity ladder (kept in sync with nodes/distribution.py FIDELITY_LADDER).
 const FIDELITY = ['exact', 'sym', 'decomposed', 'shape', 'joint', 'full']
@@ -216,27 +217,52 @@ function ReferenceField({ name, value, references, onParam, onCreateReference })
 }
 
 function NewReferenceForm({ onCreate, onCancel }) {
-  const [f, setF] = useState({ slug: '', doi: '', title: '', authors: '', year: '' })
+  const [f, setF] = useState({ slug: '', doi: '', title: '', authors: '', year: '', container: '', kind: 'article' })
   const [err, setErr] = useState(null)
+  const [fetching, setFetching] = useState(false)
   const set = (k) => (e) => setF((prev) => ({ ...prev, [k]: e.target.value }))
+  const fetchDoi = async () => {
+    if (!f.doi.trim()) { setErr('enter a DOI first'); return }
+    setFetching(true); setErr(null)
+    try {
+      const m = await crossrefLookup(f.doi.trim())
+      setF((prev) => ({
+        ...prev,
+        doi: m.doi || prev.doi,
+        title: m.title || prev.title,
+        authors: m.authors || prev.authors,
+        year: m.year != null ? String(m.year) : prev.year,
+        container: m.container || prev.container,
+        kind: m.kind || prev.kind,
+        slug: prev.slug || m.suggested_slug || '',
+      }))
+    } catch (ex) { setErr(ex?.data?.detail || ex?.data || 'Crossref lookup failed') }
+    finally { setFetching(false) }
+  }
   const submit = async () => {
     if (!f.slug || !f.title) { setErr('slug and title are required'); return }
     try {
       await onCreate({
         slug: f.slug, doi: f.doi || '', title: f.title,
         authors: f.authors || '', year: f.year ? Number(f.year) : null,
+        container: f.container || '', kind: f.kind || 'article',
       })
       setErr(null)
     } catch (ex) { setErr(ex?.data ? JSON.stringify(ex.data) : String(ex.message || ex)) }
   }
   return (
     <div className="insp-newref">
+      <div className="insp-doi-row">
+        <input className="insp-input" placeholder="DOI (10.xxxx/…)" value={f.doi} onChange={set('doi')} />
+        <button type="button" className="insp-doi-fetch" onClick={fetchDoi} disabled={fetching}>
+          {fetching ? '…' : 'Fetch'}
+        </button>
+      </div>
       <input className="insp-input" placeholder="slug (e.g. cohen-2013)" value={f.slug} onChange={set('slug')} />
-      <input className="insp-input" placeholder="DOI (10.xxxx/…)" value={f.doi} onChange={set('doi')} />
       <input className="insp-input" placeholder="title" value={f.title} onChange={set('title')} />
       <input className="insp-input" placeholder="authors" value={f.authors} onChange={set('authors')} />
       <input className="insp-input" type="number" placeholder="year" value={f.year} onChange={set('year')} />
-      {err && <div className="insp-json-err">{err}</div>}
+      {err && <div className="insp-json-err">{typeof err === 'string' ? err : JSON.stringify(err)}</div>}
       <div className="insp-newref-actions">
         <button type="button" onClick={submit}>Add</button>
         <button type="button" onClick={onCancel}>Cancel</button>

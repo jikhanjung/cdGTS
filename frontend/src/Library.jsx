@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { listReferences, createReference, updateReference, deleteReference } from './api.js'
+import { listReferences, createReference, updateReference, deleteReference, crossrefLookup } from './api.js'
 
 // Top-level "Bibliography" surface — the whole reference registry (a global, DOI-centric library).
 // List every entry; create new ones (auth); edit/delete your own (or any, if staff). A reference
@@ -88,11 +88,31 @@ function RefDialog({ reference, canEdit, onClose, onChanged }) {
     url: reference?.url || '', kind: reference?.kind || 'article', note: reference?.note || '',
   })
   const [busy, setBusy] = useState(false)
+  const [fetching, setFetching] = useState(false)
   const [err, setErr] = useState(null)
   const [conflict, setConflict] = useState(null)   // { detail, cited_by } from a blocked delete
   const down = useRef(false)
 
   const set = (k, v) => setD((s) => ({ ...s, [k]: v }))
+
+  const fetchDoi = async () => {
+    if (!d.doi.trim()) { setErr('enter a DOI first'); return }
+    setFetching(true); setErr(null)
+    try {
+      const m = await crossrefLookup(d.doi.trim())
+      setD((s) => ({
+        ...s,
+        doi: m.doi || s.doi,
+        title: m.title || s.title,
+        authors: m.authors || s.authors,
+        year: m.year != null ? String(m.year) : s.year,
+        container: m.container || s.container,
+        kind: m.kind || s.kind,
+        slug: isNew ? (s.slug || m.suggested_slug || '') : s.slug,   // don't touch the slug of an existing entry (natural key)
+      }))
+    } catch (e) { setErr(e?.data?.detail || e?.data || 'Crossref lookup failed') }
+    finally { setFetching(false) }
+  }
 
   const save = async () => {
     setBusy(true); setErr(null)
@@ -147,7 +167,15 @@ function RefDialog({ reference, canEdit, onClose, onChanged }) {
           </label>
           <div className="u-row">
             <label className="bake-name">DOI <span className="hint">(without https://doi.org/)</span>
-              <input value={d.doi} placeholder="10.1130/2012.gts" onChange={(e) => set('doi', e.target.value)} />
+              <span className="lib-doi-row">
+                <input value={d.doi} placeholder="10.1130/2012.gts" onChange={(e) => set('doi', e.target.value)} />
+                {canEdit && (
+                  <button type="button" className="lib-doi-fetch" onClick={fetchDoi} disabled={fetching || busy}
+                          title="Autofill title·authors·year·container from Crossref">
+                    {fetching ? '…' : 'Fetch'}
+                  </button>
+                )}
+              </span>
             </label>
             <label className="bake-name">Kind
               <select value={d.kind} onChange={(e) => set('kind', e.target.value)}>

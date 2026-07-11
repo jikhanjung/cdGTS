@@ -50,6 +50,9 @@ export const updateReference = (id, patch) =>
 // Delete a registry entry. 409 with { detail, cited_by } if any graph still cites it.
 export const deleteReference = (id) =>
   fetch(`/api/references/${id}/`, { method: 'DELETE', headers: csrfHeaders() }).then(j)
+// Autofill from Crossref — { doi, title, authors, year, container, kind, suggested_slug }. Login required.
+export const crossrefLookup = (doi) =>
+  fetch(`/api/references/crossref/?doi=${encodeURIComponent(doi)}`).then(j)
 // This graph's bibliography — references cited by its `reference` nodes (+ per-boundary attribution).
 export const graphReferences = (id) => fetch(`/api/graphs/${id}/references/`).then(j)
 // A baked release's bibliography — references snapshotted at bake (+ which boundary each feeds).

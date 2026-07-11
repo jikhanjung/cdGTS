@@ -95,3 +95,76 @@ def test_cannot_delete_cited_reference(db):
     rnode.delete()
     assert c.delete(f"/api/references/{ref.id}/").status_code == 204
     assert not Reference.objects.filter(id=ref.id).exists()
+
+
+# --- Crossref autofill (5b) ---
+
+import io
+import json
+import urllib.error
+
+from references.crossref import CrossrefError, fetch_crossref, normalize_doi
+
+_CROSSREF_SAMPLE = {
+    "message": {
+        "DOI": "10.1130/2012.gts",
+        "title": ["The ICS International Chronostratigraphic Chart"],
+        "container-title": ["Episodes"],
+        "author": [
+            {"given": "Kim M.", "family": "Cohen"},
+            {"given": "Stan C.", "family": "Finney"},
+            {"given": "Philip L.", "family": "Gibbard"},
+        ],
+        "issued": {"date-parts": [[2013, 9]]},
+        "type": "journal-article",
+    }
+}
+
+
+def _fake_urlopen(payload, code=200):
+    def _open(req, timeout=None):
+        if code != 200:
+            raise urllib.error.HTTPError(req.full_url, code, "err", {}, None)
+        return io.BytesIO(json.dumps(payload).encode())   # supports context manager + .read()
+    return _open
+
+
+def test_normalize_doi_strips_url_prefix():
+    assert normalize_doi("https://doi.org/10.1/x") == "10.1/x"
+    assert normalize_doi("  https://dx.doi.org/10.1/Y ") == "10.1/Y"
+    assert normalize_doi("10.1/z") == "10.1/z"
+
+
+def test_fetch_crossref_maps_fields(monkeypatch):
+    monkeypatch.setattr("urllib.request.urlopen", _fake_urlopen(_CROSSREF_SAMPLE))
+    data = fetch_crossref("https://doi.org/10.1130/2012.gts")
+    assert data["title"].startswith("The ICS International")
+    assert data["authors"] == "Cohen, K., Finney, S. & Gibbard, P."
+    assert data["year"] == 2013
+    assert data["container"] == "Episodes"
+    assert data["kind"] == "article"
+    assert data["doi"] == "10.1130/2012.gts"
+    assert data["suggested_slug"] == "cohen-2013"
+
+
+def test_fetch_crossref_404(monkeypatch):
+    monkeypatch.setattr("urllib.request.urlopen", _fake_urlopen(None, code=404))
+    with pytest.raises(CrossrefError) as ei:
+        fetch_crossref("10.1/missing")
+    assert ei.value.status == 404
+
+
+def test_fetch_crossref_blank_doi():
+    with pytest.raises(CrossrefError) as ei:
+        fetch_crossref("   ")
+    assert ei.value.status == 400
+
+
+def test_crossref_action_requires_login_then_returns_data(db, monkeypatch):
+    monkeypatch.setattr("urllib.request.urlopen", _fake_urlopen(_CROSSREF_SAMPLE))
+    c = APIClient()
+    assert c.get("/api/references/crossref/?doi=10.1130/2012.gts").status_code == 403   # open proxy guard
+    c.force_authenticate(User.objects.create_user("u", password="p"))
+    ok = c.get("/api/references/crossref/?doi=10.1130/2012.gts")
+    assert ok.status_code == 200
+    assert ok.data["year"] == 2013 and ok.data["suggested_slug"] == "cohen-2013"

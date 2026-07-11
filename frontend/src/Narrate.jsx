@@ -66,6 +66,23 @@ export default function Narrate({ embedReleaseId } = {}) {
               ))}
             </section>
           ))}
+
+          {doc.bibliography?.length > 0 && (
+            <section className="narrate-biblio">
+              <h3>References <span className="narrate-count">{doc.bibliography.length}</span></h3>
+              <ol>
+                {doc.bibliography.map((r) => (
+                  <li key={r.slug} className="narrate-ref">
+                    {r.authors ? `${r.authors} ` : ''}{r.year ? `(${r.year}) ` : ''}
+                    {r.title}{r.container ? <>. <i>{r.container}</i></> : null}
+                    {r.link
+                      ? <>. <a href={r.link} target="_blank" rel="noreferrer">{r.doi ? `doi:${r.doi}` : r.link} ↗</a></>
+                      : null}
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
         </div>
       )}
       <p className="narrate-note">
