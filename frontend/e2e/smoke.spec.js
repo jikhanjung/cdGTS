@@ -29,6 +29,31 @@ test('editor mounts a graph in the browser (read-only, anonymous)', async ({ pag
   await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 15_000 })
 })
 
+// Auto-evaluate ran in the browser: the default graph (Example ① Precambrian GSSA) resolves its
+// base-proterozoic boundary to 2500 Ma. This exercises the whole evaluate path (runEvaluation +
+// result attachment) end-to-end in real JS — the browser side of what Tier 1 covers on the backend.
+test('auto-evaluate renders the boundary age (2500 Ma)', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 15_000 })
+  await expect(page.locator('.cdgts-node__bage').filter({ hasText: '2500' }).first())
+    .toBeVisible({ timeout: 15_000 })
+})
+
+// Drill into a node group in the browser (exercises the extracted buildView + activeGroup state).
+// Example ④ (Partial ICC) has node groups; select it, double-click a group node, expect the
+// "inside group" breadcrumb + Exit-to-parent control. Anonymous / read-only — no mutation.
+test('group drill-in works (buildView)', async ({ page }) => {
+  await page.goto('/')
+  await expect(page.locator('.react-flow__node').first()).toBeVisible({ timeout: 15_000 })
+  // Graphs are ordered by name (Example ①…④); index 3 = Example ④, which has groups.
+  await page.locator('.graph-select').selectOption({ index: 3 })
+  const group = page.locator('.react-flow__node[data-id^="group:"]').first()
+  await expect(group).toBeVisible({ timeout: 15_000 })
+  await group.dblclick()
+  await expect(page.locator('.exit-parent')).toBeVisible()
+  await expect(page.locator('.bc-hint').filter({ hasText: 'Inside group' })).toBeVisible()
+})
+
 // The browser-only seam: session login sends the csrftoken cookie back as X-CSRFToken from real JS.
 // Runs only when creds are provided (never mutates data — just logs in and out).
 test('login CSRF round-trip', async ({ page }) => {

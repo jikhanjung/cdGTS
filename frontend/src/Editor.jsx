@@ -14,6 +14,7 @@ import Inspector from './Inspector.jsx'
 import ResultsPanel from './ResultsPanel.jsx'
 import VerifyPanel from './VerifyPanel.jsx'
 import EditorMenu from './EditorMenu.jsx'
+import { useNodeInspectorHandlers } from './useNodeInspectorHandlers.js'
 import {
   rfType, isRealNode, nodeWidth, isOrderConn, isCiteConn, edgeStyleFor,
   apiToRF, rfToApi, buildView,
@@ -580,30 +581,9 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
     } catch (e) { setError(e.data?.detail || e.data || String(e)); setStatus('Propose failed') }
   }, [dirty, graphId, nodes, edges, groups, getViewport, graphSig, onProposed])
 
-  // --- Inspector (selected real node) ---
-  const patchNodeData = useCallback((id, fn) => {
-    setNodes((nds) => nds.map((n) => (n.id === id ? { ...n, data: fn(n.data) } : n)))
-  }, [setNodes])
-  const onLabel = useCallback((id, label) => patchNodeData(id, (d) => ({ ...d, label })), [patchNodeData])
-  const onDescription = useCallback((id, description) => patchNodeData(id, (d) => ({ ...d, description })), [patchNodeData])
-  const onParam = useCallback((id, key, value) => patchNodeData(id, (d) => {
-    const params = { ...(d.params || {}) }
-    if (value === undefined) delete params[key]; else params[key] = value
-    return { ...d, params }
-  }), [patchNodeData])
-  const onDist = useCallback((id, key, subKey, value) => patchNodeData(id, (d) => {
-    const params = { ...(d.params || {}) }
-    const dist = { ...(params[key] || {}) }
-    if (subKey.startsWith('budget.')) {
-      const bk = subKey.slice('budget.'.length)
-      const budget = { ...(dist.budget || {}) }
-      if (value === undefined) delete budget[bk]; else budget[bk] = value
-      if (Object.keys(budget).length) dist.budget = budget; else delete dist.budget
-    } else if (value === undefined) { delete dist[subKey] } else { dist[subKey] = value }
-    params[key] = dist
-    return { ...d, params }
-  }), [patchNodeData])
-  const onReplaceParams = useCallback((id, params) => patchNodeData(id, (d) => ({ ...d, params })), [patchNodeData])
+  // --- Inspector field handlers (label/description/params/dist + group name) — see useNodeInspectorHandlers ---
+  const { onLabel, onDescription, onParam, onDist, onReplaceParams, onGroupName } =
+    useNodeInspectorHandlers(setNodes, setGroups)
 
   const selectedId = selectedIds[0] ?? null
   const selectedNode = useMemo(() => nodes.find((n) => n.id === selectedId) || null, [nodes, selectedId])
@@ -618,10 +598,6 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   )
 
   // --- Inspector (selected node group) — when no real node is selected, show the selected group's info ---
-  const onGroupName = useCallback(
-    (key, name) => setGroups((gs) => gs.map((g) => (g.key === key ? { ...g, name } : g))),
-    [setGroups],
-  )
   const selectedGroup = useMemo(
     () => (selectedNode ? null : groups.find((g) => g.key === selectedGroupKeys[0]) || null),
     [selectedNode, groups, selectedGroupKeys],
