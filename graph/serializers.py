@@ -207,6 +207,14 @@ class GraphSerializer(serializers.ModelSerializer):
         return instance
 
     def _replace_topology(self, graph, nodes, edges, groups):
+        # Gateways CASCADE off their node, so the wipe below would drop a graph's boundary contracts on
+        # every save. Snapshot them and re-link by node key after the topology is rebuilt — an edit keeps
+        # its gateways, while a gateway whose boundary node was deleted is correctly dropped.
+        saved_gateways = [
+            {"slug": gw.slug, "name": gw.name, "node_key": gw.node.key,
+             "output_port": gw.output_port, "boundary_id": gw.boundary_id}
+            for gw in graph.gateways.select_related("node")
+        ]
         graph.nodes.all().delete()          # cascade 로 edges 도 제거
         graph.groups.all().delete()
         key_to_group = {}
@@ -246,4 +254,9 @@ class GraphSerializer(serializers.ModelSerializer):
                 kind=e.get("kind", Edge.Kind.DATA),
             )
             for e in edges
+        ])
+        Gateway.objects.bulk_create([
+            Gateway(graph=graph, slug=gw["slug"], name=gw["name"], node=key_to_obj[gw["node_key"]],
+                    output_port=gw["output_port"], boundary_id=gw["boundary_id"])
+            for gw in saved_gateways if gw["node_key"] in key_to_obj
         ])
