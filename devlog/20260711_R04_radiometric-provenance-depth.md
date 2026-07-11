@@ -1,6 +1,6 @@
 # 20260711_R04 — 방사연대 provenance 를 cdGTS 에 어느 깊이까지 구현할까
 
-> 성격: **검토(scope/altitude).** `docs/radiogenic_isotope_geoghronology_summary.md`(Schmitz 2012, GTS2012 Ch.6
+> 성격: **검토(scope/altitude).** `docs/radiogenic_isotope_geochronology_summary.md`(Schmitz 2012, GTS2012 Ch.6
 > 요약)를 cdGTS 관점에서 읽고, "논문 디테일을 다 구현할 필요는 없다 — **어느 수준이 적당한가**"를 정리한다.
 > 결론: 재설계가 아니라 **한 프리미티브(공유 보정 파라미터 노드)만 1급으로 올리는 L1**이 적정선.
 
@@ -67,4 +67,4 @@ TODO 와 맞물림. (cf. concept-map §3-1 "provenance 깊이 = 하나의 축".)
   노드로 올리는 L1 이 적정선.** 그러면 공분산·재계산·diff 가 실데이터로 돌고, lab 내부는 cite 로 남는다.
 - 착수 시: P07 이 base-Cambrian 으로 한 것처럼 **한 경계(예: base-Triassic Meishan U-Pb, 또는 Ar-Ar/FCs 사례)로
   L1 vertical slice** — 공유 보정 노드 → 상관 duration + "FCs 바꾸면 이만큼 영향" diff 까지. (스케치 대기)
-- 원문: `docs/radiogenic_isotope_geoghronology_summary.md` · 관련: [cycles §12](../docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)(joint 노드) · [R01](20260707_R01_vision-implementation-review.md) 아크 A.
+- 원문: `docs/radiogenic_isotope_geochronology_summary.md` · 관련: [cycles §12](../docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)(joint 노드) · [R01](20260707_R01_vision-implementation-review.md) 아크 A.
