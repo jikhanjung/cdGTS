@@ -2,9 +2,11 @@
 
 *English · [한국어](cycles.md)*
 
-> Status: **Analysis → partly reflected in the schema/gate.** Expands the cycle problem (biostratigraphy ↔
+> Status: **Analysis → partly reflected in the schema/gate → reconsidered (scope-down conclusion).** Expands the cycle problem (biostratigraphy ↔
 > radiometric dating) that [node-graph-paradigm_en.md](node-graph-paradigm_en.md) flagged from the start, and
 > introduces the subcommissions' **hand-crafted clamp** as the solution. → clamp primitives **implemented** (releases.Clamp · pin/range/order/freeze-version · devlog 118).
+>
+> ⚠️ **Reconsidered (2026-07): see [§12](#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept).** On the evidence of what was built and used, clamp is **not needed as a distinct first-class concept.** Everything it did folds into mechanisms that already exist — **an authored node (GSSA leaf) + order edges + a joint-inference node + the version spiral.** A human pinning a value is **fully covered by an authored node (GSSA leaf).** §1–9 are kept as the thinking (conceptual history).
 
 ## 1. The "cycle" is not one thing
 
@@ -125,3 +127,72 @@ place accountable clamps, and automatically propagate / check / diff the rest."*
 - [coherence-gate_en.md](coherence-gate_en.md) — clamp application + acyclicity check
 - [boundary-gateway-schema_en.md](boundary-gateway-schema_en.md) §2 — `Clamp` node · GSSA = clamp
 - [competing-models_en.md](competing-models_en.md) · [versioning-global-vs-per-boundary_en.md](versioning-global-vs-per-boundary_en.md) — release/governance layer
+
+## 12. Reconsideration note (2026-07) — is clamp needed as a distinct concept?
+
+> Revisits the "clamp = the unifier" conclusion of §5–9 against what was actually built and used. **Bottom line:
+> everything clamp did folds into other, already-existing mechanisms, so clamp does not need to exist as a
+> distinct first-class concept / type / governance record. A human pinning a value is fully covered by an
+> authored node (GSSA leaf).** The cycle analysis in §1–4 still holds — in fact it is what supports the
+> conclusion that a graph-level loop never needs to arise in the first place.
+
+### Usage (evidence)
+
+- Graph clamp nodes: only two `pin` nodes exist, and **both are the same GSSA decree** (2500 Ma, base-proterozoic). `range`: 0 · `joint-inference`: 0.
+- `releases.Clamp` (authored governance record): **0 in the real seed.** Only `seed_demo._clamps()` plants a demo (a range on base-triassic that is honored / a pin on base-cambrian that is violated → reconcile demo).
+- So apart from the single GSSA, clamp is **almost entirely demonstration scaffolding.**
+
+### Each of the four pillars folds away
+
+- **Cycle-cutting → unnecessary.** Biostratigraphy↔radiometric is a *scientific* mutual calibration, not a
+  pipeline dependency cycle. Fold the two into **a single joint-inference process node**, resolve the circularity
+  *inside* the node, and emit only value+σ — the graph stays a DAG (§3's joint node is already this answer). That
+  is why real graphs draw no loops: with no cycle to cut, no breaker (clamp) is needed. (The difficulty does not
+  vanish; it is encapsulated *inside* the node boundary = the right place for it, and the job of P06.4b.)
+- **pin / GSSA → an authored data leaf suffices.** A GSSA is "a boundary whose value is authored, not derived" —
+  exactly what a `published-age` leaf (+ `definition_type=GSSA`) already does. The clamp abstraction adds nothing.
+- **order (monotonicity) → already handled by order edges (the L1 gate).** `Clamp{order}` is redundant.
+- **freeze-version → already done by §4's version spiral** (a gateway = a constant within a release). No per-boundary clamp needed.
+
+### The release override (§6) is in the wrong place
+
+`releases.Clamp` + `reconcile` (L3b) *directly edit* the baked release's values to satisfy the clamps. But the
+**graph that produced those values still says the old value** → a **provenance hole**: the published number no
+longer traces to a graph evaluation. Reproducible provenance is this system's core, so overriding out-of-band at
+the release tier conflicts with that principle. If a subcommission override is genuinely needed, it belongs as an
+**authored node inside the graph that gets re-baked — which is then the same shape as a GSSA leaf.** Even this
+case converges on the authored leaf.
+
+### Conclusion
+
+Clamp's four jobs + the governance override all fold as follows:
+
+| What clamp tried to do | Replacement |
+|---|---|
+| pin / GSSA | **authored data leaf** (`published-age`, `definition_type=GSSA`) |
+| cycle-cutting | **joint-inference node** (circularity encapsulated *inside* the node) |
+| order (monotonicity) | **order edges** (L1) |
+| freeze-version | **version spiral** (gateway) |
+| release override | if ever needed → **an authored leaf inside the graph** + re-bake |
+
+→ **No distinct clamp concept / type / governance record is needed.** §9's mission still holds: instead of
+"humans clamp," it is **"humans author the authoritative nodes (leaf/order); the machine propagates, checks
+coherence, and diffs."**
+
+### Scope-down sketch (implementation is follow-up; direction only here)
+
+1. **Keep the conceptual history.** §1–9 stay as the thinking (do not delete). This §12 is the reconsidered conclusion.
+2. **Shrink the graph clamp nodes.** Migrate the two `pin` (GSSA) nodes to an authored leaf (`published-age`/GSSA);
+   the `range` and the `clamp` category NodeType are unused → deprecation candidates. `is_cycle_breaker` can keep
+   only `joint-inference`.
+3. **Isolate `releases.Clamp` + verify/reconcile.** With zero real use, mark them **demo-only** (seed_demo) or
+   consider removal. Do **not** build the graph↔release clamp *integration* (it would wire two unused machines
+   together). This also eases the `services.py` bloat R02 flagged.
+4. **Update the mission wording.** "humans clamp" → "humans author nodes."
+
+### Triggers that would reopen this (deferred until then)
+
+- **A real graph cycle that cannot be folded** — genuine mutual wiring between separate nodes that a single joint node cannot encapsulate.
+- **A real governance override that must live outside the graph** — a case a subcommission cannot express even as an authored leaf.
+
+Both are hypothetical today. If one appears, reopen this note.
