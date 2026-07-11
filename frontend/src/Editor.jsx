@@ -549,7 +549,8 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   // touch: long press (≈0.5s, if no movement) → context menu. Use elementFromPoint to detect node/group/empty area.
   const cancelLongPress = useCallback(() => { if (lpRef.current) { clearTimeout(lpRef.current); lpRef.current = null } }, [])
   const onTouchStartFlow = useCallback((e) => {
-    if (!IS_TOUCH || e.touches.length !== 1 || !canEdit) return
+    // read-only users still get the long-press menu — it's their only path to drill into a group (no double-click on touch).
+    if (!IS_TOUCH || e.touches.length !== 1) return
     const { clientX: x, clientY: y } = e.touches[0]
     cancelLongPress()
     lpFiredRef.current = false
@@ -559,10 +560,10 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
       const nodeEl = document.elementFromPoint(x, y)?.closest?.('.react-flow__node')
       const id = nodeEl?.getAttribute('data-id')
       if (id?.startsWith('group:')) setMenu({ x, y, kind: 'group', groupKey: id.slice(6) })
-      else if (id && !id.startsWith('stub-')) setMenu({ x, y, kind: 'node', id })
-      else setMenu({ x, y, kind: 'pane' })
+      else if (canEdit && id && !id.startsWith('stub-')) setMenu({ x, y, kind: 'node', id })
+      else if (canEdit || activeGroup) setMenu({ x, y, kind: 'pane' })   // read-only: pane menu only inside a group (Exit)
     }, 500)
-  }, [cancelLongPress, canEdit])
+  }, [cancelLongPress, canEdit, activeGroup])
 
   // --- create · merge / ungroup / drill-in groups ---
   // Combine real nodes + groups (collapsed nodes) into one. If groups are mixed in, absorb their members too and **merge** (single hierarchy kept);
@@ -617,15 +618,15 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   const closeMenu = useCallback(() => setMenu(null), [])
   const onNodeContextMenu = useCallback((e, node) => {
     e.preventDefault()
-    if (!canEdit) return                       // read-only: no edit menu (group/delete)
+    // read-only: still offer the group menu (view-only "Open group"); no menu on real nodes.
     if (node.type === 'cdgtsGroup') setMenu({ x: e.clientX, y: e.clientY, kind: 'group', groupKey: node.data.key })
-    else if (isRealNode(node.type)) setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
+    else if (canEdit && isRealNode(node.type)) setMenu({ x: e.clientX, y: e.clientY, kind: 'node', id: node.id })
   }, [canEdit])
   const onPaneContextMenu = useCallback((e) => {
     e.preventDefault()
-    if (!canEdit) return
+    if (!canEdit && !activeGroup) return       // read-only at top level: nothing to offer
     setMenu({ x: e.clientX, y: e.clientY, kind: 'pane' })
-  }, [canEdit])
+  }, [canEdit, activeGroup])
   const onEdgeContextMenu = useCallback((e, edge) => {
     e.preventDefault()
     if (!canEdit) return
@@ -1108,11 +1109,11 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
             })}
             {activeGroup && (
               <>
-                <span className="bc-hint">Inside group — edit members·subgroups · left/right stubs = external I/O</span>
-                <button className="ungroup" onClick={() => onUngroup(activeGroup)}>Ungroup</button>
+                <span className="bc-hint">Inside group — {canEdit ? 'edit' : 'view'} members·subgroups · left/right stubs = external I/O</span>
+                {canEdit && <button className="ungroup" onClick={() => onUngroup(activeGroup)}>Ungroup</button>}
               </>
             )}
-            {!activeGroup && <span className="bc-hint">Double-click a group → edit inside</span>}
+            {!activeGroup && <span className="bc-hint">Double-click a group → open inside{canEdit ? ' (edit)' : ' (view)'}</span>}
           </div>
         )}
 
@@ -1195,16 +1196,16 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
               {menu.kind === 'group' && (
                 <>
                   <li onClick={() => { setActiveGroup(menu.groupKey); closeMenu() }}>Open group</li>
-                  {(selectedIds.length || selectedGroupKeys.filter((k) => k !== menu.groupKey).length) > 0 && (
+                  {canEdit && (selectedIds.length || selectedGroupKeys.filter((k) => k !== menu.groupKey).length) > 0 && (
                     <li onClick={() => {
                       createOrMergeGroup(selectedIds, [menu.groupKey, ...selectedGroupKeys.filter((k) => k !== menu.groupKey)])
                       closeMenu()
                     }}>Merge selection into this group ({selectedIds.length + selectedGroupKeys.filter((k) => k !== menu.groupKey).length})</li>
                   )}
-                  <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>Ungroup</li>
+                  {canEdit && <li onClick={() => { onUngroup(menu.groupKey); closeMenu() }}>Ungroup</li>}
                 </>
               )}
-              {menu.kind === 'pane' && (
+              {menu.kind === 'pane' && canEdit && (
                 (selectedIds.length || selectedGroupKeys.length >= 2)
                   ? <li onClick={() => { createOrMergeGroup(selectedIds, selectedGroupKeys); closeMenu() }}>
                       {selectedGroupKeys.length ? 'Merge selected groups·nodes' : (activeGroup ? 'Group selection into a subgroup' : 'Group selected nodes')} ({selectedIds.length + selectedGroupKeys.length})
