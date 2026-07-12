@@ -66,33 +66,39 @@ Evaluating a graph attaches a **consistency certificate**, shown as chips in the
 
 ---
 
-## 2. Exercise 1 — the covariance gate: *same values, one tag flips the verdict*
+## 2. Exercise 1 — the covariance gate: *same values, one shared node flips the verdict*
 
-The two deployed demo graphs have **identical values and identical errors**, differing by exactly one thing — a shared
-systematic tag.
+The two deployed demo graphs have **identical values and identical errors**, differing by exactly one thing — whether the
+two U-Pb ages hang off **one shared calibration node** (`decay-238U`) or **two separate ones**. Each boundary is a chain:
+**`[calibration-constant]` ─calibration─▶ `[radiometric-uPb age]` ─age─▶ `[boundary]`.** The systematic (σ 1.4) is
+authored **once** on the calibration node (single source of truth, provenance visible as an edge) and the ages **inherit**
+it — not a magic string hand-typed onto each boundary.
 
 ### Steps
-1. In the **Editor**, use the top **graph dropdown** → **"Demo: duration overlap (independent errors → L1b warn)"**.
+1. In the **Editor**, use the top **graph dropdown** → **"Demo: duration overlap (independent decay-const nodes → L1b warn)"**.
 2. **Actions ▾ → Evaluate**.
 3. Read the **Results panel**:
    - consistency badge **amber (warn)**, **L1b** chip amber.
    - note: `L1b 순서 통계적 미해결: olenekian↔anisian (Δ2.0 < 2σ 4.243)`.
-4. Dropdown → **"Demo: duration resolved (shared systematic → L1b pass)"** → **Evaluate**.
+4. Dropdown → **"Demo: duration resolved (shared decay-const node → L1b pass)"** → **Evaluate**.
    - consistency **green (pass)**, **L1b** green.
+   - Side by side the difference is **visible**: the warn graph has **two** λ238U nodes; the pass graph has **one** feeding both ages.
 
 ### What happened (the numbers)
-In both graphs the two Age boundaries sit on either side of an **Olenekian time-unit** node, joined by order edges — that
+In both graphs the two boundaries sit on either side of an **Olenekian time-unit** node, joined by order edges — that
 **asserts** the sequence, and the gate only judges the duration of an **asserted unit** (two floating boundaries are
-skipped). The boundaries are **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (gap **2.0 Myr**), each **1σ = 1.5 Myr**.
+skipped). The boundaries are **base-Olenekian 249.0 Ma**, **base-Anisian 247.0 Ma** (gap **2.0 Myr**). Each age authors
+only its **analytical 1σ ≈ 0.54**; the calibration node supplies the **systematic σ 1.4**, so marginal 1σ = √(0.54²+1.4²) = **1.5**.
 
-- **independent (warn)**: no sharing → `2σ_gap = 2·√(1.5² + 1.5²) ≈ 4.24`. Gap 2.0 < 4.24 → **order unresolved (warn)**.
-  ("The boundaries are 2 Myr apart, but the error is 4 Myr — you can't be statistically sure which is older.")
-- **shared (pass)**: both share `decay-238U` (σ 1.4) → `Cov = 1.4·1.4 = 1.96` →
+- **independent (warn)**: the two ages use **different** calibration nodes (different ref) → `Cov = 0` →
+  `2σ_gap = 2·√(1.5² + 1.5²) ≈ 4.24`. Gap 2.0 < 4.24 → **order unresolved (warn)**.
+- **shared (pass)**: the two ages share the **same** calibration node (ref `decay-238U`, σ 1.4) → `Cov = 1.4·1.4 = 1.96` →
   `Var_gap = 1.5² + 1.5² − 2·1.96 = 0.58`, `2σ_gap ≈ 1.52`. Gap 2.0 > 1.52 → **order resolved (pass)**.
 
 ### Takeaway ✅
-> **Even with identical values and errors, where the error comes from (shared systematic or not) flips the order verdict.**
-> A single `±` can never do this — which is why we carry distributions decomposed into components.
+> **Even with identical values and errors, whether the systematic comes from the same source (node) flips the order verdict.**
+> A single `±` can never do this — which is why we carry distributions decomposed into components, and put the shared
+> source in a **node** (change the constant once → every age on it re-computes → the diff surfaces the affected boundaries).
 
 ---
 
@@ -144,7 +150,7 @@ If a boundary has several clamps, the strongest wins by **precedence `pin > rang
 ## 5. How the demo data is made
 
 `releases/management/commands/seed_demo.py` (idempotent):
-- Two covariance-contrast graphs (§2) — identical values/±, differing only by the `decay-238U` shared tag.
+- Two covariance-contrast graphs (§2) — identical values/±, differing only by whether they **share one** `decay-238U` calibration node or use **two separate** ones.
 - Two authored clamps on the published release (§3) — an honored range + a violated pin.
 
 It leaves the main seed untouched. It disappears after a container restart or the nightly mirror sync, so **re-run**:

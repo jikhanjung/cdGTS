@@ -152,6 +152,50 @@ def test_calibration_constant_via_compute_dispatch():
     assert out["shared_components"] == [{"ref": "FCs", "sigma": 0.03}]
 
 
+# --- radiometric-uPb: calibration 입력을 접어넣는 소비자 (R04 vertical slice) ---
+
+def _cal_in(ref, sigma):
+    # calibration-constant 출력 모양(auto-tag 된 공유원)을 calibration 포트 입력으로.
+    return {"dist": {"fidelity": "joint", "value_ma": 248.0, "shared_components": [{"ref": ref, "sigma": sigma}]},
+            "params": {}, "port": "calibration"}
+
+
+def test_radiometric_age_without_calibration_is_opaque_leaf():
+    d = _sym(249.0, 0.5385)
+    assert compute("data", "radiometric-uPb", [], {"distribution": d}) == d      # 하위호환: 입력 없으면 원본
+
+def test_radiometric_age_folds_calibration_into_marginal_and_tag():
+    d = {"fidelity": "decomposed", "value_ma": 249.0, "sigma": 1, "budget": {"analytical": 0.5385}}
+    out = compute("data", "radiometric-uPb", [_cal_in("decay-238U", 1.4)], {"distribution": d})
+    assert out["value_ma"] == 249.0                                  # 값 불변(재계산 아님)
+    assert out["budget"]["systematic"] == 1.4                        # 계통 σ 가 marginal 에 접힘
+    assert abs(moments(out)[1] - 1.5) < 1e-4                         # √(0.5385²+1.4²)≈1.5
+    assert out["shared_components"] == [{"ref": "decay-238U", "sigma": 1.4}]  # 공분산 태그
+
+def test_two_ages_sharing_one_calibration_node_covary():
+    # 같은 보정 노드(같은 ref)를 소비한 두 연대 → duration_stats 가 공분산으로 σ_gap 축소.
+    cal = _cal_in("decay-238U", 1.4)
+    older = compute("data", "radiometric-uPb", [cal],
+                    {"distribution": {"fidelity": "decomposed", "value_ma": 249.0, "sigma": 1, "budget": {"analytical": 0.5385}}})
+    younger = compute("data", "radiometric-uPb", [cal],
+                      {"distribution": {"fidelity": "decomposed", "value_ma": 247.0, "sigma": 1, "budget": {"analytical": 0.5385}}})
+    assert abs(covariance(older, younger) - 1.96) < 1e-6            # 1.4·1.4
+    from engine.kernels import duration_stats
+    gap, sig = duration_stats(older, younger)
+    assert gap == 2.0 and 2 * sig < 2.0                            # 상관으로 2σ_gap<2 → 해소(L1b pass)
+
+def test_two_ages_with_different_calibration_refs_do_not_covary():
+    # 서로 다른 보정 노드(ref 다름) → Cov 0 → 2σ_gap 큼(L1b warn).
+    older = compute("data", "radiometric-uPb", [_cal_in("decay-238U·A", 1.4)],
+                    {"distribution": {"fidelity": "decomposed", "value_ma": 249.0, "sigma": 1, "budget": {"analytical": 0.5385}}})
+    younger = compute("data", "radiometric-uPb", [_cal_in("decay-238U·B", 1.4)],
+                      {"distribution": {"fidelity": "decomposed", "value_ma": 247.0, "sigma": 1, "budget": {"analytical": 0.5385}}})
+    assert covariance(older, younger) == 0.0
+    from engine.kernels import duration_stats
+    _, sig = duration_stats(older, younger)
+    assert 2 * sig > 2.0
+
+
 # --- age-depth-model ---
 
 def test_age_depth_linear_midpoint():

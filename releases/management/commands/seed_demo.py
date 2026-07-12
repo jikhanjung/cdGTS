@@ -1,11 +1,15 @@
 """
 P06.3b capstone demo (idempotent, add-only) — makes the P06 science engine features *visible*:
 
-  1. Two tiny graphs that differ only by a shared systematic tag, so the coherence gate flips:
-     - demo-cov-independent : two Age boundaries joined by an order edge, wide ±, independent → L1b WARN (2σ overlap).
-     - demo-cov-shared      : same values/±, but both share a decay-constant → covariance shrinks σ_gap → L1b PASS.
-     The order edge is what *asserts* the sequence — L1b/L2 only judge boundaries the user connected.
-     Open each in the Editor, press Evaluate, read the consistency chips (Results panel).
+  1. Two tiny graphs that differ only by whether the two U-Pb ages hang off the SAME shared
+     calibration-constant node (decay-238U) or two separate ones — so the coherence gate flips:
+     - demo-cov-independent : each age gets its OWN decay-const node (different ref) → uncorrelated → L1b WARN.
+     - demo-cov-shared      : both ages consume ONE shared decay-const node (same ref) → covariance
+                              shrinks σ_gap → L1b PASS.
+     Chain per boundary: [calibration-constant] --calibration--> [radiometric-uPb age] --age--> [boundary].
+     The systematic is authored ONCE on the calibration node (single source of truth, provenance visible
+     as an edge) — not a magic string hand-typed onto each boundary. The order edge asserts the sequence
+     (L1b/L2 only judge boundaries the user connected). Open each in the Editor, Evaluate, read the chips.
 
   2. Authored governance clamps on the published ICS-2024/12 release (Vault → Clamps tab):
      - range on base-triassic that the value honors (L3a: honored),
@@ -38,7 +42,9 @@ class Command(BaseCommand):
         from graph.models import Edge, Gateway, Graph, NodeInstance
         from nodes.models import NodeType
 
-        pub = NodeType.objects.get(slug="published-age")
+        bnd = NodeType.objects.get(slug="boundary")
+        upb = NodeType.objects.get(slug="radiometric-uPb")
+        cal = NodeType.objects.get(slug="calibration-constant")
         unt = NodeType.objects.get(slug="unit")
         ole = Boundary.objects.filter(slug="base-olenekian").first()
         ani = Boundary.objects.filter(slug="base-anisian").first()
@@ -46,12 +52,22 @@ class Command(BaseCommand):
             self.stdout.write("  (skip covariance graphs — base-olenekian/base-anisian not seeded)")
             return
 
-        def dist(value, shared):
-            d = {"fidelity": "decomposed", "value_ma": value, "sigma": 2, "budget": {"model": 3.0}}   # 1σ = 1.5
-            if shared:
-                d["fidelity"] = "joint"
-                d["shared_components"] = [{"ref": "decay-238U", "sigma": 1.4}]   # shared decay constant
-            return d
+        # Each U-Pb age authors ONLY its analytical error (1σ ≈ 0.5385). The decay-238U calibration node
+        # contributes a systematic σ 1.4 → folded into the age's marginal (√(0.5385²+1.4²)=1.5) AND tagged
+        # as a shared_component. So marginal ± is identical to the old hand-authored demo; the difference is
+        # the systematic now comes from a real node, and correlation exists iff both ages share that node.
+        analytical = {"fidelity": "decomposed", "value_ma": None, "sigma": 1, "budget": {"analytical": 0.5385}}
+
+        def age_dist(value):
+            return {**analytical, "value_ma": value}
+
+        def cal_params(symbol):
+            # value_ma is a linearization reference only (unused downstream — never flows as an age);
+            # what propagates is the systematic σ 1.4, auto-tagged with ref=symbol by the kernel.
+            return {"symbol": symbol, "kind": "decay-constant",
+                    "distribution": {"fidelity": "decomposed", "value_ma": 248.0, "sigma": 1,
+                                     "budget": {"systematic": 1.4},
+                                     "note": "U decay-const systematic (linearized ~248 Ma; only σ propagates)"}}
 
         def build(slug, name, shared):
             g, _ = Graph.objects.get_or_create(slug=slug, defaults={"name": name})
@@ -60,24 +76,43 @@ class Command(BaseCommand):
             g.edges.all().delete()
             g.nodes.all().delete()
             g.gateways.all().delete()
-            # Layout top→bottom = younger→older (ICC convention): Base Anisian(247) · Olenekian unit · Base Olenekian(249).
-            n1 = NodeInstance.objects.create(graph=g, key="pub-olenekian", node_type=pub, nature="boundary",
-                                             label="Base Olenekian", params={"distribution": dist(249.0, shared)}, x=120, y=280)
-            n2 = NodeInstance.objects.create(graph=g, key="pub-anisian", node_type=pub, nature="boundary",
-                                             label="Base Anisian", params={"distribution": dist(247.0, shared)}, x=120, y=40)
-            Gateway.objects.create(graph=g, slug=f"{slug}-ole", name="base-olenekian", node=n1, boundary=ole)
-            Gateway.objects.create(graph=g, slug=f"{slug}-ani", name="base-anisian", node=n2, boundary=ani)
-            # Olenekian time unit spanning the two boundaries — this is the *asserted* span the gate judges.
+
+            # Layout: calibration (left) → age (mid) → boundary (right). top→bottom = younger→older.
+            # shared: one decay-238U node feeds both ages. independent: a separate node per age (refs differ).
+            cal_shared = None
+            if shared:
+                cal_shared = NodeInstance.objects.create(graph=g, key="cal-decay238u", node_type=cal, nature="generic",
+                                                         label="λ238U (shared)", params=cal_params("decay-238U"), x=0, y=160)
+
+            def boundary_chain(tag, label, value, boundary, y, cal_symbol):
+                c = cal_shared or NodeInstance.objects.create(
+                    graph=g, key=f"cal-{tag}", node_type=cal, nature="generic",
+                    label=f"λ238U ({tag})", params=cal_params(cal_symbol), x=0, y=y)
+                a = NodeInstance.objects.create(graph=g, key=f"age-{tag}", node_type=upb, nature="generic",
+                                                label=f"U-Pb {value} Ma", params={"distribution": age_dist(value)}, x=190, y=y)
+                b = NodeInstance.objects.create(graph=g, key=f"bnd-{tag}", node_type=bnd, nature="boundary",
+                                                label=label, params={}, x=380, y=y)
+                Edge.objects.create(graph=g, source=c, source_port="value", target=a, target_port="calibration", kind="data")
+                Edge.objects.create(graph=g, source=a, source_port="age", target=b, target_port="age", kind="data")
+                Gateway.objects.create(graph=g, slug=f"{slug}-{tag}", name=f"base-{tag}", node=b, boundary=boundary)
+                return b
+
+            # independent: each age its OWN decay-const node (ref "decay-238U·A" / "·B") → no correlation.
+            b_ole = boundary_chain("olenekian", "Base Olenekian", 249.0, ole, 280, "decay-238U·A")
+            b_ani = boundary_chain("anisian", "Base Anisian", 247.0, ani, 40, "decay-238U·B")
+
+            # Olenekian time unit spanning the two boundaries — the *asserted* span the gate judges.
             # order edge 인터리브: base(older).younger → unit.older , unit.younger → top(younger).older.
             u = NodeInstance.objects.create(graph=g, key="unit-olenekian", node_type=unt, nature="generic",
-                                            label="Olenekian", params={}, x=120, y=160)
-            Edge.objects.create(graph=g, source=n1, source_port="younger", target=u, target_port="older", kind="order")
-            Edge.objects.create(graph=g, source=u, source_port="younger", target=n2, target_port="older", kind="order")
-            self.stdout.write(f"  graph {slug} ({'shared' if shared else 'independent'})")
+                                            label="Olenekian", params={}, x=380, y=160)
+            Edge.objects.create(graph=g, source=b_ole, source_port="younger", target=u, target_port="older", kind="order")
+            Edge.objects.create(graph=g, source=u, source_port="younger", target=b_ani, target_port="older", kind="order")
+            self.stdout.write(f"  graph {slug} ({'shared decay-238U node' if shared else 'independent nodes'})")
 
-        # gap 2.0 Ma, each 1σ 1.5 → 2σ_gap(indep) ≈ 4.24 > 2 → warn; shared Cov 1.96 → σ_gap 0.76, 2σ 1.52 < 2 → pass
-        build("demo-cov-independent", "Demo: duration overlap (independent errors → L1b warn)", shared=False)
-        build("demo-cov-shared", "Demo: duration resolved (shared systematic → L1b pass)", shared=True)
+        # gap 2.0 Ma, each 1σ 1.5. indep: two refs → Cov 0 → 2σ_gap ≈ 4.24 > 2 → warn.
+        # shared: one ref → Cov 1.96 → Var_gap 0.58 → 2σ_gap ≈ 1.52 < 2 → pass.
+        build("demo-cov-independent", "Demo: duration overlap (independent decay-const nodes → L1b warn)", shared=False)
+        build("demo-cov-shared", "Demo: duration resolved (shared decay-const node → L1b pass)", shared=True)
 
     # --- 2. authored clamps on the published release (L3a verify / L3b reconcile) ---
     def _clamps(self):

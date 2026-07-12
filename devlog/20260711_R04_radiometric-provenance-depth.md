@@ -43,10 +43,13 @@
 - **L1 (권장, 적정선)** — 공유 보정 노드 2~3개(붕괴상수·FCs·tracer) + 방사연대가 거기 의존 + systematic 을
   shared_component 로 태깅. **재계산의 정확한 숫자는 수동/단순 rescale 로 두고, "무엇이 영향받는지"를 diff 로
   surface.** 딱 그래프 엔진의 고도.
-  - **✅ 프리미티브 구현됨(2026-07)** — `calibration-constant` NodeType(data leaf, params: distribution·kind·
-    symbol, out 포트 `value`). 커널이 출력 불확실성 전액을 자기 자신(ref=symbol)의 shared_component 로 자동
-    태깅 → 소비 연대들이 공짜로 공분산 획득. **아직 미완**: 방사연대(radiometric-uPb)가 이걸 소비하는 배선
-    (rescale/joint 커널)과 실제 예시 그래프는 미착수(= 아래 vertical slice).
+  - **✅ 프리미티브 + 공분산 배선 구현됨(2026-07)** — `calibration-constant` NodeType(data leaf, params:
+    distribution·kind·symbol, out `value`; 커널이 불확실성을 자기 자신 ref=symbol 의 shared_component 로
+    자동 태깅) + **소비자 배선**: `radiometric-uPb` 에 `calibration` 입력 포트 추가, 커널이 보정 노드의 계통 σ 를
+    (a) 자기 marginal budget 에 접고 (b) shared_component 로 태깅(값 불변 = 재계산 아닌 **공분산 배선**).
+    캡스톤 데모(`seed_demo` demo-cov)를 매직 스트링 → **진짜 공유 노드**로 재구성: shared=한 노드가 두 연대에,
+    independent=각자 다른 노드 → L1b pass/warn 그대로(test_seed_demo_capstone). **남은 것(L2)**: 상수 변경이
+    연대 **값**을 재계산하는 rescale(raw invariant/민감도 노드) — 여전히 유스케이스 대기.
 - **L2 (후속, 선택)** — monitor/붕괴상수 변화 실제 rescale 커널(선형 민감도) + **FCs 교차보정(astrochronology +
   U-Pb → FCs 연대)을 joint-inference 노드로**(P06.4b). 구동 유스케이스 생길 때.
 - **범위 밖 (명시)** — 동위원소비·CA-TIMS 화학·Re–Os detrital·이상치 기각·reduction SW → 인용 논문(DOI/cite)에
@@ -69,6 +72,7 @@ TODO 와 맞물림. (cf. concept-map §3-1 "provenance 깊이 = 하나의 축".)
 
 - **논문 디테일 구현 금지. "바꾸면 하류가 재계산되는가" 기준으로 공유 보정 파라미터(붕괴상수·FCs·tracer)만 1급
   노드로 올리는 L1 이 적정선.** 그러면 공분산·재계산·diff 가 실데이터로 돌고, lab 내부는 cite 로 남는다.
-- 착수 시: P07 이 base-Cambrian 으로 한 것처럼 **한 경계(예: base-Triassic Meishan U-Pb, 또는 Ar-Ar/FCs 사례)로
-  L1 vertical slice** — 공유 보정 노드 → 상관 duration + "FCs 바꾸면 이만큼 영향" diff 까지. (스케치 대기)
+- **✅ L1 vertical slice 착수됨(2026-07)** — base-Olenekian/Anisian(Triassic) 공분산 데모를 공유 보정 노드
+  → 상관 duration 으로 재구성(위 L1 note). 남은 것은 L2(값 재계산 rescale). "상수 바꾸면 diff" 는 증분 엔진이
+  이미 하류를 dirty 로 표시하므로 값 rescale(L2)까지 가면 자동으로 따라옴.
 - 원문: `docs/radiogenic_isotope_geochronology_summary.md` · 관련: [cycles §12](../docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)(joint 노드) · [R01](20260707_R01_vision-implementation-review.md) 아크 A.

@@ -99,6 +99,39 @@ def calibration_constant(params):
     return out
 
 
+def radiometric_age(inputs, params):
+    """
+    U-Pb 방사연대 leaf. 자기 authored 연대(분석오차만)를 방출하되, `calibration` 포트로 들어온 공유 보정
+    노드(calibration-constant)의 계통 기여를 **접어넣는다**: 각 공유원 σ 를
+      (a) budget.systematic 에 제곱합 → marginal σ 증가(그 연대 자신의 오차에 계통분이 더해짐),
+      (b) shared_components 에 태그 → 같은 보정 노드를 쓰는 다른 연대와 covariance() 로 상관.
+    값(value_ma)은 불변 — 이건 **재계산이 아니라 공분산 배선(L1)**. calibration 입력이 없으면 기존 불투명
+    leaf 그대로(하위호환). → 두 연대를 같은 calibration 노드에 걸면 duration 오차가 상쇄(R04 vertical slice).
+    """
+    params = params or {}
+    d = params.get("distribution")
+    if not d:
+        return d
+    contrib = {}
+    for i in inputs:
+        if i.get("port") == "calibration":
+            for ref, sig in component_sigmas(i.get("dist")).items():
+                contrib[ref] = contrib.get(ref, 0.0) + sig       # 같은 ref 여러 입력 → 합
+    if not contrib:
+        return d                                                 # 보정 입력 없음 → 원본(불투명 leaf)
+    out = dict(d)
+    budget = dict(out.get("budget") or {})
+    sys_add = math.sqrt(sum(s * s for s in contrib.values()))    # 여러 보정원 → 제곱합(독립 가정)
+    budget["systematic"] = round(math.sqrt(budget.get("systematic", 0.0) ** 2 + sys_add ** 2), 6)
+    out["budget"] = budget
+    merged = {c["ref"]: c["sigma"] for c in out.get("shared_components", []) or []}
+    for ref, sig in contrib.items():
+        merged[ref] = merged.get(ref, 0.0) + sig
+    out["shared_components"] = [{"ref": r, "sigma": round(s, 6)} for r, s in merged.items()]
+    out["fidelity"] = "joint"                                    # 공유성분 태그 → 공분산 재구성 층
+    return out
+
+
 def range_clamp(dist, lo, hi):
     """분포를 [lo, hi] 로 절단(절단정규). exact 는 구간으로 clip."""
     m = moments(dist)
@@ -273,6 +306,8 @@ def compute(category, slug, inputs, params):
     """
     if slug == "calibration-constant":
         return calibration_constant(params)     # data leaf 지만 출력에 공유 계통원 태그를 실어 방출
+    if slug == "radiometric-uPb":
+        return radiometric_age(inputs, params)  # data leaf 지만 calibration 입력의 계통원을 접어넣어 방출
     if category == "data":
         return (params or {}).get("distribution")
     if slug == "boundary":
