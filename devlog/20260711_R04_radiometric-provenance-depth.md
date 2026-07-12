@@ -43,6 +43,10 @@
 - **L1 (권장, 적정선)** — 공유 보정 노드 2~3개(붕괴상수·FCs·tracer) + 방사연대가 거기 의존 + systematic 을
   shared_component 로 태깅. **재계산의 정확한 숫자는 수동/단순 rescale 로 두고, "무엇이 영향받는지"를 diff 로
   surface.** 딱 그래프 엔진의 고도.
+  - **✅ 프리미티브 구현됨(2026-07)** — `calibration-constant` NodeType(data leaf, params: distribution·kind·
+    symbol, out 포트 `value`). 커널이 출력 불확실성 전액을 자기 자신(ref=symbol)의 shared_component 로 자동
+    태깅 → 소비 연대들이 공짜로 공분산 획득. **아직 미완**: 방사연대(radiometric-uPb)가 이걸 소비하는 배선
+    (rescale/joint 커널)과 실제 예시 그래프는 미착수(= 아래 vertical slice).
 - **L2 (후속, 선택)** — monitor/붕괴상수 변화 실제 rescale 커널(선형 민감도) + **FCs 교차보정(astrochronology +
   U-Pb → FCs 연대)을 joint-inference 노드로**(P06.4b). 구동 유스케이스 생길 때.
 - **범위 밖 (명시)** — 동위원소비·CA-TIMS 화학·Re–Os detrital·이상치 기각·reduction SW → 인용 논문(DOI/cite)에

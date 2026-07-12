@@ -2,8 +2,10 @@
 import math
 
 from engine.kernels import (
-    age_depth_model, compute, dist_from, inverse_variance_combine, moments, order_check, range_clamp,
+    age_depth_model, calibration_constant, compute, dist_from, inverse_variance_combine,
+    moments, order_check, range_clamp,
 )
+from nodes.distribution import covariance
 
 
 def _sym(value, sigma1):
@@ -113,6 +115,41 @@ def test_compute_passthrough_fallback():
 def test_compute_data_emits_params():
     d = _sym(1.0, 0.1)
     assert compute("data", "radiometric-uPb", [], {"distribution": d}) == d
+
+
+# --- calibration-constant (공유 보정 파라미터 leaf, R04) ---
+
+def test_calibration_constant_self_tags_shared_component():
+    # 저작된 대칭 분포(σ1=0.03) → 자기 자신(symbol)을 가리키는 shared_component 로 태깅, joint 승격.
+    d = _sym(28.201, 0.03)
+    out = calibration_constant({"distribution": d, "symbol": "FCs", "kind": "monitor-age"})
+    assert out["fidelity"] == "joint"
+    assert out["value_ma"] == 28.201
+    assert out["shared_components"] == [{"ref": "FCs", "sigma": 0.03}]
+
+def test_calibration_constant_makes_dependents_covary():
+    # 같은 보정 노드(FCs)를 태그로 상속한 두 연대 → covariance() 가 계통오차 상관을 복원.
+    fcs = calibration_constant({"distribution": _sym(28.201, 0.05), "symbol": "FCs"})
+    tag = fcs["shared_components"]                       # 하류 연대가 물려받는 공유원 태그
+    age_a = {**_sym(250.0, 0.2), "shared_components": tag}
+    age_b = {**_sym(300.0, 0.2), "shared_components": tag}
+    assert covariance(age_a, age_b) == 0.05 * 0.05      # 공유 FCs 성분만큼 상관
+
+def test_calibration_constant_passes_exact_through():
+    # 불확실성 없는 값(exact)은 공분산 기여가 없으니 원본 그대로.
+    d = {"fidelity": "exact", "value_ma": 28.201}
+    assert calibration_constant({"distribution": d, "symbol": "FCs"}) == d
+
+def test_calibration_constant_respects_authored_components():
+    # 이미 shared_components 저작돼 있으면 재태깅하지 않음.
+    d = {"fidelity": "joint", "value_ma": 28.201, "sigma": 1,
+         "budget": {"model": 0.03}, "shared_components": [{"ref": "custom", "sigma": 0.01}]}
+    assert calibration_constant({"distribution": d, "symbol": "FCs"}) == d
+
+def test_calibration_constant_via_compute_dispatch():
+    # data 카테고리지만 compute 가 slug 특수처리로 태그를 실어 방출(plain data early-return 우회).
+    out = compute("data", "calibration-constant", [], {"distribution": _sym(28.201, 0.03), "symbol": "FCs"})
+    assert out["shared_components"] == [{"ref": "FCs", "sigma": 0.03}]
 
 
 # --- age-depth-model ---

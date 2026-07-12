@@ -56,7 +56,7 @@ def test_to_dict_omits_empties():
 # --- NodeType 카탈로그 (데이터로 존재, 하드코딩 아님) ---
 
 def test_catalog_loads(seeded):
-    assert NodeType.objects.count() == 16          # boundary·unit·merge·reference·section·horizon; clamp pin/range/freeze-version 제거(cycles §12)
+    assert NodeType.objects.count() == 17          # +calibration-constant(R04 L1 공유 보정 leaf); clamp pin/range/freeze-version 제거(cycles §12)
     assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "clamp", "reference"}
     assert NodeType.objects.get(slug="published-age").category == "data"
 

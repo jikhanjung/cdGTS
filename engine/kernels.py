@@ -76,6 +76,29 @@ def inverse_variance_combine(inputs, note):
     return dist_from(mean, sigma1, note=f"{note} (n={len(valid)})", shared=shared)
 
 
+def calibration_constant(params):
+    """
+    공유 보정 파라미터(붕괴상수·monitor(FCs)·tracer) leaf. 저작된 분포를 방출하되, 그 불확실성 **전액을**
+    자기 자신을 가리키는 `shared_component`(ref=symbol)로 태깅해 L4 `joint` 로 승격한다.
+    → 이 노드를 소비하는 두 방사연대는 같은 ref 를 공유 → covariance() 가 계통오차 상관을 복원하고,
+      duration 오차가 정직하게 상쇄된다(R04 #3 "공유 계통원" 의 실동작). 상수를 바꾸면 하류가 전부 재계산.
+    이미 shared_components 가 저작돼 있으면 존중(재태깅 안 함). 값만 있고 불확실성 없으면 그대로 통과.
+    """
+    params = params or {}
+    d = params.get("distribution")
+    if not d or d.get("shared_components"):
+        return d
+    m = moments(d)
+    if m is None or m[1] <= 0:          # 불확실성 없음 → 공분산 기여 없음, 원본 그대로
+        return d
+    ref = params.get("symbol") or params.get("kind") or "calibration"
+    out = dict(d)
+    out["shared_components"] = [{"ref": ref, "sigma": round(m[1], 6)}]
+    if out.get("fidelity") in ("sym", "decomposed"):
+        out["fidelity"] = "joint"       # 공유성분 태그 → 공분산 재구성 가능 층
+    return out
+
+
 def range_clamp(dist, lo, hi):
     """분포를 [lo, hi] 로 절단(절단정규). exact 는 구간으로 clip."""
     m = moments(dist)
@@ -248,6 +271,8 @@ def compute(category, slug, inputs, params):
     노드 하나의 출력 분포 계산.
     inputs = 포트순 입력 목록, 각 원소 {"dist": 분포|None, "params": 상류노드 params, "port": target_port}.
     """
+    if slug == "calibration-constant":
+        return calibration_constant(params)     # data leaf 지만 출력에 공유 계통원 태그를 실어 방출
     if category == "data":
         return (params or {}).get("distribution")
     if slug == "boundary":
