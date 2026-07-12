@@ -25,12 +25,18 @@ UX로 얹으면 된다.
    `radiometric_age()`가 보정 입력의 계통 σ를 (a) 자기 marginal budget(systematic)에 제곱합 + (b)
    shared_component로 태깅. **값 불변 = 재계산 아닌 공분산 배선(L1)**. 입력 없으면 기존 불투명 leaf
    그대로(하위호환). data 카테고리지만 compute()에서 slug 특수처리로 early-return 우회.
-3. **캡스톤 데모 재구성**(`seed_demo` demo-cov) — 매직 스트링 → 진짜 공유 노드. 경계마다
-   `[calibration-constant]→[radiometric-uPb]→[boundary]` 사슬.
-   - **shared**: 한 decay-238U 노드가 두 연대에 갈라짐 → 같은 ref → Cov 1.96 → **L1b pass**.
-   - **independent**: 각자 다른 노드(ref `decay-238U·A`/`·B`) → Cov 0 → **L1b warn**.
-   - 차이가 그래프 구조에 보임(노드 하나 vs 둘). 숫자·판정 종전과 동일 → 기존
-     `test_seed_demo_capstone`가 그대로 통합 검증.
+3. **캡스톤 데모 재구성**(`seed_demo` demo-cov) — 매직 스트링 → 진짜 공유 노드. ²³⁸U 붕괴상수는 물리적으로
+   **하나**라 `decay-238U` 는 **딱 한 노드**, 그 의존을 기록한 그래프에만 존재. 대비는 **올바른 처리 vs 순진한
+   처리**(붕괴상수 두 개가 아님):
+   - **shared**: 한 decay-238U 노드가 두 연대에 갈라짐(`[calibration-constant]→[radiometric-uPb]→[boundary]`
+     사슬, 연대는 분석오차만 authored·노드가 계통 공급) → Cov 1.96 → **L1b pass**.
+   - **independent**: 공유 의존을 **모델에 기록 안 함**(보정 노드 없음) — 각 연대가 ±(분석 0.54 ⊕ 계통 1.4)를
+     인라인·untagged 로 들고 독립 취급 → Cov 0 → **L1b warn**.
+   - marginal 값·± 는 두 그래프 동일, 차이는 프로비넌스(노드+엣지)뿐. 그래프 구조에 보임(노드 하나 vs 없음).
+     숫자·판정 종전과 동일 → 기존 `test_seed_demo_capstone`가 그대로 통합 검증.
+
+   > **정정(같은 라운드 내)**: 최초엔 independent 를 `decay-238U·A`/`·B` 두 노드로 뒀으나, 붕괴상수는 하나뿐이라
+   > 물리적으로 틀림 → "노드 없음(순진 독립)" 으로 수정.
 4. **문서** — tutorial-science-engine(KR/EN) §2 "공유 태그" → "공유 노드 하나/둘"로 갱신. R04에 L1
    vertical slice 착수·구현 반영.
 

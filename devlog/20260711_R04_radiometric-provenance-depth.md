@@ -48,7 +48,7 @@
     자동 태깅) + **소비자 배선**: `radiometric-uPb` 에 `calibration` 입력 포트 추가, 커널이 보정 노드의 계통 σ 를
     (a) 자기 marginal budget 에 접고 (b) shared_component 로 태깅(값 불변 = 재계산 아닌 **공분산 배선**).
     캡스톤 데모(`seed_demo` demo-cov)를 매직 스트링 → **진짜 공유 노드**로 재구성: shared=한 노드가 두 연대에,
-    independent=각자 다른 노드 → L1b pass/warn 그대로(test_seed_demo_capstone). **남은 것(L2)**: 상수 변경이
+    independent=노드 없음(순진 독립) → L1b pass/warn 그대로(test_seed_demo_capstone). **남은 것(L2)**: 상수 변경이
     연대 **값**을 재계산하는 rescale(raw invariant/민감도 노드) — 여전히 유스케이스 대기.
 - **L2 (후속, 선택)** — monitor/붕괴상수 변화 실제 rescale 커널(선형 민감도) + **FCs 교차보정(astrochronology +
   U-Pb → FCs 연대)을 joint-inference 노드로**(P06.4b). 구동 유스케이스 생길 때.
