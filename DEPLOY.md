@@ -8,8 +8,9 @@
 > **규칙**: 새 릴리스는 맨 위(최신)에 추가. 항목 = `버전 — 조치(재시드·env·마이그레이션·주의)`. 조치 없으면
 > "코드/프론트 전용, 조치 없음" 한 줄. 관례: 🔴 필수 조치 · 🟡 주의 · 🟢 무조치.
 >
-> 상시 절차(`build.sh`→`sync_to_srv.sh`→`deploy-{prod,dev}.sh`)는 [deploy/README.md](deploy/README.md),
-> 선언층은 [deploy/deploy.toml](deploy/deploy.toml).
+> 상시 절차(0.1.58~): (빌드호스트)`build.sh X.Y.Z` → (운영/테스트)`deploy-{prod,dev}.sh X.Y.Z [--reseed]`.
+> `sync_to_srv.sh` 는 **최초 부트스트랩 전용**(self-heal 이후 상시 경로에서 빠짐). 상세 [deploy/README.md](deploy/README.md),
+> 선언층 [deploy/deploy.toml](deploy/deploy.toml).
 
 ## 상시 불변식 (릴리스 무관)
 
@@ -21,8 +22,10 @@
   빈 DB 최초 배포도 `--reseed` 로 채워야 smoke(healthz 행 수>0)가 통과.
 - 🔴 **prod 최초/DB 이전 시 `.env` `DATABASE_PATH=/app/hostdb/db.sqlite3`** 확인. compose 가 `/srv/cdGTS` 를
   `/app/hostdb` 디렉터리로 바인드(WAL 공유). 이 경로를 벗어나면 컨테이너가 이미지 내부 빈 DB 로 폴백 →
-  사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/5] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
+  사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/6] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
 - 🟡 마이그레이션은 web entrypoint 가 자동 적용(`migrate --noinput`). 워커는 web 이 스키마를 올린 뒤 폴링만.
+- 🟢 **배포는 웹+워커 둘 다 올린다**(0.1.60~): `deploy.sh` 재기동이 `docker compose up -d`(전 서비스)라 웹(cdgts)과
+  워커(cdgts-worker) 모두 현재 이미지로 뜬다. (0.1.60 이전엔 `up -d cdgts` 라 prod 스냅샷 경로에서 워커가 빠졌음.)
 - 🟡 Crossref 자동 메타데이터(0.1.49)는 컨테이너 외부망(api.crossref.org) 필요.
 - 🟢 **git-free 배포**(0.1.56~): 상시 배포는 `deploy-{prod,dev}.sh X.Y.Z` — 모든 host 파일을 이미지에서 추출.
   **운영 서버에 repo 불필요.** 0.1.58~ 는 부트스트랩 파일(deploy-prod/dev.sh·_extract_and_deploy.sh)도
@@ -40,6 +43,15 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.60** — 🟢 **워커 배포 버그 수정**(devlog 미기록·핫픽스). `deploy.sh` 재기동 `up -d cdgts`(웹만) → `up -d`(전
+  서비스). 이전엔 prod 스냅샷 경로(`down` 후 웹만 up)에서 **워커(cdgts-worker, 비동기 평가)가 계속 부재**했음.
+  0.1.60 배포 시 prod 에 워커 즉시 기동 확인. 이후 배포는 자동으로 웹+워커 둘 다. 조치 없음.
+- **0.1.59** — 🟢 버전만 올림(코드 변경 없음). git-free 릴리스 플로우 end-to-end 검증용.
+- **0.1.58** — 🟢 **부트스트랩 self-heal**(§git-free 배포). 도입 시 **최초 1회 git-free 부트스트랩**(§상시 불변식의
+  docker cp 블록)으로 self-heal `_extract_and_deploy.sh` 를 심으면, 이후 배포가 부트스트랩까지 갱신 → repo 영영 불필요.
+- **0.1.57** — 🟢 배포 스크립트 수정. ⓐ smoke prod SSL 대응(`X-Forwarded-Proto`, §상시 불변식). ⓑ `--reseed` 배포
+  플래그(§상시 불변식). ⚠️ `--reseed` 를 래퍼로 흘리려면 새 `_extract_and_deploy.sh` 필요 → 0.1.58 self-heal 이전엔
+  재부트스트랩(`sync_to_srv.sh` 또는 git-free docker cp) 1회.
 - **0.1.56** — 🔴 **git-free 배포 전환(P08.6) — 이번 1회 부트스트랩 필요**. 호스트 배포 진입점이
   `deploy.sh` → **`deploy-{prod,dev}.sh`**(이미지에서 host 파일 추출)로 바뀜. 기존 호스트의 래퍼는 옛 2줄 버전이라,
   이번에 repo 머신에서 **`./deploy/sync_to_srv.sh` 1회** 실행해 새 래퍼(`deploy-prod/dev.sh`·`_extract_and_deploy.sh`)를
@@ -52,7 +64,7 @@
   신규 + `seed_demo` demo-cov 그래프를 공유 노드 구조로 재구성(devlog 139). 마이그레이션 없음(시드/동적 UI).
 - **0.1.53** — 🟢 프론트 전용(Editor 분해 2차 + e2e 스모크). 조치 없음.
 - **0.1.52** — 🔴 **compose 볼륨 파일→디렉터리 바인드로 변경** — 배포 전 `.env` `DATABASE_PATH=/app/hostdb/db.sqlite3`
-  먼저 확인(위 불변식). `deploy.sh` 에 [5/5] DB 바인딩 검증 게이트 추가. 🟢 프론트 분해 1차는 무조치.
+  먼저 확인(위 불변식). `deploy.sh` 에 DB 바인딩 검증 게이트 추가(현재 [5/6]). 🟢 프론트 분해 1차는 무조치.
 - **0.1.51** — 🔴 **재시드 필요**. clamp 축소(devlog 135): GSSA pin→`published-age` leaf, `pin`/`range`/
   `freeze-version` NodeType 제거(시드 변경).
 - **0.1.50** — 🔴 **재시드 필요**. gateway-wipe 버그 수정 + 예제 노드 재배치(시드 변경).
