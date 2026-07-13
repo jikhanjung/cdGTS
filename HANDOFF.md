@@ -80,14 +80,19 @@
 - **예제 그래프**: 3종 파이프라인(permian-triassic 3·cambrian-base 5·gssa-precambrian 1) + **`example-icc-partial`
   (예제④)** — 전 ICC 재구성: **261 노드 · 493 엣지(order 233) · 노드그룹 14**. period=노드그룹(span)·내부 age
   order edge 체인, merge 노드로 age→period→era→chart 조립.
-- **배포/운영**:
+- **배포/운영** (배포·데이터 계약 P08 — [DEPLOY.md](DEPLOY.md)·[deploy/README.md](deploy/README.md)·[deploy/deploy.toml](deploy/deploy.toml)):
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.55**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.55**.
-    테스트 DB(prod 미러)에 P05 검증용 계정 세팅: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
-  - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 분리 + prod→test sync.
-    이 호스트(m710q)는 **빌드 호스트이자 테스트 서버** — deploy-dev.sh 로 스냅샷 없이 즉시 스왑.
+  - **운영서버** `cdgts.paleobytes.info`(GCP dolfinid-2) @ **0.1.60**(nginx + certbot). 테스트 `127.0.0.1:8011`(m710q) @ **0.1.60**.
+    **양 서버 cdgts(웹) + cdgts-worker(비동기 평가) 둘 다 가동**. 테스트 DB(prod 미러)에 P05 검증용 계정: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
+  - **git-free + self-heal 배포(0.1.58~)**: 운영 서버에 repo 불필요. 모든 host 파일이 이미지 `/app/deploy/host/*`(`COPY . .`)에
+    실려, 진입점 `deploy-{prod,dev}.sh X.Y.Z [--reseed]` 가 `_extract_and_deploy.sh` 로 이미지에서 추출 + 부트스트랩 파일까지
+    자기 치유. **배포 = 한 줄**(git pull/sync 불요). prod=스냅샷(pre_deploy) 후 스왑, dev=스냅샷 없이(DB=운영 복사본).
+    `deploy.sh` 재기동은 `docker compose up -d`(웹+워커 전 서비스). m710q→prod SSH 별칭 `dolfinid`(키 인증)로 원격 배포 가능.
+  - **동사·게이트**: `/healthz`(버전+DB+핵심 행 수 → 200/503) · `smoke.sh`(배포 후 healthz+버전+행 수, prod SSL `X-Forwarded-Proto`
+    대응) · `rollback.sh`(이전 이미지+pre_deploy 스냅샷) · DB 바인딩 게이트([5/6], 이미지 내부 빈 DB 폴백 차단) · `preflight.sh`(위험 표면 diff).
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 cron.
-  - ⚠️ **시드 데이터(레이아웃 포함) 변경 릴리스는 `seed --mode=replace` 재시드 필요**(add 는 그래프 원자 skip).
+  - ⚠️ **시드/레이아웃 변경 릴리스는 재시드 필요** — 0.1.57~ 는 **`--reseed` 플래그**로 자동(migrate 후 smoke 전 `seed --mode=replace`
+    + `seed_demo`). replace 는 P08.1 이후 **운영 데이터(owner-set) 보존 upsert**(자연키 멱등). add 는 그래프 원자 skip → 변경 반영 안 됨.
 - **초기 데이터(seed)**: 통합 `seed/`(manifest `2026.07.0`, 자연키) — `01_chrono`~`04_releases` + **`05_icc_release`**.
   `manage.py seed --mode=replace|add`. 순환 자연키 FK(그룹↔노드)는 forward-ref 2패스로 로드. `FIXTURE_DIRS=seed/`.
 - **테스트**: 백엔드 `pytest` **178 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 + calibration 커널 공분산 상속/비상속 + seed replace 운영 데이터 생존 + /healthz 포함). 테스트 fixture 는 seed 파일 loaddata.
