@@ -27,15 +27,12 @@
   문법 검사에 통과시키고, 기존 파일은 `<f>.previous` 로 보존한 뒤 원자 rename. 깨진 새 스크립트가 **작동하던
   부트스트랩 경로까지 함께 망가뜨리지 않게** 하는 최소 안전망. deploy/smoke/rollback + 래퍼 2 + 추출기 자신에 적용.
 
-## 검증
+## 검증 + 배포 (0.1.61, 양 서버)
 
-- `bash -n` 전 스크립트 통과. rollback 인자 파싱(usage 가드·`--db=`·`--force`·unknown flag 거부) 로컬 확인.
-- 실제 롤백/self-heal 경로(docker 필요)는 실배포에서 검증 예정. 코드·스크립트만·마이그레이션 없음.
-
-## 배포 주의
-
-호스트 파일은 self-heal 로 **이미지에서** 온다 → 새 `rollback.sh`·`deploy.sh`·`_extract_and_deploy.sh` 가 서버에 반영되려면
-이 코드를 담은 이미지로 **1회 배포**해야 한다. 안전망(bash -n)·`.previous` 는 그 다음 배포부터 완전 동작(추출기 자기 치유 관례).
+- `bash -n` 전 스크립트 통과. rollback 인자 파싱(usage 가드·`--db=`·`--force`·unknown flag 거부) 로컬 확인. pytest **178**.
+- **실배포 완료** — `build.sh 0.1.61`(pytest 178) → `deploy-dev.sh 0.1.61`(m710q) → `remote-prod.sh 0.1.61`(prod). 둘 다 smoke green(0.1.61/node_types 17), 웹+워커 가동, 공개 HTTPS healthz 확인.
+- **계약 항목 실동작 확인**: prod 스냅샷이 `.mig` 사이드카 기록(`cdgts_pre_deploy_0.1.61_*.mig` = pre-migration **50**) → keep 가드 판정 근거 확보. 새 `rollback.sh`(`--db`)·self-heal 추출기(`safe_extract_sh`) 양 서버 landed. 마이그레이션 없음.
+- 이번 배포는 **구 추출기**(0.1.60)가 새 파일을 plain docker cp 로 추출 → 새 추출기는 self-heal 됨. 따라서 안전망(`bash -n`·`.previous`)은 **다음 배포부터** 완전 동작(추출기 자기 치유 관례).
 
 ## 문서 정합
 
