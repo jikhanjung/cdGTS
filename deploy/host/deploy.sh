@@ -43,6 +43,9 @@ echo ""
 echo "=== [3/6] Swap container (DB 볼륨 유지) ==="
 if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
     echo "  pre-deploy DB snapshot (prod) — writer 정지 후 cp (이 동안 nginx 점검 페이지)"
+    # rollback keep 가드용: 배포 전(이 이미지의 migrate 실행 전) 적용된 migration 수를 기록.
+    # 컨테이너 정지 전에 조회(정지 후엔 exec 불가). rollback.sh 가 스냅샷의 .mig 사이드카와 현재를 비교.
+    PRE_MIG=$(docker compose exec -T cdgts python manage.py showmigrations --plan 2>/dev/null | grep -c '\[X\]' || echo "")
     docker compose down
     SNAP_DIR="$ROOT/backup/pre_deploy"
     mkdir -p "$SNAP_DIR"
@@ -51,11 +54,12 @@ if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
     cp -p "$ROOT/db.sqlite3" "$SNAP"
     [ -f "$ROOT/db.sqlite3-wal" ] && cp -p "$ROOT/db.sqlite3-wal" "${SNAP}-wal" || true
     [ -f "$ROOT/db.sqlite3-shm" ] && cp -p "$ROOT/db.sqlite3-shm" "${SNAP}-shm" || true
-    echo "  snapshot: $SNAP"
-    # retention: 최근 20개만
+    [ -n "$PRE_MIG" ] && printf '%s\n' "$PRE_MIG" > "${SNAP}.mig" || true
+    echo "  snapshot: $SNAP (pre-migration count: ${PRE_MIG:-미상})"
+    # retention: 최근 20개만(.mig 사이드카 포함)
     ls -1tr "$SNAP_DIR"/cdgts_pre_deploy_*.sqlite3 2>/dev/null \
         | head -n -20 \
-        | while read -r f; do rm -f "$f" "$f-wal" "$f-shm"; done
+        | while read -r f; do rm -f "$f" "$f-wal" "$f-shm" "$f.mig"; done
 fi
 # 전 서비스 조정 — 웹(cdgts) + 워커(cdgts-worker) 둘 다 현재 이미지로. up -d cdgts(웹만)이면
 # 스냅샷 경로의 down 뒤 워커가 안 켜지고, dev 경로에선 워커가 옛 이미지로 남는다.

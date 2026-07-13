@@ -3,12 +3,15 @@
 # Claude Code)가 프로젝트 지식 없이 이 매니페스트만 읽고 배포·검증할 수 있게 하는 것이 목표.
 # 근거: ../devdocs/wiki/deploy-data-contract.md · deploy/README.md.
 
+contract_version = 1               # 이 매니페스트가 따르는 배포·데이터 계약 판(필드·동사 의미 변경 시 증가).
 image    = "honestjung/cdgts"      # Docker Hub. build.sh 가 :X.Y.Z + :latest push.
 db_path  = "/srv/cdGTS"            # 호스트 DB 디렉터리. WAL 공유 위해 파일이 아닌 디렉터리 마운트
                                    # (/srv/cdGTS → 컨테이너 /app/hostdb; DB=/app/hostdb/db.sqlite3).
 has_seed = true                    # 시스템 시드 있음. `seed --mode=replace` = 시스템 데이터만
                                    # (운영 데이터 보존, devlog 140). 시드/레이아웃 변경 릴리스는 재시드 필요.
 services = ["cdgts", "cdgts-worker"]   # compose: web(cdgts, gunicorn) + async worker(run_worker, P06.4a).
+rollback_db = "keep"               # rollback 기본 DB 정책: keep(이미지만 전환·운영 데이터 보존) | restore(스냅샷 복원).
+                                   # keep 이 기본 — DB 복원은 배포 후 운영 입력분을 지우므로 명시적 opt-in(§rollback 동사).
 
 # 헬스체크(P08.5). /healthz = 버전 + DB + 핵심 행 수. smoke 가 소비, deploy.sh [6/6] 이 자동 호출.
 health_url   = "/healthz"
@@ -21,7 +24,7 @@ build     = "deploy/build.sh X.Y.Z [--fast]"        # 빌드 호스트: pytest+b
 deploy    = "/srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z [--reseed]" # 추출→(스냅샷 prod)→스왑→migrate→(--reseed 시 재시드)→smoke
 seed      = "manage.py seed --mode=replace|add"     # 시스템 데이터만(devlog 140)
 smoke     = "/srv/cdGTS/smoke.sh [X.Y.Z]"           # 대상 호스트: healthz 200 + 버전 일치 + 행 수
-rollback  = "/srv/cdGTS/rollback.sh <이전 X.Y.Z>"    # 대상 호스트: 이전 이미지 + pre_deploy 스냅샷 복원
+rollback  = "/srv/cdGTS/rollback.sh <이전 X.Y.Z> [--db=keep|restore]"  # 코드/DB 분리: keep(기본, 이미지만)·restore(스냅샷 복원). keep 가드=직전 migration 시 차단
 bootstrap = "deploy/sync_to_srv.sh"                 # repo 머신 1회: 호스트 래퍼(deploy-*·_extract_and_deploy) 설치
 
 # --- 환경 ---

@@ -37,12 +37,20 @@
   docker rm "$CID" && chmod +x _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh
   ```
   이후 `deploy-{prod,dev}.sh X.Y.Z` 만으로 부트스트랩 포함 전부 self-heal. (`.env`·`db.sqlite3`·`backup/` 는 유지.)
+- 🟢 **롤백은 코드/DB 분리**(계약, 0.1.61~): `rollback.sh <이전> [--db=keep|restore]`. **`--db=keep`(기본)** = 이미지
+  태그만 전환, 현재 DB 유지(배포 후 운영자 입력 보존). `--db=restore` = 정지 후 pre_deploy 스냅샷 복원(그 배포 창의
+  운영 쓰기는 유실). **keep 가드**: 직전 배포가 migration 을 적용했으면(스냅샷 `.mig` 사이드카 vs 현재 비교) 이전 코드가
+  새 스키마와 비호환일 수 있어 keep 을 막고 `--db=restore`/`--force` 로 승격. 기본값은 `deploy.toml rollback_db="keep"` 선언.
 - 🟡 **prod SSL 리다이렉트 + smoke**: prod `.env` `SECURE_SSL_REDIRECT=True` 라 평문 HTTP 는 301(HTTPS)로 튄다.
   `smoke.sh`·deploy 대기 루프는 `X-Forwarded-Proto: https` 헤더를 실어(settings 의 SECURE_PROXY_SSL_HEADER)
   로컬 컨테이너를 직접 검증한다(0.1.57~ 반영). 수동 확인도 동일: `curl -sH 'X-Forwarded-Proto: https' http://127.0.0.1:8011/healthz`.
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.61** — 🟢 **배포·데이터 계약 외부 검토분 반영**(devlog 145, 코드/스크립트만·마이그레이션 없음). ⓐ **롤백 코드/DB 분리**
+  (`rollback.sh --db=keep|restore` + keep 가드, §상시 불변식). ⓑ 매니페스트 `contract_version=1`·`rollback_db="keep"` 필드.
+  ⓒ **self-heal 추출 안전망**(`_extract_and_deploy.sh` 가 교체 전 `bash -n` 검증 + `.previous` 보존). ⓓ `deploy.sh` 스냅샷이
+  `.mig` 사이드카(배포 전 migration 수) 기록 — keep 가드 판정용. ⚠️ 호스트에 반영되려면 이 이미지로 **1회 배포**(self-heal 추출).
 - **0.1.60** — 🟢 **워커 배포 버그 수정**(devlog 미기록·핫픽스). `deploy.sh` 재기동 `up -d cdgts`(웹만) → `up -d`(전
   서비스). 이전엔 prod 스냅샷 경로(`down` 후 웹만 up)에서 **워커(cdgts-worker, 비동기 평가)가 계속 부재**했음.
   0.1.60 배포 시 prod 에 워커 즉시 기동 확인. 이후 배포는 자동으로 웹+워커 둘 다. 조치 없음.
