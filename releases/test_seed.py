@@ -51,6 +51,54 @@ def test_add_is_idempotent(seeded):
     assert _counts() == before
 
 
+def test_replace_preserves_operational_data(seeded):
+    """레인 경계(배포·데이터 계약, P08) — replace 는 *시스템* 데이터만 정합하고 *운영*(owner-set)
+    데이터는 절대 건드리지 않는다. 예전엔 owner-set 그래프/릴리스를 통째 삭제했고(silent),
+    시스템 baseline/candidate 를 지워 운영 Proposal.baseline·Selection.candidate(PROTECT)를 깼다."""
+    from django.contrib.auth import get_user_model
+    from graph.models import Graph, NodeInstance
+    from nodes.models import NodeType
+    from releases.models import ModelCandidate, Proposal, Selection
+
+    user = get_user_model().objects.create_user("scholar", password="pw12345")
+
+    # 운영 데이터: owner-set 그래프(+노드) · owner-set 릴리스 · 시스템 것을 PROTECT 로 가리키는 Proposal/Selection
+    op_graph = Graph.objects.create(slug="scholar-sandbox", name="Scholar sandbox", owner=user)
+    NodeInstance.objects.create(
+        graph=op_graph, key="n1", node_type=NodeType.objects.get(slug="published-age"),
+        params={"distribution": {"fidelity": "exact", "value_ma": 500.0}},
+    )
+    op_release = Release.objects.create(
+        version="GeologicTimeScale.Release.scholar.20260713.01",
+        kind=Release.Kind.BAKE, owner=user, source_graph=op_graph,
+    )
+    sys_baseline = Release.objects.get(version="ICS-2024/12")      # 시스템 공표 baseline (upsert 대상)
+    sys_candidate = ModelCandidate.objects.get(slug="base-triassic/legacy-tims")  # 시스템 후보 (PROTECT 참조 대상)
+    sys_baseline_pk, sys_candidate_pk = sys_baseline.pk, sys_candidate.pk
+    proposal = Proposal.objects.create(graph=op_graph, baseline=sys_baseline)
+    selection = Selection.objects.create(
+        release=op_release, boundary=Boundary.objects.get(slug="base-triassic"), candidate=sys_candidate,
+    )
+
+    sys_before = _counts()
+    call_command("seed", mode="replace", verbosity=0)             # raise(PROTECT) 하면 실패
+
+    # 1) 운영 데이터 전부 생존 (같은 pk).
+    assert Graph.objects.filter(pk=op_graph.pk, owner=user).exists()
+    assert op_graph.nodes.count() == 1
+    assert Release.objects.filter(pk=op_release.pk, owner=user).exists()
+    assert Proposal.objects.filter(pk=proposal.pk).exists()
+    assert Selection.objects.filter(pk=selection.pk).exists()
+
+    # 2) 시스템 참조 대상은 삭제·재생성이 아니라 제자리 upsert → pk 보존(그래서 PROTECT 가 안 깨진다).
+    assert Release.objects.get(version="ICS-2024/12").pk == sys_baseline_pk
+    assert ModelCandidate.objects.get(slug="base-triassic/legacy-tims").pk == sys_candidate_pk
+
+    # 3) 시스템 데이터는 여전히 정합(운영 릴리스 1 개만큼 카운트가 늘었을 뿐).
+    assert _counts()[:4] == sys_before[:4]                        # units·boundaries·types·graphs 는 운영 그래프 포함 값 동일
+    assert Graph.objects.filter(owner__isnull=True).count() == 4  # 시스템 예제 그래프 그대로 재구성
+
+
 def test_bake_graph_produces_icc_table(seeded):
     """조립 그래프 bake → 게이트웨이 출력이 ICC 테이블(BoundaryRecord)로 얼려진다.
     계층 완성: 그래프가 **전 177 ICC 경계**(Eon…Age, Subperiod 포함)를 재구성 → 공표 릴리스와 대칭."""
