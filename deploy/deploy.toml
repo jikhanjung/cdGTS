@@ -1,0 +1,37 @@
+# cdGTS 배포 매니페스트 — 배포·데이터 계약(devlog P08) 선언층.
+# 프로젝트별 배포 지식을 기억이 아니라 이 파일에 고정한다. 단일 오케스트레이터(또는
+# Claude Code)가 프로젝트 지식 없이 이 매니페스트만 읽고 배포·검증할 수 있게 하는 것이 목표.
+# 근거: ../devdocs/wiki/deploy-data-contract.md · deploy/README.md.
+
+image    = "honestjung/cdgts"      # Docker Hub. build.sh 가 :X.Y.Z + :latest push.
+db_path  = "/srv/cdGTS"            # 호스트 DB 디렉터리. WAL 공유 위해 파일이 아닌 디렉터리 마운트
+                                   # (/srv/cdGTS → 컨테이너 /app/hostdb; DB=/app/hostdb/db.sqlite3).
+has_seed = true                    # 시스템 시드 있음. `seed --mode=replace` = 시스템 데이터만
+                                   # (운영 데이터 보존, devlog 140). 시드/레이아웃 변경 릴리스는 재시드 필요.
+services = ["cdgts", "cdgts-worker"]   # compose: web(cdgts, gunicorn) + async worker(run_worker, P06.4a).
+
+# 헬스체크. /healthz 는 P08.5 예정 — 그전까지 smoke probe = /admin/login/ (deploy.sh [4/5] 가 사용).
+health_url   = "/healthz"
+health_probe = "http://127.0.0.1:8011/admin/login/"
+
+# 배포 동사(계약 이름 → 현 구현). P08.4 에서 preflight/smoke/rollback 정형화 예정.
+[verbs]
+build  = "deploy/build.sh X.Y.Z [--fast]"        # 빌드 호스트: pytest+bump+build+push
+sync   = "deploy/sync_to_srv.sh"                 # 대상 호스트: host/* → /srv/cdGTS
+deploy = "/srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z" # 스냅샷(prod)→스왑→migrate(entrypoint)→up→DB바인딩게이트
+seed   = "manage.py seed --mode=replace|add"     # 시스템 데이터만(devlog 140)
+
+# --- 환경 ---
+# 빌드 호스트(m710q)가 곧 테스트 서버. prod 는 GCP dolfinid-2.
+[targets.prod]
+host     = "dolfinid-2"                 # GCP, SSH 키 인증(honestjung). `dolfinid` 단독은 미해석.
+domain   = "cdgts.paleobytes.info"      # 34.64.158.160. 앞단 nginx + certbot(HTTPS).
+entry    = "/srv/cdGTS/deploy-prod.sh"  # DEPLOY_SNAPSHOT=1 — 스왑 직전 원자적 DB 스냅샷.
+snapshot = true
+expose   = "127.0.0.1:8011"             # 공인 IP 직접 노출 금지, nginx 경유만.
+
+[targets.test]
+host     = "m710q"                      # 빌드+테스트 호스트(집). tailscale serve → 127.0.0.1:8011.
+domain   = "127.0.0.1:8011"
+entry    = "/srv/cdGTS/deploy-dev.sh"   # 스냅샷 없음 — DB = 운영 복사본이라 폐기 가능.
+snapshot = false
