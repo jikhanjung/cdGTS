@@ -4,6 +4,9 @@ cross-project **배포·데이터 계약**(`../devdocs/wiki/deploy-data-contract
 cdGTS 에 적용하는 계획. cdGTS 는 계약이 지목한 **파일럿**(worker·seed·reseed·마이그레이션·백업을 다 exercise) 이라
 여기서 되면 나머지 프로젝트는 부분집합이다.
 
+> **✅ 완료(2026-07-13)**: P08.1~P08.6 전량 구현·실배포 검증. 착지 기록 [140](20260713_140_seed-replace-lane-boundary.md)~[143](20260713_143_git-free-deploy.md),
+> 마무리(실배포 0.1.56~0.1.60·워커 핫픽스·문서 정합) [144](20260713_144_p08-close-deploy-validation.md). 양 서버 @ 0.1.60(웹+워커).
+
 ## 계약 요약 (근거 문서)
 
 세 수명주기를 분리한다:
