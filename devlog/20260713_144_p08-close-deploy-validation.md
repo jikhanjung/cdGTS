@@ -55,4 +55,14 @@
 - **maintenance 점검 페이지 자동 nginx 토글** — `maintenance.html` 은 배포되지만 앞단 nginx fallback 은 아직 수동(후속).
 - P08 이후 로드맵 복귀: **R04 L2**(상수 변경→연대 값 rescale 커널) · **P06.4b**(PyMC joint) · 아크 A(L2/L3).
 
+## 마무리 addendum (P08-close 이후, 같은 세션)
+
+- **`deploy/remote-prod.sh`**(신규) — m710q(빌드 호스트)에서 prod 로 원격 배포하는 얇은 래퍼.
+  `ssh dolfinid '/srv/cdGTS/deploy-prod.sh X.Y.Z [--reseed]'` 를 대신 실행(인자 그대로 전달, `exec ssh`).
+  실제 배포 로직은 전부 운영 서버 쪽(이미지 self-heal)이고 이 래퍼는 ssh 호출만. `PROD_HOST`/`PROD_DEPLOY` env 로
+  대상 오버라이드. 릴리스 흐름 = `build.sh X.Y.Z` → `remote-prod.sh X.Y.Z` → `deploy-dev.sh X.Y.Z`.
+- **문서 정합·정리** — 계약 원본(`../devdocs/wiki/deploy-data-contract.md`) 5정정 + DEPLOY.md·deploy/README.md 갱신에
+  더해, `HANDOFF.md`·`TODOs.md` 의 **오래된 완료 항목을 정리**(devlog/git 에 보존). HANDOFF −54줄(라운드로그 압축·
+  '최근 작업' 이력 절 삭제·완료 계획 블록 요약), TODOs −107줄(§0~0d done `[x]` 제거, 열린 항목만). P08 계획 문서에 ✅ 완료 배너.
+
 *근거: [P08](20260713_P08_deploy-data-contract-retrofit.md) · [140](20260713_140_seed-replace-lane-boundary.md)~[143](20260713_143_git-free-deploy.md) · `../devdocs/wiki/deploy-data-contract.md`.*
