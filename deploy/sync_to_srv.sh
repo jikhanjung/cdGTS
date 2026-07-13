@@ -1,9 +1,10 @@
 #!/bin/bash
-# deploy/sync_to_srv.sh — **부트스트랩/래퍼 갱신 전용**(P08.6 이후). repo 있는 머신에서 host/* → /srv/cdGTS.
+# deploy/sync_to_srv.sh — **repo 있는 머신에서** 최초 부트스트랩용(P08.6). host/* → /srv/cdGTS.
 #
-# 상시 배포는 git-free 다: /srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z 가 이미지에서 host 운영 파일을 자체 추출.
-# 이 스크립트는 **최초 부트스트랩**(호스트에 래퍼가 아직 없을 때)이나 **부트스트랩 래퍼 자체가 바뀔 때**만 필요:
-#   deploy-prod.sh · deploy-dev.sh · _extract_and_deploy.sh (호스트 상시 파일). 나머지는 이미지에서 나온다.
+# 상시 배포는 git-free 다: /srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z 가 이미지에서 모든 host 파일을 추출하고,
+# 0.1.58~ 는 부트스트랩 파일까지 self-heal 하므로 이후 repo 는 영영 불필요.
+# repo 가 없는 prod 는 이 스크립트 대신 **이미지에서 직접**(git-free) 부트스트랩할 수 있다 — DEPLOY.md 참조:
+#   docker create → docker cp /app/deploy/host/{_extract_and_deploy,deploy-prod,deploy-dev}.sh → chmod +x.
 #
 # 최초 1회: /srv/cdGTS 생성 + .env 준비 (deploy/host/.env.example 참조) 후 실행.
 set -euo pipefail

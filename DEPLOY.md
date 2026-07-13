@@ -24,9 +24,16 @@
   사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/5] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
 - 🟡 마이그레이션은 web entrypoint 가 자동 적용(`migrate --noinput`). 워커는 web 이 스키마를 올린 뒤 폴링만.
 - 🟡 Crossref 자동 메타데이터(0.1.49)는 컨테이너 외부망(api.crossref.org) 필요.
-- 🟢 **git-free 배포**(0.1.56~): 상시 배포는 `deploy-{prod,dev}.sh X.Y.Z` — host 운영 파일을 이미지에서 추출.
-  운영 서버에 repo/`git pull` 불필요. 호스트 상시 파일 = `.env`+`deploy-prod/dev.sh`+`_extract_and_deploy.sh`.
-  이 래퍼가 바뀔 때만 repo 머신에서 `sync_to_srv.sh` 재실행.
+- 🟢 **git-free 배포**(0.1.56~): 상시 배포는 `deploy-{prod,dev}.sh X.Y.Z` — 모든 host 파일을 이미지에서 추출.
+  **운영 서버에 repo 불필요.** 0.1.58~ 는 부트스트랩 파일(deploy-prod/dev.sh·_extract_and_deploy.sh)도
+  이미지에서 **자기 치유**(self-heal)하므로 repo 는 영영 필요 없다(prod 에서 삭제 가능).
+- 🟢 **git-free 부트스트랩**(최초 1회 또는 self-heal 도입 시): repo 없이 이미지에서 부트스트랩 파일만 심는다 —
+  ```
+  cd /srv/cdGTS && CID=$(docker create honestjung/cdgts:X.Y.Z)
+  for f in _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh; do docker cp "$CID:/app/deploy/host/$f" ./; done
+  docker rm "$CID" && chmod +x _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh
+  ```
+  이후 `deploy-{prod,dev}.sh X.Y.Z` 만으로 부트스트랩 포함 전부 self-heal. (`.env`·`db.sqlite3`·`backup/` 는 유지.)
 - 🟡 **prod SSL 리다이렉트 + smoke**: prod `.env` `SECURE_SSL_REDIRECT=True` 라 평문 HTTP 는 301(HTTPS)로 튄다.
   `smoke.sh`·deploy 대기 루프는 `X-Forwarded-Proto: https` 헤더를 실어(settings 의 SECURE_PROXY_SSL_HEADER)
   로컬 컨테이너를 직접 검증한다(0.1.57~ 반영). 수동 확인도 동일: `curl -sH 'X-Forwarded-Proto: https' http://127.0.0.1:8011/healthz`.
