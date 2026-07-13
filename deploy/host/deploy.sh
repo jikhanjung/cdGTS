@@ -23,11 +23,11 @@ PORT=8011
 # 스왑 직전 pre_deploy 스냅샷을 뜬다. dev/test DB 는 운영 복사본이라 스냅샷 불필요
 # (scripts/sync-cdgts-db.sh 가 운영서버 DB 를 pull → 히스토리 보관).
 
-echo "=== [1/5] Pulling ${IMAGE} ==="
+echo "=== [1/6] Pulling ${IMAGE} ==="
 docker pull "${IMAGE}"
 
 echo ""
-echo "=== [2/5] Updating .env (IMAGE_TAG=${VERSION}) ==="
+echo "=== [2/6] Updating .env (IMAGE_TAG=${VERSION}) ==="
 if grep -q '^IMAGE_TAG=' .env 2>/dev/null; then
     sed -i "s/^IMAGE_TAG=.*/IMAGE_TAG=${VERSION}/" .env
 else
@@ -35,7 +35,7 @@ else
 fi
 
 echo ""
-echo "=== [3/5] Swap container (DB 볼륨 유지) ==="
+echo "=== [3/6] Swap container (DB 볼륨 유지) ==="
 if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
     echo "  pre-deploy DB snapshot (prod) — writer 정지 후 cp (이 동안 nginx 점검 페이지)"
     docker compose down
@@ -55,7 +55,7 @@ fi
 docker compose up -d cdgts
 
 echo ""
-echo "=== [4/5] Wait for backend ==="
+echo "=== [4/6] Wait for backend ==="
 for i in $(seq 1 60); do
     if curl -fsS -o /dev/null -m 2 "http://127.0.0.1:${PORT}/admin/login/"; then
         echo "  backend up after ${i}s"
@@ -65,7 +65,7 @@ for i in $(seq 1 60); do
 done
 
 echo ""
-echo "=== [5/5] Verify DB binding (bind mount, not ephemeral image DB) ==="
+echo "=== [5/6] Verify DB binding (bind mount, not ephemeral image DB) ==="
 # compose 는 host DB 디렉터리를 /app/hostdb 로 바인드한다(docker-compose.yml).
 # .env 의 DATABASE_PATH 가 이 마운트를 벗어나면(예: /app/db.sqlite3) 컨테이너는
 # 이미지 내부의 빈 DB 로 폴백 → 사이트가 빈 데이터로 뜬다(실데이터는 $ROOT/db.sqlite3 에 안전).
@@ -87,6 +87,19 @@ case "$DB_NAME" in
         exit 1
         ;;
 esac
+
+echo ""
+echo "=== [6/6] Smoke (healthz + 버전 일치 + 행 수) ==="
+# smoke.sh 는 sync_to_srv.sh 로 함께 동기화됨(없으면 구버전 — 경고만).
+if [ -x "$ROOT/smoke.sh" ]; then
+    if ! "$ROOT/smoke.sh" "$VERSION"; then
+        echo "  ✗ smoke 실패 — 배포된 컨테이너가 불건전. 롤백 검토:"
+        echo "      $ROOT/rollback.sh <이전 X.Y.Z>"
+        exit 1
+    fi
+else
+    echo "  (smoke.sh 없음 — sync_to_srv.sh 재실행 권장. 건너뜀.)"
+fi
 
 echo ""
 echo "=== Done: cdgts -> ${VERSION} ==="

@@ -10,16 +10,19 @@ has_seed = true                    # 시스템 시드 있음. `seed --mode=repla
                                    # (운영 데이터 보존, devlog 140). 시드/레이아웃 변경 릴리스는 재시드 필요.
 services = ["cdgts", "cdgts-worker"]   # compose: web(cdgts, gunicorn) + async worker(run_worker, P06.4a).
 
-# 헬스체크. /healthz 는 P08.5 예정 — 그전까지 smoke probe = /admin/login/ (deploy.sh [4/5] 가 사용).
+# 헬스체크(P08.5). /healthz = 버전 + DB + 핵심 행 수. smoke 가 소비, deploy.sh [6/6] 이 자동 호출.
 health_url   = "/healthz"
-health_probe = "http://127.0.0.1:8011/admin/login/"
+health_probe = "http://127.0.0.1:8011/healthz"
 
-# 배포 동사(계약 이름 → 현 구현). P08.4 에서 preflight/smoke/rollback 정형화 예정.
+# 배포 동사(계약 이름 → 현 구현, P08.4).
 [verbs]
-build  = "deploy/build.sh X.Y.Z [--fast]"        # 빌드 호스트: pytest+bump+build+push
-sync   = "deploy/sync_to_srv.sh"                 # 대상 호스트: host/* → /srv/cdGTS
-deploy = "/srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z" # 스냅샷(prod)→스왑→migrate(entrypoint)→up→DB바인딩게이트
-seed   = "manage.py seed --mode=replace|add"     # 시스템 데이터만(devlog 140)
+preflight = "deploy/preflight.sh [<since-ref>]"     # 빌드 호스트: 위험 표면 diff + seed 냄새 lint + DEPLOY.md
+build     = "deploy/build.sh X.Y.Z [--fast]"        # 빌드 호스트: pytest+bump+build+push
+sync      = "deploy/sync_to_srv.sh"                 # 대상 호스트: host/* → /srv/cdGTS
+deploy    = "/srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z" # 스냅샷(prod)→스왑→migrate→up→DB바인딩게이트→smoke
+seed      = "manage.py seed --mode=replace|add"     # 시스템 데이터만(devlog 140)
+smoke     = "/srv/cdGTS/smoke.sh [X.Y.Z]"           # 대상 호스트: healthz 200 + 버전 일치 + 행 수
+rollback  = "/srv/cdGTS/rollback.sh <이전 X.Y.Z>"    # 대상 호스트: 이전 이미지 + pre_deploy 스냅샷 복원
 
 # --- 환경 ---
 # 빌드 호스트(m710q)가 곧 테스트 서버. prod 는 GCP dolfinid-2.

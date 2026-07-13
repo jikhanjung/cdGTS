@@ -19,7 +19,10 @@ from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
 
+from config.health import healthz
+
 urlpatterns = [
+    path('healthz', healthz, name='healthz'),        # 배포 smoke (P08.5)
     path('admin/', admin.site.urls),
     path('api/', include('graph.urls')),
     path('api/', include('nodes.urls')),
