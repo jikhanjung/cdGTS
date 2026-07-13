@@ -1,6 +1,7 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-11. 운영 `cdgts.paleobytes.info` @ **0.1.52** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.53**. 이미지 `honestjung/cdgts:0.1.35~0.1.53` dockerhub push 완료.
+**Last updated**: 2026-07-13. 운영 `cdgts.paleobytes.info` @ **0.1.52** 배포 완료 · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.54**. 이미지 `honestjung/cdgts:0.1.35~0.1.55` dockerhub push 완료. ⚠️ **운영은 0.1.52** — 0.1.53~0.1.55 는 테스트 서버까지만 반영(운영 배포는 사용자 승인 후).
+- **0.1.54~0.1.55** 공유 보정 노드 + 공분산 배선 L1 vertical slice([devlog 139](devlog/20260712_139_calibration-constant-covariance-slice.md) · 근거 [R04](devlog/20260711_R04_radiometric-provenance-depth.md)): R04("방사연대 provenance 를 어느 깊이까지"—결론 = 공유 보정 파라미터 한 프리미티브만 1급으로)를 노드·커널·데모로 착지. **`calibration-constant` NodeType**(data leaf; params distribution·kind·symbol; out `value`; 커널이 불확실성 전액을 자기 자신 ref=symbol 의 `shared_component` 로 자동 태깅=L4 joint 승격) + **소비자 배선**: `radiometric-uPb` 에 `calibration` 입력 포트, 커널이 보정 σ 를 (a) 자기 marginal budget 에 제곱합 + (b) shared_component 로 태깅. **값 불변 = 재계산 아닌 공분산 배선(L1)**. 캡스톤 데모(`seed_demo` demo-cov)를 매직 스트링 → **진짜 공유 노드**로 재구성: ²³⁸U 붕괴상수는 물리적으로 하나 → `decay-238U` **딱 한 노드**가 두 연대에 갈라짐(shared→Cov 1.96→L1b **pass**) vs 공유 의존을 모델에 기록 안 함(independent=노드 없음, 순진 독립→Cov 0→L1b **warn**). marginal 값·± 는 양쪽 동일, 차이는 provenance(노드+엣지)뿐. **pytest 174**(커널 단위 5케이스 신규). 프런트 변경·마이그레이션 없음(팔레트·포트·인스펙터 동적). **남은 것(L2)**: 상수 값 변경이 연대 **값**을 재계산하는 rescale(raw invariant/민감도 노드) — 유스케이스 대기.
 - **0.1.53** Editor.jsx 분해 2차([devlog 138](devlog/20260711_138_editor-decompose-2.md)): 인스펙터 핸들러 훅 `useNodeInspectorHandlers.js` 추출(Editor 990→966줄) + e2e 상호작용 스모크 확장(auto-eval 2500·그룹 렌더, **5/5**). graph-actions/selection 훅은 core state 얽힘으로 leaky → 의도적 미추출(Editor 분해 종결). 프론트 전용. **운영 0.1.52 배포 함정 대응**: compose 볼륨을 파일→디렉터리 바인드로 바꾼 뒤 prod `.env` 의 `DATABASE_PATH` 가 `/app/hostdb/db.sqlite3` 로 안 바뀌면 컨테이너가 이미지 내부 빈 DB 로 폴백 → `deploy.sh` 에 **`[5/5] DB 바인딩 검증 게이트`** 추가(636779b, 실데이터는 호스트에 안전했음).
 - **0.1.52** Editor.jsx 분해 1차([devlog 137](devlog/20260711_137_editor-decompose.md)): 순수 뷰 레이어 `graphView.js`(apiToRF/rfToApi/buildView) + 컨텍스트 메뉴 `EditorMenu.jsx` 추출, Editor.jsx **1252→990줄**. 프론트 전용, 브라우저 스모크 3/3 통과. **Tier 2 스모크 스캐폴딩**(devlog 136, `frontend/e2e/`, Playwright·비블로킹)도 이 세션 산출.
 - **0.1.51** clamp 축소([devlog 135](devlog/20260711_135_clamp-scopedown.md) · 근거 [cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)): clamp를 별도 개념에서 제거하고 **authored leaf로 수렴**. GSSA pin 2개→`published-age`(값 동일 2500 Ma), `pin`/`range`/`freeze-version` NodeType 제거(19→16, `order` 유지), cycle-breaker=joint-inference 전용, `releases.Clamp`/reconcile은 **DEMO-ONLY 격리**. pytest 165. ⚠️ **seed 변경 → 배포 시 `seed --mode=replace`**(테스트 반영 완료).
@@ -15,7 +16,7 @@
 - **그룹·example④**: 3 dated 섹션 evidence 18 노드 → NodeGroup "Base Cambrian · δ13C-dated sections" 하나. **realistic 모델을 example④(전 ICC 조립 그래프)에도 반영** — 옛 flat(global-age-model) 제거, `calib-transfer → bnd-base-cambrian.age`, 섹션 그룹 동일 적용(279 노드). 각 섹션 논문 cite → bibliography 4건 전파.
 - 예제③(example-cambrian-base) **23 노드** · 예제④(example-icc-partial) **279 노드**. **pytest 159 passed.**
 
-**배경(0.1.35~0.1.46)**: **레퍼런스 노드 + bake→bibliography**(devlog 127·128) 위에 P07 을 쌓음. 이전 P04(불변 Bake·Vault) · P05(멀티유저 CI) · P06(Science Engine: 공분산 백본·정합성 게이트 L1/L2·clamp reconcile) · P06.4a(비동기 워커) 는 그대로. **다음: P06.4b(PyMC joint) · 아크 A(L2/L3) · Editor 분해 2차(상호작용 스모크 후).** (P07 운영 반영·devlog·clamp 통합→축소·Editor 분해 1차·Tier1/2 테스트는 완료.)
+**배경(0.1.35~0.1.46)**: **레퍼런스 노드 + bake→bibliography**(devlog 127·128) 위에 P07 을 쌓음. 이전 P04(불변 Bake·Vault) · P05(멀티유저 CI) · P06(Science Engine: 공분산 백본·정합성 게이트 L1/L2·clamp reconcile) · P06.4a(비동기 워커) 는 그대로. **다음: R04 L2(상수 변경→연대 값 rescale 커널) · P06.4b(PyMC joint) · 아크 A(L2/L3) · 0.1.53~0.1.55 운영 배포(승인 후).** (P07 운영 반영·devlog·clamp 통합→축소·Editor 분해 1·2차·Tier1/2 테스트·R04 L1 공분산 배선은 완료.)
 
 > 과거 작업 내역은 `devlog/` 에 모두 기록됨. 본 문서는 **현재 상태 + 다음 작업**만 유지.
 > 개념 지도 `docs/concept-map.md` · 앱 설계 `docs/app-architecture.md` · 개발 계획 `devlog/*_P01_*` · backlog `TODOs.md`.
@@ -28,7 +29,8 @@
 - **앱 7개** (의존: chrono ◁ nodes ◁ graph ◁ engine ◁ releases · accounts · references):
   - `chrono` — 정본 registry(Unit 이중명명·Boundary·Lineage·Authority·Ratification·Locality).
     ICS chart.ttl 기반, **Subperiod(아계) rank 포함**(Carboniferous Mississippian/Pennsylvanian).
-  - `nodes` — 타입 시스템(NodeType + Port) + `Distribution` 값객체(충실도 L0–L5). `published-age`(공표값 leaf) 포함.
+  - `nodes` — 타입 시스템(NodeType + Port) + `Distribution` 값객체(충실도 L0–L5). `published-age`(공표값 leaf) ·
+    **`calibration-constant`**(공유 보정 파라미터 leaf: 붕괴상수·monitor·tracer; 커널이 σ 를 shared_component 로 자동 태깅 → 공분산 백본) 포함.
   - `graph` — DAG(Graph·NodeInstance·Edge·NodeGroup·Gateway) + DAG 불변식 + DRF React Flow 왕복.
     **경계·구간 이중성 모델**(`NodeInstance.nature`=generic|boundary · `NodeGroup.kind`=container|unit·`unit`·
     `lower`/`upper` 경계 노드 FK · `Edge.kind`=data|order). **노드그룹 = 컨테이너+접기+드릴인, N단 중첩**(parent
@@ -71,7 +73,7 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영**:
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info` @ **0.1.52**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.52**.
+  - **운영서버** `cdgts.paleobytes.info` @ **0.1.52**(nginx + certbot). 개발/테스트 `127.0.0.1:8011` @ **0.1.54**.
     테스트 DB(prod 미러)에 P05 검증용 계정 세팅: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
   - deploy-prod.sh / deploy-dev.sh 분리, 스왑 중 nginx maintenance. DB 분리 + prod→test sync.
     이 호스트(m710q)는 **빌드 호스트이자 테스트 서버** — deploy-dev.sh 로 스냅샷 없이 즉시 스왑.
@@ -79,7 +81,7 @@
   - ⚠️ **시드 데이터(레이아웃 포함) 변경 릴리스는 `seed --mode=replace` 재시드 필요**(add 는 그래프 원자 skip).
 - **초기 데이터(seed)**: 통합 `seed/`(manifest `2026.07.0`, 자연키) — `01_chrono`~`04_releases` + **`05_icc_release`**.
   `manage.py seed --mode=replace|add`. 순환 자연키 FK(그룹↔노드)는 forward-ref 2패스로 로드. `FIXTURE_DIRS=seed/`.
-- **테스트**: 백엔드 `pytest` **114 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 포함). 테스트 fixture 는 seed 파일 loaddata.
+- **테스트**: 백엔드 `pytest` **174 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 + calibration 커널 공분산 상속/비상속 포함). 테스트 fixture 는 seed 파일 loaddata.
 - **문서 코퍼스**: `docs/` 14주제 × 한/영 + README + app-architecture + naming(태그라인·표기 규칙) +
   evaluation-order(의존 vs 연대순, order=사후 검사) + boundary-span-duality. 진입점 `docs/concept-map.md`.
   **clamp 축소([cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가))를 문서 전반에 정합화** —
