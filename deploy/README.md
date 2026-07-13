@@ -15,6 +15,7 @@ fsis2026 패턴 + 프론트(Vite SPA) 멀티스테이지 빌드. 이미지 `hone
 | `entrypoint.sh` | collectstatic → migrate → gunicorn(:8000). 워커는 인자(`run_worker`)로 실행(migrate 경합 회피). |
 | `build.sh X.Y.Z [--fast]` | **빌드 호스트**: pytest(+`--fast` 로 생략) + version bump + `docker build/push` (`:X.Y.Z` + `:latest`). |
 | `preflight.sh` | **빌드 호스트**: 마지막 배포 이후 위험 표면 diff(migrations·seed·.env·compose) + seed 냄새 lint + `DEPLOY.md` 출력. |
+| `remote-prod.sh X.Y.Z [--reseed]` | **빌드 호스트**: `ssh dolfinid '/srv/cdGTS/deploy-prod.sh …'` 얇은 래퍼(원격 prod 배포). `PROD_HOST`/`PROD_DEPLOY` env 로 대상 변경. |
 | `deploy.toml` | 선언 매니페스트(image·db_path·has_seed·services·동사·targets prod/test). |
 | `docker-compose.dev.yml` | 로컬 빌드/실행 테스트(`--build`). |
 | `sync_to_srv.sh` | **repo 있는 머신에서 최초 부트스트랩만**(host/* → /srv/cdGTS). 상시 배포엔 불필요(self-heal). |
@@ -59,7 +60,8 @@ docker rm "$CID" && chmod +x _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh
 #   시드/레이아웃 변경 릴리스나 빈 DB 최초 배포면 --reseed 를 붙인다:
 /srv/cdGTS/deploy-prod.sh 0.1.60 --reseed   # migrate 후 smoke 전 seed --mode=replace + seed_demo
 ```
-m710q 에서 prod 까지 원격으로:  `ssh dolfinid '/srv/cdGTS/deploy-prod.sh 0.1.60 [--reseed]'`
+m710q 에서 prod 까지 원격으로 — 얇은 래퍼 `./deploy/remote-prod.sh 0.1.60 [--reseed]`
+(= `ssh dolfinid '/srv/cdGTS/deploy-prod.sh 0.1.60 [--reseed]'` 를 대신 실행. `PROD_HOST`/`PROD_DEPLOY` env 로 대상 변경).
 
 **seed** (통합 seed, 자연키, `seed/`. devlog P02·140):
 ```
