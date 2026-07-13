@@ -1,10 +1,9 @@
 #!/bin/bash
-# deploy/sync_to_srv.sh — 운영/테스트 호스트에서 host/* → /srv/cdGTS 동기화.
+# deploy/sync_to_srv.sh — **부트스트랩/래퍼 갱신 전용**(P08.6 이후). repo 있는 머신에서 host/* → /srv/cdGTS.
 #
-# 사용법 (개발/테스트 서버 + 프로덕션 서버 모두):
-#   cd ~/projects/cdGTS && git pull
-#   ./deploy/sync_to_srv.sh
-#   /srv/cdGTS/deploy.sh X.Y.Z
+# 상시 배포는 git-free 다: /srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z 가 이미지에서 host 운영 파일을 자체 추출.
+# 이 스크립트는 **최초 부트스트랩**(호스트에 래퍼가 아직 없을 때)이나 **부트스트랩 래퍼 자체가 바뀔 때**만 필요:
+#   deploy-prod.sh · deploy-dev.sh · _extract_and_deploy.sh (호스트 상시 파일). 나머지는 이미지에서 나온다.
 #
 # 최초 1회: /srv/cdGTS 생성 + .env 준비 (deploy/host/.env.example 참조) 후 실행.
 set -euo pipefail
@@ -21,16 +20,19 @@ if [ ! -d "$HOST_DEST" ]; then
     exit 1
 fi
 
-echo "=== host/* → $HOST_DEST/ ==="
-cp -p "$PROJECT_DIR/deploy/host/docker-compose.yml" "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/deploy.sh"          "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/deploy-prod.sh"     "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/deploy-dev.sh"      "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/smoke.sh"           "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/rollback.sh"        "$HOST_DEST/"
-cp -p "$PROJECT_DIR/deploy/host/maintenance.html"   "$HOST_DEST/"
-chmod +x "$HOST_DEST/deploy.sh" "$HOST_DEST/deploy-prod.sh" "$HOST_DEST/deploy-dev.sh" \
-         "$HOST_DEST/smoke.sh" "$HOST_DEST/rollback.sh"
-echo "  docker-compose.yml + deploy{,-prod,-dev}.sh + smoke.sh + rollback.sh + maintenance.html synced."
+echo "=== bootstrap host/* → $HOST_DEST/ ==="
+# 상시 부트스트랩 파일(호스트에 남는 것) — git-free 배포의 진입점.
+cp -p "$PROJECT_DIR/deploy/host/deploy-prod.sh"        "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/deploy-dev.sh"         "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/_extract_and_deploy.sh" "$HOST_DEST/"
+# 나머지는 배포 시 이미지에서 추출되지만, 최초 부트스트랩 편의를 위해 함께 심는다.
+cp -p "$PROJECT_DIR/deploy/host/docker-compose.yml"   "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/deploy.sh"            "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/smoke.sh"             "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/rollback.sh"          "$HOST_DEST/"
+cp -p "$PROJECT_DIR/deploy/host/maintenance.html"     "$HOST_DEST/"
+chmod +x "$HOST_DEST"/deploy-prod.sh "$HOST_DEST"/deploy-dev.sh "$HOST_DEST"/_extract_and_deploy.sh \
+         "$HOST_DEST"/deploy.sh "$HOST_DEST"/smoke.sh "$HOST_DEST"/rollback.sh
+echo "  bootstrap synced (deploy-prod/dev + _extract_and_deploy + compose/deploy/smoke/rollback/maintenance)."
 echo ""
-echo "=== 다음: /srv/cdGTS/deploy.sh X.Y.Z  (끝에 smoke 자동) ==="
+echo "=== 상시 배포(git-free): /srv/cdGTS/deploy-{prod,dev}.sh X.Y.Z  (이미지 추출 → 스왑 → smoke) ==="

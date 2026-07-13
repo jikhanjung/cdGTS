@@ -21,10 +21,18 @@
   사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/5] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
 - 🟡 마이그레이션은 web entrypoint 가 자동 적용(`migrate --noinput`). 워커는 web 이 스키마를 올린 뒤 폴링만.
 - 🟡 Crossref 자동 메타데이터(0.1.49)는 컨테이너 외부망(api.crossref.org) 필요.
+- 🟢 **git-free 배포**(0.1.56~): 상시 배포는 `deploy-{prod,dev}.sh X.Y.Z` — host 운영 파일을 이미지에서 추출.
+  운영 서버에 repo/`git pull` 불필요. 호스트 상시 파일 = `.env`+`deploy-prod/dev.sh`+`_extract_and_deploy.sh`.
+  이 래퍼가 바뀔 때만 repo 머신에서 `sync_to_srv.sh` 재실행.
 
 ## 릴리스 노트 (최신 → 과거)
 
-- **P08.1** (미배포, 다음 릴리스 포함) — 🟢 마이그레이션 없음(관리 명령만). `seed --mode=replace` 의미가
+- **0.1.56** — 🔴 **git-free 배포 전환(P08.6) — 이번 1회 부트스트랩 필요**. 호스트 배포 진입점이
+  `deploy.sh` → **`deploy-{prod,dev}.sh`**(이미지에서 host 파일 추출)로 바뀜. 기존 호스트의 래퍼는 옛 2줄 버전이라,
+  이번에 repo 머신에서 **`./deploy/sync_to_srv.sh` 1회** 실행해 새 래퍼(`deploy-prod/dev.sh`·`_extract_and_deploy.sh`)를
+  설치한 뒤 `deploy-dev.sh 0.1.56` / `deploy-prod.sh 0.1.56`. 이후 릴리스는 git 불필요. 이 릴리스에 P08.1~P08.5
+  포함(seed 레인 경계·/healthz·smoke·매니페스트). 🔴 seed 변경(P08.1) 포함 → 배포 후 `seed --mode=replace`.
+- **P08.1** (0.1.56 에 포함) — 🟢 마이그레이션 없음(관리 명령만). `seed --mode=replace` 의미가
   delete-all → **운영 데이터 보존 upsert** 로 바뀜(devlog 140). 배포 후 재시드해도 학자 데이터 안전.
   `references.Reference` 재replace 중복 INSERT 잠복 버그 동봉 수정.
 - **0.1.54~0.1.55** — 🔴 **재시드 필요**(`seed --mode=replace` + `seed_demo`). `calibration-constant` NodeType

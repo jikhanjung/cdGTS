@@ -23,6 +23,8 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+# `COPY . .` 로 deploy/host/* (compose·deploy.sh·smoke·rollback·maintenance)도 /app/deploy/host/ 에 실린다.
+# 운영 서버가 git 없이 이미지에서 이 파일들을 추출해 배포한다(git-free, deploy/host/_extract_and_deploy.sh · P08.6).
 # 빌드된 SPA 를 이미지에 포함 (settings.FRONTEND_DIST / SPA 라우트 / collectstatic 이 소비).
 COPY --from=frontend /fe/dist ./frontend/dist
 
