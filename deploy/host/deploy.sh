@@ -57,7 +57,9 @@ if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
         | head -n -20 \
         | while read -r f; do rm -f "$f" "$f-wal" "$f-shm"; done
 fi
-docker compose up -d cdgts
+# 전 서비스 조정 — 웹(cdgts) + 워커(cdgts-worker) 둘 다 현재 이미지로. up -d cdgts(웹만)이면
+# 스냅샷 경로의 down 뒤 워커가 안 켜지고, dev 경로에선 워커가 옛 이미지로 남는다.
+docker compose up -d
 
 echo ""
 echo "=== [4/6] Wait for backend ==="
