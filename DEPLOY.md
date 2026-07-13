@@ -13,9 +13,12 @@
 
 ## 상시 불변식 (릴리스 무관)
 
-- 🔴 **시드/레이아웃 변경 릴리스 → `seed --mode=replace`** 재시드. `add` 는 기존 그래프를 slug 단위로 원자 skip →
-  변경 반영 안 됨. **replace 는 P08.1(devlog 140) 이후 운영 데이터(owner-set 그래프·릴리스·Proposal)를 보존** —
-  시스템 정의 데이터만 정합(자연키 upsert + 시스템 그래프 재생성). 캡스톤/데모 릴리스 쌍은 `seed_demo` 도 재실행.
+- 🔴 **시드/레이아웃 변경 릴리스 → 재시드**. 0.1.57~ 는 **배포 시 `--reseed` 플래그**로 자동
+  (`deploy-{prod,dev}.sh X.Y.Z --reseed` → migrate 후 smoke 전에 `seed --mode=replace` + `seed_demo`). 수동이면
+  `docker exec cdgts python manage.py seed --mode=replace` + `seed_demo`. `add` 는 그래프를 slug 단위로 원자 skip →
+  변경 반영 안 됨. **replace 는 P08.1(devlog 140) 이후 운영 데이터(owner-set 그래프·릴리스·Proposal)를 보존**
+  (자연키 upsert + 시스템 그래프 재생성, 멱등). 데모 그래프는 시스템이라 replace 가 지움 → `seed_demo` 로 복원.
+  빈 DB 최초 배포도 `--reseed` 로 채워야 smoke(healthz 행 수>0)가 통과.
 - 🔴 **prod 최초/DB 이전 시 `.env` `DATABASE_PATH=/app/hostdb/db.sqlite3`** 확인. compose 가 `/srv/cdGTS` 를
   `/app/hostdb` 디렉터리로 바인드(WAL 공유). 이 경로를 벗어나면 컨테이너가 이미지 내부 빈 DB 로 폴백 →
   사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/5] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
@@ -24,6 +27,9 @@
 - 🟢 **git-free 배포**(0.1.56~): 상시 배포는 `deploy-{prod,dev}.sh X.Y.Z` — host 운영 파일을 이미지에서 추출.
   운영 서버에 repo/`git pull` 불필요. 호스트 상시 파일 = `.env`+`deploy-prod/dev.sh`+`_extract_and_deploy.sh`.
   이 래퍼가 바뀔 때만 repo 머신에서 `sync_to_srv.sh` 재실행.
+- 🟡 **prod SSL 리다이렉트 + smoke**: prod `.env` `SECURE_SSL_REDIRECT=True` 라 평문 HTTP 는 301(HTTPS)로 튄다.
+  `smoke.sh`·deploy 대기 루프는 `X-Forwarded-Proto: https` 헤더를 실어(settings 의 SECURE_PROXY_SSL_HEADER)
+  로컬 컨테이너를 직접 검증한다(0.1.57~ 반영). 수동 확인도 동일: `curl -sH 'X-Forwarded-Proto: https' http://127.0.0.1:8011/healthz`.
 
 ## 릴리스 노트 (최신 → 과거)
 

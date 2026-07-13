@@ -9,7 +9,11 @@ PORT="${SMOKE_PORT:-8011}"
 URL="http://127.0.0.1:${PORT}/healthz"
 
 echo "=== smoke: ${URL} ==="
-BODY=$(curl -fsS -m 5 "$URL") || { echo "  ✗ healthz 도달 실패 (컨테이너 미기동?)"; exit 1; }
+# prod 는 SECURE_SSL_REDIRECT=True → 평문 HTTP 는 301(HTTPS)로 튄다. settings 의
+# SECURE_PROXY_SSL_HEADER('X-Forwarded-Proto: https') 를 실어 보내 Django 가 secure 로 인식 →
+# 리다이렉트 없이 로컬 컨테이너를 직접 검증(공인 DNS/인증서 비의존, dev 에선 헤더 무해).
+BODY=$(curl -fsS -m 5 -H 'X-Forwarded-Proto: https' "$URL") \
+    || { echo "  ✗ healthz 도달 실패 (컨테이너 미기동?)"; exit 1; }
 echo "  ${BODY}"
 
 echo "$BODY" | grep -qE '"status":[[:space:]]*"ok"' \

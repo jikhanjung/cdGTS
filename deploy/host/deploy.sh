@@ -4,14 +4,19 @@
 #   prod:      /srv/cdGTS/deploy-prod.sh X.Y.Z   (DEPLOY_SNAPSHOT=1 — 배포 전 DB 스냅샷)
 #   dev/test:  /srv/cdGTS/deploy-dev.sh  X.Y.Z   (스냅샷 없음, DB = 운영 복사본이라 폐기 가능)
 # 직접 호출 시 DEPLOY_SNAPSHOT 미설정 → 스냅샷 없음(dev 동작).
-# Usage: DEPLOY_SNAPSHOT=0|1 /srv/cdGTS/deploy.sh X.Y.Z
+# Usage: DEPLOY_SNAPSHOT=0|1 /srv/cdGTS/deploy.sh X.Y.Z [--reseed]
+#   --reseed : migrate 후 smoke 전에 seed --mode=replace + seed_demo (시드 변경 릴리스·빈 DB 최초 배포).
+#              replace 는 운영 데이터 보존 upsert(P08.1)라 멱등·안전.
 set -euo pipefail
 
 VERSION=${1:-}
 if [ -z "$VERSION" ]; then
-    echo "Usage: $0 X.Y.Z"
+    echo "Usage: $0 X.Y.Z [--reseed]"
     exit 1
 fi
+
+RESEED=0
+for a in "$@"; do [ "$a" = "--reseed" ] && RESEED=1; done
 
 ROOT=/srv/cdGTS
 cd "$ROOT"
@@ -57,7 +62,8 @@ docker compose up -d cdgts
 echo ""
 echo "=== [4/6] Wait for backend ==="
 for i in $(seq 1 60); do
-    if curl -fsS -o /dev/null -m 2 "http://127.0.0.1:${PORT}/admin/login/"; then
+    # X-Forwarded-Proto: prod(SECURE_SSL_REDIRECT=True)에서 평문 301 대신 실제 200 응답을 받아 기동 확인.
+    if curl -fsS -o /dev/null -m 2 -H 'X-Forwarded-Proto: https' "http://127.0.0.1:${PORT}/admin/login/"; then
         echo "  backend up after ${i}s"
         break
     fi
@@ -87,6 +93,17 @@ case "$DB_NAME" in
         exit 1
         ;;
 esac
+
+echo ""
+echo "=== [5b/6] Reseed (--reseed) ==="
+# 시드 변경 릴리스·빈 DB 최초 배포는 smoke 전에 재시드해야 healthz 가 건전(행 수>0)해진다.
+# replace 는 운영 데이터 보존 upsert(P08.1)라 멱등·안전. 데모 그래프(시스템)는 seed_demo 로 복원.
+if [ "$RESEED" = "1" ]; then
+    docker compose exec -T cdgts python manage.py seed --mode=replace
+    docker compose exec -T cdgts python manage.py seed_demo
+else
+    echo "  (--reseed 미지정 — 건너뜀. 시드 변경 릴리스면 --reseed 로 재배포하거나 배포 후 수동 재시드.)"
+fi
 
 echo ""
 echo "=== [6/6] Smoke (healthz + 버전 일치 + 행 수) ==="
