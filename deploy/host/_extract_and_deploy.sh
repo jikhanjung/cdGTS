@@ -48,6 +48,11 @@ for f in docker-compose.yml maintenance.html; do
     docker cp "${CID}:/app/deploy/host/${f}" "${ROOT}/${f}" 2>/dev/null && echo "  extracted ${f}" \
         || echo "  (이미지에 ${f} 없음 — 구버전, 건너뜀)"
 done
+# backup_db.py — 호스트 cron 이 쓰는 hourly 백업(python, bash -n 대상 아님). 이미지에서 함께 갱신
+# (fsis/fcmanager 동형, 2026-07-14). cron 등록은 최초 1회(스크립트 docstring 참조).
+mkdir -p "${ROOT}/scripts"
+docker cp "${CID}:/app/scripts/backup_db.py" "${ROOT}/scripts/backup_db.py" 2>/dev/null \
+    && echo "  extracted scripts/backup_db.py" || true
 
 # 부트스트랩 래퍼 — exec 로 넘어와 안전하지만, 깨진 걸 심으면 다음 배포가 막히니 bash -n 검증 후 교체.
 for f in deploy-prod.sh deploy-dev.sh; do safe_extract_sh "$f"; done

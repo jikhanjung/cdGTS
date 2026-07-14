@@ -24,12 +24,13 @@ fsis2026 패턴 + 프론트(Vite SPA) 멀티스테이지 빌드. 이미지 `hone
 | `host/deploy.sh X.Y.Z [--reseed]` | 배포 엔진: (스냅샷)→스왑→migrate→DB바인딩게이트→(`--reseed` 시 재시드)→smoke. **`up -d`(전 서비스)**. 직접 호출 X. |
 | `host/deploy-prod.sh X.Y.Z [--reseed]` | **프로덕션** 진입점 — `DEPLOY_SNAPSHOT=1`(배포 전 DB 스냅샷). |
 | `host/deploy-dev.sh X.Y.Z [--reseed]` | **개발/테스트** 진입점 — 스냅샷 없이(DB = 운영 복사본). |
-| `host/smoke.sh [X.Y.Z]` | 배포 후 검증: `/healthz` 200 + 버전 일치 + 행 수. prod SSL 대응(`X-Forwarded-Proto`). |
+| `host/smoke.sh X.Y.Z` | 배포 후 검증: `/healthz` 200 + 버전 일치(필수 인자) + 행 수(python3 JSON, fsis/fcmanager 동형). prod SSL 대응(`X-Forwarded-Proto`). |
 | `host/rollback.sh <이전 X.Y.Z> [--db=keep\|restore]` | 코드/DB 롤백 분리: `--db=keep`(기본, 이미지만 전환·운영 데이터 보존) · `--db=restore`(정지 후 pre_deploy 스냅샷 복원). keep 가드=직전 배포 migration 시 차단(`--force`/`--db=restore`). |
 | `host/maintenance.html` | prod 스왑/스냅샷 동안 nginx 가 띄우는 점검 페이지. |
 | `host/.env.example` | `/srv/cdGTS/.env` 템플릿. |
 | `../config/health.py` | `/healthz` 엔드포인트(버전+DB+핵심 행 수 → 200/503). smoke 가 소비. |
 | `../scripts/sync-cdgts-db.sh` | (개발/테스트) 운영 DB 를 cron 으로 pull → 히스토리 + 테스트 DB 로 교체. |
+| `../scripts/backup_db.py` | (운영) hourly DB 백업(sqlite online backup, 12개 유지) — cron 1회 등록 + 배포 시 self-heal 추출. |
 
 ## 흐름 (git-free, 0.1.58~)
 

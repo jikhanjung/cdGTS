@@ -3,7 +3,7 @@
 # 직접 부르지 말고 환경별 래퍼로 호출:
 #   prod:      /srv/cdGTS/deploy-prod.sh X.Y.Z   (DEPLOY_SNAPSHOT=1 — 배포 전 DB 스냅샷)
 #   dev/test:  /srv/cdGTS/deploy-dev.sh  X.Y.Z   (스냅샷 없음, DB = 운영 복사본이라 폐기 가능)
-# 직접 호출 시 DEPLOY_SNAPSHOT 미설정 → 스냅샷 없음(dev 동작).
+# 미설정 시 DEPLOY_SNAPSHOT 기본=1 — 직접 호출도 안전측(fsis/fcmanager 동형, 2026-07-14 통일). dev 는 래퍼가 0 명시.
 # Usage: DEPLOY_SNAPSHOT=0|1 /srv/cdGTS/deploy.sh X.Y.Z [--reseed]
 #   --reseed : migrate 후 smoke 전에 seed --mode=replace + seed_demo (시드 변경 릴리스·빈 DB 최초 배포).
 #              replace 는 운영 데이터 보존 upsert(P08.1)라 멱등·안전.
@@ -24,9 +24,9 @@ cd "$ROOT"
 IMAGE="honestjung/cdgts:${VERSION}"
 PORT=8011
 
-# 기본: 배포는 DB 를 손대지 않는다(컨테이너만 스왑). DEPLOY_SNAPSHOT=1(prod)이면
-# 스왑 직전 pre_deploy 스냅샷을 뜬다. dev/test DB 는 운영 복사본이라 스냅샷 불필요
-# (scripts/sync-cdgts-db.sh 가 운영서버 DB 를 pull → 히스토리 보관).
+# 기본: 배포는 DB 를 손대지 않는다(컨테이너만 스왑). DEPLOY_SNAPSHOT=1(기본, prod)이면
+# 스왑 직전 pre_deploy 스냅샷을 뜬다. dev/test 는 래퍼(deploy-dev.sh)가 0 을 명시 —
+# DB 가 운영 복사본이라 스냅샷 불필요(scripts/sync-cdgts-db.sh 가 운영서버 DB 를 pull → 히스토리 보관).
 
 echo "=== [1/6] Pulling ${IMAGE} ==="
 docker pull "${IMAGE}"
@@ -41,7 +41,7 @@ fi
 
 echo ""
 echo "=== [3/6] Swap container (DB 볼륨 유지) ==="
-if [ "${DEPLOY_SNAPSHOT:-0}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
+if [ "${DEPLOY_SNAPSHOT:-1}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
     echo "  pre-deploy DB snapshot (prod) — writer 정지 후 cp (이 동안 nginx 점검 페이지)"
     # rollback keep 가드용: 배포 전(이 이미지의 migrate 실행 전) 적용된 migration 수를 기록.
     # 컨테이너 정지 전에 조회(정지 후엔 exec 불가). rollback.sh 가 스냅샷의 .mig 사이드카와 현재를 비교.
@@ -67,9 +67,11 @@ docker compose up -d
 
 echo ""
 echo "=== [4/6] Wait for backend ==="
+# liveness: /healthz 200 대기(fsis/fcmanager 동형, 2026-07-14 통일 — 종전 /admin/login/).
+# X-Forwarded-Proto: prod(SECURE_SSL_REDIRECT=True)에서 평문 301 대신 실제 200 응답을 받아 기동 확인.
+# 빈 DB 최초 배포는 healthz 가 503(시드 부재)이라 60s 대기 후 진행 — [5b] --reseed 가 채우면 smoke 통과.
 for i in $(seq 1 60); do
-    # X-Forwarded-Proto: prod(SECURE_SSL_REDIRECT=True)에서 평문 301 대신 실제 200 응답을 받아 기동 확인.
-    if curl -fsS -o /dev/null -m 2 -H 'X-Forwarded-Proto: https' "http://127.0.0.1:${PORT}/admin/login/"; then
+    if curl -fsS -o /dev/null -m 2 -H 'X-Forwarded-Proto: https' "http://127.0.0.1:${PORT}/healthz"; then
         echo "  backend up after ${i}s"
         break
     fi
@@ -83,8 +85,11 @@ echo "=== [5/6] Verify DB binding (bind mount, not ephemeral image DB) ==="
 # 이미지 내부의 빈 DB 로 폴백 → 사이트가 빈 데이터로 뜬다(실데이터는 $ROOT/db.sqlite3 에 안전).
 # 이 게이트는 그 오배선을 배포 직후 잡아 실패시킨다(0.1.52 배포 때 실제로 걸렸던 함정).
 EXPECT_PREFIX=/app/hostdb/
-DB_NAME=$(docker compose exec -T -e DJANGO_SETTINGS_MODULE=config.settings cdgts \
-    python -c "from django.conf import settings; print(settings.DATABASES['default']['NAME'])" \
+# 이식-안전(계약 §deploy DB 게이트 함정): 순수 `python -c` 는 DJANGO_SETTINGS_MODULE 없는 컨테이너에서
+# ImproperlyConfigured 로 죽어 false-fail 한다(fcmanager 0.6.12 실측). manage.py 가 settings 기본값을
+# 세팅하는 `manage.py shell -c` 경유로 통일(fsis/fcmanager 동형, 2026-07-14).
+DB_NAME=$(docker compose exec -T cdgts \
+    python manage.py shell -c "from django.conf import settings; print(settings.DATABASES['default']['NAME'])" \
     2>/dev/null | tr -d '\r' | tail -n1)
 case "$DB_NAME" in
     "${EXPECT_PREFIX}"*)

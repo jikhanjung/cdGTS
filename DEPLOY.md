@@ -47,6 +47,12 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.63** — 🟡 **3-repo 일관성 정렬 + hourly DB 백업**(devlog 147). 🟡 **hourly DB 백업 신설**(`scripts/backup_db.py`, fcmanager/fsis 동형 —
+  sqlite online backup, 12개 유지; nginx conf 는 같은 호스트 fcmanager 스크립트가 커버). 배포 시 이미지에서 self-heal 추출.
+  🔴 **최초 1회 cron 등록**(prod dolfinid): `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`.
+  🟢 **3-repo 일관성 정렬**(fsis/fcmanager 동형, 조치 없음): `deploy.sh` 직접 호출 기본 `DEPLOY_SNAPSHOT=1`(안전측),
+  헬스 대기 `/healthz`(종전 `/admin/login/`), DB 게이트 `manage.py shell -c` 경유(종전 순수 `python -c`),
+  smoke python3 JSON 검증 + 버전 인자 필수(종전 grep·선택), 매니페스트 `db_path` = DB 파일 전체 경로 표준.
 - **0.1.62** — 🟡 **컨테이너 비-root 실행 전환**(devlog 146, 코드/이미지만·마이그레이션 없음). entrypoint 가 root 로 시작해
   마운트 디렉터리(`/app/hostdb`) **소유 uid 를 감지 → gosu 로 드롭**(prod 1001·test 1000). 웹·워커 둘 다 비-root. Dockerfile 에
   `gosu` 설치. `deploy.sh [5/6]` 에 **쓰기 프로브**(앱 uid CREATE/DROP) 추가 — 디렉터리 마운트 소유권 함정을 배포 직후 잡음.
