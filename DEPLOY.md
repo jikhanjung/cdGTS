@@ -47,6 +47,11 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.62** — 🟡 **컨테이너 비-root 실행 전환**(devlog 146, 코드/이미지만·마이그레이션 없음). entrypoint 가 root 로 시작해
+  마운트 디렉터리(`/app/hostdb`) **소유 uid 를 감지 → gosu 로 드롭**(prod 1001·test 1000). 웹·워커 둘 다 비-root. Dockerfile 에
+  `gosu` 설치. `deploy.sh [5/6]` 에 **쓰기 프로브**(앱 uid CREATE/DROP) 추가 — 디렉터리 마운트 소유권 함정을 배포 직후 잡음.
+  ⚠️ **전제**: 각 호스트에서 `/srv/cdGTS` 와 `db.sqlite3*` 가 **같은 비-root uid 소유**여야 한다(현재 충족). 어긋나면 [5/6]
+  쓰기 프로브가 FATAL — `chown <uid>:<gid> /srv/cdGTS /srv/cdGTS/db.sqlite3*` 로 정렬. 양 서버 배포·검증(PID1 uid=1001/1000).
 - **0.1.61** — 🟢 **배포·데이터 계약 외부 검토분 반영**(devlog 145, 코드/스크립트만·마이그레이션 없음). ⓐ **롤백 코드/DB 분리**
   (`rollback.sh --db=keep|restore` + keep 가드, §상시 불변식). ⓑ 매니페스트 `contract_version=1`·`rollback_db="keep"` 필드.
   ⓒ **self-heal 추출 안전망**(`_extract_and_deploy.sh` 가 교체 전 `bash -n` 검증 + `.previous` 보존). ⓓ `deploy.sh` 스냅샷이

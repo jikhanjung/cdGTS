@@ -41,11 +41,14 @@ uid 1001)이 이미 -wal 을 열어 소유하고 있으면 root exec 는 그 기
 entrypoint 의 `umask 002` + DB 형제 파일 소유 정리로 잔존 불일치도 흡수. (신규 파일이 root 소유로 생기는 fresh-DB
 경계만 유의 — 그 경우 migrate 가 앱 uid 로 먼저 만든다.)
 
-## 상태 — 빌드 완료, 배포·검증 대기
+## 상태 — 양 서버 배포·검증 완료(0.1.62)
 
-- 로컬 `bash -n` 통과. **`build.sh 0.1.62`**(pytest 178·이미지 gosu 포함 재빌드·push) 완료.
-- **배포 미완** — 검증 전략: 테스트(m710q) 배포 → 컨테이너가 실제로 uid 1000 **비-root** 로 도는지(`docker exec cdgts id`
-  가 아니라 PID1 프로세스 uid) + [5/6] 쓰기 프로브 통과 확인 → 이상 없으면 prod. prod 쓰기 프로브가 **테스트가 재현 못
-  하는 비-root 쓰기**를 실검증. 이상 시 entrypoint/Dockerfile revert 로 즉시 롤백(코드만·마이그레이션 없음).
+- 로컬 `bash -n` 통과. `build.sh 0.1.62`(pytest 178·gosu 포함 이미지 재빌드·push).
+- **실배포 완료** — `deploy-dev.sh 0.1.62`(m710q) → `remote-prod.sh 0.1.62`(prod). 둘 다 [5/6] 쓰기 프로브 통과·smoke green.
+- **비-root 실검증**(host PID1 uid — `docker exec` 은 root 라 무의미, 실제 프로세스 uid 로 확인):
+  - test: gunicorn·run_worker 둘 다 **uid 1000**, 로그 `entrypoint: drop → uid 1000:0`.
+  - prod: gunicorn·run_worker 둘 다 **uid 1001**, 로그 `entrypoint: drop → uid 1001:0`. 공개 HTTPS healthz = 0.1.62.
+  - **쓰기 프로브 uid = 앱 uid**(test 1000·prod 1001) 로 CREATE/DROP 성공 → 비-root 쓰기 실동작 확인(prod 가 테스트 못 하는 부분).
+- 롤백 필요 시 entrypoint/Dockerfile revert + 재빌드·배포(코드만·마이그레이션 없음). 또는 `rollback.sh <이전> --db=keep`.
 
 *근거: `../devdocs/wiki/deploy-data-contract.md`(§동사 deploy 디렉터리 마운트 소유권 함정·쓰기 프로브) · [145](20260713_145_deploy-contract-external-review.md).*
