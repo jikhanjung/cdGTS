@@ -63,10 +63,12 @@ fi
 if [ "$DB_MODE" = restore ]; then
     docker compose down
     if [ -n "$SNAP" ]; then
-        echo "  restore DB ← ${SNAP} (컨테이너 정지 후 — SQLite WAL torn-copy 방지)"
-        cp -p "$SNAP" "$ROOT/db.sqlite3"
-        [ -f "${SNAP}-wal" ] && cp -p "${SNAP}-wal" "$ROOT/db.sqlite3-wal" || rm -f "$ROOT/db.sqlite3-wal"
-        [ -f "${SNAP}-shm" ] && cp -p "${SNAP}-shm" "$ROOT/db.sqlite3-shm" || rm -f "$ROOT/db.sqlite3-shm"
+        # 정본 = db/ 서브디렉터리(0.1.64~). 컷오버 전 호스트면 $ROOT/db 없으니 루트로 폴백.
+        DB_DIR="$ROOT/db"; [ -d "$DB_DIR" ] || DB_DIR="$ROOT"
+        echo "  restore DB ← ${SNAP} → ${DB_DIR}/db.sqlite3 (컨테이너 정지 후 — SQLite WAL torn-copy 방지)"
+        cp -p "$SNAP" "${DB_DIR}/db.sqlite3"
+        [ -f "${SNAP}-wal" ] && cp -p "${SNAP}-wal" "${DB_DIR}/db.sqlite3-wal" || rm -f "${DB_DIR}/db.sqlite3-wal"
+        [ -f "${SNAP}-shm" ] && cp -p "${SNAP}-shm" "${DB_DIR}/db.sqlite3-shm" || rm -f "${DB_DIR}/db.sqlite3-shm"
     else
         echo "  (pre_deploy 스냅샷 없음 — DB 복원 건너뜀; dev 이거나 최초 배포)"
     fi

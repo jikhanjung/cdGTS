@@ -13,8 +13,9 @@ services:
     volumes:
       # WAL 을 위해 파일이 아닌 *디렉터리* 를 마운트 — web·worker 가 -wal/-shm 형제 파일을
       # 공유해야 서로의 커밋을 본다(파일만 마운트하면 컨테이너별 사설 WAL 로 갈라짐).
-      # host DB 위치(/srv/cdGTS/db.sqlite3)는 그대로. DATABASE_PATH=/app/hostdb/db.sqlite3.
-      - /srv/cdGTS:/app/hostdb
+      # **DB 전용 db/ 서브디렉터리만** 마운트(0.1.64~) — 컨테이너가 .env·backup·배포 스크립트를 못 보게
+      # blast radius 축소. host DB 위치=/srv/cdGTS/db/db.sqlite3, 컨테이너 DATABASE_PATH=/app/hostdb/db.sqlite3.
+      - /srv/cdGTS/db:/app/hostdb
     env_file:
       - /srv/cdGTS/.env
     restart: unless-stopped
@@ -33,8 +34,9 @@ services:
     volumes:
       # WAL 을 위해 파일이 아닌 *디렉터리* 를 마운트 — web·worker 가 -wal/-shm 형제 파일을
       # 공유해야 서로의 커밋을 본다(파일만 마운트하면 컨테이너별 사설 WAL 로 갈라짐).
-      # host DB 위치(/srv/cdGTS/db.sqlite3)는 그대로. DATABASE_PATH=/app/hostdb/db.sqlite3.
-      - /srv/cdGTS:/app/hostdb
+      # **DB 전용 db/ 서브디렉터리만** 마운트(0.1.64~) — 컨테이너가 .env·backup·배포 스크립트를 못 보게
+      # blast radius 축소. host DB 위치=/srv/cdGTS/db/db.sqlite3, 컨테이너 DATABASE_PATH=/app/hostdb/db.sqlite3.
+      - /srv/cdGTS/db:/app/hostdb
     env_file:
       - /srv/cdGTS/.env
     restart: unless-stopped

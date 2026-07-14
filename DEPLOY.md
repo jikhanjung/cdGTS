@@ -20,9 +20,10 @@
   변경 반영 안 됨. **replace 는 P08.1(devlog 140) 이후 운영 데이터(owner-set 그래프·릴리스·Proposal)를 보존**
   (자연키 upsert + 시스템 그래프 재생성, 멱등). 데모 그래프는 시스템이라 replace 가 지움 → `seed_demo` 로 복원.
   빈 DB 최초 배포도 `--reseed` 로 채워야 smoke(healthz 행 수>0)가 통과.
-- 🔴 **prod 최초/DB 이전 시 `.env` `DATABASE_PATH=/app/hostdb/db.sqlite3`** 확인. compose 가 `/srv/cdGTS` 를
-  `/app/hostdb` 디렉터리로 바인드(WAL 공유). 이 경로를 벗어나면 컨테이너가 이미지 내부 빈 DB 로 폴백 →
-  사이트가 빈 데이터로 뜬다(실데이터는 호스트에 안전). `deploy.sh` [5/6] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
+- 🔴 **prod 최초/DB 이전 시 `.env` `DATABASE_PATH=/app/hostdb/db.sqlite3`** 확인. compose 가 **`/srv/cdGTS/db`**(0.1.64~,
+  종전 whole-/srv)를 `/app/hostdb` 디렉터리로 바인드(WAL 공유). 이 경로를 벗어나면 컨테이너가 이미지 내부 빈 DB 로 폴백 →
+  사이트가 빈 데이터로 뜬다(실데이터는 `/srv/cdGTS/db/db.sqlite3` 에 안전). `deploy.sh` [5/6] DB 바인딩 게이트가 배포 직후 잡아 실패시킴.
+  **fresh 호스트 부트스트랩은 `mkdir -p /srv/cdGTS/db` 를 배포 계정 소유로 먼저**(entrypoint 가 이 디렉터리 소유 uid 로 gosu 드롭).
 - 🟡 마이그레이션은 web entrypoint 가 자동 적용(`migrate --noinput`). 워커는 web 이 스키마를 올린 뒤 폴링만.
 - 🟢 **배포는 웹+워커 둘 다 올린다**(0.1.60~): `deploy.sh` 재기동이 `docker compose up -d`(전 서비스)라 웹(cdgts)과
   워커(cdgts-worker) 모두 현재 이미지로 뜬다. (0.1.60 이전엔 `up -d cdgts` 라 prod 스냅샷 경로에서 워커가 빠졌음.)
@@ -36,7 +37,7 @@
   for f in _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh; do docker cp "$CID:/app/deploy/host/$f" ./; done
   docker rm "$CID" && chmod +x _extract_and_deploy.sh deploy-prod.sh deploy-dev.sh
   ```
-  이후 `deploy-{prod,dev}.sh X.Y.Z` 만으로 부트스트랩 포함 전부 self-heal. (`.env`·`db.sqlite3`·`backup/` 는 유지.)
+  이후 `deploy-{prod,dev}.sh X.Y.Z` 만으로 부트스트랩 포함 전부 self-heal. (`.env`·`db/`·`backup/` 는 유지.)
 - 🟢 **롤백은 코드/DB 분리**(계약, 0.1.61~): `rollback.sh <이전> [--db=keep|restore]`. **`--db=keep`(기본)** = 이미지
   태그만 전환, 현재 DB 유지(배포 후 운영자 입력 보존). `--db=restore` = 정지 후 pre_deploy 스냅샷 복원(그 배포 창의
   운영 쓰기는 유실). **keep 가드**: 직전 배포가 migration 을 적용했으면(스냅샷 `.mig` 사이드카 vs 현재 비교) 이전 코드가
@@ -47,6 +48,13 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.64** — 🟡 **DB 마운트 db/ 서브디렉터리 컷오버**(devlog 148) + 🟢 gosu HOME 명시. 🟡 **whole-/srv → `/srv/cdGTS/db`
+  마운트로 축소** — 컨테이너가 `.env`(시크릿)·`backup/`·배포 스크립트를 못 보게 blast radius 축소(fsis/fcmanager 동형, cdGTS 예외 해소).
+  `deploy.sh` [3/6] 이 옛 루트 DB 를 db/ 로 **1회 자동 `mv` 컷오버**(멱등, 컨테이너 정지 후) + `/srv/cdGTS/db.sqlite3 → db/db.sqlite3`
+  **안전망 symlink**(컷오버 이전 이미지 재배포 대비). `.env` `DATABASE_PATH` 무변경(컨테이너 경로 동일). ⚠️ **one-way** — 컷오버
+  이후 컷오버 이전 이미지를 full 재배포하면 옛 compose(whole-/srv)라 빈 DB 로 뜰 수 있으나 [6/6] smoke(boundaries=0)가 잡음
+  (실데이터 안전); `rollback.sh --db=keep` 은 호스트 compose 유지라 안전. 🟢 **gosu 드롭 시 `HOME=/tmp`(+`MPLCONFIGDIR`)**
+  (entrypoint, fsis 0.5.82 동형) — 미등록 numeric uid 의 비쓰기 HOME 함정 선제 차단, 동작 무변화. 마이그레이션 없음.
 - **0.1.63** — 🟡 **3-repo 일관성 정렬 + hourly DB 백업**(devlog 147). 🟡 **hourly DB 백업 신설**(`scripts/backup_db.py`, fcmanager/fsis 동형 —
   sqlite online backup, 12개 유지; nginx conf 는 같은 호스트 fcmanager 스크립트가 커버). 배포 시 이미지에서 self-heal 추출.
   🔴 **최초 1회 cron 등록**(prod dolfinid, **완료 2026-07-14**): `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`.

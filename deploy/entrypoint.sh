@@ -18,7 +18,9 @@ if [ "$(id -u)" = "0" ] && [ -d "$HOSTDB" ]; then
         # 과거 root 실행기가 남긴 root 소유 DB 형제 파일이 있으면 드롭 후 못 쓰니 소유 정리(멱등).
         chown "${UID_T}:${GID_T}" "$HOSTDB"/db.sqlite3* 2>/dev/null || true
         echo "entrypoint: drop → uid ${UID_T}:${GID_T} (owner of ${HOSTDB})"
-        exec gosu "${UID_T}:${GID_T}" "$0" "$@"
+        # HOME 명시 — gosu 가 미등록 numeric uid 에 HOME 을 `/`(또는 root 의 /root 잔존, 비쓰기)로 둘 수 있어,
+        # HOME 에 쓰는 라이브러리(matplotlib MPLCONFIGDIR 등)가 나중에 추가돼도 안 죽게 /tmp 로 고정(fsis 0.5.82 동형).
+        exec gosu "${UID_T}:${GID_T}" env HOME=/tmp MPLCONFIGDIR=/tmp/mpl "$0" "$@"
     fi
     echo "entrypoint: ${HOSTDB} is root-owned → staying root"
 fi

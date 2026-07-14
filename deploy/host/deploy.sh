@@ -41,19 +41,37 @@ fi
 
 echo ""
 echo "=== [3/6] Swap container (DB 볼륨 유지) ==="
-if [ "${DEPLOY_SNAPSHOT:-1}" = "1" ] && [ -f "$ROOT/db.sqlite3" ]; then
+DB="$ROOT/db/db.sqlite3"     # 정본 위치 = db/ 서브디렉터리(0.1.64~). compose 가 $ROOT/db 만 /app/hostdb 로 마운트.
+
+# rollback keep 가드용: 배포 전(migrate 실행 전) 적용 migration 수를 컨테이너 정지 전에 조회(정지 후 exec 불가).
+PRE_MIG=$(docker compose exec -T cdgts python manage.py showmigrations --plan 2>/dev/null | grep -c '\[X\]' || echo "")
+
+# --- one-way 컷오버(멱등): 옛 루트 DB(/srv/cdGTS/db.sqlite3) → db/ 서브디렉터리 이행(1회). ---
+# 종전엔 whole-/srv 를 마운트해 컨테이너가 .env(시크릿)·backup/·배포 스크립트까지 봤다(blast radius).
+# db/ 만 마운트로 좁힌다. DB 이동은 WAL 일관 위해 컨테이너 정지 후. symlink 는 컷오버 이전 이미지(옛
+# compose = whole-/srv 마운트)로 실수 재배포해도 DB 를 찾게 하는 안전망(상대경로라 두 레이아웃 다 유효).
+if [ -f "$ROOT/db.sqlite3" ] && [ ! -L "$ROOT/db.sqlite3" ] && [ ! -e "$DB" ]; then
+    echo "  cutover: /srv/cdGTS → /srv/cdGTS/db 마운트 이행(1회, blast radius 축소). 이동 전 컨테이너 정지."
+    docker compose down 2>/dev/null || true
+    mkdir -p "$ROOT/db"
+    mv "$ROOT/db.sqlite3" "$DB"
+    [ -f "$ROOT/db.sqlite3-wal" ] && mv "$ROOT/db.sqlite3-wal" "${DB}-wal" || true
+    [ -f "$ROOT/db.sqlite3-shm" ] && mv "$ROOT/db.sqlite3-shm" "${DB}-shm" || true
+    ln -sf db/db.sqlite3 "$ROOT/db.sqlite3"
+    echo "  cutover 완료: 정본 = $DB (+ 안전망 symlink $ROOT/db.sqlite3 → db/db.sqlite3)"
+fi
+
+# --- pre-deploy 스냅샷(prod, DEPLOY_SNAPSHOT=1) — 새 위치 $DB 에서 ---
+if [ "${DEPLOY_SNAPSHOT:-1}" = "1" ] && [ -f "$DB" ]; then
     echo "  pre-deploy DB snapshot (prod) — writer 정지 후 cp (이 동안 nginx 점검 페이지)"
-    # rollback keep 가드용: 배포 전(이 이미지의 migrate 실행 전) 적용된 migration 수를 기록.
-    # 컨테이너 정지 전에 조회(정지 후엔 exec 불가). rollback.sh 가 스냅샷의 .mig 사이드카와 현재를 비교.
-    PRE_MIG=$(docker compose exec -T cdgts python manage.py showmigrations --plan 2>/dev/null | grep -c '\[X\]' || echo "")
-    docker compose down
+    docker compose down 2>/dev/null || true
     SNAP_DIR="$ROOT/backup/pre_deploy"
     mkdir -p "$SNAP_DIR"
     TS=$(date -u +%Y%m%d_%H%M%S)
     SNAP="$SNAP_DIR/cdgts_pre_deploy_${VERSION}_${TS}.sqlite3"
-    cp -p "$ROOT/db.sqlite3" "$SNAP"
-    [ -f "$ROOT/db.sqlite3-wal" ] && cp -p "$ROOT/db.sqlite3-wal" "${SNAP}-wal" || true
-    [ -f "$ROOT/db.sqlite3-shm" ] && cp -p "$ROOT/db.sqlite3-shm" "${SNAP}-shm" || true
+    cp -p "$DB" "$SNAP"
+    [ -f "${DB}-wal" ] && cp -p "${DB}-wal" "${SNAP}-wal" || true
+    [ -f "${DB}-shm" ] && cp -p "${DB}-shm" "${SNAP}-shm" || true
     [ -n "$PRE_MIG" ] && printf '%s\n' "$PRE_MIG" > "${SNAP}.mig" || true
     echo "  snapshot: $SNAP (pre-migration count: ${PRE_MIG:-미상})"
     # retention: 최근 20개만(.mig 사이드카 포함)
@@ -80,9 +98,9 @@ done
 
 echo ""
 echo "=== [5/6] Verify DB binding (bind mount, not ephemeral image DB) ==="
-# compose 는 host DB 디렉터리를 /app/hostdb 로 바인드한다(docker-compose.yml).
+# compose 는 host DB 디렉터리($ROOT/db)를 /app/hostdb 로 바인드한다(docker-compose.yml, 0.1.64~ db/ 서브디렉터리).
 # .env 의 DATABASE_PATH 가 이 마운트를 벗어나면(예: /app/db.sqlite3) 컨테이너는
-# 이미지 내부의 빈 DB 로 폴백 → 사이트가 빈 데이터로 뜬다(실데이터는 $ROOT/db.sqlite3 에 안전).
+# 이미지 내부의 빈 DB 로 폴백 → 사이트가 빈 데이터로 뜬다(실데이터는 $ROOT/db/db.sqlite3 에 안전).
 # 이 게이트는 그 오배선을 배포 직후 잡아 실패시킨다(0.1.52 배포 때 실제로 걸렸던 함정).
 EXPECT_PREFIX=/app/hostdb/
 # 이식-안전(계약 §deploy DB 게이트 함정): 순수 `python -c` 는 DJANGO_SETTINGS_MODULE 없는 컨테이너에서
@@ -98,7 +116,7 @@ case "$DB_NAME" in
     *)
         echo "  ✗ FATAL: container DB = '${DB_NAME:-<empty>}' — NOT under ${EXPECT_PREFIX}"
         echo "    컨테이너가 마운트되지 않은 이미지 내부 DB 를 쓰고 있다 → 사이트가 빈 데이터로 뜬다."
-        echo "    실데이터는 ${ROOT}/db.sqlite3 에 안전. 고칠 곳:"
+        echo "    실데이터는 ${ROOT}/db/db.sqlite3 에 안전. 고칠 곳:"
         echo "      ${ROOT}/.env 의 DATABASE_PATH=${EXPECT_PREFIX}db.sqlite3 로 수정 후"
         echo "      (cd ${ROOT} && docker compose up -d --force-recreate cdgts)"
         exit 1
@@ -110,7 +128,8 @@ esac
 # 죽는데 healthz(읽기)·경로 확인은 통과한다. 앱과 같은 uid(마운트 소유자)로 임시 테이블 CREATE/DROP 하여
 # 실제 쓰기 가능성을 배포 직후 검증한다(비-root 실행·소유권 오배치를 여기서 잡음).
 echo "  write probe (앱 uid = 마운트 소유자)…"
-OWNER_UID=$(stat -c %u "$ROOT"); OWNER_GID=$(stat -c %g "$ROOT")
+# 마운트 소스 = $ROOT/db(entrypoint 가 이 소유 uid 로 드롭). 프로브도 같은 uid 로 돌려 실제 서비스 권한 검증.
+OWNER_UID=$(stat -c %u "$ROOT/db"); OWNER_GID=$(stat -c %g "$ROOT/db")
 if docker compose exec -T -u "${OWNER_UID}:${OWNER_GID}" cdgts \
     python manage.py shell -c "from django.db import connection as x; c=x.cursor(); c.execute('CREATE TABLE IF NOT EXISTS _wprobe_gate (n integer)'); c.execute('DROP TABLE _wprobe_gate'); print('WRITE_OK')" \
     2>/dev/null | grep -q WRITE_OK; then

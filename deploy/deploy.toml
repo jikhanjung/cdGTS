@@ -5,10 +5,10 @@
 
 contract_version = 1               # 이 매니페스트가 따르는 배포·데이터 계약 판(필드·동사 의미 변경 시 증가).
 image    = "honestjung/cdgts"      # Docker Hub. build.sh 가 :X.Y.Z + :latest push.
-db_path  = "/srv/cdGTS/db.sqlite3" # 호스트 DB 파일 전체 경로(계약 표준 표기, 2026-07-14 3-repo 통일 — 디렉터리는 dirname).
-                                   # WAL 공유 위해 파일이 아닌 디렉터리 마운트(/srv/cdGTS → 컨테이너 /app/hostdb;
-                                   # DB=/app/hostdb/db.sqlite3). ※ whole-/srv 마운트는 cdGTS 예외(web·worker 공유) —
-                                   # DB 전용 하위 디렉터리(db/) 컷오버는 계약 일반 권고(후보 과제).
+db_path  = "/srv/cdGTS/db/db.sqlite3"  # 호스트 DB 파일 전체 경로(계약 표준 표기). 마운트 소스 = dirname = /srv/cdGTS/db.
+                                   # WAL 공유 위해 파일이 아닌 **db/ 서브디렉터리** 마운트(0.1.64~, /srv/cdGTS/db →
+                                   # 컨테이너 /app/hostdb; DATABASE_PATH=/app/hostdb/db.sqlite3). db/ 만 마운트해
+                                   # 컨테이너가 .env·backup·배포 스크립트를 못 보게 blast radius 축소(3-repo 정렬 완료).
 has_seed = true                    # 시스템 시드 있음. `seed --mode=replace` = 시스템 데이터만
                                    # (운영 데이터 보존, devlog 140). 시드/레이아웃 변경 릴리스는 재시드 필요.
 services = ["cdgts", "cdgts-worker"]   # compose: web(cdgts, gunicorn) + async worker(run_worker, P06.4a).

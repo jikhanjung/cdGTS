@@ -22,8 +22,9 @@ CURRENT_DIR="${BACKUP_DIR}/current"
 LOG_FILE="${BACKUP_DIR}/sync.log"
 
 # 이 서버의 테스트/개발 컨테이너가 mount 하는 DB (host/docker-compose.yml 볼륨)
+# 정본 = db/ 서브디렉터리(0.1.64~). 컷오버 전이면 루트로 폴백(전환기 안전).
 DEV_ROOT="/srv/cdGTS"
-DEV_DB="${DEV_ROOT}/db.sqlite3"
+DEV_DB="${DEV_ROOT}/db/db.sqlite3"; [ -d "${DEV_ROOT}/db" ] || DEV_DB="${DEV_ROOT}/db.sqlite3"
 COMPOSE="${DEV_ROOT}/docker-compose.yml"
 CONTAINER="cdgts"
 
@@ -59,7 +60,9 @@ SNAP="${DB_HISTORY_DIR}/db_${TODAY}.sqlite3"
 # 세 파일이 서로 다른 시점일 수 있다. 대신 prod 에서 sqlite online backup API 로
 # 일관 스냅샷(단일 파일)을 만들고 그것만 가져온다. (fsis backup_db.py 의 .backup 방식)
 REMOTE_SNAP="${REMOTE_PATH}/.db_sync_snapshot.sqlite3"
-ssh "$REMOTE" "python3 - '${REMOTE_PATH}/db.sqlite3' '${REMOTE_SNAP}'" <<'PYEOF' || { log "ERROR: prod 원자적 스냅샷 실패 (${REMOTE})"; exit 1; }
+# 정본 = db/ 서브디렉터리(0.1.64~ 컷오버). 원격이 컷오버 전이면 루트로 폴백(전환기 안전).
+REMOTE_DB=$(ssh "$REMOTE" "if [ -f '${REMOTE_PATH}/db/db.sqlite3' ]; then echo '${REMOTE_PATH}/db/db.sqlite3'; else echo '${REMOTE_PATH}/db.sqlite3'; fi")
+ssh "$REMOTE" "python3 - '${REMOTE_DB}' '${REMOTE_SNAP}'" <<'PYEOF' || { log "ERROR: prod 원자적 스냅샷 실패 (${REMOTE})"; exit 1; }
 import sqlite3, sys
 src = sqlite3.connect(sys.argv[1])
 dst = sqlite3.connect(sys.argv[2])
