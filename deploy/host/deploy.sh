@@ -100,6 +100,23 @@ case "$DB_NAME" in
         ;;
 esac
 
+# 쓰기 프로브(계약, fcmanager 0.6.17): 읽기 경로 게이트로는 "디렉터리 마운트 소유권 함정"을 못 잡는다
+# — 컨테이너 uid 가 마운트 디렉터리 소유자가 아니면 SQLite 저널/-wal 생성이 막혀 **쓰기만** readonly 로
+# 죽는데 healthz(읽기)·경로 확인은 통과한다. 앱과 같은 uid(마운트 소유자)로 임시 테이블 CREATE/DROP 하여
+# 실제 쓰기 가능성을 배포 직후 검증한다(비-root 실행·소유권 오배치를 여기서 잡음).
+echo "  write probe (앱 uid = 마운트 소유자)…"
+OWNER_UID=$(stat -c %u "$ROOT"); OWNER_GID=$(stat -c %g "$ROOT")
+if docker compose exec -T -u "${OWNER_UID}:${OWNER_GID}" cdgts \
+    python manage.py shell -c "from django.db import connection as x; c=x.cursor(); c.execute('CREATE TABLE IF NOT EXISTS _wprobe_gate (n integer)'); c.execute('DROP TABLE _wprobe_gate'); print('WRITE_OK')" \
+    2>/dev/null | grep -q WRITE_OK; then
+    echo "  OK: DB 쓰기 프로브 통과 (uid ${OWNER_UID})"
+else
+    echo "  ✗ FATAL: DB 쓰기 프로브 실패 — 컨테이너가 마운트 디렉터리에 못 쓴다(소유권 오배치?)."
+    echo "    ${ROOT} 및 db.sqlite3* 소유 uid 와 컨테이너 실행 uid(entrypoint 드롭 대상)를 확인."
+    echo "    보통 ${ROOT} 와 db.sqlite3* 를 같은 uid 로 chown 하면 해소."
+    exit 1
+fi
+
 echo ""
 echo "=== [5b/6] Reseed (--reseed) ==="
 # 시드 변경 릴리스·빈 DB 최초 배포는 smoke 전에 재시드해야 healthz 가 건전(행 수>0)해진다.

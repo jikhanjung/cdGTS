@@ -19,6 +19,10 @@ WORKDIR /app
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 
+# gosu: entrypoint 가 root 로 시작해 마운트 디렉터리 소유 uid 로 권한을 드롭할 때 사용(비-root 실행).
+RUN apt-get update && apt-get install -y --no-install-recommends gosu \
+    && rm -rf /var/lib/apt/lists/* && gosu nobody true
+
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
