@@ -26,10 +26,17 @@ fsis 는 python3 JSON). 이 미세 드리프트가 쌓이면 "한 번 익히면 
 - **`_extract_and_deploy.sh`** — `scripts/backup_db.py` 이미지 추출 추가. **`preflight.sh`** — backup_db.py 변경 플래그.
   **`README.md`**·**`DEPLOY.md`** 반영.
 
-## 유의
+## 배포·검증 (0.1.63, 양 서버)
 
-- host 스크립트·backup 은 self-heal 이라 **새 이미지 빌드·배포**로 서버 반영(0.1.63). `.mig`·write probe(0.1.61~62)와
-  함께 이번 이미지에 실림.
-- **backup_db.py 는 prod cron 최초 1회 등록** 필요: `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`.
+- `build.sh 0.1.63`(pytest 178) → `deploy-dev.sh`(m710q) → `remote-prod.sh`(prod). 둘 다 새 **python3 JSON smoke**
+  (`PASS: version=0.1.63…`)·healthz 대기·write probe(uid 1000/1001)·비-root 통과.
+- **backup_db.py self-heal 한 세대 지연** — 이번 배포를 **실행한** 추출기는 호스트의 0.1.62 판(추출 코드 없음)이라
+  backup_db.py 를 안 꺼냈다. 새 추출기(코드 포함)는 이번에 self-heal → **다음 배포부터 자동**. 이번은 `docker create`+
+  `docker cp /app/scripts/backup_db.py`(0.1.63 이미지)로 **1회 수동 부트스트랩**(git-free 부트스트랩과 동일 관례).
+- **backup 디렉터리 소유권** — prod `/srv/cdGTS/backup` = **1001(honestjung) 소유**라 cron(honestjung) 쓰기 OK →
+  test-run 성공(`cdgts_20260714_03.sqlite3` 1.1MB). ⚠️ m710q 는 `/srv/cdGTS/backup` 이 **root 소유**(과거 root era 잔재)
+  라 backup_db.py 가 dest 를 못 쓴다 — 그러나 m710q 는 deploy-dev 가 snapshot 안 뜨고 cron 도 없어 무해(테스트 전용).
+- **prod cron 등록 완료**(2026-07-14): `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`
+  (fcmanager backup 항목과 공존, 기존 crontab 보존). prod web+worker uid 1001·공개 healthz 0.1.63 확인.
 
 *근거: `../devdocs/wiki/deploy-data-contract.md`(§동사 전반·백업) · [145](20260713_145_deploy-contract-external-review.md)·[146](20260714_146_nonroot-container.md). fcmanager·fsis2026 동측 정렬은 각 repo devlog.*

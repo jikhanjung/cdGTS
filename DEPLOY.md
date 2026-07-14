@@ -49,7 +49,9 @@
 
 - **0.1.63** — 🟡 **3-repo 일관성 정렬 + hourly DB 백업**(devlog 147). 🟡 **hourly DB 백업 신설**(`scripts/backup_db.py`, fcmanager/fsis 동형 —
   sqlite online backup, 12개 유지; nginx conf 는 같은 호스트 fcmanager 스크립트가 커버). 배포 시 이미지에서 self-heal 추출.
-  🔴 **최초 1회 cron 등록**(prod dolfinid): `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`.
+  🔴 **최초 1회 cron 등록**(prod dolfinid, **완료 2026-07-14**): `0 * * * * /usr/bin/python3 /srv/cdGTS/scripts/backup_db.py >> /srv/cdGTS/backup/backup.log 2>&1`.
+  ⚠️ backup_db.py 는 self-heal 한 세대 지연 → 이번 릴리스는 이미지에서 **1회 수동 부트스트랩** 필요(`docker cp /app/scripts/backup_db.py`); 다음 배포부터 자동.
+  ⚠️ backup 디렉터리는 cron 실행 uid 소유여야 함(prod `/srv/cdGTS/backup`=1001 OK).
   🟢 **3-repo 일관성 정렬**(fsis/fcmanager 동형, 조치 없음): `deploy.sh` 직접 호출 기본 `DEPLOY_SNAPSHOT=1`(안전측),
   헬스 대기 `/healthz`(종전 `/admin/login/`), DB 게이트 `manage.py shell -c` 경유(종전 순수 `python -c`),
   smoke python3 JSON 검증 + 버전 인자 필수(종전 grep·선택), 매니페스트 `db_path` = DB 파일 전체 경로 표준.
