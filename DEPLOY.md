@@ -48,6 +48,8 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **(미릴리스 — 다음 버전)** — 🟢 `deploy.sh` 쓰기 프로브 **실패 안내문 경로 현행화**(문구만): 구 레이아웃(`/srv/cdGTS` 루트
+  chown) 기준이던 복구 안내를 db/ 컷오버(0.1.64) 기준(`chown -R ${ROOT}/db`)으로. 동작 무변화, 조치 없음.
 - **0.1.64** — 🟡 **DB 마운트 db/ 서브디렉터리 컷오버**(devlog 148) + 🟢 gosu HOME 명시. 🟡 **whole-/srv → `/srv/cdGTS/db`
   마운트로 축소** — 컨테이너가 `.env`(시크릿)·`backup/`·배포 스크립트를 못 보게 blast radius 축소(fsis/fcmanager 동형, cdGTS 예외 해소).
   `deploy.sh` [3/6] 이 옛 루트 DB 를 db/ 로 **1회 자동 `mv` 컷오버**(멱등, 컨테이너 정지 후) + `/srv/cdGTS/db.sqlite3 → db/db.sqlite3`

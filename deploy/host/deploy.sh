@@ -136,8 +136,8 @@ if docker compose exec -T -u "${OWNER_UID}:${OWNER_GID}" cdgts \
     echo "  OK: DB 쓰기 프로브 통과 (uid ${OWNER_UID})"
 else
     echo "  ✗ FATAL: DB 쓰기 프로브 실패 — 컨테이너가 마운트 디렉터리에 못 쓴다(소유권 오배치?)."
-    echo "    ${ROOT} 및 db.sqlite3* 소유 uid 와 컨테이너 실행 uid(entrypoint 드롭 대상)를 확인."
-    echo "    보통 ${ROOT} 와 db.sqlite3* 를 같은 uid 로 chown 하면 해소."
+    echo "    ${ROOT}/db(마운트 소스)와 그 안의 db.sqlite3* 소유 uid 를 확인 — entrypoint 는 ${ROOT}/db 소유자로 드롭한다."
+    echo "    보통 같은 비-root uid 로 정렬하면 해소:  sudo chown -R <uid>:<gid> ${ROOT}/db"
     exit 1
 fi
 
