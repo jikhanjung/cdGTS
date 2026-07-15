@@ -48,6 +48,12 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.66** — 🔴 **`--reseed` 필요** (시드 변경: `seed/02_nodes.json` 의 `params_schema.help` 10개 신규).
+  값·스키마·마이그레이션 변경은 **없고** NodeType 산문만 바뀐다 — 재시드 안 하면 프론트 인스펙터에 새 help 가 안 뜰 뿐
+  경계 연대·행 수는 무영향(smoke 는 어느 쪽이든 통과하므로 게이트가 안 잡아준다. 그래서 🔴). replace 는 P08.1 이후
+  운영 데이터 보존 upsert 라 학자 fork·Proposal 안전. 🟢 **노드 매뉴얼 자동 생성**(`manage.py node_manual` →
+  [docs/node-manual.md](docs/node-manual.md)) — 시드 × 커널 × 사용처 조립. 배포 동작 무관(문서 생성기).
+  ⚠️ 생성기는 **갓 시드한 DB** 에 대고 돌릴 것(운영 DB 로 돌리면 사용처에 사용자 fork 가 섞임).
 - **0.1.65** — 🟢 **조치 없음**(커널 + 문서 전용). 🟢 **spline age-depth 경로의 `shared_components` 유실 수정**
   ([R05](devlog/20260715_R05_correlation-provenance-depth.md) §2 + 말미 addendum): `method="spline"` 이면 공분산 백본이
   조용히 끊겨 하류 duration 공분산이 0 이 되던 잠복 버그. **현재 경계 연대는 하나도 바뀌지 않는다** — 시드·운영 DB 의
