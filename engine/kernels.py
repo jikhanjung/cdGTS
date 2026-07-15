@@ -41,6 +41,11 @@ def moments(d):
     return (mean, 0.0)   # 값만 있고 분산 정보 없음 → 점질량 취급
 
 
+def _shared_comps(shared):
+    """{ref: 1σ 기여} → shared_components 직렬화 형태. (음/영 기여 생략은 R05 §7 부채 — 부호 있는 loading 미지원.)"""
+    return [{"ref": r, "sigma": round(float(s), 6)} for r, s in (shared or {}).items() if s > 0]
+
+
 def dist_from(mean, sigma1, note="", shared=None):
     """
     (mean, 1σ) → 분포 dict. σ=0 이면 exact, 아니면 decomposed(2σ, model 성분).
@@ -48,7 +53,7 @@ def dist_from(mean, sigma1, note="", shared=None):
     """
     if sigma1 <= 0:
         return Distribution.exact(round(mean, 6), note=note).to_dict()
-    comps = [{"ref": r, "sigma": round(s, 6)} for r, s in (shared or {}).items() if s > 0]
+    comps = _shared_comps(shared)
     return Distribution(
         fidelity="joint" if comps else "decomposed", value_ma=round(mean, 6), sigma=2,
         budget={"model": round(2 * sigma1, 6)}, shared_components=comps, note=note,
@@ -148,24 +153,46 @@ def range_clamp(dist, lo, hi):
     return dist_from(float(tn.mean()), new_sigma1, note=f"range[{lo},{hi}]", shared=shared)
 
 
-def _summarize_samples(samples, note):
-    """MC 샘플 → 분포 dict. 왜도 있으면 shape(median+hpd95), 아니면 decomposed(2σ)."""
+def _summarize_samples(samples, note, shared=None):
+    """
+    MC 샘플 → 분포 dict. 왜도 있으면 shape(median+hpd95), 아니면 decomposed(2σ).
+    shared = {ref: 1σ 기여} 있으면 공유 계통 성분을 실어 `joint` 로 승격 — 왜도가 있어도 공분산 백본을 잃지 않는다
+    (`shape` 와 `shared_components` 는 직교 필드이고, moments()/component_sigmas() 는 fidelity 라벨이 아니라
+    필드를 읽는다. 라벨이 둘 중 하나를 강요하는 문제는 R05 §7 부채).
+    """
     med = float(np.median(samples))
     mean = float(np.mean(samples))
     std = float(np.std(samples))
     if std > 0 and abs(mean - med) > 0.1 * std:
         lo, hi = np.percentile(samples, [2.5, 97.5])
+        comps = _shared_comps(shared)
         return Distribution(
-            fidelity="shape", value_ma=round(med, 6),
+            fidelity="joint" if comps else "shape", value_ma=round(med, 6),
             shape={"median": round(med, 6), "hpd95": [round(float(lo), 6), round(float(hi), 6)]},
-            note=note,
+            shared_components=comps, note=note,
         ).to_dict()
-    return dist_from(med, std, note=note)
+    return dist_from(med, std, note=note, shared=shared)
 
 
-def _blend_components(c1, s1, c2, s2, w1, w2):
-    """두 horizon 의 공유 계통 성분을 보간 가중치로 선형 결합: out[ref] = w1·σ1[ref] + w2·σ2[ref]."""
-    return {r: w1 * c1.get(r, 0.0) + w2 * c2.get(r, 0.0) for r in set(c1) | set(c2)}
+def _blend_components(comps, weights):
+    """
+    공유 계통 성분의 선형 결합: out[ref] = Σ_i w_i·σ_i[ref] (공유원은 완전상관 → 가중치가 그대로 실린다).
+    선형보간·스플라인 평가 **둘 다 입력 연대에 대해 선형**이라 같은 규칙이 적용된다.
+    """
+    out: dict[str, float] = {}
+    for w, c in zip(weights, comps):
+        for r, s in (c or {}).items():
+            out[r] = out.get(r, 0.0) + w * s
+    return out
+
+
+def _spline_weights(depths_s, target):
+    """
+    CubicSpline 평가의 카디널 가중치 c_i (f(target) = Σ_i c_i·y_i). 평가가 y 에 대해 선형이므로
+    각 horizon 에 단위 임펄스를 넣어 적합·평가하면 그 계수가 나온다(knot 수가 적어 비용 무시 가능, Σc_i = 1).
+    """
+    eye = np.eye(len(depths_s))
+    return np.array([float(CubicSpline(depths_s, eye[i])(target)) for i in range(len(depths_s))])
 
 
 def _linear_age_depth(horizons, target):
@@ -180,13 +207,13 @@ def _linear_age_depth(horizons, target):
         (d1, m1, s1, c1), (d2, m2, s2, c2) = horizons[k], horizons[k + 1]
     if d2 == d1:   # 같은 깊이 두 점 → 결합
         return dist_from((m1 + m2) / 2, math.sqrt((s1 * s1 + s2 * s2)) / 2,
-                         note="age-depth (coincident)", shared=_blend_components(c1, s1, c2, s2, 0.5, 0.5))
+                         note="age-depth (coincident)", shared=_blend_components([c1, c2], [0.5, 0.5]))
     t = (target - d1) / (d2 - d1)
     mean = m1 + (m2 - m1) * t
     var = (1 - t) ** 2 * s1 * s1 + t * t * s2 * s2   # 독립 두 점의 선형결합 분산(외삽 시 증가)
     where = "interp" if depths[0] <= target <= depths[-1] else "extrap"
     return dist_from(mean, math.sqrt(var), note=f"age-depth linear @ {target} ({where})",
-                     shared=_blend_components(c1, s1, c2, s2, 1 - t, t))
+                     shared=_blend_components([c1, c2], [1 - t, t]))
 
 
 def _spline_age_depth(horizons, target):
@@ -199,11 +226,14 @@ def _spline_age_depth(horizons, target):
     if np.any(np.diff(depths_s) <= 0):   # 중복/비단조 깊이 → 선형 폴백
         return _linear_age_depth(horizons, target)
     means_s, sigmas_s = means[order], sigmas[order]
+    comps_s = [horizons[i][3] for i in order]
     rng = np.random.default_rng(0)       # 결정론적(입력 고정 시 재현)
     n = 3000
     draws = means_s + sigmas_s * rng.standard_normal((n, len(means_s)))
     vals = np.array([CubicSpline(depths_s, draws[k])(target) for k in range(n)])
-    return _summarize_samples(vals, note=f"age-depth spline @ {target}")
+    # 공유 계통 성분은 MC 로 뽑지 않고 해석적으로 전파 — 평가가 y 에 대해 선형이라 카디널 가중치가 곧 결합 계수.
+    shared = _blend_components(comps_s, _spline_weights(depths_s, target))
+    return _summarize_samples(vals, note=f"age-depth spline @ {target}", shared=shared)
 
 
 def age_depth_model(inputs, params):

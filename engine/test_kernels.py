@@ -247,6 +247,59 @@ def test_dist_from_shared_is_joint():
     assert d0["fidelity"] == "decomposed" and "shared_components" not in d0
 
 
+# --- R05 §2 회귀: spline 경로 공유 계통 성분 유실 ---
+# 버그: _spline_age_depth 가 horizon 의 comps 를 안 읽어 method="spline" 이면 공분산 백본이 조용히 끊겼다
+# (linear 은 _blend_components 로 보존). → 보간 방법 선택이 공분산 의미론을 바꿔선 안 된다.
+
+def _horizon_shared(depth, value, sigma1, ref, ref_sigma):
+    """공유 계통원이 marginal 예산에 접혀 있으면서 동시에 태깅된 horizon(radiometric-uPb 출력 모양)."""
+    indep = math.sqrt(max(sigma1 ** 2 - ref_sigma ** 2, 0.0))
+    return {"dist": {"fidelity": "joint", "value_ma": value, "sigma": 1,
+                     "budget": {"analytical": indep, "systematic": ref_sigma},
+                     "shared_components": [{"ref": ref, "sigma": ref_sigma}]},
+            "params": {"depth": depth}, "port": "dated_horizons"}
+
+
+def _shared_hs(ref="decay-238U", ref_sigma=0.4):
+    return [_horizon_shared(d, v, 0.5, ref, ref_sigma)
+            for d, v in ((10, 540.0), (20, 539.0), (40, 538.0), (50, 537.0))]
+
+
+def test_age_depth_spline_keeps_shared_components():
+    out = age_depth_model(_shared_hs(), {"method": "spline", "target_depth": 30})
+    assert out["fidelity"] == "joint"
+    # 전 horizon 이 같은 공유원을 σ=0.4 로 물고 카디널 가중치 합이 1 → 출력도 0.4 를 그대로 물려받는다.
+    assert component_sigmas(out) == {"decay-238U": 0.4}
+
+
+def test_age_depth_spline_and_linear_agree_on_shared_components():
+    # 보간 방법은 값·marginal 에만 영향을 줘야 하고 공분산 구조를 바꿔선 안 된다.
+    hs = _shared_hs()
+    lin = age_depth_model(hs, {"method": "linear", "target_depth": 30})
+    spl = age_depth_model(hs, {"method": "spline", "target_depth": 30})
+    assert component_sigmas(spl) == component_sigmas(lin)
+
+
+def test_age_depth_spline_shared_survives_into_duration_covariance():
+    # 버그의 실제 증상: 두 경계가 같은 붕괴상수를 공유하는데 Cov 가 0 이라 duration 오차가 과대평가됐다.
+    older = age_depth_model(_shared_hs(), {"method": "spline", "target_depth": 45})
+    younger = age_depth_model(_shared_hs(), {"method": "spline", "target_depth": 15})
+    assert covariance(older, younger) == 0.4 * 0.4                 # 수정 전 0.0
+    _, sig_corr = duration_stats(older, younger)
+    stripped = [{k: v for k, v in d.items() if k != "shared_components"} for d in (older, younger)]
+    _, sig_naive = duration_stats(*stripped)
+    assert sig_corr < sig_naive        # 공유원이 차이에서 상쇄 → 정직한 duration 은 더 좁다 (Ch.14 §16.5)
+
+
+def test_summarize_samples_joint_keeps_shape_fields():
+    # 왜도 + 공유성분 공존 시 둘 다 살아야 한다(라벨은 joint, shape 필드 유지) — fidelity enum 이 강요하던 손실.
+    from engine.kernels import _summarize_samples
+    skewed = [1.0] * 90 + [50.0] * 10                       # mean 이 median 에서 크게 벗어남
+    out = _summarize_samples(skewed, "t", shared={"decay-U": 0.5})
+    assert out["fidelity"] == "joint"
+    assert out["shape"]["hpd95"] and component_sigmas(out) == {"decay-U": 0.5}
+
+
 def test_covariance_only_over_shared_refs():
     a = dist_from(700.0, 2.0, shared={"decay-U": 1.0, "tracer": 0.5})
     b = dist_from(600.0, 2.0, shared={"decay-U": 0.8})
