@@ -30,7 +30,7 @@ fsis2026 패턴 + 프론트(Vite SPA) 멀티스테이지 빌드. 이미지 `hone
 | `host/.env.example` | `/srv/cdGTS/.env` 템플릿. |
 | `../config/health.py` | `/healthz` 엔드포인트(버전+DB+핵심 행 수 → 200/503). smoke 가 소비. |
 | `../scripts/sync-cdgts-db.sh` | (개발/테스트) 운영 DB 를 cron 으로 pull → 히스토리 + 테스트 DB 로 교체. |
-| `../scripts/backup_db.py` | (운영) hourly DB 백업(sqlite online backup, 12개 유지) — cron 1회 등록 + 배포 시 self-heal 추출. |
+| `../scripts/backup_db.py` | (운영) hourly DB 백업(sqlite online backup, **24개 유지** = daily 오프사이트 창을 덮는 유도값) — **채택 전 `integrity_check`**(실패 시 미채택 + prune 금지 + `db/INTEGRITY_FAIL` 센티넬 → healthz degraded → smoke 실패). cron 1회 등록 + 배포 시 self-heal 추출. |
 
 ## 흐름 (git-free, 0.1.58~)
 
