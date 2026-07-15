@@ -26,7 +26,7 @@ LOG_FILE="${BACKUP_DIR}/sync.log"
 DEV_ROOT="/srv/cdGTS"
 DEV_DB="${DEV_ROOT}/db/db.sqlite3"; [ -d "${DEV_ROOT}/db" ] || DEV_DB="${DEV_ROOT}/db.sqlite3"
 COMPOSE="${DEV_ROOT}/docker-compose.yml"
-CONTAINER="cdgts"
+CONTAINER="cdgts"          # 웹 서비스명(존재 확인용). 정지/기동은 **전 서비스** — 아래 참조.
 
 LOCAL_DAILY_DAYS=30
 
@@ -98,13 +98,19 @@ fi
 # --- 4. 개발/테스트 DB 교체 ---
 # 스냅샷은 이미 일관된 단일 파일(-wal/-shm 없음). 컨테이너가 DB 를 열고 있으므로
 # 라이브 교체를 피해 잠시 정지 → 교체 → 재기동. 남아있던 -wal/-shm 은 제거.
+#
+# ⚠️ **전 서비스를 정지해야 한다** (`stop`/`up -d` 를 서비스명 없이). compose 에는 웹(cdgts)과
+# 워커(cdgts-worker, run_worker 폴링)가 있고 **둘 다 같은 sqlite 를 WAL 로 연다**. 웹만 정지하면
+# 워커가 DB 를 쥔 채로 남고, 그 발밑에서 메인 파일을 cp 로 덮고 -wal/-shm 을 지우면 워커의 캐시
+# 페이지 상태와 어긋나 **DB 가 깨진다**(2026-07-15 실제 발생 — graph_nodeinstance btree 손상 2회).
+# deploy.sh 의 `up -d cdgts` → `up -d` 수정(0.1.60·devlog 144)과 **같은 부류의 버그**였다.
 if [ -f "$COMPOSE" ] && docker ps -a --format '{{.Names}}' | grep -qx "$CONTAINER"; then
-    log "컨테이너 정지 → DB 교체 → 재기동"
-    docker compose -f "$COMPOSE" stop "$CONTAINER" >/dev/null 2>&1 || true
+    log "전 서비스 정지(웹+워커) → DB 교체 → 재기동"
+    docker compose -f "$COMPOSE" stop >/dev/null 2>&1 || true          # 서비스명 없음 = 전부(워커 포함)
     cp -f "$SNAP" "$DEV_DB"
     rm -f "${DEV_DB}-wal" "${DEV_DB}-shm"
-    docker compose -f "$COMPOSE" up -d "$CONTAINER" >/dev/null 2>&1
-    log "DB 교체 + 재기동 완료"
+    docker compose -f "$COMPOSE" up -d >/dev/null 2>&1                 # 전부 기동
+    log "DB 교체 + 재기동 완료(웹+워커)"
 else
     cp -f "$SNAP" "$DEV_DB"
     rm -f "${DEV_DB}-wal" "${DEV_DB}-shm"
