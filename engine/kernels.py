@@ -4,6 +4,7 @@
 NodeType.slug → 커널 함수 레지스트리. 미등록 slug 는 pass-through(첫 입력 통과)로 폴백.
 이번 증분(결정론적, 해석적):
   - joint-inference / cross-section-correlation : **역분산 가중 결합**(독립 추정 결합 → 불확실성 축소).
+> `order` 노드 커널은 devlog 149 에서 제거 — order 제약은 order **edge** 로 표현하고 _certify(L1)가 읽는다.
 후속(별도 과학 스택): age-depth 베이지안·joint MCMC·공분산 전파. 현재는 in-process numpy/scipy.
 
 > GSSA(옛 pin clamp)는 이제 authored `published-age` leaf(exact)로 표현한다 — cycles.md §12 참조.
@@ -289,36 +290,11 @@ def duration_stats(older, younger):
     return (dur, math.sqrt(max(var, 0.0)))
 
 
-def order_check(inputs, params):
-    """
-    두 경계의 시간적 선후 **검사**(값 불변). 포트 older(아래·큰 Ma) / younger(위·작은 Ma).
-    ok = age(older) ≥ age(younger) + Δ(min_gap). 결과는 분포가 아니라 판정 dict(kind=order).
-    """
-    params = params or {}
-    gap_min = float(params.get("min_gap") or 0)
-    older = younger = None
-    for i in inputs:
-        m = moments(i.get("dist"))
-        if m is None:
-            continue
-        if i.get("port") == "older":
-            older = m[0]
-        elif i.get("port") == "younger":
-            younger = m[0]
-    if older is None or younger is None:
-        return {"kind": "order", "ok": None, "note": "order: older/younger 입력 부족"}
-    gap = round(older - younger, 6)
-    ok = gap >= gap_min
-    return {"kind": "order", "ok": ok, "gap": gap, "min_gap": gap_min,
-            "note": f"order {'✓' if ok else '✗'}: gap {gap} {'≥' if ok else '<'} Δ {gap_min}"}
-
-
 # --- 레지스트리 (slug → fn(inputs, params) → dist dict|None). inputs = [{dist, params, port}] ---
 KERNELS = {
     "joint-inference": lambda inputs, params: inverse_variance_combine([i["dist"] for i in inputs], "joint"),
     "cross-section-correlation": lambda inputs, params: inverse_variance_combine([i["dist"] for i in inputs], "correlation"),
     "age-depth-model": age_depth_model,
-    "order": order_check,
 }
 
 # 레지스트리 람다는 docstring 을 못 실으므로 여기 둔다(노드 매뉴얼 생성기가 읽는다).

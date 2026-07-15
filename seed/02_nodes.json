@@ -150,29 +150,6 @@
   }
  },
  {
-  "model": "nodes.nodetype",
-  "fields": {
-   "slug": "order",
-   "name": "Clamp: order",
-   "category": "clamp",
-   "description": "Checks temporal order of two boundaries (bottom=older ≥ top=younger + Δ). Check only · value unchanged.",
-   "params_schema": {
-    "min_gap": {
-     "type": "number",
-     "help": "Minimum duration Δ (Ma). 0 = plain ordering."
-    },
-    "mode": {
-     "type": "enum",
-     "choices": [
-      "hard",
-      "warn"
-     ],
-     "help": "hard = FAIL on violation · warn = warning"
-    }
-   }
-  }
- },
- {
   "model": "nodes.port",
   "fields": {
    "node_type": [
@@ -484,32 +461,6 @@
    "datatype": "distribution",
    "multiple": false,
    "order": 2
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "order"
-   ],
-   "name": "younger",
-   "direction": "in",
-   "datatype": "distribution",
-   "multiple": false,
-   "order": 0
-  }
- },
- {
-  "model": "nodes.port",
-  "fields": {
-   "node_type": [
-    "order"
-   ],
-   "name": "older",
-   "direction": "in",
-   "datatype": "distribution",
-   "multiple": false,
-   "order": 1
   }
  },
  {

@@ -8,7 +8,7 @@
 ## 0. 한 줄 논지
 
 **L0~6 선형 스택은 구현에서 두 축으로 분해됐다** — **티어**(registry / graph / release, §8.2의 게이트웨이
-아키텍처)와, graph 티어 안의 **카테고리**(data / process / clamp). "레이어 번호"만이 인공물이었다.
+아키텍처)와, graph 티어 안의 **카테고리**(data / process / reference — clamp 는 devlog 149 에서 제거). "레이어 번호"만이 인공물이었다.
 
 ## 1. 레이어 번호가 섞고 있던 두 가지
 
@@ -30,17 +30,23 @@ L0~6은 하나의 선형 축에 서로 다른 두 개념을 눌러 담고 있었
 |---|---|---|---|
 | **data** | 불변·인용 관측 leaf. `params.distribution` 를 그대로 출력 | L2 | radiometric-uPb · astronomical · magnetostratigraphic · biostratigraphic · **published-age** |
 | **process** | 입력 분포 → 산출 분포 (계산) | L3 · L4 · L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference |
-| **clamp** | 값을 못박거나 제약 | (레이어 밖) | **order** (pin · range · freeze-version 는 제거됨 — [cycles](cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가)) |
+| **reference** | 인용 provenance (`cite` 엣지, 값 안 나름) | (레이어 밖) | reference |
+
+> **`clamp` 카테고리는 제거됐다**(devlog 149). 마지막 멤버 `order` 마저 order **엣지**로 대체되어 카테고리가 비었고,
+> `nodes.NodeType.Category` 에서도 빠졌다. 남은 카테고리는 **data · process · reference** 3종.
 
 L2가 data로, L3·L4·L5가 process로 접혔다. 레이어 번호는 "특정 DAG에서의 깊이"로 녹아 **분류가 아니라 창발
 속성**이 됐다.
 
-## 3. clamp — 어떤 레이어에도 집이 없던 카테고리
+## 3. clamp — 어떤 레이어에도 집이 없던 카테고리 (지금은 카테고리도 없다)
 
-`clamp`은 레이어 모델에 자리가 없었지만 실제론 **두 레이어를 가로지른다**:
+> **결말**: clamp 은 카테고리로도 남지 못했다(devlog 149). 아래는 그 축소의 논리 — 두 레이어를 가로지르던 것이
+> 각각 **제 자리를 찾아** 흩어졌고, 남은 껍데기가 사라진 것이다.
+
+`clamp`은 레이어 모델에 자리가 없었지만 실제론 **두 레이어를 가로질렀다**:
 
 - **GSSA**(L1 경계 정의) = 저작된 `published-age` leaf (data 카테고리) — 점질량 δ. (당초 `pin` clamp 로 모델링했으나 재검토됨.)
-- **정합성 제약**(L5 순서) = `order` 엣지 (range/pin clamp 은 제거됨).
+- **정합성 제약**(L5 순서) = `order` **엣지** (range/pin clamp 은 제거됨). → 노드가 아니라 엣지이므로 clamp 카테고리에 남을 이유가 없었다.
 
 레이어 번호로는 "L1과 L5가 같은 종류"를 표현할 수 없다. 카테고리로는 자연스럽다. 레이어가 옳은 절단면이
 아니었다는 방증이자, [concept-map](concept-map.md) §3-2 "clamp가 통일자"의 구현 측 증거다 — 단, 이 "clamp 통일자"

@@ -2,7 +2,7 @@
 graph 직렬화 — React Flow 왕복 계약 {nodes[], edges[], viewport}.
 
 PUT 은 노드/엣지를 통째 교체(wholesale replace)하고 저장 전에 검증:
-  포트 방향 정합 + 끊기지 않은 순환 금지(joint-inference/clamp 로만 절단 허용).
+  포트 방향 정합 + 끊기지 않은 순환 금지(joint-inference 로만 절단 허용).
 """
 from django.db import transaction
 from rest_framework import serializers

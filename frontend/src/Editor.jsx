@@ -620,7 +620,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
   }, [selectedGroup, groups, nodes])
 
   const grouped = useMemo(() => {
-    const g = { data: [], process: [], clamp: [] }
+    const g = { data: [], process: [] }
     types.forEach((t) => (g[t.category] || (g[t.category] = [])).push(t))
     return g
   }, [types])
@@ -753,7 +753,7 @@ export default function Editor({ onBaked, onProposed, user } = {}) {
         <h1>cdGTS</h1>
         <p className="hint">{!canEdit ? '🔒 Read-only — you can view but not edit this graph'
           : (IS_TOUCH ? 'Tap a node → tap the canvas to place' : 'Drag a node onto the canvas')}</p>
-        {['data', 'process', 'clamp', 'reference'].map((cat) => (
+        {['data', 'process', 'reference'].map((cat) => (
           <div key={cat} className="palette-group">
             <h2 style={{ color: CATEGORY_COLOR[cat] }}>{cat}</h2>
             {(grouped[cat] || []).map((t) => (

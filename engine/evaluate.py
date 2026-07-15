@@ -71,7 +71,7 @@ def needs_async(graph):
 
     판별:
       - `joint-inference` 노드가 있으면 진짜 결합 추정 대상. → async.
-      - 저장 검증을 통과한 그래프에 남은 데이터 순환은 곧 breaker(clamp/joint)를 지나는
+      - 저장 검증을 통과한 그래프에 남은 데이터 순환은 곧 breaker(joint-inference)를 지나는
         상호제약 클러스터(cycles.md). → async.
     """
     from graph.dag import find_unbroken_cycles
@@ -184,11 +184,11 @@ def duration_gate(pairs):
 def _certify(run, graph, results):
     """
     정합성 게이트 (coherence-gate.md).
-      L0 구조 — cycle-breaker(clamp/joint-inference) 를 지나지 않는 순환이 남으면 fail.
-      L1 순서 — authored `order` 제약(노드/엣지)이 있으면 그걸로, 없으면 게이트웨이 단조 휴리스틱 폴백(L1a).
+      L0 구조 — cycle-breaker(joint-inference) 를 지나지 않는 순환이 남으면 fail.
+      L1 순서 — authored `order` **엣지**가 있으면 그걸로, 없으면 게이트웨이 단조 휴리스틱 폴백(L1a).
       L1b 통계적 순서 — 인접 경계 지속시간이 2σ 안에서 ≤0 이 될 수 있으면(공분산 인지) "미해결" warn.
       L2 지속시간 — rank 별 타일링. 점추정 duration ≤ 0(퇴화/영-길이) → fail.
-      L3 은 skip(후속: joint reconcile / clamp).
+      L3 은 skip(후속: joint reconcile).
     """
     from .models import CoherenceCertificate
     from graph.dag import find_unbroken_cycles
@@ -208,9 +208,9 @@ def _certify(run, graph, results):
         checks["notes"].append(f"L0: 끊기지 않은 순환 {sorted(stuck)}")
         passed = False
 
-    # L1 우선순위: order edge(경계 세로 포트 연결) > order 노드 > 게이트웨이 단조 휴리스틱.
+    # L1 우선순위: order edge(경계 세로 포트 연결) > 게이트웨이 단조 휴리스틱.
+    # (옛 `order` **노드** 폴백은 devlog 149 에서 제거 — order 제약은 order edge 로 표현한다, cycles §12.)
     order_edges = list(graph.edges.filter(kind="order").select_related("source", "target"))
-    order_nodes = [n for n in graph.nodes.select_related("node_type") if n.node_type.slug == "order"]
     if order_edges:
         # 각 order edge: source=더 오래된(큰 Ma), target=더 젊은(작은 Ma). source.value ≥ target.value 여야.
         violations, checked = 0, 0
@@ -227,24 +227,6 @@ def _certify(run, graph, results):
             checks["L1"] = "pass" if violations == 0 else "fail"
             if violations:
                 passed = False
-    elif order_nodes:
-        # 사람이 명시한 선후 제약 — 국소·authored·provenance. 위반 시 mode 로 FAIL/WARN.
-        violations, hard_fail = 0, False
-        for n in order_nodes:
-            r = results.get(n.key)
-            d = r["distribution"] if r else None
-            if not d or d.get("ok") is None:
-                continue
-            if not d["ok"]:
-                violations += 1
-                if (n.params or {}).get("mode", "hard") == "hard":
-                    hard_fail = True
-        if violations == 0:
-            checks["L1"] = "pass"
-        elif hard_fail:
-            checks["L1"] = "fail"; passed = False
-        else:
-            checks["L1"] = "warn"
     else:
         gateways = list(graph.gateways.select_related("boundary"))
         vals = []

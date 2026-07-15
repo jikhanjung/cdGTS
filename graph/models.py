@@ -135,7 +135,7 @@ class NodeInstance(models.Model):
     """A node placed on the canvas. key = React Flow node id (client-provided, unique within the graph)."""
 
     class Nature(models.TextChoices):
-        GENERIC = "generic", "Generic (data/process/clamp machinery)"
+        GENERIC = "generic", "Generic (data/process machinery)"
         BOUNDARY = "boundary", "Boundary (boundary point / 0-cell · independent citizen)"
 
     graph = models.ForeignKey(Graph, on_delete=models.CASCADE, related_name="nodes")

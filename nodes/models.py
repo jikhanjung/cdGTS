@@ -17,13 +17,13 @@ class NodeTypeManager(models.Manager):
 
 class NodeType(models.Model):
     """
-    Node type definition. category is the main split (data/process/clamp); slug is the engine compute
-    kernel binding key (process nodes). data=immutable leaf, clamp=governance gateway.
+    Node type definition. category is the main split (data/process); slug is the engine compute
+    kernel binding key (process nodes). data=immutable leaf.
+    (`clamp` 카테고리는 devlog 149 에서 제거 — 마지막 멤버 `order` 가 order **edge** 로 대체됨. cycles §12.)
     """
     class Category(models.TextChoices):
         DATA = "data", "Data (immutable observation / leaf)"
         PROCESS = "process", "Process (transform / model)"
-        CLAMP = "clamp", "Clamp (governance gate)"
         REFERENCE = "reference", "Reference (provenance / citation)"
 
     slug = models.SlugField(unique=True, help_text="Identifier = engine kernel binding key. e.g. age-depth-model")

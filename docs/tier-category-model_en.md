@@ -26,23 +26,30 @@ correlation may serve as an anchor. So what survived as a first-class taxonomy i
 
 ## 2. What survived — `NodeType.category`
 
-The only node taxonomy in the implementation is three categories (`nodes.NodeType.category`):
+The only node taxonomy in the implementation is three categories (`nodes.NodeType.category`) — data / process / reference (`clamp` was removed in devlog 149):
 
 | Category | What | Old layer | Examples (implemented types) |
 |---|---|---|---|
 | **data** | Immutable, cited observation leaf. Surfaces `params.distribution` as-is | L2 | radiometric-uPb · astronomical · magnetostratigraphic · biostratigraphic · **published-age** |
 | **process** | Input distributions → output distribution (computation) | L3 · L4 · L5 | age-depth-model · cross-section-correlation · calibration-transfer · joint-inference |
-| **clamp** | Pin a value or constrain | (outside the layers) | **order** (pin · range · freeze-version were removed — [cycles](cycles_en.md#12-reconsideration-note-2026-07--is-clamp-needed-as-a-distinct-concept)) |
+| **reference** | Citation provenance (`cite` edges; carries no value) | (outside the layers) | reference |
+
+> **The `clamp` category is gone** (devlog 149). Its last member `order` was itself replaced by an order **edge**,
+> leaving the category empty, so it was dropped from `nodes.NodeType.Category` too. What remains: **data · process · reference**.
 
 L2 folded into data; L3·L4·L5 into process. The layer number dissolved into "depth within a specific DAG" — an
 **emergent property, not a taxonomy**.
 
-## 3. clamp — the category with no layer home
+## 3. clamp — the category with no layer home (and now, no category)
 
-`clamp` had no place in the layer model, yet in practice it **cuts across two layers**:
+> **Ending**: clamp did not survive even as a category (devlog 149). What follows is the logic of that
+> scope-down — the thing that cut across two layers found a **proper home on each side**, and the empty
+> shell was removed.
+
+`clamp` had no place in the layer model, yet in practice it **cut across two layers**:
 
 - **GSSA** (L1, boundary definition) = an authored `published-age` leaf (data category) — a point mass δ. (Originally modeled as a `pin` clamp, since reconsidered.)
-- **coherence constraints** (L5, order) = an `order` edge (the range/pin clamps were removed).
+- **coherence constraints** (L5, order) = an `order` **edge** (the range/pin clamps were removed). Being an edge, not a node, it had no reason to stay in a node category.
 
 Layer numbers can't express "L1 and L5 are the same kind." Categories can. That is both evidence the layers were
 the wrong cut, and the implementation-side confirmation of [concept-map](concept-map_en.md) §3-2 "clamp is the

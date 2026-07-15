@@ -86,37 +86,8 @@ def test_published_age_emits_exact(node_types):
     assert r.distribution == {"fidelity": "exact", "value_ma": 2500}   # GSSA = authored leaf
 
 
-def _order_graph(older_val, younger_val, min_gap=0, mode="hard"):
-    g = Graph.objects.create(slug=f"ord-{older_val}-{younger_val}-{min_gap}-{mode}", name="Order")
-    older = _exact_leaf(g, "older", older_val)
-    younger = _exact_leaf(g, "younger", younger_val)
-    oc = NodeInstance.objects.create(graph=g, key="oc", node_type=NodeType.objects.get(slug="order"),
-                                     params={"min_gap": min_gap, "mode": mode})
-    Edge.objects.create(graph=g, source=older, source_port="out", target=oc, target_port="older")
-    Edge.objects.create(graph=g, source=younger, source_port="out", target=oc, target_port="younger")
-    return g
-
-
-def test_order_constraint_certifies_pass(node_types):
-    run = evaluate_graph(_order_graph(500, 400))
-    assert run.results.get(node_key="oc").distribution["ok"] is True
-    assert run.certificate.checks["L1"] == "pass" and run.certificate.passed is True
-
-
-def test_order_constraint_hard_violation_fails(node_types):
-    run = evaluate_graph(_order_graph(300, 400, mode="hard"))   # older < younger
-    assert run.results.get(node_key="oc").distribution["ok"] is False
-    assert run.certificate.checks["L1"] == "fail" and run.certificate.passed is False
-
-
-def test_order_constraint_warn_mode_warns(node_types):
-    run = evaluate_graph(_order_graph(300, 400, mode="warn"))
-    assert run.certificate.checks["L1"] == "warn" and run.certificate.passed is True
-
-
-def test_order_constraint_min_gap(node_types):
-    run = evaluate_graph(_order_graph(460, 400, min_gap=100))   # gap 60 < Δ 100
-    assert run.results.get(node_key="oc").distribution["ok"] is False
+# `order` 노드 기반 L1 테스트 4종은 devlog 149 에서 제거 — order 제약은 order **edge** 이고
+# 그 L1 판정은 graph/tests.py(엣지 왕복)와 test_kernels.py(duration/공분산)가 덮는다.
 
 
 # --- 증분 캐시 ---

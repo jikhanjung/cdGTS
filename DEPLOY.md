@@ -48,6 +48,14 @@
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.67** — 🔴 **`--reseed` 필요** + 🟡 **마이그레이션 있음**(`nodes/0004_alter_nodetype_category.py`).
+  **`order` NodeType + `clamp` 카테고리 제거**([devlog 149](devlog/20260715_149_order-node-and-clamp-category-removal.md)) —
+  devlog 135(clamp 축소)의 잔재 회수. NodeType **17 → 16**, 카테고리 **4 → 3**(data·process·reference).
+  🟡 마이그레이션은 `NodeType.category` 의 **enum choices 변경만**(컬럼 타입·데이터 무변경, 무손실). 🔴 재시드는
+  `order` NodeType/Port 를 DB 에서 실제로 걷어내기 위해 필요 — 안 하면 옛 `order` 행이 남아 팔레트에 유령 노드가 뜬다
+  (healthz 행 수는 무영향 → smoke 가 안 잡음). **경계 연대·행 수 불변**(order 인스턴스 0개였음 = 죽은 코드).
+  L1 게이트가 3단 → 2단 폴백(order 엣지 > 게이트웨이 휴리스틱); 중간 단은 실행된 적이 없어 판정 변화 없음.
+  ⚠️ 존치: `releases.Clamp`(DEMO-ONLY)·`range_clamp` 커널 — 이름만 같고 별개다.
 - **0.1.66** — 🔴 **`--reseed` 필요** (시드 변경: `seed/02_nodes.json` 의 `params_schema.help` 10개 신규).
   값·스키마·마이그레이션 변경은 **없고** NodeType 산문만 바뀐다 — 재시드 안 하면 프론트 인스펙터에 새 help 가 안 뜰 뿐
   경계 연대·행 수는 무영향(smoke 는 어느 쪽이든 통과하므로 게이트가 안 잡아준다. 그래서 🔴). replace 는 P08.1 이후

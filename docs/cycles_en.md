@@ -152,6 +152,11 @@ place accountable clamps, and automatically propagate / check / diff the rest."*
 - **pin / GSSA → an authored data leaf suffices.** A GSSA is "a boundary whose value is authored, not derived" —
   exactly what a `published-age` leaf (+ `definition_type=GSSA`) already does. The clamp abstraction adds nothing.
 - **order (monotonicity) → already handled by order edges (the L1 gate).** `Clamp{order}` is redundant.
+  - **Epilogue (devlog 149)**: this conclusion only removed `releases.Clamp{order}` — the graph-side **`order`
+    NodeType** (plus its kernel and the L1 fallback branch) survived, used by no graph at all. It is now gone too,
+    and since `order` was the **last member of the clamp category**, the **`clamp` category itself disappeared**
+    (dropped from `NodeType.Category`). Remaining: data · process · reference.
+    → [tier-category-model](tier-category-model_en.md) §2·§3.
 - **freeze-version → already done by §4's version spiral** (a gateway = a constant within a release). No per-boundary clamp needed.
 
 ### The release override (§6) is in the wrong place

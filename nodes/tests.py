@@ -56,8 +56,8 @@ def test_to_dict_omits_empties():
 # --- NodeType 카탈로그 (데이터로 존재, 하드코딩 아님) ---
 
 def test_catalog_loads(seeded):
-    assert NodeType.objects.count() == 17          # +calibration-constant(R04 L1 공유 보정 leaf); clamp pin/range/freeze-version 제거(cycles §12)
-    assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "clamp", "reference"}
+    assert NodeType.objects.count() == 16          # +calibration-constant(R04 L1); clamp 카테고리 전체 제거(cycles §12 · devlog 149)
+    assert set(NodeType.objects.values_list("category", flat=True)) == {"data", "process", "reference"}
     assert NodeType.objects.get(slug="published-age").category == "data"
 
 
@@ -71,9 +71,10 @@ def test_ports_wired(seeded):
 
 def test_graph_clamp_nodes_removed(seeded):
     # cycles §12 축소: GSSA=authored leaf(published-age), 순환=joint-inference 노드 → 그래프 clamp 노드 불필요.
+    # devlog 149: 마지막 멤버 order 도 제거(order 제약 = order edge) → clamp 카테고리 자체가 사라짐.
     assert not NodeType.objects.filter(slug__in=["pin", "range", "freeze-version"]).exists()
-    # 남은 clamp 카테고리는 order(L1 선후 검사)뿐.
-    assert list(NodeType.objects.filter(category=NodeType.Category.CLAMP).values_list("slug", flat=True)) == ["order"]
+    assert not hasattr(NodeType.Category, "CLAMP")
+    assert not NodeType.objects.filter(category="clamp").exists()
 
 
 def test_edges_carry_distributions(seeded):

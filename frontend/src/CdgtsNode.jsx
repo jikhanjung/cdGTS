@@ -3,7 +3,6 @@ import { Handle, Position, NodeResizeControl } from '@xyflow/react'
 export const CATEGORY_COLOR = {
   data: '#2d7d46',      // observation leaf
   process: '#3b6fb0',   // transform·model
-  clamp: '#a24bd8',     // governance gate
   reference: '#c0842e', // provenance / citation (amber)
 }
 

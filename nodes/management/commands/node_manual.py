@@ -46,7 +46,6 @@ CATEGORY_BLURB = {
     "data": "관측·저작된 값이 들어오는 leaf. 커널 없이 `params.distribution` 을 방출하는 것이 기본 "
             "(`calibration-constant`·`radiometric-uPb` 만 예외 — 공유 계통원 태그를 실어 방출).",
     "process": "상류 분포를 받아 계산하는 노드. 커널이 없으면 pass-through(= 의미론적/구조적 노드).",
-    "clamp": "값을 만들지 않고 **검사**하는 노드. clamp 축소(cycles §12) 이후 `order` 만 남았다.",
     "reference": "인용 provenance. `cite` 엣지로 데이터/모델 노드를 가리킨다(값을 나르지 않는다).",
 }
 
@@ -100,7 +99,7 @@ class Command(BaseCommand):
                        f"의도된 여지인지, 정리 대상인지 검토 필요.\n")
 
         # --- 카테고리별 상세 ---
-        for cat in ("data", "process", "clamp", "reference"):
+        for cat in ("data", "process", "reference"):
             if cat not in by_cat:
                 continue
             out.append(f"## {cat}\n")
