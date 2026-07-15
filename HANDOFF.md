@@ -1,6 +1,7 @@
 # HANDOFF — Current Work Status
 
-**Last updated**: 2026-07-15. 운영 `cdgts.paleobytes.info`(dolfinid-2) @ **0.1.67** · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.67**. 이미지 `honestjung/cdgts:0.1.35~0.1.67` dockerhub push 완료. 공개 `https://cdgts.paleobytes.info/healthz` = 0.1.67/node_types 16. **양 서버 cdgts + cdgts-worker 둘 다 가동, 비-root(prod uid 1001·test uid 1000), DB = `/srv/cdGTS/db/` 서브디렉터리 마운트**.
+**Last updated**: 2026-07-15. 운영 `cdgts.paleobytes.info`(dolfinid-2) @ **0.1.68** · 테스트 서버 **m710q**(tailscale serve → `127.0.0.1:8011`) @ **0.1.68**. 이미지 `honestjung/cdgts:0.1.35~0.1.68` dockerhub push 완료. 공개 `https://cdgts.paleobytes.info/healthz` = 0.1.68/node_types 16. **양 서버 cdgts + cdgts-worker 둘 다 가동, 비-root(prod uid 1001·test uid 1000), DB = `/srv/cdGTS/db/` 서브디렉터리 마운트**.
+- **매시 백업 무결성 게이트·배포(0.1.68)**([devlog 150](devlog/20260715_150_hourly-integrity-gate.md)): 사용자 질문("prod DB 무결성도 매시 체크할까?")에서 출발했으나 **목적은 탐지가 아니라 로테이션 오염 방지**로 판명 — `backup()` 은 소스 페이지를 **검증 없이** 복사하므로 소스가 깨지면 스냅샷도 깨진 채 채택되고, `RETAIN_COUNT=12`(매시)라 **12시간이면 성한 스냅샷이 0개**가 된다(149 의 테스트 DB 손상이 prod 였다면 정확히 이 경로, 9h 미탐지). → 규칙 두 줄: **①검사 실패 시 채택 안 함 + prune 건너뜀**(아무도 안 봐도 자동으로 성한 백업 보존) **②`db/INTEGRITY_FAIL` 센티넬 → `/healthz` degraded → smoke 실패**. 센티넬이 `db/` 인 이유 = 0.1.64 가 컨테이너 시야에서 `backup/` 을 뺐음(마운트 되돌리지 않음). **`degraded` 는 200**(btree 손상 ≠ 서빙 불능 — 재시작이 못 고치는 조건으로 트래픽에서 빼지 않는다; smoke 는 `status=="ok"` 만 통과시키므로 게이트는 그대로). `MAILTO` 미설정이라 로그 경고는 연극 → 사람이 **이미** 보는 smoke 에 물림. 자동 롤백은 **일부러 안 함**(DB 손상에 롤백은 답이 아닐 수 있음). 증거 사본 `.corrupt` 1개만 보존(디스크 누수·prune glob 회피, 테스트로 고정). **테스트가 오염을 실증**: 실제 sqlite 3번째 페이지를 훼손 → 센티넬이 뜬다 = `backup()` 이 예외 없이 손상을 복사했다. pytest **174→192**. ⚠️ **3-repo 정렬 이탈**(fcmanager/fsis 미적용 — P08 식 파일럿, 검증 후 포팅). ⚠️ 남은 구멍: `rollback.sh --db=restore` 는 복원 대상을 검사하지 않음.
 - **`order` 노드 + `clamp` 카테고리 제거·배포(0.1.67)**([devlog 149](devlog/20260715_149_order-node-and-clamp-category-removal.md)): devlog 135(clamp 축소)가 "order 제약 = order 엣지"로 결정하고 `graph/models.py` 에 *"replaces the order node"* 라 적어두고도 **정작 order 노드를 안 지운** 잔재 회수 — 0.1.66 노드 매뉴얼이 "미사용 타입 4개"로 표면화(**매뉴얼이 만든 당일 제 목적을 달성**). `order` 가 clamp 카테고리의 마지막 멤버라 **카테고리 자체가 소멸**(마이그레이션 `nodes/0004`, enum choices 만) → 카테고리 = **data·process·reference**. NodeType **17→16**. L1 게이트 3단→2단 폴백(중간 order-노드 단은 인스턴스 0개라 사문 → 판정 무변화). 존치(이름만 같음): `releases.Clamp`(DEMO-ONLY)·`range_clamp` 커널. 순환 breaker 는 `joint-inference` slug 하나뿐임을 확인 — **그래서 미사용이어도 존치**(유일 breaker). pytest **174**(order 테스트 9종 제거). 양 서버 배포·재시드·smoke green(node_types 16).
   - 🐛 **배포 중 발견·수정 — `scripts/sync-cdgts-db.sh` 가 테스트 DB 를 깨뜨리고 있었다**: 웹(`cdgts`)만 stop 하고 **워커(`cdgts-worker`)가 같은 WAL DB 를 연 채로** 메인 파일을 `cp` 로 덮고 `-wal`/`-shm` 을 지워 btree 손상(`graph_nodeinstance`). 오늘 2회 발생(04:00 cron · 복구용 수동 sync — **복구 도구가 재손상 원인**). **0.1.60(devlog 144) `up -d cdgts`→`up -d` 수정의 놓친 형제**. → `stop`/`up -d` 를 서비스명 없이. 전수 점검 결과 `deploy.sh`·`rollback.sh` 는 처음부터 옳았음(`down` 전 서비스 + `-wal`/`-shm` 동반). **prod 무사**(sync 의 소스이지 대상 아님, `integrity_check` = ok 전 구간 확인).
 - **노드 매뉴얼 자동 생성·배포(0.1.66)**: `manage.py node_manual` → **[docs/node-manual.md](docs/node-manual.md)** — 시드(NodeType.description·`params_schema.help`·Port) × 커널(`engine.kernels.kernel_for`) × **실제 사용처**(NodeInstance) 를 조립. 손으로 쓴 매뉴얼은 낡으므로 단일 진리원에서 생성. `kernel_for` 가 `compute()` 분기 우선순위를 노출(정합성 테스트로 고정 — 어긋나면 매뉴얼이 틀린 커널을 보고). 시드 빈 `help` 10개 채움(→ `--reseed` 배포, 프론트 인스펙터 반영 확인). **바로 드러난 것: NodeType 17개 중 4개가 어떤 그래프에서도 미사용** — `order`(clamp 축소 잔재?)·`astronomical`·`magnetostratigraphic`·`joint-inference`. ⚠️ R05 는 "`joint-inference` 는 살고 `cross-section-correlation` 은 소멸"이라 했으나 **정작 미사용인 쪽이 `joint-inference`** 이고 둘은 같은 커널 — 정리 여부 미결. ⚠️ 생성기는 **갓 시드한 DB** 에 돌릴 것(운영 DB 면 사용자 fork 가 섞여 DB 마다 문서가 달라짐). pytest **183**. 양 서버 배포·재시드·smoke green.
@@ -79,7 +80,7 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영** (배포·데이터 계약 P08 — [DEPLOY.md](DEPLOY.md)·[deploy/README.md](deploy/README.md)·[deploy/deploy.toml](deploy/deploy.toml)):
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info`(GCP dolfinid-2) @ **0.1.67**(nginx + certbot). 테스트 `127.0.0.1:8011`(m710q) @ **0.1.67**.
+  - **운영서버** `cdgts.paleobytes.info`(GCP dolfinid-2) @ **0.1.68**(nginx + certbot). 테스트 `127.0.0.1:8011`(m710q) @ **0.1.68**.
     **양 서버 cdgts(웹) + cdgts-worker(비동기 평가) 둘 다 가동**. 테스트 DB(prod 미러)에 P05 검증용 계정: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
   - **컨테이너 비-root 실행(0.1.62~)**: entrypoint 가 root 로 시작 → 마운트(`/app/hostdb`) 소유 uid 감지 → `gosu` 로 드롭
     (prod uid 1001 · test uid 1000, chown 불요, `HOME=/tmp` 명시). 전제 = 호스트별 `/srv/cdGTS`·DB 파일이 동일 비-root uid 소유.
@@ -95,11 +96,15 @@
     + **쓰기 프로브**(앱 uid 로 CREATE/DROP — 소유권 오배치를 배포 직후 FATAL) · `preflight.sh`(위험 표면 diff).
   - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 daily cron · 배포 시 pre_deploy 스냅샷 ·
     **hourly 트랙**(`scripts/backup_db.py`, sqlite online backup·12개 유지, prod cron 등록 완료).
+  - **무결성 게이트(0.1.68~)**: hourly 스냅샷마다 `PRAGMA integrity_check` → 실패 시 **채택 안 함 + prune 중단**
+    (`backup()` 은 소스 페이지를 검증 없이 복사 → 손상 시 12h 내 성한 스냅샷이 전부 prune 되는 **로테이션 오염** 차단).
+    + `db/INTEGRITY_FAIL` 센티넬 → `/healthz` **degraded**(stat 1회, 200 — btree 손상 ≠ 서빙 불능) → **smoke 실패**.
+    ⚠️ smoke 가 degraded 로 실패 = **배포 문제 아님, 반사적 롤백 금지**([devlog 150](devlog/20260715_150_hourly-integrity-gate.md)).
   - ⚠️ **시드/레이아웃 변경 릴리스는 재시드 필요** — 0.1.57~ 는 **`--reseed` 플래그**로 자동(migrate 후 smoke 전 `seed --mode=replace`
     + `seed_demo`). replace 는 P08.1 이후 **운영 데이터(owner-set) 보존 upsert**(자연키 멱등). add 는 그래프 원자 skip → 변경 반영 안 됨.
 - **초기 데이터(seed)**: 통합 `seed/`(manifest `2026.07.0`, 자연키) — `01_chrono`~`04_releases` + **`05_icc_release`**.
   `manage.py seed --mode=replace|add`. 순환 자연키 FK(그룹↔노드)는 forward-ref 2패스로 로드. `FIXTURE_DIRS=seed/`.
-- **테스트**: 백엔드 `pytest` **178 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 + calibration 커널 공분산 상속/비상속 + seed replace 운영 데이터 생존 + /healthz 포함). 테스트 fixture 는 seed 파일 loaddata.
+- **테스트**: 백엔드 `pytest` **192 passed**(L2 게이트·seed 회귀 + P04/P05 소유·CI·가시성 + calibration 커널 공분산 상속/비상속 + seed replace 운영 데이터 생존 + /healthz(센티넬 degraded 포함) + `scripts/test_backup_db.py` 무결성 게이트). 테스트 fixture 는 seed 파일 loaddata.
 - **문서 코퍼스**: `docs/` 14주제 × 한/영 + README + app-architecture + naming(태그라인·표기 규칙) +
   evaluation-order(의존 vs 연대순, order=사후 검사) + boundary-span-duality. 진입점 `docs/concept-map.md`.
   **clamp 축소([cycles §12](docs/cycles.md#12-재검토-노트-2026-07--clamp는-별도-개념으로-필요한가))를 문서 전반에 정합화** —

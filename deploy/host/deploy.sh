@@ -118,7 +118,9 @@ case "$DB_NAME" in
         echo "    컨테이너가 마운트되지 않은 이미지 내부 DB 를 쓰고 있다 → 사이트가 빈 데이터로 뜬다."
         echo "    실데이터는 ${ROOT}/db/db.sqlite3 에 안전. 고칠 곳:"
         echo "      ${ROOT}/.env 의 DATABASE_PATH=${EXPECT_PREFIX}db.sqlite3 로 수정 후"
-        echo "      (cd ${ROOT} && docker compose up -d --force-recreate cdgts)"
+        # 서비스명 없이 — 워커도 같은 .env 를 읽는다. `--force-recreate cdgts` 만이면 워커는
+        # 낡은 DATABASE_PATH 로 남아 이미지 내부 DB 를 계속 본다(devlog 144/149 와 같은 부류).
+        echo "      (cd ${ROOT} && docker compose up -d --force-recreate)"
         exit 1
         ;;
 esac

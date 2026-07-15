@@ -42,12 +42,30 @@
   태그만 전환, 현재 DB 유지(배포 후 운영자 입력 보존). `--db=restore` = 정지 후 pre_deploy 스냅샷 복원(그 배포 창의
   운영 쓰기는 유실). **keep 가드**: 직전 배포가 migration 을 적용했으면(스냅샷 `.mig` 사이드카 vs 현재 비교) 이전 코드가
   새 스키마와 비호환일 수 있어 keep 을 막고 `--db=restore`/`--force` 로 승격. 기본값은 `deploy.toml rollback_db="keep"` 선언.
+- 🟡 **smoke 가 `status=degraded` 로 실패 = DB 손상, 배포 문제 아님**(0.1.68~). 매시 `backup_db.py` 의
+  `integrity_check` 가 남긴 `/srv/cdGTS/db/INTEGRITY_FAIL` 를 `/healthz` 가 stat 한 것. **백업 prune 은 이미
+  자동 중단**돼 `/srv/cdGTS/backup/` 의 과거 스냅샷이 복구 후보로 남아 있다(그게 이 게이트의 본래 목적).
+  **롤백을 반사적으로 하지 말 것** — `--db=keep` 은 손상을 그대로 두고, `--db=restore` 는 스냅샷을 복원하는데
+  그게 성한지는 사람이 판단해야 한다(`rollback.sh` 는 아직 복원 대상을 검사하지 않음, devlog 150 §10).
+  상세 [devlog 150](devlog/20260715_150_hourly-integrity-gate.md).
 - 🟡 **prod SSL 리다이렉트 + smoke**: prod `.env` `SECURE_SSL_REDIRECT=True` 라 평문 HTTP 는 301(HTTPS)로 튄다.
   `smoke.sh`·deploy 대기 루프는 `X-Forwarded-Proto: https` 헤더를 실어(settings 의 SECURE_PROXY_SSL_HEADER)
   로컬 컨테이너를 직접 검증한다(0.1.57~ 반영). 수동 확인도 동일: `curl -sH 'X-Forwarded-Proto: https' http://127.0.0.1:8011/healthz`.
 
 ## 릴리스 노트 (최신 → 과거)
 
+- **0.1.68** — 🟢 **조치 없음**(코드/스크립트 전용, 시드·마이그레이션 없음). **매시 백업에 무결성 게이트**
+  ([devlog 150](devlog/20260715_150_hourly-integrity-gate.md)). 배포자가 알아야 할 **새 실패 모드 하나**:
+  - `smoke` 가 **`status=degraded` 로 실패**하면 → **배포 문제가 아니다.** 매시 `backup_db.py` 의
+    `PRAGMA integrity_check` 가 운영 DB 손상을 발견해 `/srv/cdGTS/db/INTEGRITY_FAIL` 을 남긴 것.
+    **롤백이 답이 아닐 수 있다** — 확인: `sqlite3 /srv/cdGTS/db/db.sqlite3 'PRAGMA integrity_check'`,
+    복구 후보는 `/srv/cdGTS/backup/` 의 과거 스냅샷(**prune 은 이미 자동 중단됨**), 증거는 `cdgts_INTEGRITY_FAIL.corrupt`.
+    복구 후 다음 정시 검사 통과 시 자동 해제(급하면 `rm /srv/cdGTS/db/INTEGRITY_FAIL`).
+  - 왜: `backup()` 은 소스 페이지를 **검증 없이** 복사 → 소스가 깨지면 스냅샷도 깨진 채 채택되고,
+    `RETAIN_COUNT=12`(매시)라 **12시간이면 성한 스냅샷이 전부 prune**된다. 이제 검사 실패 시 채택·prune 둘 다 중단.
+  - `/healthz` 상태 3종(`ok`/`degraded`/`unhealthy`). **`degraded` 는 200** — btree 손상 ≠ 서빙 불능이라
+    트래픽에서 빼지 않는다. smoke 는 `status=="ok"` 만 통과시키므로 200 이어도 배포 게이트는 걸린다.
+  - ⚠️ **3-repo 정렬 이탈**: fcmanager/fsis2026 의 `backup_db.py` 엔 아직 없음(cdGTS 파일럿, devlog 147 대비).
 - **0.1.67** — 🔴 **`--reseed` 필요** + 🟡 **마이그레이션 있음**(`nodes/0004_alter_nodetype_category.py`).
   **`order` NodeType + `clamp` 카테고리 제거**([devlog 149](devlog/20260715_149_order-node-and-clamp-category-removal.md)) —
   devlog 135(clamp 축소)의 잔재 회수. NodeType **17 → 16**, 카테고리 **4 → 3**(data·process·reference).
