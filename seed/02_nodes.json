@@ -8,7 +8,8 @@
    "description": "U–Pb radiometric age observation (immutable · cited · leaf). Optionally wire shared calibration-constant node(s) into its `calibration` port: each folds its systematic σ into this age's budget AND tags it as a shared_component, so two ages sharing the same constant get correlated durations (value unchanged — covariance wiring, not recompute; R04 L1).",
    "params_schema": {
     "distribution": {
-     "type": "distribution"
+     "type": "distribution",
+     "help": "Interpreted age as published (leaf — cdGTS trusts it; grain-level provenance stays in the cited paper, R04). `budget.analytical` = internal error; wiring a `calibration` input adds its σ to `budget.systematic` (= external) without changing the value."
     },
     "depth": {
      "type": "number",
@@ -26,7 +27,8 @@
    "description": "Shared calibration parameter (decay constant · monitor age e.g. FCs 28.201 Ma · tracer). A single upstream leaf that many radiometric ages depend on; its uncertainty is a shared systematic source. Change it → every dependent age re-computes (diff surfaces the impact); two ages sharing it get correlated durations. Emits its value tagged with a self-referencing shared_component (ref = symbol) so covariance propagates. Cite-able. NB: its `value` is the parameter itself (not a boundary age) — it feeds a rescale/joint kernel, not a boundary directly (that wiring is L1/L2, see R04).",
    "params_schema": {
     "distribution": {
-     "type": "distribution"
+     "type": "distribution",
+     "help": "Authored value + uncertainty of the constant. The kernel re-tags ALL of this uncertainty as a shared_component pointing at `symbol` (or `kind`), promoting the output to L4 `joint` — that tag is what makes two ages sharing this node covary."
     },
     "kind": {
      "type": "enum",
@@ -53,7 +55,8 @@
    "description": "Astronomically tuned age (immutable · leaf).",
    "params_schema": {
     "distribution": {
-     "type": "distribution"
+     "type": "distribution",
+     "help": "Tuned age from the astronomical solution (authored leaf — cdGTS trusts the published value; the tuning itself is not modelled)."
     },
     "depth": {
      "type": "number",
@@ -96,7 +99,8 @@
       "linear",
       "spline"
      ],
-     "default": "linear"
+     "default": "linear",
+     "help": "`linear` (default) = analytic two-point interpolation. `spline` = cubic interpolating spline + 3000-draw MC, and needs ≥3 dated horizons or it silently falls back to linear. NOTE: it is an *interpolating* spline — no smoothing factor, no cross-validation, no monotonicity constraint (R05 §2); nothing currently seeded uses `spline`."
     },
     "target_depth": {
      "type": "number",
@@ -119,7 +123,8 @@
       "d13C",
       "Sr-isotope",
       "biostratigraphy"
-     ]
+     ],
+     "help": "⚠️ ANNOTATION ONLY — no kernel reads this, and values are not validated against `choices` (instances carry `d13C-BACE`, which is not in the list). The correlation is asserted by the author's wiring, not computed. R05 proposes replacing this with first-class `tie-point` nodes."
     }
    }
   }
@@ -436,7 +441,8 @@
    "description": "Reference leaf for published boundary ages (ICS/GTS chart). Holds the value only, no editing.",
    "params_schema": {
     "distribution": {
-     "type": "distribution"
+     "type": "distribution",
+     "help": "The published age as authored (leaf). Also how a GSSA is expressed — an `exact` point mass IS the definition, not a measurement (clamp scope-down, cycles §12)."
     }
    }
   }
@@ -515,7 +521,8 @@
    "description": "Boundary point (0-cell). Receives the age from an upstream computation (data/process) as input and displays it. Shared by multiple units.",
    "params_schema": {
     "distribution": {
-     "type": "distribution"
+     "type": "distribution",
+     "help": "Fallback age used ONLY when nothing is wired to the `age` port. With an upstream input this is ignored — the boundary passes the computed age through."
     }
    }
   }
@@ -666,7 +673,8 @@
    "description": "A bibliographic source (DOI-centric) for a data/model node. Wire its citation port to the node it sources with a cite edge; a bake can walk cite edges to collect the bibliography.",
    "params_schema": {
     "reference": {
-     "type": "reference"
+     "type": "reference",
+     "help": "Natural key of the `references.Reference` row (DOI registry). This node cites data/model nodes via non-data `cite` edges, making provenance a first-class citizen of the graph (devlog 127)."
     }
    }
   }
@@ -701,7 +709,8 @@
      "help": "Country / region"
     },
     "note": {
-     "type": "string"
+     "type": "string",
+     "help": "Free-form annotation (not read by any kernel)."
     }
    }
   }
@@ -762,7 +771,8 @@
      "help": "Correlation signal at this level (e.g. δ13C BACE, T. pedum FAD)"
     },
     "note": {
-     "type": "string"
+     "type": "string",
+     "help": "Free-form annotation (not read by any kernel)."
     }
    }
   }

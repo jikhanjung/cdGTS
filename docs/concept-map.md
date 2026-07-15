@@ -61,6 +61,9 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 
 ## 2. 문서 지도
 
+**레퍼런스 (자동 생성)**
+- [node-manual.md](node-manual.md) — **카테고리별 노드 매뉴얼** (`manage.py node_manual` 이 시드 × 커널 × 실제 사용처를 조립). 어떤 노드가 무슨 기능을 갖고 어디 쓰이는지 · **미사용 타입**이 무엇인지. 손으로 고치지 말 것 — 산문은 `seed/02_nodes.json` 의 `description`/`help` 와 커널 docstring 에 넣는다.
+
 **튜토리얼 (손으로)**
 - [tutorial-science-engine.md](tutorial-science-engine.md) — Science Engine(공분산·정합성 게이트·clamp)을 배포판에서 눌러보며 이해 (Arc A / P06)
 

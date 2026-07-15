@@ -321,6 +321,38 @@ KERNELS = {
     "order": order_check,
 }
 
+# 레지스트리 람다는 docstring 을 못 실으므로 여기 둔다(노드 매뉴얼 생성기가 읽는다).
+_KERNEL_NOTES = {
+    "joint-inference": "역분산(정밀도) 가중 결합 — 같은 양의 **독립** 추정들을 합쳐 σ 를 줄인다. exact 입력이 있으면 그것이 지배(pin).",
+    "cross-section-correlation": "`joint-inference` 와 **동일 커널**(note 문자열만 다름). 섹션별 연대를 역분산 평균한다. "
+                                 "⚠️ 상관 자체는 계산하지 않고(δ13C 는 읽히지 않는 문자열) 저자의 배선 주장을 받는다. "
+                                 "분산 검정(MSWD/χ²) 없음 — 불일치해도 조용히 평균된다. R05 는 이 타입의 **소멸**을 권고.",
+}
+
+
+def kernel_for(category, slug):
+    """
+    (category, slug) → (커널 라벨, 설명) — `compute()` 가 실제로 어디로 보내는지.
+
+    ⚠️ **`compute()` 의 분기 우선순위와 반드시 일치해야 한다.** 두 곳에 흩어지면 매뉴얼이 거짓말을 한다
+    (`test_kernels.py` 의 정합성 테스트가 시드된 전 slug 에 대해 이걸 검사한다).
+    노드 매뉴얼 생성기(`manage.py node_manual`)가 유일한 소비자.
+    """
+    if slug in ("calibration-constant", "radiometric-uPb"):
+        fn = {"calibration-constant": calibration_constant, "radiometric-uPb": radiometric_age}[slug]
+        return (fn.__name__, (fn.__doc__ or "").strip())
+    if category == "data":
+        return ("(leaf)", "데이터 leaf — 커널 없음. 저작된 `params.distribution` 을 그대로 방출한다.")
+    if slug == "boundary":
+        return ("(pass-through + fallback)",
+                "경계 점 — 상류가 준 연대를 통과. 입력이 없으면 자기 `params.distribution`(공표값) 으로 폴백.")
+    fn = KERNELS.get(slug)
+    if fn is not None:
+        note = _KERNEL_NOTES.get(slug) or (fn.__doc__ or "").strip()
+        return (getattr(fn, "__name__", slug).replace("<lambda>", slug), note)
+    return ("(pass-through)",
+            "커널 **미등록** → 첫 non-null 입력을 그대로 통과시킨다. 계산 노드가 아니라 의미론적/구조적 노드.")
+
 
 def _first_non_null(dists):
     for d in dists:

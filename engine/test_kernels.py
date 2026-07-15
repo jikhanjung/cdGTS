@@ -240,6 +240,27 @@ from engine.kernels import duration_stats                       # noqa: E402
 from nodes.distribution import Distribution, component_sigmas, covariance   # noqa: E402
 
 
+# --- kernel_for: 노드 매뉴얼이 거짓말하지 않도록 compute() 와 정합 유지 ---
+
+def test_kernel_for_matches_compute_dispatch():
+    """kernel_for 의 분기 우선순위가 compute() 와 일치해야 한다 — 어긋나면 매뉴얼이 틀린 커널을 보고한다."""
+    from engine.kernels import KERNELS, kernel_for
+
+    # 특수분기 두 slug 는 category=data 이면서도 leaf 가 아니다(compute 가 data early-return 보다 먼저 잡는다).
+    for slug, fn in (("calibration-constant", "calibration_constant"), ("radiometric-uPb", "radiometric_age")):
+        assert kernel_for("data", slug)[0] == fn
+
+    assert kernel_for("data", "published-age")[0] == "(leaf)"      # 평범한 data → leaf
+    assert kernel_for("process", "boundary")[0] == "(pass-through + fallback)"
+    assert kernel_for("process", "merge")[0] == "(pass-through)"   # 커널 미등록 → 폴백
+
+    # 레지스트리에 등록된 slug 는 leaf/pass-through 로 잘못 분류되면 안 된다.
+    for slug in KERNELS:
+        label, note = kernel_for("process" if slug != "order" else "clamp", slug)
+        assert "pass-through" not in label and label != "(leaf)", slug
+        assert note, slug                                          # 설명 없는 커널 금지
+
+
 def test_dist_from_shared_is_joint():
     d = dist_from(100.0, 1.0, shared={"decay-U": 0.5})
     assert d["fidelity"] == "joint" and d["shared_components"] == [{"ref": "decay-U", "sigma": 0.5}]
