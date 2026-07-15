@@ -75,15 +75,22 @@
   order edge 체인, merge 노드로 age→period→era→chart 조립.
 - **배포/운영** (배포·데이터 계약 P08 — [DEPLOY.md](DEPLOY.md)·[deploy/README.md](deploy/README.md)·[deploy/deploy.toml](deploy/deploy.toml)):
   - Docker 이미지 `honestjung/cdgts`, `deploy/build.sh <ver>` 로 pytest→bump→build→push. 버전 `config/version.py`.
-  - **운영서버** `cdgts.paleobytes.info`(GCP dolfinid-2) @ **0.1.60**(nginx + certbot). 테스트 `127.0.0.1:8011`(m710q) @ **0.1.60**.
+  - **운영서버** `cdgts.paleobytes.info`(GCP dolfinid-2) @ **0.1.64**(nginx + certbot). 테스트 `127.0.0.1:8011`(m710q) @ **0.1.64**.
     **양 서버 cdgts(웹) + cdgts-worker(비동기 평가) 둘 다 가동**. 테스트 DB(prod 미러)에 P05 검증용 계정: `admin`(staff·ICS chair)·`demo`(비-staff·ICS chair·개인 fork).
+  - **컨테이너 비-root 실행(0.1.62~)**: entrypoint 가 root 로 시작 → 마운트(`/app/hostdb`) 소유 uid 감지 → `gosu` 로 드롭
+    (prod uid 1001 · test uid 1000, chown 불요, `HOME=/tmp` 명시). 전제 = 호스트별 `/srv/cdGTS`·DB 파일이 동일 비-root uid 소유.
+  - **DB 마운트(0.1.64~)**: `/srv/cdGTS` 전체가 아니라 **`/srv/cdGTS/db` 서브디렉터리만** 마운트(컨테이너가 `.env`·`backup/`·배포
+    스크립트를 못 봄). `deploy.sh [3/6]` 이 옛 루트 DB 를 `db/` 로 1회 자동 mv 컷오버(멱등) + `db.sqlite3 → db/db.sqlite3` 안전망 symlink.
   - **git-free + self-heal 배포(0.1.58~)**: 운영 서버에 repo 불필요. 모든 host 파일이 이미지 `/app/deploy/host/*`(`COPY . .`)에
     실려, 진입점 `deploy-{prod,dev}.sh X.Y.Z [--reseed]` 가 `_extract_and_deploy.sh` 로 이미지에서 추출 + 부트스트랩 파일까지
     자기 치유. **배포 = 한 줄**(git pull/sync 불요). prod=스냅샷(pre_deploy) 후 스왑, dev=스냅샷 없이(DB=운영 복사본).
     `deploy.sh` 재기동은 `docker compose up -d`(웹+워커 전 서비스). m710q→prod SSH 별칭 `dolfinid`(키 인증)로 원격 배포 가능.
   - **동사·게이트**: `/healthz`(버전+DB+핵심 행 수 → 200/503) · `smoke.sh`(배포 후 healthz+버전+행 수, prod SSL `X-Forwarded-Proto`
-    대응) · `rollback.sh`(이전 이미지+pre_deploy 스냅샷) · DB 바인딩 게이트([5/6], 이미지 내부 빈 DB 폴백 차단) · `preflight.sh`(위험 표면 diff).
-  - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 cron.
+    대응) · `rollback.sh` **코드/DB 분리**(`--db=keep` 기본 = 이미지만 되돌리고 운영 데이터 보존, 직전 배포에 migration 이 있으면
+    `.mig` 사이드카 비교로 차단 / `--db=restore` = 정지 후 스냅샷 복원) · DB 바인딩 게이트([5/6], 이미지 내부 빈 DB 폴백 차단)
+    + **쓰기 프로브**(앱 uid 로 CREATE/DROP — 소유권 오배치를 배포 직후 FATAL) · `preflight.sh`(위험 표면 diff).
+  - **백업**: 원자적 스냅샷(WAL torn-copy 방지) + NAS 오프사이트 + 04:00 daily cron · 배포 시 pre_deploy 스냅샷 ·
+    **hourly 트랙**(`scripts/backup_db.py`, sqlite online backup·12개 유지, prod cron 등록 완료).
   - ⚠️ **시드/레이아웃 변경 릴리스는 재시드 필요** — 0.1.57~ 는 **`--reseed` 플래그**로 자동(migrate 후 smoke 전 `seed --mode=replace`
     + `seed_demo`). replace 는 P08.1 이후 **운영 데이터(owner-set) 보존 upsert**(자연키 멱등). add 는 그래프 원자 skip → 변경 반영 안 됨.
 - **초기 데이터(seed)**: 통합 `seed/`(manifest `2026.07.0`, 자연키) — `01_chrono`~`04_releases` + **`05_icc_release`**.
