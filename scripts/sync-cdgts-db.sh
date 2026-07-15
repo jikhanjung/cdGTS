@@ -83,9 +83,21 @@ try:
     # 비밀번호 해시는 남긴다: pbkdf2_sha256 1,000,000회(Django 5.2 기본)로 강하고,
     # 지우면 테스트서버 로그인이 막힌다. 세션과 달리 "그냥 쓸 수 있는" 값이 아니다.
     try:
+        # secure_delete=ON: 지운 행의 자리를 0 으로 덮는다. 이 빌드 기본값이 1 이지만
+        # **컴파일 타임 옵션**이라 빌드에 기대지 않고 명시한다(OFF 빌드 실측: 200행 DELETE 후 200개 전량 잔존).
+        dst.execute("PRAGMA secure_delete=ON")
         n = dst.execute("DELETE FROM django_session").rowcount
         dst.commit()
-        print(f"  sanitize: django_session {n}행 제거(스냅샷 사본 한정)")
+
+        # ⚠️ VACUUM 이 **필수**다 — 위 DELETE 로는 부족하다.
+        # `backup()` 은 소스를 페이지 단위로 복사하므로 **free page 까지 그대로 옮긴다.** 즉 운영 DB 에서
+        # 과거에 지워진 세션(로그아웃·만료 정리·로그인 시 세션 회전)의 잔류가 스냅샷에 딸려오는데,
+        # 그건 이미 "행"이 아니라 free page 라 `DELETE FROM django_session` 이 **닿지 못한다**
+        # (secure_delete 를 켜도 마찬가지 — 지금 지우는 행만 덮을 뿐이다).
+        # 실측: 소스 free page 에 200개 잔류 → backup 직후 스냅샷 200개 → DELETE 후에도 200개 → VACUUM 후 0개.
+        # 파일을 재구축하는 VACUUM 만이 상속된 잔류까지 없앤다. (스냅샷 대상이라 라이브 영향 없음.)
+        dst.execute("VACUUM")    # 열린 트랜잭션이 있으면 실패 → 위 commit() 뒤에 와야 한다
+        print(f"  sanitize: django_session {n}행 제거 + VACUUM(상속 잔류 포함 재구축)")
     except sqlite3.Error as e:
         print(f"  ERROR: sanitize 실패 — {e}", file=sys.stderr)
         sys.exit(1)              # 위생 실패한 스냅샷은 반출하지 않는다
