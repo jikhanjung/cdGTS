@@ -67,8 +67,32 @@ import sqlite3, sys
 src = sqlite3.connect(sys.argv[1])
 dst = sqlite3.connect(sys.argv[2])
 try:
-    with dst:
-        src.backup(dst)          # online backup API — writer 있어도 일관 스냅샷
+    src.backup(dst)              # online backup API — writer 있어도 일관 스냅샷
+
+    # --- 반출 위생(egress sanitize) ---
+    # ⚠️ 대상은 dst(= 곧 반출될 스냅샷 사본)뿐. **라이브 운영 DB(src)는 읽기만 한다** —
+    #    운영에 로그인해 있는 사람은 아무 영향 없다.
+    #
+    # 이 스냅샷은 운영의 신뢰 경계를 떠난다: m710q(/srv·~/backups) → NAS(90일 보존).
+    # `django_session.session_key` 는 **쿠키에 담기는 값 그 자체(bearer 토큰)** 라,
+    # 사본을 읽은 사람이 그걸 **운영에** 되제시하면 그대로 로그인된다 — 운영이 자기 DB 에서
+    # 그 행을 찾아 자기 SECRET_KEY 로 디코드하므로 **prod/test SECRET_KEY 가 달라도 안 막힌다**.
+    # 반면 테스트서버엔 애초에 무용지물이다(SECRET_KEY 불일치 → 서명 검증 실패 → 빈 세션).
+    # 즉 이 행들은 **테스트엔 쓸모없고 운영엔 위험한** 순수 손해라 반출 전에 지운다.
+    #
+    # 비밀번호 해시는 남긴다: pbkdf2_sha256 1,000,000회(Django 5.2 기본)로 강하고,
+    # 지우면 테스트서버 로그인이 막힌다. 세션과 달리 "그냥 쓸 수 있는" 값이 아니다.
+    try:
+        n = dst.execute("DELETE FROM django_session").rowcount
+        dst.commit()
+        print(f"  sanitize: django_session {n}행 제거(스냅샷 사본 한정)")
+    except sqlite3.Error as e:
+        print(f"  ERROR: sanitize 실패 — {e}", file=sys.stderr)
+        sys.exit(1)              # 위생 실패한 스냅샷은 반출하지 않는다
+
+    # 아카이브에 동시 writer 는 없다 → -wal/-shm 이 아예 없는 단일 파일로.
+    # (이 스크립트가 이미 "스냅샷 = 일관된 단일 파일"을 전제하고 있다.)
+    dst.execute("PRAGMA journal_mode=DELETE")
 finally:
     dst.close(); src.close()
 PYEOF
