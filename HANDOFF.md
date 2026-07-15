@@ -124,6 +124,7 @@
 
 ### 후속 (열린 항목, 우선순위 대략순)
 
+- [ ] **R05 — 상관 provenance**([검토 R05](devlog/20260715_R05_correlation-provenance-depth.md), GTS2012 Ch.14 요약 검토) — `tie-point`(상관 가설 = 1급 노드, rectangular σ_x) + `composite-scale`(derived, 커널은 trivial 로 시작) + `age-model`(N→M). 킬러 유스케이스 = **상관 가설 엣지 토글 → 원클릭 diff**(topology-diff·competing-models·P05 재사용). `cross-section-correlation` 소멸. 부수: spline 경로 `shared_components` 유실 **버그** · loading 부호/marginal 단일 진리원 · `fidelity` enum 조합 불가 · `hpd95` 오칭. **미착수.**
 - [ ] **R04 L2** — 상수 값 변경이 연대 **값**을 재계산하는 rescale 커널(raw invariant/민감도 노드). L1 공분산 배선(0.1.54~55)의 다음 단계.
 - [ ] **L2/L3 확장** — L2 warn 임계(과소/과대 duration 의심) · L3 joint reconcile · 프론트 cert 뷰 L2 상세.
 - [ ] **계산 커널 확장 / P06.4b** — age-depth 외 joint/베이지안(PyMC) 노드타입별 실제 커널(별도 워커).

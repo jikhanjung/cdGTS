@@ -88,6 +88,10 @@ L0~6 선형 스택은 브레인스토밍의 원래 척추였고, 지금은 **사
 - [topology-diff.md](topology-diff.md) — 값 diff와 직교하는 구조 diff
 - [distribution-representation.md](distribution-representation.md) — 불확실성 충실도 사다리 L0–L5
 
+**참고 (외부 문헌 요약 — 개념 코퍼스 아님, 한국어 단독)**
+- [radiogenic_isotope_geochronology_summary.md](radiogenic_isotope_geochronology_summary.md) — GTS2012 Ch.6 (Schmitz, *Radiogenic Isotope Geochronology*): 방사성연대 = 시료·표준물질·붕괴상수·오차모델의 계산 결과 · internal vs external 오차
+- [statistical_procedures_summary.md](statistical_procedures_summary.md) — GTS2012 Ch.14 (Agterberg, Hammer & Gradstein, *Statistical Procedures*): 상대 층서척도 × 방사성연대 → cubic smoothing spline(SF·cross-validation·단조 제약) → 경계 보간 → Monte Carlo 신뢰구간. **§21–26 은 cdGTS 해석**(원저 아님)
+
 **보관 (역사)**
 - [archive/](archive/) — 구현으로 대체된 브레인스토밍(원래 Layer 0–6 데이터 모델 등). 현행 아님.
 
