@@ -1371,8 +1371,8 @@
    "key": "grp-cambrian-sections",
    "name": "Base Cambrian · δ13C-dated sections",
    "collapsed": false,
-   "x": -170.0,
-   "y": 190.0,
+   "x": 904.0,
+   "y": 680.0,
    "kind": "container",
    "unit": null,
    "lower": null,
@@ -1860,8 +1860,8 @@
      "d13C-BACE"
     ]
    },
-   "x": 1110.0,
-   "y": 830.0,
+   "x": 1187.0,
+   "y": 718.0,
    "group": null
   }
  },
@@ -1879,8 +1879,8 @@
    "params": {
     "reference": "brasier-1994-pc-boundary"
    },
-   "x": 830.0,
-   "y": 340.0,
+   "x": 762.0,
+   "y": 893.0,
    "group": null
   }
  },
@@ -1900,8 +1900,8 @@
     "region": "SE Newfoundland, Canada",
     "note": "GSSP — T. pedum FAD defines the boundary; no radiometric ages here (dated elsewhere via δ13C)"
    },
-   "x": 1110.0,
-   "y": 340.0,
+   "x": 998.0,
+   "y": 890.0,
    "group": null
   }
  },
@@ -1917,8 +1917,8 @@
    ],
    "label": "T. pedum FAD (GSSP)\nboundary definition · not dated",
    "params": {},
-   "x": 1390.0,
-   "y": 340.0,
+   "x": 1195.0,
+   "y": 957.0,
    "group": null
   }
  },
@@ -1934,8 +1934,8 @@
    ],
    "label": "δ13C calibration transfer\nBACE age → T. pedum FAD boundary",
    "params": {},
-   "x": 1400.0,
-   "y": 600.0,
+   "x": 1425.0,
+   "y": 792.0,
    "group": null
   }
  },
