@@ -64,6 +64,10 @@ ladder, kept as a document index:
 
 ## 2. Document map
 
+**Getting started (new here?)**
+- [introduction_en.md](introduction_en.md) — what cdGTS is and why it exists (intro for stratigraphers)
+- [quickstart_en.md](quickstart_en.md) — **5-minute hands-on**: sign in → fork Example ④ → change one value → one-click diff
+
 **Tutorial (hands-on)**
 - [tutorial-science-engine_en.md](tutorial-science-engine_en.md) — click through the Science Engine (covariance · coherence gate · clamps) on the deploy (Arc A / P06)
 
