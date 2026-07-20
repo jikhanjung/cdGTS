@@ -1,4 +1,4 @@
-# cdGTS — the Geologic Time Scale as an engine, not a chart
+# cdGTS — the Geologic Time Scale as an engine
 
 *English · [한국어](introduction.md)*
 
@@ -37,14 +37,20 @@ definition types changed. Reproducibility and provenance are built in, not bolte
 boundary results and their citations, and points back to the source graph that produced it as provenance.
 
 ```mermaid
-flowchart LR
-  O["radiometric · astronomical ·<br/>biostratigraphic (cited leaves)"] --> A["age–depth model<br/>(per section)"]
-  A --> C["inter-section<br/>correlation"]
-  C --> B["boundary age"]
-  B --> R["bake → versioned release"]
-  R -->|diff| R2["another release /<br/>published baseline"]
+flowchart TB
+  subgraph r1[" "]
+    direction LR
+    O["radiometric · astronomical ·<br/>biostratigraphic (cited leaves)"] --> A["age–depth model<br/>(per section)"] --> C["inter-section<br/>correlation"]
+  end
+  subgraph r2[" "]
+    direction LR
+    B["boundary age"] --> R["bake → versioned release"] -->|diff| R2["another release /<br/>published baseline"]
+  end
+  C --> B
   classDef n fill:#eef6ff,stroke:#4a72d0;
   class O,A,C,B,R,R2 n;
+  style r1 fill:none,stroke:none
+  style r2 fill:none,stroke:none
 ```
 
 ## The familiar picture, in an unfamiliar form
