@@ -95,6 +95,11 @@ rendered deterministically from structured fields; no LLM invention).
 
 ## What it is **not** (honestly)
 
+- **It is an abstraction, not a full record of practice.** The real reasoning behind any boundary is far more
+  tangled than any graph, and cdGTS does not try to capture every step of it — that would be near-impossible.
+  The aim is to model a *conceptually coherent* reconstruction of how the time scale is built, grounded in the
+  published literature, at the level of abstraction where the dependencies, evidence, and consequences become
+  explicit and inspectable.
 - **It does not invent a time scale.** People place the responsible (load-bearing) nodes; the machine only
   propagates, reconciles, and diffs. It does not replace expert judgement — it makes that judgement
   **executable and auditable**.
