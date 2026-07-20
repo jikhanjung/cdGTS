@@ -39,3 +39,6 @@ Thumbs.db
 
 # Claude Code 로컬 상태 (사용자별)
 .claude/
+
+# GTS2012 챕터 요약 (로컬 참고용, 저작권 자료 기반)
+docs/GTS2012*
