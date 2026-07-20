@@ -15,7 +15,7 @@ change an input**. It is an *engine*: swap a datum or retune a model, and the do
 you see the effect **immediately** — the idea borrowed from software CI/CD, *"CI for science."*
 
 > **Status.** cdGTS *aims* to make the computation, evidence, and revision of the time scale an executable
-> dependency graph. Today it is a working **v0 prototype**: age–depth computation, limited uncertainty/covariance
+> dependency graph. Today, at **v0.1.70**, it is a **preliminary, proof-of-concept prototype**: age–depth computation, limited uncertainty/covariance
 > propagation, bake & diff, and a propose/review/ratify flow are implemented; full value-recomputation and joint
 > Bayesian estimation are in progress. Read the present tense below as "the implemented slice"; roadmap items are
 > flagged as such.
@@ -99,7 +99,7 @@ rendered deterministically from structured fields; no LLM invention).
   propagates, reconciles, and diffs. It does not replace expert judgement — it makes that judgement
   **executable and auditable**.
 - **The reconstructed examples are demonstrations** of what the machinery can do, not a competing time scale.
-- **It is still v0.** The schema and kernels run, but input data formats and some statistical procedures (e.g.
+- **It is an early, proof-of-concept prototype (v0.1.70).** The schema and kernels run, but input data formats and some statistical procedures (e.g.
   joint Bayesian estimation) are still evolving.
 
 ## See it
