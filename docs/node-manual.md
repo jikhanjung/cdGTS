@@ -8,7 +8,7 @@
 > 목적: 어떤 노드가 무슨 기능을 갖는지 한눈에 보고 **무엇이 정말 필요한지·무엇이 더 필요한지** 판단하기 위한 것.
 > 개념 지도는 [concept-map](concept-map.md) · 카테고리 모델은 [tier-category-model](tier-category-model.md).
 
-> 생성: 2026-07-15 · NodeType **16** 개 · 사용 중 **13** 개 · **미사용 3** 개
+> 생성: 2026-07-20 · NodeType **16** 개 · 사용 중 **13** 개 · **미사용 3** 개
 
 ## 요약
 
@@ -63,7 +63,7 @@ Biostratigraphic datum (FAD/LAD) signal.
 
 ### `calibration-constant`
 
-Shared calibration parameter (decay constant · monitor age e.g. FCs 28.201 Ma · tracer). A single upstream leaf that many radiometric ages depend on; its uncertainty is a shared systematic source. Change it → every dependent age re-computes (diff surfaces the impact); two ages sharing it get correlated durations. Emits its value tagged with a self-referencing shared_component (ref = symbol) so covariance propagates. Cite-able. NB: its `value` is the parameter itself (not a boundary age) — it feeds a rescale/joint kernel, not a boundary directly (that wiring is L1/L2, see R04).
+Shared calibration parameter (decay constant · monitor age e.g. FCs 28.201 Ma · tracer). A single upstream leaf that many radiometric ages depend on; its uncertainty is a shared systematic source. Change it → today its uncertainty re-wires the shared covariance of every dependent age (two ages sharing it get correlated durations); rescaling the dependent age *values* is R04 L2 (roadmap). Emits its value tagged with a self-referencing shared_component (ref = symbol) so covariance propagates. Cite-able. NB: its `value` is the parameter itself (not a boundary age) — it feeds a rescale/joint kernel, not a boundary directly (that wiring is L1/L2, see R04).
 
 - **커널**: `calibration_constant`
   - 공유 보정 파라미터(붕괴상수·monitor(FCs)·tracer) leaf. 저작된 분포를 방출하되, 그 불확실성 **전액을**

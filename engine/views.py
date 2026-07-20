@@ -3,7 +3,7 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from graph.models import Graph
+from graph.permissions import visible_graphs
 
 from .evaluate import evaluate_graph, needs_async
 from .models import EvalJob
@@ -21,7 +21,8 @@ class EvaluateView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def post(self, request, pk):
-        graph = get_object_or_404(Graph, pk=pk)
+        # visible_graphs = 단일 진리원(graph ViewSet·bake/verify/icc 와 동일) — 비공개 sandbox 는 pk 로도 404.
+        graph = get_object_or_404(visible_graphs(request.user), pk=pk)
         if needs_async(graph):
             user = request.user if request.user.is_authenticated else None
             job = EvalJob.objects.create(graph=graph, requested_by=user)
@@ -30,7 +31,7 @@ class EvaluateView(APIView):
         return Response(EvalRunSerializer(run).data)
 
     def get(self, request, pk):
-        graph = get_object_or_404(Graph, pk=pk)
+        graph = get_object_or_404(visible_graphs(request.user), pk=pk)
         run = graph.eval_runs.first()
         if run is None:
             return Response({"detail": "아직 평가된 적 없음."}, status=404)
@@ -42,5 +43,6 @@ class EvalJobView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, pk):
-        job = get_object_or_404(EvalJob, pk=pk)
+        # 잡의 그래프가 가시 범위 안일 때만 — 비공개 그래프의 잡은 pk 로도 404.
+        job = get_object_or_404(EvalJob.objects.filter(graph__in=visible_graphs(request.user)), pk=pk)
         return Response(EvalJobSerializer(job).data)

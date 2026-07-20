@@ -1,7 +1,10 @@
 import pytest
+from django.contrib.auth import get_user_model
 from django.core.management import call_command
+from rest_framework.test import APIClient
 
 from engine.evaluate import content_hash, evaluate_graph, topo_order
+from engine.models import EvalJob
 from graph.models import Edge, Graph, NodeInstance
 from nodes.models import NodeType
 
@@ -208,3 +211,45 @@ def test_process_job_records_failure(node_types, monkeypatch):
     job = process_job(claim_next_job())
     assert job.status == "failed"
     assert "boom" in job.error and job.run is None
+
+
+# --- 가시성 회귀: 비공개 그래프는 평가/잡 엔드포인트에서도 pk 로 새지 않는다 (R07 §1.2) ---
+
+@pytest.fixture
+def private_graph(node_types):
+    owner = get_user_model().objects.create_user("evalowner", password="pw12345")
+    g = _build_chain({"fidelity": "decomposed", "value_ma": 251.9, "budget": {"analytical": 0.02}})
+    g.owner = owner            # owner-set + default status(sandbox) = 비공개
+    g.save(update_fields=["owner"])
+    return g, owner
+
+
+def test_private_graph_evaluate_hidden_from_anon_and_others(private_graph):
+    g, owner = private_graph
+    # 익명: POST/GET 모두 404 (결과 열람·평가·잡 큐잉 차단)
+    assert APIClient().post(f"/api/graphs/{g.pk}/evaluate/").status_code == 404
+    assert APIClient().get(f"/api/graphs/{g.pk}/evaluate/").status_code == 404
+    # 다른 인증 사용자도 404
+    other = APIClient()
+    other.force_authenticate(user=get_user_model().objects.create_user("evalmallory", password="pw12345"))
+    assert other.post(f"/api/graphs/{g.pk}/evaluate/").status_code == 404
+    # 소유자는 정상 평가(200)
+    mine = APIClient(); mine.force_authenticate(user=owner)
+    assert mine.post(f"/api/graphs/{g.pk}/evaluate/").status_code == 200
+
+
+def test_public_graph_evaluate_allowed_for_anon(node_types):
+    """공개(시스템 owner=null) 그래프는 익명 평가 유지 — 데모·quickstart 읽기전용 자동평가 흐름 보존."""
+    g = _build_chain({"fidelity": "decomposed", "value_ma": 251.9, "budget": {"analytical": 0.02}})
+    assert APIClient().post(f"/api/graphs/{g.pk}/evaluate/").status_code == 200
+
+
+def test_private_eval_job_hidden_from_others(private_graph):
+    g, owner = private_graph
+    job = EvalJob.objects.create(graph=g, requested_by=owner)
+    assert APIClient().get(f"/api/eval-jobs/{job.pk}/").status_code == 404
+    other = APIClient()
+    other.force_authenticate(user=get_user_model().objects.create_user("evaleve", password="pw12345"))
+    assert other.get(f"/api/eval-jobs/{job.pk}/").status_code == 404
+    mine = APIClient(); mine.force_authenticate(user=owner)
+    assert mine.get(f"/api/eval-jobs/{job.pk}/").status_code == 200

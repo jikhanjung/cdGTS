@@ -24,7 +24,7 @@
    "slug": "calibration-constant",
    "name": "Calibration constant",
    "category": "data",
-   "description": "Shared calibration parameter (decay constant · monitor age e.g. FCs 28.201 Ma · tracer). A single upstream leaf that many radiometric ages depend on; its uncertainty is a shared systematic source. Change it → every dependent age re-computes (diff surfaces the impact); two ages sharing it get correlated durations. Emits its value tagged with a self-referencing shared_component (ref = symbol) so covariance propagates. Cite-able. NB: its `value` is the parameter itself (not a boundary age) — it feeds a rescale/joint kernel, not a boundary directly (that wiring is L1/L2, see R04).",
+   "description": "Shared calibration parameter (decay constant · monitor age e.g. FCs 28.201 Ma · tracer). A single upstream leaf that many radiometric ages depend on; its uncertainty is a shared systematic source. Change it → today its uncertainty re-wires the shared covariance of every dependent age (two ages sharing it get correlated durations); rescaling the dependent age *values* is R04 L2 (roadmap). Emits its value tagged with a self-referencing shared_component (ref = symbol) so covariance propagates. Cite-able. NB: its `value` is the parameter itself (not a boundary age) — it feeds a rescale/joint kernel, not a boundary directly (that wiring is L1/L2, see R04).",
    "params_schema": {
     "distribution": {
      "type": "distribution",
