@@ -136,10 +136,11 @@
 
 ### 후속 (열린 항목, 우선순위 대략순)
 
+- [ ] **R06 — GTS2012 코퍼스(32장) vs 구현 대조 리뷰**([R06](devlog/20260720_R06_gts2012-corpus-vs-implementation.md)) — 32장 전장을 as-built(v0.1.70)와 대조. **COVERED**: 아키텍처·철학(Ch1·2)·PTB Meishan·Cambrian base·**공분산 오차모델(Ch6·14, GTS2012 독립오차 MC 보다 원리적으로 우수)**·retype/거버넌스(Ch16~18·30·32). **핵심 격차 4종**: ⓐ Ch14 **전역 joint 스무딩 스플라인** ↔ cdGTS 국소 subgraph+merge(스플라인 커널 존재하나 시드 전부 linear, joint 추정기 없음) · ⓑ **CONOP 생층서 composite scaling**(Ord·Sil·Dev·Carb·Perm 숫자 백본 — biozone/occurrence/composite-scale 프리미티브 전무) · ⓒ **astronomical·magnetostratigraphic 커널 미배선**(타입은 있으나 미사용인데 중생대~신생대 백본 전부가 이것 — Neogene ATNTS·Newark·M/C-sequence) · ⓓ **상관신호/기준곡선 프리미티브 부재**(δ13C BACE 가 유일 하드코딩; Sr LOWESS·LR04 등 역함수 기준곡선 없음). **교차 격차**: 릴리스 *내* 병렬 경쟁가설(branching)·해석/보정 사슬 provenance·R04 L2 캐스케이드·게이트 과소(proxy 교차검증·fitting 내 단조성)·경계≠사건≠반응·dating 방법 semantics. **레버리지 순 권고**: ①astro/magneto 커널(어휘는 있음, 배선만) ②상관신호 tie-point 일반화(R05 확대)+기준곡선 ③생층서 composite-scale+Ch14 스플라인 노드 ④병렬 분기+R04 L2. 아래 R05·R04 L2·P06.4b·retype 데모가 이 결론을 직접 겨냥.
 - [ ] **R05 — 상관 provenance**([검토 R05](devlog/20260715_R05_correlation-provenance-depth.md), GTS2012 Ch.14 요약 검토) — `tie-point`(상관 가설 = 1급 노드, rectangular σ_x) + `composite-scale`(derived, 커널은 trivial 로 시작) + `age-model`(N→M). 킬러 유스케이스 = **상관 가설 엣지 토글 → 원클릭 diff**(topology-diff·competing-models·P05 재사용). `cross-section-correlation` 소멸. **미착수.** 부수 부채 중 **spline 경로 `shared_components` 유실 버그는 선상환 완료**([R05 말미 Addendum](devlog/20260715_R05_correlation-provenance-depth.md), pytest 178→182, **미배포**) — 스플라인 평가가 연대에 선형임을 이용해 카디널 가중치로 해석적 전파(Cov 0→0.16, duration σ 0.58→0.13). 잔여: MC 가 horizon 을 독립으로 draw(marginal 과소) · loading 부호 · `fidelity` enum · `hpd95` 오칭.
 - [ ] **R04 L2** — 상수 값 변경이 연대 **값**을 재계산하는 rescale 커널(raw invariant/민감도 노드). L1 공분산 배선(0.1.54~55)의 다음 단계.
 - [ ] **L2/L3 확장** — L2 warn 임계(과소/과대 duration 의심) · L3 joint reconcile · 프론트 cert 뷰 L2 상세.
-- [ ] **계산 커널 확장 / P06.4b** — age-depth 외 joint/베이지안(PyMC) 노드타입별 실제 커널(별도 워커).
+- [ ] **계산 커널 확장 / P06.4b** — age-depth 외 joint/베이지안(PyMC) 노드타입별 실제 커널(별도 워커). **R06 최우선 지목: `astronomical`(천문튜닝: floating 주기수 duration + anchor 절대위치 2부분 σ → shared_components 매핑)·`magnetostratigraphic`(polarity order-edge 사슬 + 이상거리→확장속도→연대, age-depth 와 동형) 커널 — 타입은 있으나 미사용, 중생대~신생대 백본 전부가 이것.**
 - [ ] **PostGIS** — chrono.Locality lat/lon → PointField(공간 차원 착수 시).
-- [ ] **retype diff 실데모** — Ediacaran/Cryogenian 경계 추가로 GSSA→GSSP retype 시나리오.
+- [ ] **retype diff 실데모** — Ediacaran/Cryogenian 경계 추가로 GSSA→GSSP retype 시나리오. **R06: Cryogenian base 는 2024/25 실제 비준 — 데모가 실사건 retrodiction**(cdGTS 최적합 도메인). 단 실 retype 은 증거 substrate(빙성퇴적·δ13C·proposal-status lattice·geochronologic-role 타이핑) 필요.
 - [ ] **미해결 열린 질문** — 각 설계 문서 말미. → `TODOs.md` §2.
