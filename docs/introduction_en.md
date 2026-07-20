@@ -11,22 +11,29 @@ U–Pb date lands, so you re-run an age model, re-fit a correlation, and manuall
 boundaries and unit durations. cdGTS turns that whole chain — **raw observations → age model → correlation →
 boundary age → chart** — into an **executable dependency graph (DAG)**. The time scale stops being a *chart or
 book* revised every few years and becomes **the output of a pipeline that recomputes, reproducibly, whenever you
-change an input**. It is an *engine*: swap a datum, a decay constant, or a correlation hypothesis, and the
-downstream ages re-propagate so you see the effect **immediately** — the idea borrowed from software CI/CD,
-*"CI for science."*
+change an input**. It is an *engine*: swap a datum or retune a model, and the downstream ages re-propagate so
+you see the effect **immediately** — the idea borrowed from software CI/CD, *"CI for science."*
+
+> **Status.** cdGTS *aims* to make the computation, evidence, and revision of the time scale an executable
+> dependency graph. Today it is a working **v0 prototype**: age–depth computation, limited uncertainty/covariance
+> propagation, bake & diff, and a propose/review/ratify flow are implemented; full value-recomputation and joint
+> Bayesian estimation are in progress. Read the present tense below as "the implemented slice"; roadmap items are
+> flagged as such.
 
 ## Two things to take away
 
-**① It is an engine — change an input, see the result at once.** Every number in the chart is *computed* from
-the nodes upstream of it, not typed in. Edit a radiometric age, retune an age–depth model, toggle a correlation
-edge, or change a shared calibration constant, and the boundary ages recompute along the dependency graph. No
-manual re-derivation, no stale spreadsheet — the "what if we accept this?" is a live, reproducible result.
+**① It is an engine — change an input, see the result at once.** Every number in the chart is either a leaf a
+person authored (a published age, a GSSA) or a value *computed* from the nodes upstream of it. Edit a
+radiometric age or retune an age–depth model and the boundary ages recompute along the dependency graph — no
+manual re-derivation, no stale spreadsheet, so "what if we accept this?" becomes a live, reproducible result.
+(Changing a shared calibration constant re-wires the covariance today; rescaling the dependent age *values* is
+on the roadmap — R04 L2.)
 
 **② It is versioned — every result is a frozen, comparable release.** A completed graph is *baked* into an
 **immutable, versioned release** (an ICC snapshot). You can **diff** a baked release against the published
-baseline (or against another release) and get a summary of exactly which boundaries moved and how the wiring
-changed. Reproducibility and provenance are built in, not bolted on: a release records the graph that produced
-it, down to the observations and papers each age hangs on.
+baseline (or against another release) and get a summary of which boundaries moved and how the boundary set and
+definition types changed. Reproducibility and provenance are built in, not bolted on: a release freezes the
+boundary results and their citations, and points back to the source graph that produced it as provenance.
 
 ```mermaid
 flowchart LR
@@ -72,7 +79,8 @@ rendered deterministically from structured fields; no LLM invention).
 
 1. **"If we accept this new date, what changes?" — in one click.** Edit the graph → re-bake → **diff** against
    the published baseline seeded in the app (ICC `ICS-2024/12`). See which boundaries moved, by how much, and
-   what wiring changed. The between-editions "what if" becomes a reproducible artifact, not hand arithmetic.
+   how the boundary set and definition types changed. The between-editions "what if" becomes a reproducible
+   artifact, not hand arithmetic.
 2. **Coherence gates catch silent errors.** The engine checks the authored boundary-succession (order) chains
    (L1) and automatically verifies that every unit spanned by a gateway has duration > 0 (L2 — catching
    zero-length units and reversed successions).
