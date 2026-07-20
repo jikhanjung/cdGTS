@@ -75,7 +75,7 @@ and diff it against the published time scale. Worked examples reconstructed into
 One graph yields two products — **ICC = bake** (a frozen, authoritative snapshot) and **GTS = narrate** (prose
 rendered deterministically from structured fields; no LLM invention).
 
-## Why a GTS2030 practitioner should care
+## Why a working stratigrapher should care
 
 1. **"If we accept this new date, what changes?" — in one click.** Edit the graph → re-bake → **diff** against
    the published baseline seeded in the app (ICC `ICS-2024/12`). See which boundaries moved, by how much, and
