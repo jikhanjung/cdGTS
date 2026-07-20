@@ -10,14 +10,15 @@ When one boundary age changes, we usually work out the consequences **by hand an
 U–Pb date lands, so you re-run an age model, re-fit a correlation, and manually check the neighbouring
 boundaries and unit durations. cdGTS turns that whole chain — **raw observations → age model → correlation →
 boundary age → chart** — into an **executable dependency graph (DAG)**. The time scale stops being a *chart or
-book* revised every few years and becomes **the output of a pipeline that recomputes, reproducibly, whenever you
-change an input**. It is an *engine*: swap a datum or retune a model, and the downstream ages re-propagate so
+book* revised only periodically and becomes **the output of a pipeline that recomputes, reproducibly, whenever
+you change an input**. It is an *engine*: swap a datum or retune a model, and the downstream ages re-propagate so
 you see the effect **immediately** — the idea borrowed from software CI/CD, *"CI for science."*
 
 > **Status.** cdGTS *aims* to make the computation, evidence, and revision of the time scale an executable
-> dependency graph. Today, at **v0.1.70**, it is a **preliminary, proof-of-concept prototype**: age–depth computation, limited uncertainty/covariance
-> propagation, bake & diff, and a propose/review/ratify flow are implemented; full value-recomputation and joint
-> Bayesian estimation are in progress. Read the present tense below as "the implemented slice"; roadmap items are
+> dependency graph. Today, at **v0.1.70**, it is a **preliminary, proof-of-concept prototype**: age–depth
+> computation, limited uncertainty/covariance propagation, bake & diff, and a propose/review/ratify flow are
+> implemented; rescaling dependent ages after a shared calibration-constant change, and joint Bayesian
+> estimation, are on the roadmap. Read the present tense below as "the implemented slice"; roadmap items are
 > flagged as such.
 
 ## Two things to take away
@@ -51,12 +52,14 @@ flowchart LR
 This is work you already do — it just lives scattered across papers, tables, and private notes, and no machine
 can re-run it. cdGTS makes that structure a first-class citizen.
 
-- **Boundaries and units are nodes.** GSSP boundaries are defined by a physical point → their ages are *derived*;
-  GSSA boundaries are defined by a decreed number → the age *is* the definition, and the arrows point the other way.
+- **Boundaries are nodes; a unit is a *node group* (span) bounded by two of them.** GSSP boundaries are defined
+  by a physical point → their ages are *derived*; GSSA boundaries are defined by a decreed number → the age *is*
+  the definition, and the arrows point the other way.
 - **Provenance is first-class.** Which observation, which calibration constant, which paper a given age rests on
   is recorded as edges. Click a boundary and you see the whole chain of evidence its number stands on.
-- **Uncertainty flows along the wiring.** If two ages share the same ²³⁸U decay constant, the engine knows the
-  shared dependency and propagates their covariance correctly — the part a naive independence assumption misses.
+- **Uncertainty flows along the wiring.** If two ages share the same ²³⁸U decay constant, the engine uses that
+  explicitly tagged shared dependency to propagate their covariance in supported computation paths — the part a
+  naive independence assumption misses.
 
 ## What is actually running (deployed, not a concept)
 
@@ -72,8 +75,8 @@ and diff it against the published time scale. Worked examples reconstructed into
 - **A full ICC reconstruction** — periods as node groups (spans), age boundaries wired as order-edge chains, the
   whole Eon-to-Age column assembled into one graph (hundreds of nodes), merged age→period→era→chart.
 
-One graph yields two products — **ICC = bake** (a frozen, authoritative snapshot) and **GTS = narrate** (prose
-rendered deterministically from structured fields; no LLM invention).
+One graph yields two products — **ICC = bake** (a frozen chart snapshot; an authoritative release once ratified)
+and **GTS = narrate** (prose rendered deterministically from structured fields; no LLM invention).
 
 ## Why a working stratigrapher should care
 
@@ -105,8 +108,8 @@ rendered deterministically from structured fields; no LLM invention).
   propagates, reconciles, and diffs. It does not replace expert judgement — it makes that judgement
   **executable and auditable**.
 - **The reconstructed examples are demonstrations** of what the machinery can do, not a competing time scale.
-- **It is an early, proof-of-concept prototype (v0.1.70).** The schema and kernels run, but input data formats and some statistical procedures (e.g.
-  joint Bayesian estimation) are still evolving.
+- **It is an early, proof-of-concept prototype (v0.1.70).** The schema and kernels run, but input data formats
+  and some statistical procedures (e.g. joint Bayesian estimation) are still evolving.
 
 ## See it
 
