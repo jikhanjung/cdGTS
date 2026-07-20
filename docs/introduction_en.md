@@ -77,10 +77,11 @@ rendered deterministically from structured fields; no LLM invention).
 
 ## Why a working stratigrapher should care
 
-1. **"If we accept this new date, what changes?" — in one click.** Edit the graph → re-bake → **diff** against
-   the published baseline seeded in the app (ICC `ICS-2024/12`). See which boundaries moved, by how much, and
-   how the boundary set and definition types changed. The between-editions "what if" becomes a reproducible
-   artifact, not hand arithmetic.
+1. **"If we bring this new evidence into the model, what changes?" — in one click.** A new radiometric age, a
+   revised age–depth model, a different correlation — edit the graph → re-bake → **diff** against the published
+   baseline seeded in the app (ICC `ICS-2024/12`). See which boundaries moved, by how much, and how the boundary
+   set and definition types changed. The between-editions "what if" becomes a reproducible artifact, not hand
+   arithmetic.
 2. **Coherence gates catch silent errors.** The engine checks the authored boundary-succession (order) chains
    (L1) and automatically verifies that every unit spanned by a gateway has duration > 0 (L2 — catching
    zero-length units and reversed successions).
