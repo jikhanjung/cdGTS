@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import Editor from './Editor.jsx'
+import Home from './Home.jsx'
 import Vault from './Vault.jsx'
 import Proposals from './Proposals.jsx'
 import Library from './Library.jsx'
@@ -9,10 +10,10 @@ import Users from './Users.jsx'
 import LoginBar from './LoginBar.jsx'
 import { whoami } from './api.js'
 
-// Surfaces: Editor (build/bake/propose a graph) · Vault (baked Release hub) · Proposals (CI review).
-// Baking drops you into the Vault; proposing drops you into Proposals.
+// Surfaces: Home (landing dashboard) · Editor (build/bake/propose a graph) · Vault (baked Release hub) ·
+// Proposals (CI review). Baking drops you into the Vault; proposing drops you into Proposals.
 export default function App() {
-  const [view, setView] = useState('editor')
+  const [view, setView] = useState('home')
   const [vaultReleaseId, setVaultReleaseId] = useState(null)
   const [user, setUser] = useState(null)   // whoami payload; primes the CSRF cookie for writes
   const [sysOpen, setSysOpen] = useState(false)
@@ -23,7 +24,7 @@ export default function App() {
   return (
     <div className="app">
       <nav className="topnav">
-        <span className="brand">cdGTS<span className="brand-ver">v{__APP_VERSION__}</span></span>
+        <button className="brand" onClick={() => setView('home')} title="Dashboard">cdGTS<span className="brand-ver">v{__APP_VERSION__}</span></button>
         <button className={view === 'editor' ? 'active' : ''} onClick={() => setView('editor')}>Editor</button>
         <button className={view === 'vault' ? 'active' : ''} onClick={() => setView('vault')}>Vault</button>
         <button className={view === 'proposals' ? 'active' : ''} onClick={() => setView('proposals')}>Proposals</button>
@@ -45,7 +46,9 @@ export default function App() {
         <LoginBar user={user} onChange={setUser} />
       </nav>
       <div className="view">
-        {view === 'editor'
+        {view === 'home'
+          ? <Home onGo={setView} onOpenRelease={goVault} />
+          : view === 'editor'
           ? <ReactFlowProvider><Editor onBaked={goVault} onProposed={() => setView('proposals')} user={user} /></ReactFlowProvider>
           : view === 'vault'
             ? <Vault initialReleaseId={vaultReleaseId} user={user} />
