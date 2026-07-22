@@ -57,6 +57,18 @@
 - **0.1.72** — 🟢 **조치 없음**(프론트 전용, 시드·마이그레이션 없음). **홈 대시보드 신설** — 초기 화면이
   Editor → Home 대시보드(릴리스·제안·그래프·레퍼런스 현황 + 표면별 바로가기)로 바뀌고, 좌상단 cdGTS
   워드마크 클릭 시 홈으로 이동. 기존 공개 API 만 소비(백엔드 무변경). `<title>` 문구 현행화.
+- **0.1.71** — *(소급 기재 — 배포는 2026-07-20 완료)* 🔴 **`--reseed` 필요** + 🟡 **마이그레이션 있음**
+  (`graph/0011_alter_nodeinstance_nature`). **R07 quick wins**([R07](devlog/20260720_R07_project-wide-gts2012-review.md)):
+  ⓐ **비공개 그래프 평가 API IDOR 수정** — `EvaluateView`·`EvalJobView` 가 `AllowAny`+직접조회라 비공개 sandbox 가
+  pk 로 새던 것을 `visible_graphs()` 경유로 차단(공개/시스템 그래프 익명 평가는 유지). 회귀 3종 추가(pytest 192→195).
+  ⓑ 🟡 마이그레이션은 `NodeInstance.nature` 의 **choices/help_text 변경만**(컬럼 타입·데이터 무변경, 무손실) —
+  누락돼 있던 것을 생성해 `makemigrations --check` 클린화. ⓒ 🔴 재시드는 `calibration-constant` NodeType **설명
+  산문 정정** 반영용(seed/02_nodes.json 1건; 값·행 수 무영향이라 smoke 가 안 잡음 — 0.1.66 과 동형). 양 서버
+  `--reseed` 배포·smoke green(재시드 inserted 1053·updated 794).
+- **0.1.70** — *(소급 기재 — 배포는 2026-07-17 완료)* 🔴 **`--reseed` 필요**(시드 변경: `seed/03_graphs.json`).
+  **예제④ base-of-Cambrian δ13C 클러스터 재배치**(커밋 d7dcc37) — admin fork 에서 정리한 배치를 시스템
+  `example-icc-partial` 에 반영, 노드 6개 **좌표만** 변경(위상·값·경계 연대 전부 불변 = 순수 레이아웃).
+  마이그레이션 없음. 재시드 안 하면 캔버스 배치만 옛것으로 남고 행 수·연대는 무영향(smoke 미검출 — 그래서 🔴).
 - **0.1.69** — 🟢 **조치 없음**(호스트 스크립트 전용, 코드·시드·마이그레이션 무변경).
   **hourly 백업 보존 12 → 24개**(`scripts/backup_db.py`, self-heal 로 배포 시 prod cron 스크립트 자동 갱신).
   **일일 오프사이트 pull(04:00)과 창을 맞춘 값** — 12 면 하루 중 절반만 시간 단위 granularity 가 있어 두 트랙
